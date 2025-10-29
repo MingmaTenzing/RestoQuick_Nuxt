@@ -4,7 +4,7 @@
 </script>
 
 <template> 
-<div class=" w-[260px] h-screen bg-sidebar p-4 space-y-2">
+<div class=" w-[260px] h-[calc(100vh-4rem)] bg-sidebar p-4 space-y-2 ">
     
 
     <div class=" cursor-pointer flex space-x-4 items-center hover:bg-sidebar-accent  outline-none hover:border-sidebar-border   text-muted-foreground hover:text-accent-foreground p-2 rounded-lg ">
