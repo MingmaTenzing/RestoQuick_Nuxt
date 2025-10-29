@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import type accordionItems from '~~/types/accordionItems';
+import About_Section_Accordion from '../ui/About_Section_Accordion.vue';
+
+
 
 const about_items = ref<accordionItems[]>([
   {
@@ -81,7 +85,7 @@ const about_items = ref<accordionItems[]>([
     </section>
 
     <section class=" flex flex-col gap-6 md:flex-row md:items-center">
-      <div class=" space-y-4 relative md:w-[50%] h-[480px] overflow-y-scroll scrollbar-hide  ">
+      <div class=" space-y-4 relative md:w-[50%] h-[480px] overflow-y-scroll  no-scrollbar  ">
 
         <div v-for="item in about_items">
           <About_Section_Accordion :item="item"></About_Section_Accordion>
@@ -89,7 +93,7 @@ const about_items = ref<accordionItems[]>([
 
       </div>
       <div class=" w-full">
-        <img src="../../assets/Macbook-Air-localhost.png" class=" w-full"></img>
+        <img src="../../assets/images/Macbook-Air-localhost.png" class=" w-full"></img>
       </div>
     </section>
   </div>

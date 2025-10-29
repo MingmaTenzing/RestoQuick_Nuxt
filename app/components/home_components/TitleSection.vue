@@ -16,7 +16,7 @@
     </div>
 
     <div class="drop-shadow-2xl drop-shadow-violet-200 dark:drop-shadow-violet-800">
-      <img src="../../assets/TitleSection_Image.webp" class="w-full lg:h-[700px] object-cover" />
+      <img src="../../assets/images/TitleSection_Image.webp" class="w-full lg:h-[700px] object-cover" />
     </div>
   </section>
 </template>

@@ -12,7 +12,7 @@
 
         <div class=" absolute top-0 left-0 w-full h-full ">
 
-          <img  src="../../assets/Coffee shop.webp" class="group-hover:scale-110 transition-all ease-in-out  duration-200  w-full h-full object-cover "></img>
+          <img  src="../../assets/images/Coffee shop.webp" class="group-hover:scale-110 transition-all ease-in-out  duration-200  w-full h-full object-cover "></img>
         </div>
 <div class="absolute top-0 left-0 bg-linear-to-bl from-orange-400 via-pink-500 to-purple-600 w-full h-full opacity-25"></div>
 
@@ -35,7 +35,7 @@
 
         <div class=" absolute top-0 left-0 w-full h-full ">
 
-          <img  src="../../assets/korean bbq.webp" class="group-hover:scale-110 transition-all ease-in-out  duration-200  w-full h-full object-cover "></img>
+          <img  src="../../assets/images/korean bbq.webp" class="group-hover:scale-110 transition-all ease-in-out  duration-200  w-full h-full object-cover "></img>
         </div>
 <div class="absolute top-0 left-0 bg-linear-to-bl from-cyan-400 via-blue-500 to-indigo-600 w-full h-full opacity-25"></div>
 
@@ -58,7 +58,7 @@
 
         <div class=" absolute top-0 left-0 w-full h-full ">
 
-          <img  src="../../assets/italian restaurant.webp" class="group-hover:scale-110 transition-all ease-in-out  duration-200  w-full h-full object-cover "></img>
+          <img  src="../../assets/images/italian restaurant.webp" class="group-hover:scale-110 transition-all ease-in-out  duration-200  w-full h-full object-cover "></img>
         </div>
 <div class="absolute inset-0 bg-linear-to-bl from-red-500 via-orange-500 to-yellow-500 opacity-25"></div>
 
@@ -80,7 +80,7 @@
 
         <div class=" absolute top-0 left-0 w-full h-full ">
 
-          <img  src="../../assets/Ramen restaurant.webp" class="group-hover:scale-110 transition-all ease-in-out  duration-200  w-full h-full object-cover "></img>
+          <img  src="../../assets/images/Ramen restaurant.webp" class="group-hover:scale-110 transition-all ease-in-out  duration-200  w-full h-full object-cover "></img>
         </div>
 <div class="absolute inset-0 bg-linear-to-bl from-pink-200 via-rose-300 to-red-400 opacity-30"></div>
 
