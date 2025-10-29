@@ -10,7 +10,7 @@
         <div class="px-2 py-2 flex justify-center items-center bg-green-600 rounded-lg">
           <i class="pi pi-users text-green-200 text-lg"></i>
         </div>
-        <p class="">Smart Roster</p>
+        <h3 class="">Smart Roster</h3>
       </div>
       <p class="text-sm font-thin">
         Easily schedule staff, manage shifts, and track attendance—all in one place.
@@ -23,7 +23,7 @@
         <div class="px-2 py-2 flex justify-center items-center bg-blue-600 rounded-lg">
           <i class="pi pi-box text-blue-200 text-lg"></i>
         </div>
-        <p class="">Inventory Management</p>
+        <h3 class="">Inventory Management</h3>
       </div>
       <p class="text-sm font-thin">
         Easily schedule staff, manage shifts, and track attendance—all in one place.
@@ -36,7 +36,7 @@
         <div class="px-2 py-2 flex justify-center items-center bg-amber-600 rounded-lg">
           <i class="pi pi-file-check text-amber-200 text-lg"></i>
         </div>
-        <p class="">Taks Management</p>
+        <h3 class="">Taks Management</h3>
       </div>
       <p class="text-sm font-thin">
         Easily schedule staff, manage shifts, and track attendance—all in one place.
@@ -49,7 +49,7 @@
         <div class="px-2 py-2 flex justify-center items-center bg-violet-600 rounded-lg">
           <i class="pi pi-microchip-ai text-violet-200 text-lg"></i>
         </div>
-        <p class="">AI Booking System</p>
+        <h3 class="">AI Booking System</h3>
       </div>
       <p class="text-sm font-light">
         Easily schedule staff, manage shifts, and track attendance—all in one place.

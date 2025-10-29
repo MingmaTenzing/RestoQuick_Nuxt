@@ -23,7 +23,10 @@ const toggleTheme = useToggle(isdarkMode)
         <div v-on:click="toggleTheme()">
           <i class="pi pi-moon"></i>
         </div>
-        <button class="bg-violet-500 text-white px-4 py-2">View Dashboard</button>
+        <NuxtLink to="/dashboard" >
+
+          <button class="bg-violet-500 text-white px-4 py-2">View Dashboard</button>
+        </NuxtLink>
       </div>
     </section>
   </header>
