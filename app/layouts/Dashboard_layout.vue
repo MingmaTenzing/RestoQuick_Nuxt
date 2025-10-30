@@ -20,14 +20,25 @@ const { isSidebar_open, isTabletOrLarger } = useSideBar()
 <Dashboard_NavBar></Dashboard_NavBar>
 
 
+<div class=" md:flex">
+
+
+
+
   <Transition name="slide"> 
       
   
       <Dashboard_SideBar v-if="isSidebar_open || isTabletOrLarger" class="absolute left-0 top-20 md:static"  ></Dashboard_SideBar>
       </Transition>
 
+<div class=" p-4">
 
-<slot></slot>
+  <slot></slot>
+</div>
+
+</div>
+
+
 
     
 </div>

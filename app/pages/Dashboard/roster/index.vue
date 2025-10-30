@@ -1,14 +1,16 @@
-<script setup lang="ts">
+
+
+<script lang="ts" setup>
+
 
 definePageMeta({
     layout: 'dashboard-layout'
 })
 </script>
 
-<template>
-<div>
-    <p> hello</p>
-</div>
 
- 
+<template>
+
+
+    this is roster
 </template>
