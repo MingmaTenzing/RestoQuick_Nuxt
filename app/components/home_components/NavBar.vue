@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { useDark, useToggle } from '@vueuse/core'
 
-const isdarkMode = useDark()
+const colorMode = useColorMode()
+console.log(colorMode.preference)
 
-const toggleTheme = useToggle(isdarkMode)
 </script>
 
 <template>
@@ -20,7 +19,13 @@ const toggleTheme = useToggle(isdarkMode)
       </div>
 
       <div class="flex items-center gap-4">
-        <div v-on:click="toggleTheme()">
+        {{ $colorMode.preference }}
+        <div v-on:click="$colorMode.preference = 'light'">
+       
+          <i class="pi pi-moon"></i>
+        </div>
+        <div v-on:click="$colorMode.preference = 'dark'">
+       
           <i class="pi pi-moon"></i>
         </div>
         <NuxtLink to="/dashboard" >

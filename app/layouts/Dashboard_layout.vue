@@ -18,11 +18,13 @@ const { isSidebar_open, isTabletOrLarger } = useSideBar()
 
        <!-- nav bar dashboard -->
 <Dashboard_NavBar></Dashboard_NavBar>
-<Transition name="slide"> 
-    
 
-    <Dashboard_SideBar v-if="isSidebar_open || isTabletOrLarger" class="absolute left-0 top-20 md:static"  ></Dashboard_SideBar>
-    </Transition>
+
+  <Transition name="slide"> 
+      
+  
+      <Dashboard_SideBar v-if="isSidebar_open || isTabletOrLarger" class="absolute left-0 top-20 md:static"  ></Dashboard_SideBar>
+      </Transition>
 
 
 <slot></slot>
