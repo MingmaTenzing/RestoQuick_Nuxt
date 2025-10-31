@@ -1,5 +1,7 @@
 <script setup lang="ts">
+const route = useRoute();
 
+console.log(route.path)
 
 </script>
 
@@ -7,35 +9,35 @@
 <aside class=" w-[260px] h-[calc(100vh-4rem)] bg-sidebar p-4 space-y-2 ">
     
 
-    <NuxtLink to="/dashboard/roster" class=" cursor-pointer flex space-x-4 items-center hover:bg-sidebar-accent  outline-none hover:border-sidebar-border   text-muted-foreground hover:text-accent-foreground p-2 rounded-lg ">
+    <NuxtLink to="/dashboard/roster" :class="[ 'cursor-pointer flex space-x-4 items-center   text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/roster' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border ']">
         <i class=" pi pi-calendar "></i>
         <span class=" ">Roster</span>
     </NuxtLink>
-    <div class=" cursor-pointer  flex space-x-4 items-center hover:bg-sidebar-accent  outline-none hover:border-sidebar-border    text-muted-foreground hover:text-sidebar-accent-foreground p-2 rounded-lg">
+    <NuxtLink to="/dashboard/bookings" :class="[ 'cursor-pointer flex space-x-4 items-center   text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/bookings' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
         <i class=" pi pi-calendar-clock"></i>
         <span>Bookings</span>
-    </div>
+    </NuxtLink>
     
-    <div class=" cursor-pointer flex space-x-4 items-center hover:bg-sidebar-accent  outline-none hover:border-sidebar-border    text-muted-foreground hover:text-sidebar-accent-foreground p-2 rounded-lg">
+    <NuxtLink to="/dashboard/orders" :class="[ 'cursor-pointer flex space-x-4 items-center   text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/orders' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
         <i class=" pi pi-shopping-cart"></i>
         <span>Orders</span>
-    </div>
-    <div class=" cursor-pointer flex space-x-4 items-center hover:bg-sidebar-accent  outline-none hover:border-sidebar-border    text-muted-foreground hover:text-sidebar-accent-foreground p-2 rounded-lg">
+    </NuxtLink>
+    <NuxtLink to="/dashboard/kitchen" :class="[ 'cursor-pointer flex space-x-4 items-center   text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/kitchen' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
         <i class=" pi pi-building-columns"></i>
         <span>Kitchen</span>
-    </div>
-    <div class=" cursor-pointer flex space-x-4 items-center hover:bg-sidebar-accent  outline-none hover:border-sidebar-border    text-muted-foreground hover:text-sidebar-accent-foreground p-2 rounded-lg">
+    </NuxtLink>
+    <NuxtLink to="/dashboard/staff&integration" :class="[ 'cursor-pointer flex space-x-4 items-center   text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/staff&integration' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
         <i class=" pi pi-users"></i>
         <span>Staff & Integrations</span>
-    </div>
-    <div class=" cursor-pointer flex space-x-4 items-center hover:bg-sidebar-accent  outline-none hover:border-sidebar-border    text-muted-foreground hover:text-sidebar-accent-foreground p-2 rounded-lg">
+    </NuxtLink>
+    <NuxtLink to="/dashboard/stock" :class="[ 'cursor-pointer flex space-x-4 items-center   text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/stock' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
         <i class=" pi pi-box"></i>
         <span>Stock</span>
-    </div>
-    <div class=" cursor-pointer flex space-x-4 items-center hover:bg-sidebar-accent  outline-none hover:border-sidebar-border    text-muted-foreground hover:text-sidebar-accent-foreground p-2 rounded-lg">
+    </NuxtLink>
+    <NuxtLink to="/dashboard/qrcodes" :class="[ 'cursor-pointer flex space-x-4 items-center   text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/qrcodes' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
         <i class=" pi pi-qrcode"></i>
         <span>QR Codes</span>
-    </div>
+    </NuxtLink>
 
 
 
