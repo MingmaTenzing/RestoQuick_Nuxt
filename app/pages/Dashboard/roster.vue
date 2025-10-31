@@ -1,18 +1,16 @@
+<script setup  lang="ts">
 
-
-<script lang="ts" setup>
 
 
 definePageMeta({
     layout: 'dashboard-layout'
 })
+
+const route = useRoute();
 </script>
 
-
 <template>
-
-
- <div>
+<div class=" space-y-6">
 
     <div class="flex justify-between items-center">
         <!-- headers  -->
@@ -41,7 +39,7 @@ definePageMeta({
 
 
         <!-- total staff card -->
-    <div class="border rounded-lg shadow w-full p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
+    <div class="border rounded-lg w-full p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
  <div class=" flex justify-between">
 
     <span class=" font-light">Total Staff</span>
@@ -65,7 +63,7 @@ definePageMeta({
 
 
         <!-- this week card -->
-    <div class="border rounded-lg shadow w-full p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
+    <div class="border rounded-lg w-full p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
  <div class=" flex justify-between">
 
     <span class=" font-light">This Week</span>
@@ -88,7 +86,7 @@ definePageMeta({
 
 
         <!-- pending leaves card -->
-    <div class="border rounded-lg shadow w-full p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
+    <div class="border rounded-lg w-full p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
  <div class=" flex justify-between">
 
     <span class=" font-light">Pending Leave Requests</span>
@@ -112,12 +110,32 @@ definePageMeta({
 
 
 
-     <div>
 
-     </div>
     </div>
 
 
 
+
+    <!-- nested roster routes links -->
+
+    <div class=" bg-accent py-1 px-2 rounded-lg flex gap-4 items-center  w-[520px]">
+
+        <NuxtLink to="/dashboard/roster/weekly" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/weekly' ? 'bg-background': '']">Weekly schedule</NuxtLink>
+        <NuxtLink to="/dashboard/roster/ai-optimizer" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/ai-optimizer' ? 'bg-background': '']">AI-optimizer</NuxtLink>
+        <NuxtLink to="/dashboard/roster/leave-requests" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/leave-requests' ? 'bg-background': '']">Leave requests</NuxtLink>
+        <NuxtLink to="/dashboard/roster/staff-availability" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/staff-availability' ? 'bg-background': '']">Staff Availability</NuxtLink>
+
+    </div>
+
+
+    <!-- here all the nested roster routes will be rendered -->
+    <div>
+<NuxtPage/>
+    </div>
+
 </div>
+
+
+
+ 
 </template>
