@@ -1,4 +1,6 @@
-<script setup lang="ts">
+<script setup  lang="ts">
+
+
 
 definePageMeta({
     layout: 'dashboard-layout'
@@ -6,9 +8,7 @@ definePageMeta({
 </script>
 
 <template>
-<div>
-    <p> hello</p>
-</div>
+
 
  
 </template>

@@ -6,11 +6,10 @@ import { Transition } from 'vue';
 const { isSidebar_open, open_side_bar, close_side_bar, isTabletOrLarger} = useSideBar();
 
 
-const {width} = useWindowSize()
 </script>
 <template>
    <!-- nav bar dashboard -->
-<div class=" flex justify-between p-4 ">
+<div class=" flex justify-between p-4  ">
     <div class=" flex items-center space-x-6">
 
     <div v-if="!isTabletOrLarger">

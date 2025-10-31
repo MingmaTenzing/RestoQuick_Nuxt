@@ -31,7 +31,7 @@ const { isSidebar_open, isTabletOrLarger } = useSideBar()
       <Dashboard_SideBar v-if="isSidebar_open || isTabletOrLarger" class="absolute left-0 top-20 md:static"  ></Dashboard_SideBar>
       </Transition>
 
-<div class=" p-4">
+<div class=" p-4 w-full">
 
   <slot></slot>
 </div>
