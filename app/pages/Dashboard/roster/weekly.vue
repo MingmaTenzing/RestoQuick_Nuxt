@@ -7,5 +7,10 @@
 <template>
 
 
-    <p>i'm child i'm weekly </p>
+
+
+<div>
+    I'm wekly
+
+</div>
 </template>
