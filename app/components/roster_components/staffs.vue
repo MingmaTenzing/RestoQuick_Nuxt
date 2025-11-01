@@ -9,7 +9,7 @@ defineProps< { staff: Staff}> ()
 
     <div>
         
-        <div class=" border border-border flex items-center gap-4 p-4 rounded-lg">
+        <div class=" border border-border bg-card text-card-foreground flex items-center gap-4 p-4 rounded-lg">
 
             <i class=" pi pi-ellipsis-v">
 

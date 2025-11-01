@@ -12,9 +12,12 @@ console.log(mockStaff.length)
 
 <div>
     <span>Staff Members</span>
-    <div v-for="data in mockStaff">
+    <div class=" space-y-2">
 
-        <RosterComponentsStaffs :staff="data"></RosterComponentsStaffs>
+        <div v-for="data in mockStaff" >
+    
+            <RosterComponentsStaffs :staff="data"></RosterComponentsStaffs>
+        </div>
     </div>
 
 </div>
