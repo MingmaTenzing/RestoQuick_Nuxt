@@ -10,7 +10,7 @@
 
 
 <div>
-    I'm wekly
+    <RosterComponentsStaffs></RosterComponentsStaffs>
 
 </div>
 </template>
