@@ -1,5 +1,3 @@
-import { ref, computed } from "vue";
-
 export function useWeekNavigation() {
   const currentDate = useState("currentDate", () => new Date());
 

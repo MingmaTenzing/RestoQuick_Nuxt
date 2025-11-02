@@ -19,6 +19,7 @@ console.log(mockStaff.length)
             <RosterComponentsStaffs :staff="data"></RosterComponentsStaffs>
         </div>
     </div>
-
+    
 </div>
+<RosterComponentsRosterCalendar></RosterComponentsRosterCalendar>
 </template>
