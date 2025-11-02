@@ -14,7 +14,7 @@ const { isSidebar_open, isTabletOrLarger } = useSideBar()
 <template>
 
     
-<div class=" relative ">
+<div class=" relative  z-0 ">
 
        <!-- nav bar dashboard -->
 <Dashboard_NavBar></Dashboard_NavBar>
@@ -25,12 +25,20 @@ const { isSidebar_open, isTabletOrLarger } = useSideBar()
 
 
 
-  <Transition name="slide"> 
-      
   
-      <Dashboard_SideBar v-if="isSidebar_open || isTabletOrLarger" class="absolute left-0 top-20 md:static"  ></Dashboard_SideBar>
+<Transition name="fade">
+        <div
+          v-if="isSidebar_open && !isTabletOrLarger"
+          class="fixed inset-0 bg-black/50 backdrop-blur-sm z-10"
+          @click="isSidebar_open = false"
+        ></div>
       </Transition>
 
+      <Transition name="slide"> 
+      
+  
+      <Dashboard_SideBar v-if="isSidebar_open || isTabletOrLarger" class="absolute left-0 top-20 lg:static z-20"  ></Dashboard_SideBar>
+      </Transition>
 <div class=" p-4 w-full">
 
   <slot></slot>

@@ -21,7 +21,7 @@ defineProps< { staff: Staff}> ()
                 <div class="space-y-2 flex flex-col">
 
                     <div>{{staff.name}}</div>
-                    <div class=" rounded-lg border border-border bg-violet-400 text-violet-200 px-4 text-sm  w-fit  ">
+                    <div class=" rounded-lg border border-border bg-secondary text-muted-foreground px-4 text-sm  w-fit  ">
                         <span class=" w-auto">{{ staff.role }}</span>
                     </div>
                 </div>
