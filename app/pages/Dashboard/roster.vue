@@ -39,7 +39,7 @@ const route = useRoute();
 
 
         <!-- total staff card -->
-    <div class="border rounded-lg w-full p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
+    <div class="border rounded-lg w-full shadow   p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
  <div class=" flex justify-between">
 
     <span class=" font-light">Total Staff</span>
@@ -63,7 +63,7 @@ const route = useRoute();
 
 
         <!-- this week card -->
-    <div class="border rounded-lg w-full p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
+    <div class="border rounded-lg w-full shadow   p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
  <div class=" flex justify-between">
 
     <span class=" font-light">This Week</span>
@@ -86,7 +86,7 @@ const route = useRoute();
 
 
         <!-- pending leaves card -->
-    <div class="border rounded-lg w-full p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
+    <div class="border rounded-lg w-full shadow  shadow-ring p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
  <div class=" flex justify-between">
 
     <span class=" font-light">Pending Leave Requests</span>
