@@ -1,29 +1,50 @@
 <script lang="ts" setup>
-import type { Staff } from '~/lib/roster-mockdata';
+import { computed } from 'vue'
+import type { Staff } from '~/lib/roster-mockdata'
 
-defineProps< { staff: Staff}> ()
+const props = defineProps<{ staff: Staff }>()
+
+const weekDays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+
+
+const isAvailable = (day: string) => props.staff.availability.includes(day)
+
+
+
+
 </script>
-
 
 <template>
 
-    <div>
+    <div >
         
-        <div class=" border border-border bg-card text-card-foreground flex items-center gap-4 p-4 rounded-lg">
+        <div class=" w-[320px] border border-border bg-card text-card-foreground  p-4 rounded-lg">
+<div class=" flex justify-end">
+    <i class=" pi pi-ellipsis-v">
 
-            <i class=" pi pi-ellipsis-v">
+    </i>
 
-            </i>
+</div>
 
-            <div class=" flex items-center gap-4">
-                <div class=" w-10 h-10 bg-accent rounded-full flex justify-center items-center">{{staff.name[0], staff.name[1]}}</div>
+            <div class="  gap-4 flex flex-col items-center justify-center">
+                    <div class=" w-10 h-10 bg-accent rounded-full flex justify-center items-center">JD</div>
                 
-                <div class="space-y-2 flex flex-col">
+                <div class="space-y-2 flex flex-col items-center">
 
                     <div>{{staff.name}}</div>
-                    <div class=" rounded-lg border border-border bg-secondary text-muted-foreground px-4 text-sm  w-fit  ">
+                    <div class=" rounded-lg border border-border bg-secondary  text-card-foreground px-4 text-sm  w-fit  ">
                         <span class=" w-auto">{{ staff.role }}</span>
                     </div>
+                </div>
+                <div class="flex gap-">
+
+                 <div v-for="day in weekDays" :key="day">
+
+                     <span :class="['bg-card text-sm border px-2 py-1 rounded-full', isAvailable(day) ? 'bg-green-500 text-green-100':'bg-muted text-muted-foreground']">
+                         {{ day }}
+                     </span>
+
+                 </div>
                 </div>
             </div>
 

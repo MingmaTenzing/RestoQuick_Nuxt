@@ -13,6 +13,16 @@ const {
 console.log(weekDates.value, weekRangeText.value, nextWeek, previousWeek, goToCurrentWeek)
 
 console.log(weekDates.value[0]?.date.toLocaleString())
+
+
+function onDrop(event: DragEvent) {
+
+    console.log('on drop called');
+
+    console.log(event.dataTransfer?.getData("staffId"))
+
+
+}
 </script>
 
 
@@ -21,7 +31,7 @@ console.log(weekDates.value[0]?.date.toLocaleString())
 <template> 
 
 <div>
-    <div class=" flex justify-between items-center">
+    <div class=" flex justify-between items-center  w-full">
 
         <span class=" text-2xl font-semibold">Weekly 
             Schedule</span>
@@ -41,8 +51,8 @@ console.log(weekDates.value[0]?.date.toLocaleString())
 
     <!-- week dates and drag and drop  -->
 
-    <section class=" flex w-full gap-4">
-        <div class="w-[200px] flex flex-col gap-4" v-for="date in weekDates" :key="date.date.toLocaleDateString()">
+    <section class=" flex  justify-around gap-4  ">
+        <div class=" flex w-full flex-col gap-4" v-for="date in weekDates" :key="date.date.toLocaleDateString()">
         <div :class="['flex flex-col items-center justify-center p-4 rounded-lg  ', date.isToday ? 'bg-accent text-primary':' bg-accent/50']">
             <span>{{ date.dayName }}</span>
             <span>{{ date.dayNumber }}</span>
@@ -51,7 +61,10 @@ console.log(weekDates.value[0]?.date.toLocaleString())
         </div>
 <!-- moring shift -->
 
-        <div class=" min-h-[120px] border-2 border-dashed rounded-lg">
+        <div @drop="onDrop($event)"
+        @dragover.prevent  
+        @dragenter.prevent
+        class=" min-h-[120px] border-2 border-dashed rounded-lg">
 
         </div>
     
