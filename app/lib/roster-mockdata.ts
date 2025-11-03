@@ -77,12 +77,12 @@ export const mockStaff: Staff[] = [
     availability: ["mon", "tue", "wed", "sat", "sun"],
   },
 ];
-
 export const mockShifts: Shift[] = [
+  // Monday (2025-11-03)
   {
     id: "s1",
     staffId: "1",
-    date: "2025-01-27",
+    date: "2025-11-03",
     startTime: "09:00",
     endTime: "17:00",
     position: "Kitchen",
@@ -90,7 +90,7 @@ export const mockShifts: Shift[] = [
   {
     id: "s2",
     staffId: "2",
-    date: "2025-01-27",
+    date: "2025-11-03",
     startTime: "10:00",
     endTime: "18:00",
     position: "Floor",
@@ -98,26 +98,166 @@ export const mockShifts: Shift[] = [
   {
     id: "s3",
     staffId: "5",
-    date: "2025-01-27",
+    date: "2025-11-03",
     startTime: "17:00",
     endTime: "23:00",
     position: "Bar",
   },
+
+  // Tuesday (2025-11-04)
   {
     id: "s4",
     staffId: "3",
-    date: "2025-01-28",
-    startTime: "09:00",
-    endTime: "17:00",
+    date: "2025-11-04",
+    startTime: "08:00",
+    endTime: "16:00",
     position: "Kitchen",
   },
   {
     id: "s5",
     staffId: "4",
-    date: "2025-01-28",
+    date: "2025-11-04",
+    startTime: "11:00",
+    endTime: "19:00",
+    position: "Floor",
+  },
+  {
+    id: "s6",
+    staffId: "5",
+    date: "2025-11-04",
+    startTime: "16:00",
+    endTime: "22:00",
+    position: "Bar",
+  },
+
+  // Wednesday (2025-11-05)
+  {
+    id: "s7",
+    staffId: "1",
+    date: "2025-11-05",
     startTime: "10:00",
     endTime: "18:00",
+    position: "Kitchen",
+  },
+  {
+    id: "s8",
+    staffId: "2",
+    date: "2025-11-05",
+    startTime: "09:00",
+    endTime: "17:00",
     position: "Floor",
+  },
+  {
+    id: "s9",
+    staffId: "3",
+    date: "2025-11-05",
+    startTime: "12:00",
+    endTime: "20:00",
+    position: "Bar",
+  },
+
+  // Thursday (2025-11-06)
+  {
+    id: "s10",
+    staffId: "4",
+    date: "2025-11-06",
+    startTime: "09:00",
+    endTime: "17:00",
+    position: "Kitchen",
+  },
+  {
+    id: "s11",
+    staffId: "5",
+    date: "2025-11-06",
+    startTime: "17:00",
+    endTime: "23:00",
+    position: "Bar",
+  },
+  {
+    id: "s12",
+    staffId: "2",
+    date: "2025-11-06",
+    startTime: "11:00",
+    endTime: "19:00",
+    position: "Floor",
+  },
+
+  // Friday (2025-11-07)
+  {
+    id: "s13",
+    staffId: "1",
+    date: "2025-11-07",
+    startTime: "08:00",
+    endTime: "16:00",
+    position: "Kitchen",
+  },
+  {
+    id: "s14",
+    staffId: "3",
+    date: "2025-11-07",
+    startTime: "17:00",
+    endTime: "23:00",
+    position: "Bar",
+  },
+  {
+    id: "s15",
+    staffId: "4",
+    date: "2025-11-07",
+    startTime: "12:00",
+    endTime: "20:00",
+    position: "Floor",
+  },
+
+  // Saturday (2025-11-08)
+  {
+    id: "s16",
+    staffId: "2",
+    date: "2025-11-08",
+    startTime: "09:00",
+    endTime: "17:00",
+    position: "Floor",
+  },
+  {
+    id: "s17",
+    staffId: "3",
+    date: "2025-11-08",
+    startTime: "10:00",
+    endTime: "18:00",
+    position: "Kitchen",
+  },
+  {
+    id: "s18",
+    staffId: "5",
+    date: "2025-11-08",
+    startTime: "18:00",
+    endTime: "00:00",
+    position: "Bar",
+  },
+
+  // Sunday (2025-11-09)
+  {
+    id: "s19",
+    staffId: "4",
+    date: "2025-11-09",
+    startTime: "09:00",
+    endTime: "15:00",
+    position: "Floor",
+  },
+  {
+    id: "s20",
+    staffId: "1",
+    date: "2025-11-09",
+    startTime: "10:00",
+    endTime: "18:00",
+    position: "Kitchen",
+  },
+  {
+    id: "s21",
+    staffId: "5",
+    date: "2025-11-09",
+    startTime: "17:00",
+    endTime: "23:00",
+    position: "Bar",
   },
 ];
 

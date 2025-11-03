@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+
+import { mockShifts } from '~/lib/roster-mockdata';
 const {
     weekDates,
     weekRangeText,
@@ -8,7 +10,7 @@ const {
 
 } = useWeekNavigation();
 
-
+console.log(mockShifts)
 
 console.log(weekDates.value, weekRangeText.value, nextWeek, previousWeek, goToCurrentWeek)
 
@@ -56,6 +58,7 @@ function onDrop(event: DragEvent) {
         <div :class="['flex flex-col items-center justify-center p-4 rounded-lg  ', date.isToday ? 'bg-accent text-primary':' bg-accent/50']">
             <span>{{ date.dayName }}</span>
             <span>{{ date.dayNumber }}</span>
+            <span>{{ date.date.toISOString().split('T')[0] }}</span>
 
 
         </div>
@@ -65,6 +68,20 @@ function onDrop(event: DragEvent) {
         @dragover.prevent  
         @dragenter.prevent
         class=" min-h-[120px] border-2 border-dashed rounded-lg">
+
+        <div v-for="shift in mockShifts" :key="shift.id">
+            <div v-if="shift.date == date.date.toISOString().split('T')[0]">
+                <span>{{ shift.date }}</span>
+
+                <div>
+                    <roster-components-staff-shift :staff_id="shift.staffId" ></roster-components-staff-shift>
+                </div>
+
+                <p>{{ shift.startTime }}</p>
+                <p>{{ shift.endTime }}</p>
+            </div>
+            
+        </div>
 
         </div>
     
