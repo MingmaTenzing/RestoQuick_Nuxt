@@ -10,18 +10,20 @@ const {
 
 } = useWeekNavigation();
 
-console.log(mockShifts)
 
-console.log(weekDates.value, weekRangeText.value, nextWeek, previousWeek, goToCurrentWeek)
+const { shifts, edit_shift_time, addShift, remove_shift} = useRoster();
 
-console.log(weekDates.value[0]?.date.toLocaleString())
-
-
-function onDrop(event: DragEvent) {
+function onDrop(event: DragEvent, shift_date: Date) {
 
     console.log('on drop called');
 
     console.log(event.dataTransfer?.getData("staffId"))
+
+    const staff_id = event.dataTransfer?.getData("staffId");
+
+    addShift(staff_id!, shift_date);
+
+    console.log(shifts.value)
 
 
 }
@@ -64,13 +66,13 @@ function onDrop(event: DragEvent) {
         </div>
 <!-- moring shift -->
 
-        <div @drop="onDrop($event)"
+        <div @drop="onDrop($event, date.date)"
         @dragover.prevent  
         @dragenter.prevent
         class=" min-h-[120px] border-2 border-dashed rounded-lg">
 
-        <div v-for="shift in mockShifts" :key="shift.id">
-            <div v-if="shift.date == date.date.toISOString().split('T')[0]">
+        <div v-for="shift in shifts" :key="shift.id">
+            <div v-if="shift.date == date.date">
                 <span>{{ shift.date }}</span>
 
                 <div>

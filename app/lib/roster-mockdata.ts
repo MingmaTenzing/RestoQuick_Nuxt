@@ -8,9 +8,9 @@ export interface Staff {
 }
 
 export interface Shift {
-  id: string;
+  id: string; //should be later on added by database
   staffId: string;
-  date: string;
+  date: Date;
   startTime: string;
   endTime: string;
   position: string;

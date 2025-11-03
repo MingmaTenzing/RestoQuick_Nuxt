@@ -5,6 +5,7 @@ console.log(mockStaff.length)
 function startDrag(event: DragEvent, staff: Staff) {
     
     event.dataTransfer?.setData('staffId', staff.id)
+   
     
 
 }
