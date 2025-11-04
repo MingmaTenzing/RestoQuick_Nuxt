@@ -10,8 +10,12 @@ const {
 
 } = useWeekNavigation();
 
+const { isStaffDragged, staffDragEnd, staffisDragged} = useStaffDrag();
+
 
 const { shifts, edit_shift_time, addShift, remove_shift} = useRoster();
+
+
 
 function onDrop(event: DragEvent, shift_date: Date) {
 
@@ -25,8 +29,12 @@ function onDrop(event: DragEvent, shift_date: Date) {
 
     console.log(shifts.value)
 
+    // sets the staff drag to false and removes the border sytling
+ staffDragEnd()
 
 }
+
+
 </script>
 
 
@@ -64,14 +72,15 @@ function onDrop(event: DragEvent, shift_date: Date) {
 
 
         </div>
-<!-- moring shift -->
+<!--  shift -->
 
-        <div @drop="onDrop($event, date.date)"
+        <div @drop="onDrop($event, date.date) "
         @dragover.prevent  
-        @dragenter.prevent
-        class=" min-h-[120px] border-2 border-dashed rounded-lg">
+       
 
-        <div v-for="shift in shifts" :key="shift.id">
+        :class="['   min-h-[120px] p-4  border-2 border-dashed rounded-lg', isStaffDragged?'border-amber-500':'']">
+
+        <div  v-for="shift in shifts" :key="shift.id">
             <div v-if="shift.date == date.date">
                 <span>{{ shift.date }}</span>
 
@@ -88,11 +97,6 @@ function onDrop(event: DragEvent, shift_date: Date) {
         </div>
     
 
-        <!-- evening shift -->
-<div class=" min-h-[120px] border-2 border-dashed rounded-lg">
-
-    
-</div>
 
     </div>
 

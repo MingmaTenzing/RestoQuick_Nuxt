@@ -2,10 +2,14 @@
 import {mockStaff, type Staff} from "../../../lib/roster-mockdata"
 console.log(mockStaff.length)
 
+
+const { staffisDragged} = useStaffDrag()
+
 function startDrag(event: DragEvent, staff: Staff) {
     
     event.dataTransfer?.setData('staffId', staff.id)
-   
+
+    staffisDragged();
     
 
 }
