@@ -42,8 +42,8 @@ function onDrop(event: DragEvent, shift_date: Date) {
 
 <template> 
 
-<div>
-    <div class=" flex justify-between items-center  w-full">
+<div >
+    <div class=" flex justify-between items-center w-full">
 
         <span class=" text-2xl font-semibold">Weekly 
             Schedule</span>
@@ -63,12 +63,15 @@ function onDrop(event: DragEvent, shift_date: Date) {
 
     <!-- week dates and drag and drop  -->
 
-    <section class=" flex  justify-around gap-4  ">
+    <section class=" flex  justify-around gap-1 ">
         <div class=" flex w-full flex-col gap-4" v-for="date in weekDates" :key="date.date.toLocaleDateString()">
         <div :class="['flex flex-col items-center justify-center p-4 rounded-lg  ', date.isToday ? 'bg-accent text-primary':' bg-accent/50']">
-            <span>{{ date.dayName }}</span>
-            <span>{{ date.dayNumber }}</span>
-            <span>{{ date.date.toISOString().split('T')[0] }}</span>
+            <span class=" font-light">{{ date.dayName }}</span>
+            <div class=" flex gap-1 font-bold">
+                <span>{{ date.dayNumber }}</span>
+                <span>{{ date.month }}</span>
+
+            </div>
 
 
         </div>
@@ -78,18 +81,17 @@ function onDrop(event: DragEvent, shift_date: Date) {
         @dragover.prevent  
        
 
-        :class="['   min-h-[120px] p-4  border-2 border-dashed rounded-lg', isStaffDragged?'border-amber-500':'']">
+        :class="['   min-h-[120px] p-2 mb-4 border-2 border-dashed rounded-lg', isStaffDragged?'border-amber-600':'']">
 
         <div  v-for="shift in shifts" :key="shift.id">
-            <div v-if="shift.date == date.date">
-                <span>{{ shift.date }}</span>
+            <div v-if="new Date(shift.date).toDateString() == date.date.toDateString()">
+              
 
                 <div>
-                    <roster-components-staff-shift :staff_id="shift.staffId" ></roster-components-staff-shift>
+                    <roster-components-staff-shift :staff_id="shift.staffId" :shift_id="shift.id" ></roster-components-staff-shift>
                 </div>
 
-                <p>{{ shift.startTime }}</p>
-                <p>{{ shift.endTime }}</p>
+               
             </div>
             
         </div>

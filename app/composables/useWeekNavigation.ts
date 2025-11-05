@@ -8,7 +8,6 @@ export function useWeekNavigation() {
     const diff = day === 0 ? 6 : day - 1; // Adjust diff to make Monday the start
     return new Date(date.setDate(date.getDate() - diff));
   });
-
   // Generate array of dates for the week
   const weekDates = computed(() => {
     const dates = [];
