@@ -14,6 +14,8 @@ const {
 
 const isaddShift_Modal_Open = ref<boolean>(false)
 
+const is_select_staff_open = ref<boolean>(false)
+
 const { shifts, edit_shift_time, addShift, remove_shift} = useRoster();
 
 
@@ -143,9 +145,9 @@ function close_add_shift_modal() {
     
     
 <!-- addd shift modal form -->
-    <div v-if="isaddShift_Modal_Open" class=" flex  justify-center items-center fixed w-screen h-screen bg-background/90  top-0  left-0">
+    <div v-if="isaddShift_Modal_Open" class=" flex  justify-center items-center fixed w-screen h-screen bg-background/90   top-0  left-0">
 
-        <div class=" w-[500px] flex flex-col gap-4  p-4 bg-popover border border-ring shadow-card opacity-100 rounded-lg" >
+        <div class=" w-[500px] flex flex-col gap-4  p-4 bg-background   drop-shadow-xs   drop-shadow-accent opacity-100 rounded-lg" >
             
             <section class=" space-y-2">
                 <!-- modal header -->
@@ -165,21 +167,23 @@ function close_add_shift_modal() {
 
 <section >
     <!-- form sections -->
-    <form>
-        <div class=" space-y-2">
-            <div class=" font-semibold">
+    <form class=" space-y-4">
+        <!-- staff member section -->
+        <section class=" space-y-2">
+            
+            <div class="text-sm font-medium">
                 Staff Member
     
             </div>
             <div >
                 <div class="relative  items-center  w-1/2"> 
-                     <div class="border border-border  p-2 rounded-lg  flex justify-between items-center">
+                     <div v-on:click="is_select_staff_open = !is_select_staff_open" class="border border-border  p-2 rounded-lg  flex justify-between items-center">
 
                         <span class=" text-muted-foreground font-light text-sm">Select a staff member</span>
                          <i class=" pi pi-angle-down"></i>
                          </div>
 
-                    <div class=" absolute w-full h-[260px] overflow-y-scroll   space-y-2  bg-popover  shadow-2xl rounded-lg ">
+                    <div v-if="is_select_staff_open" class=" absolute w-full h-[260px] overflow-y-scroll   space-y-2  bg-popover  shadow-2xl rounded-lg ">
                         <div class="hover:bg-accent" v-for="staff in mockStaff" :key="staff.id" >
                             <div class="flex  items-center justify-between p-2 ">
                                 <div class=" flex space-x-2 items-center">
@@ -199,8 +203,57 @@ function close_add_shift_modal() {
     
             </div>
     
-        </div>    
-    
+        </section>  
+        
+        
+        <!-- start and end time -->
+        <section class=" flex justify-between">
+            <div class=" flex flex-col w-[45%]">
+                <span class=" text-sm font-medium
+                ">
+                    Start Time
+                </span>
+                <div class=" border border-border   p-2 rounded-lg">
+                    <input class="outline-none  color-accent" type="time" />
+
+                </div>
+                
+
+            </div>
+            <div class=" flex flex-col w-[45%]">
+                <span class=" text-sm font-medium
+                ">
+                    End Time
+                </span>
+                <div class=" border border-border focus:border-ring  p-2 rounded-lg">
+                    <input class="outline-none" type="time" />
+
+                </div>
+                
+
+            </div>
+        </section>
+
+        <!-- shift position -->
+    <section class=" flex flex-col space-y-2">
+         <span class=" text-sm font-medium
+                ">
+                   Position
+                </span>
+                <input class="outline-none border border-border rounded-lg p-2 text-sm" type="text" placeholder="eg:- Kitchen, Receiption, Front, Floor"/>
+
+
+    </section>
+
+    <!-- cancel and add shift buttons -->
+
+    <section class=" flex justify-end space-x-2 items-center text-sm">
+
+        <button class="px-4  py-2  hover:border-ring rounded-lg border border-border ">Cancel</button>
+        <button class="px-4  py-2  hover:border-ring rounded-lg border border-border bg-green-600 text-green-200 ">Add Shift
+
+        </button>
+    </section>
     </form>
 
 </section>
