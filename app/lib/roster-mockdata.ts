@@ -1,7 +1,8 @@
 export interface Staff {
   id: string;
-  name: string;
-  role: "Chef" | "Waiter" | "Bartender" | "aMnager" | "Cook" | "Kitchen Hand";
+  firstname: string;
+  lastName: string;
+  role: "Chef" | "Waiter" | "Bartender" | "Manager" | "Cook" | "Kitchen Hand";
   email: string;
   phone: string;
   availability: string[];
@@ -30,7 +31,8 @@ export interface LeaveRequest {
 export const mockStaff: Staff[] = [
   {
     id: "1",
-    name: "John Doe",
+    firstname: "John",
+    lastName: "Doe",
     role: "Chef",
     email: "john@restaurant.com",
     phone: "555-0101",
@@ -38,7 +40,8 @@ export const mockStaff: Staff[] = [
   },
   {
     id: "2",
-    name: "Jane Smith",
+    firstname: "Jane",
+    lastName: "Smith",
     role: "Waiter",
     email: "jane@restaurant.com",
     phone: "555-0102",
@@ -46,7 +49,8 @@ export const mockStaff: Staff[] = [
   },
   {
     id: "3",
-    name: "Mike Johnson",
+    firstname: "Mike",
+    lastName: "Johnson",
     role: "Chef",
     email: "mike@restaurant.com",
     phone: "555-0103",
@@ -54,7 +58,8 @@ export const mockStaff: Staff[] = [
   },
   {
     id: "4",
-    name: "Sarah Williams",
+    firstname: "Sarah",
+    lastName: "Williams",
     role: "Waiter",
     email: "sarah@restaurant.com",
     phone: "555-0104",
@@ -62,7 +67,8 @@ export const mockStaff: Staff[] = [
   },
   {
     id: "5",
-    name: "Tom Brown",
+    firstname: "Tom",
+    lastName: "Brown",
     role: "Bartender",
     email: "tom@restaurant.com",
     phone: "555-0105",
@@ -70,11 +76,102 @@ export const mockStaff: Staff[] = [
   },
   {
     id: "6",
-    name: "Emily Davis",
+    firstname: "Emily",
+    lastName: "Davis",
     role: "Waiter",
     email: "emily@restaurant.com",
     phone: "555-0106",
     availability: ["mon", "tue", "wed", "sat", "sun"],
+  },
+  {
+    id: "7",
+    firstname: "Sujan",
+    lastName: "Shrestha",
+    role: "Chef",
+    email: "sujan@restaurant.com",
+    phone: "555-0107",
+    availability: ["mon", "tue", "wed", "thu", "fri"],
+  },
+  {
+    id: "8",
+    firstname: "Aarati",
+    lastName: "Lama",
+    role: "Waiter",
+    email: "aarati@restaurant.com",
+    phone: "555-0108",
+    availability: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+  },
+  {
+    id: "9",
+    firstname: "Bibek",
+    lastName: "Gurung",
+    role: "Cook",
+    email: "bibek@restaurant.com",
+    phone: "555-0109",
+    availability: ["wed", "thu", "fri", "sat", "sun"],
+  },
+  {
+    id: "10",
+    firstname: "Prakash",
+    lastName: "Rai",
+    role: "Kitchen Hand",
+    email: "prakash@restaurant.com",
+    phone: "555-0110",
+    availability: ["mon", "tue", "wed", "thu"],
+  },
+  {
+    id: "11",
+    firstname: "Nirmala",
+    lastName: "Thapa",
+    role: "Waiter",
+    email: "nirmala@restaurant.com",
+    phone: "555-0111",
+    availability: ["mon", "tue", "wed", "thu", "fri"],
+  },
+  {
+    id: "12",
+    firstname: "Sandesh",
+    lastName: "Tamang",
+    role: "Bartender",
+    email: "sandesh@restaurant.com",
+    phone: "555-0112",
+    availability: ["thu", "fri", "sat", "sun"],
+  },
+  {
+    id: "13",
+    firstname: "Kusum",
+    lastName: "KC",
+    role: "Waiter",
+    email: "kusum@restaurant.com",
+    phone: "555-0113",
+    availability: ["mon", "tue", "wed", "sat", "sun"],
+  },
+  {
+    id: "14",
+    firstname: "Rajendra",
+    lastName: "Magar",
+    role: "Kitchen Hand",
+    email: "rajendra@restaurant.com",
+    phone: "555-0114",
+    availability: ["mon", "tue", "wed", "thu", "fri", "sat"],
+  },
+  {
+    id: "15",
+    firstname: "Anju",
+    lastName: "Sherpa",
+    role: "Waiter",
+    email: "anju@restaurant.com",
+    phone: "555-0115",
+    availability: ["mon", "tue", "wed", "thu", "fri"],
+  },
+  {
+    id: "16",
+    firstname: "Rajan",
+    lastName: "Khadka",
+    role: "Manager",
+    email: "rajan@restaurant.com",
+    phone: "555-0116",
+    availability: ["mon", "tue", "wed", "thu", "fri"],
   },
 ];
 export const mockShifts: Shift[] = [

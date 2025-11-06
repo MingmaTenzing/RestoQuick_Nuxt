@@ -26,7 +26,23 @@ onMounted(() => {
 
 <template>
 
-<div class=" rounded-lg text-sm border border-border bg-card  p-2 gap-2 items-center">
+<div>
+
+       
+
+     
+       <div class=" flex flex-col bg-accent p-2 rounded-lg w-full">
+   
+           <span class=" text-xs xl:text-base font-medium">{{ staff?.firstname }} {{ staff?.lastName[0] }}.</span>
+           <span class="text-[10px] lg:text-sm">{{shift?.startTime}} - {{shift?.endTime}}</span>
+           <!-- <span class="text-xs">9:00 - 10:00</span> -->
+       
+ 
+   </div>
+</div>
+
+<!-- 
+<div class=" rounded-lg hover:border-ring text-sm border border-border bg-card  p-2 gap-2 items-center">
     <div class=" flex justify-end text-sm">
         <i class="pi pi-pencil"></i>
     </div>
@@ -43,7 +59,7 @@ onMounted(() => {
 
 </div>
 
-</div>
+</div> -->
 
 
 </template>

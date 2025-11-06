@@ -27,11 +27,11 @@ const isAvailable = (day: string) => props.staff.availability.includes(day)
 </div>
 
             <div class="  gap-4 flex flex-col items-center justify-center">
-                    <div class=" w-10 h-10 bg-accent rounded-full flex justify-center items-center">JD</div>
+                    <div class=" w-10 h-10 bg-accent rounded-full flex justify-center items-center">{{staff.firstname[0]}} {{ staff.lastName[0] }}</div>
                 
                 <div class="space-y-2 flex flex-col items-center">
 
-                    <div>{{staff.name}}</div>
+                    <div>{{staff.firstname}} {{ staff.lastName }}</div>
                     <div class=" rounded-lg border border-border bg-secondary  text-card-foreground px-4 text-sm  w-fit  ">
                         <span class=" w-auto">{{ staff.role }}</span>
                     </div>
@@ -40,7 +40,7 @@ const isAvailable = (day: string) => props.staff.availability.includes(day)
 
                  <div v-for="day in weekDays" :key="day">
 
-                     <span :class="['bg-card text-sm border px-2 py-1 rounded-full', isAvailable(day) ? 'bg-green-500 text-green-100':'bg-muted text-muted-foreground']">
+                     <span :class="['bg-card text-xs border px-2 py-1 rounded-full', isAvailable(day) ? 'bg-green-500 text-green-200':'bg-muted text-muted-foreground']">
                          {{ day }}
                      </span>
 
