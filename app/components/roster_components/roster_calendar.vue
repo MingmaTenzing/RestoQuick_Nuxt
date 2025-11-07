@@ -89,7 +89,7 @@ const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShift
     
 
         <!-- shifts of the day container-->
- <div    class='  flex flex-col gap-2 p-2   min-h-[120px] border-2 border-dashed rounded-lg hover:border-amber-600'>
+ <div    class='  flex flex-col gap-2 p-2   min-h-[120px] border-2 border-dashed rounded-lg hover:border-ring'>
 
 <!-- add shift button -->
       <button v-on:click="open_add_shiftModal(date.date)" class=" flex justify-end">

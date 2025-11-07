@@ -31,9 +31,12 @@ onMounted(() => {
        
 
      
-       <div class=" flex flex-col bg-accent p-2 rounded-lg w-full">
+       <div class=" flex flex-col bg-accent p-2 rounded-lg w-full border hover:border-dashed hover:border-ring">
+        <div class=" flex justify-end text-xs hover:text-amber-500">
+            <i class=" pi pi-pencil"></i>
+        </div>
+        <span class=" text-xs xl:text-base font-medium">{{ staff?.firstname }} {{ staff?.lastName[0] }}.</span>
    
-           <span class=" text-xs xl:text-base font-medium">{{ staff?.firstname }} {{ staff?.lastName[0] }}.</span>
            <span class="text-[10px] lg:text-sm">{{shift?.startTime}} - {{shift?.endTime}}</span>
            <!-- <span class="text-xs">9:00 - 10:00</span> -->
        

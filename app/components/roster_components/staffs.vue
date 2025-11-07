@@ -27,7 +27,7 @@ const isAvailable = (day: string) => props.staff.availability.includes(day)
 </div>
 
             <div class="  gap-4 flex flex-col items-center justify-center">
-                    <div class=" w-10 h-10 bg-accent rounded-full flex justify-center items-center">{{staff.firstname[0]}} {{ staff.lastName[0] }}</div>
+                    <div class=" w-10 h-10 bg-accent rounded-full flex justify-center items-center">{{staff.firstname[0]}}{{ staff.lastName[0] }}</div>
                 
                 <div class="space-y-2 flex flex-col items-center">
 

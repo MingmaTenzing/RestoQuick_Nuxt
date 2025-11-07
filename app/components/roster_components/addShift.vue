@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { mockStaff, type Staff } from '~/lib/roster-mockdata';
 
-
+const toast = useToast();
 
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
+const {shifts, addShift } = useRoster()
+
 const is_select_staff_open = ref<boolean>(false)
 
 const selected_staff = ref<Staff>();
@@ -13,12 +15,20 @@ const shift_form = ref({
     shift_start_time: '',
     shift_end_time: '',
     position: ''
+
 })
 
 
 
 function submit_shift() {
-  console.log(shift_form.value)
+    // this can be optimized once connected with database 
+
+
+    // **** date is coming from the addshiftmodal ** when its opened)
+    addShift(shift_form.value.staff_id, addShiftModal.value.date!, shift_form.value.position, shift_form.value.shift_start_time, shift_form.value.shift_end_time )
+ close_add_shiftModal()
+    toast.success({title:"Success", message:"Shift Added"})
+    
 }
 
 function onSelectStaff(staff:Staff) {

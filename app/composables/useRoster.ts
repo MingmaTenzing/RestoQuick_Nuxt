@@ -1,5 +1,5 @@
 import { ref, computed } from "vue";
-import type { Shift, Staff } from "../lib/roster-mockdata";
+import { type Shift, type Staff } from "../lib/roster-mockdata";
 import { mockStaff } from "../lib/roster-mockdata";
 
 export const useRoster = () => {
@@ -80,14 +80,20 @@ export const useRoster = () => {
   ]);
 
   // methods for adding, editing and removing shifts
-  function addShift(staff_id: string, shift_date: Date) {
+  function addShift(
+    staff_id: string,
+    shift_date: Date,
+    position: string,
+    start_time: string,
+    end_time: string
+  ) {
     shifts.value.push({
       staffId: staff_id,
       id: Math.random().toString(36).slice(2),
       date: shift_date,
-      startTime: "",
-      endTime: "",
-      position: "Kitchen", //for now demo purposes
+      startTime: start_time,
+      endTime: end_time,
+      position: position, //for now demo purposes
     });
   }
 
