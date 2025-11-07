@@ -114,7 +114,8 @@ function onSelectStaff(staff:Staff) {
                     Start Time
                 </span>
                 <div class=" border border-border   p-2 rounded-lg">
-                    <input required class="outline-none  color-accent" type="time" v-model="shift_form.shift_start_time" />
+                    <input required class="outline-none text-primary  " type="time" v-model="shift_form.shift_start_time" />
+                
 
                 </div>
                 
@@ -126,7 +127,7 @@ function onSelectStaff(staff:Staff) {
                     End Time
                 </span>
                 <div class=" border border-border focus:border-ring  p-2 rounded-lg">
-                    <input required class="outline-none" type="time" v-model="shift_form.shift_end_time"/>
+                    <input required class="outline-none text-primar" type="time" v-model="shift_form.shift_end_time"/>
 
                 </div>
                 
@@ -168,3 +169,20 @@ function onSelectStaff(staff:Staff) {
     </div>
     
 </template>
+
+<style>
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(0%);
+  opacity: 0.6;
+  cursor: pointer;
+  z-index: -10;
+}
+
+.dark-mode input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(100%);
+  opacity: 0.6;
+  cursor: pointer;
+  z-index: -10;
+}
+</style>
