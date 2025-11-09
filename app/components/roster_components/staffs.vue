@@ -18,7 +18,7 @@ const isAvailable = (day: string) => props.staff.availability.includes(day)
 
     <div >
         
-        <div class=" w-[320px] border border-border hover:border-amber-600 bg-card text-card-foreground  p-4 rounded-lg">
+        <div class=" w-[320px] border border-border hover:border-ring bg-card text-card-foreground  p-4 rounded-lg">
 <div class=" flex justify-end">
     <i class=" pi pi-ellipsis-v">
 

@@ -3,7 +3,8 @@
 import { useWindowSize } from '@vueuse/core';
 import { Transition } from 'vue';
 
-const { isSidebar_open, open_side_bar, close_side_bar, isTabletOrLarger} = useSideBar();
+const { isSidebar_open, open_side_bar, close_side_bar, isTabletOrLarger } = useSideBar();
+const {} = useColorMode()
 
 
 </script>
@@ -22,6 +23,10 @@ const { isSidebar_open, open_side_bar, close_side_bar, isTabletOrLarger} = useSi
         <img src="../../assets/images/RestroMate.png" width="100" class="dark:invert w-12 md:w-[100px]"/>
     </div> 
  <div class=" flex items-center space-x-6">
+    <div>
+        <i v-on:click="$colorMode.preference = 'dark'"  v-if="$colorMode.value === 'light'" class=" pi pi-moon"></i>
+        <i v-on:click="$colorMode.preference = 'light'" v-if="$colorMode.value === 'dark'" class=" pi pi-sun"></i>
+    </div>
      <div>
          
            <div class=" text-sm md:text-base ">Mingma</div>

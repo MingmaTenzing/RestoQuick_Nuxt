@@ -83,7 +83,7 @@ function onSelectStaff(staff:Staff) {
                          <i class=" pi pi-angle-down"></i>
                          </div>
 
-                    <div v-if="is_select_staff_open" class=" absolute w-full h-[260px] overflow-y-scroll   space-y-2  bg-background  shadow-2xl rounded-lg ">
+                    <div v-if="is_select_staff_open" class=" absolute w-full h-[260px] overflow-y-scroll  z-10  space-y-2  bg-background  shadow-2xl rounded-lg ">
                         <div v-on:click="() => onSelectStaff(staff)" class="hover:bg-accent" v-for="staff in mockStaff" :key="staff.id" >
                             <div class="flex  items-center justify-between p-2 ">
                                 <div class=" flex space-x-2 items-center">
@@ -176,13 +176,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   filter: invert(0%);
   opacity: 0.6;
   cursor: pointer;
-  z-index: -10;
+  z-index: 0;
 }
 
 .dark-mode input[type="time"]::-webkit-calendar-picker-indicator {
   filter: invert(100%);
   opacity: 0.6;
   cursor: pointer;
-  z-index: -10;
+  z-index: 0;
 }
 </style>
