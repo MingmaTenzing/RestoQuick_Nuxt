@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
 
-  modules: ["@nuxt/image", "@nuxtjs/color-mode"],
+  modules: ["@nuxt/image", "@nuxtjs/color-mode", "nuxt-toast"],
 
   routeRules: {
     "/dashboard": { ssr: false },

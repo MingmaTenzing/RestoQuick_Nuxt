@@ -5,8 +5,8 @@ definePageMeta({
 })
 </script>
 
+
 <template>
 
-
- 
+    i'm dashboard
 </template>
