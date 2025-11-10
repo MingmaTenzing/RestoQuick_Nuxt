@@ -4,7 +4,6 @@ import { useWindowSize } from '@vueuse/core';
 import { Transition } from 'vue';
 
 const { isSidebar_open, open_side_bar, close_side_bar, isTabletOrLarger } = useSideBar();
-const {} = useColorMode()
 
 
 </script>
