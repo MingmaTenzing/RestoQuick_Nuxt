@@ -1,5 +1,6 @@
 <script setup lang="ts">
 
+import type { Prisma } from '~/generated/prisma/client';
 import { mockStaff, type Staff } from '~/lib/roster-mockdata';
 
 const toast = useToast();
@@ -11,11 +12,20 @@ const is_select_staff_open = ref<boolean>(false)
 
 const selected_staff = ref<Staff>();
 
-const shift_form = ref({
-    staff_id: "",
-    shift_start_time: '',
-    shift_end_time: '',
-    position: ''
+
+const shift_form = ref<Prisma.ShiftCreateInput>({
+    // staff_id: "",
+    // shift_start_time: '',
+    // shift_end_time: '',
+    // position: '',
+    // date: new Date(),
+
+    
+    startTime: '',
+    endTime: '',
+    position: '',
+    date: new Date(Date.now()),
+   staff:'3434343',
 
 })
 
@@ -23,11 +33,24 @@ const shift_form = ref({
 
 
 
-function submit_shift() {
+async function submit_shift() {
     // this can be optimized once connected with database 
 
 
+    shift_form.value.date = addShiftModal.value.date!;
+
+    const {data} = await useFetch('/api/shift', {
+        method: 'post',
+        body: shift_form.value
+    })
+
+    console.log(data)
+
+
     // **** date is coming from the addshiftmodal ** when its opened)
+
+
+
     addShift(shift_form.value.staff_id, addShiftModal.value.date!, shift_form.value.position, shift_form.value.shift_start_time, shift_form.value.shift_end_time )
  close_add_shiftModal()
     toast.success({title:"Success", message:"Shift Added"})
