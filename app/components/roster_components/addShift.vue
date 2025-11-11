@@ -1,12 +1,13 @@
 <script setup lang="ts">
+
 import { mockStaff, type Staff } from '~/lib/roster-mockdata';
 
 const toast = useToast();
 
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
 const {shifts, addShift } = useRoster()
-
 const is_select_staff_open = ref<boolean>(false)
+
 
 const selected_staff = ref<Staff>();
 
@@ -17,6 +18,8 @@ const shift_form = ref({
     position: ''
 
 })
+
+
 
 
 

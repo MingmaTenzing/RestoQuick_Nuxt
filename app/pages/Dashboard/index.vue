@@ -4,7 +4,10 @@ definePageMeta({
     layout: 'dashboard-layout'
 })
 
-const { data } = await useFetch('/api/users');
+// const { data } = await useFetch('/api/users');
+
+
+const {data,error ,status}= await useFetch("/api/shift")
 console.log(data.value)
 
 </script>

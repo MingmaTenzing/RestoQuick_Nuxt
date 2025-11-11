@@ -14,19 +14,50 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
-  phone String
+enum Role {
+  Chef
+  Waiter
+  Bartender
+  Manager
+  Cook
+  Kitchen_Hand
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+enum LeaveStatus {
+  pending
+  approved
+  rejected
+}
+
+model Staff {
+  id            String         @id @default(uuid())
+  firstname     String
+  lastName      String
+  role          Role
+  email         String         @unique
+  phone         String
+  availability  String[] // stores an array of available days
+  shifts        Shift[]
+  leaveRequests LeaveRequest[]
+}
+
+model Shift {
+  id        String   @id @default(uuid())
+  staffId   String
+  date      DateTime
+  startTime String
+  endTime   String
+  position  String
+  staff     Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+}
+
+model LeaveRequest {
+  id          String      @id @default(uuid())
+  staffId     String
+  startDate   DateTime
+  endDate     DateTime
+  reason      String
+  status      LeaveStatus @default(pending)
+  submittedAt DateTime    @default(now())
+  staff       Staff       @relation(fields: [staffId], references: [id], onDelete: Cascade)
 }
