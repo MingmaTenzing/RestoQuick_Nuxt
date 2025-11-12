@@ -1,7 +1,8 @@
 <script setup lang="ts">
 
-import type { Prisma } from '~/generated/prisma/client';
-import { mockStaff, type Staff } from '~/lib/roster-mockdata';
+import type { Prisma, Staff , Shift} from '~/generated/prisma/client';
+import type { ShiftCreateInput } from '~/generated/prisma/models';
+import { mockStaff } from '~/lib/roster-mockdata';
 
 const toast = useToast();
 
@@ -13,19 +14,16 @@ const is_select_staff_open = ref<boolean>(false)
 const selected_staff = ref<Staff>();
 
 
-const shift_form = ref<Prisma.ShiftCreateInput>({
-    // staff_id: "",
-    // shift_start_time: '',
-    // shift_end_time: '',
-    // position: '',
-    // date: new Date(),
-
-    
+const shift_form = ref<Prisma.ShiftUncheckedCreateInput>({
     startTime: '',
     endTime: '',
+   staffId: '',
+
+    date: '', 
+
     position: '',
-    date: new Date(Date.now()),
-   staff:'3434343',
+   
+  
 
 })
 
