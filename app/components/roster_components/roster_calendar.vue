@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 
+import type { Shift } from '~/generated/prisma/client';
 import { mockStaff } from '~/lib/roster-mockdata';
 const {
     weekDates,
@@ -10,15 +11,18 @@ const {
 
 } = useWeekNavigation();
 
-const isaddShift_Modal_Open = ref<boolean>(false)
 
-const { shifts } = useRoster();
+
+const { number, add, less} = useNumber()
+// const { shifts } = useRoster();
 
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
 
 
+const { data: shifts } = await useFetch<Shift[]>("/api/shift",  {watch: [addShiftModal.value]}
+  )
 
-
+console.log(shifts)
 
 </script>
 
@@ -28,6 +32,9 @@ const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShift
 <template> 
 
 <div class=" " >
+
+    <button v-on:click="add" class=" rounded-lg border">Add more {{ number }}</button>
+    <button v-on:click="less" class=" rounded-lg border">Less more {{ number }}</button>
     <div class=" flex justify-between items-center w-full my-4">
 
         <span class=" text-2xl font-semibold">Weekly 
@@ -101,10 +108,11 @@ const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShift
 
    <!-- staff shift time and name -->
 
-        <div   v-for="shift in shifts.filter((shift) => shift.date.toDateString() == date.date.toDateString())" :key="shift.id">
+        <div   v-for="shift in shifts?.filter((shift) =>new Date(shift.date).toISOString().split('T')[0] ===
+      new Date(date.date).toISOString().split('T')[0])" :key="shift.id">
 
 
-            <roster-components-staff-shift :shift_id="shift.id" :staff_id="shift.staffId"></roster-components-staff-shift>
+            <roster-components-staff-shift :shift="shift"></roster-components-staff-shift>
             </div>
 
     </div>

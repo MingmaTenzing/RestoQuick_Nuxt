@@ -3,7 +3,7 @@ import type { Staff } from '~/generated/prisma/client';
 
 
 
-const { data: staffs } = useFetch<Staff[]>("/api/staff");
+const { data: staffs } = await useFetch<Staff[]>("/api/staff");
 
 
 

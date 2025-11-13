@@ -6,7 +6,7 @@ const toast = useToast();
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
 const { shifts, addShift } = useRoster() //need to move it to server
 
-const {data: staffs} = useFetch("/api/staff")
+const {data: staffs} = await useFetch("/api/staff")
 
 
 
@@ -38,20 +38,16 @@ async function submit_shift() {
     console.log(shift_form.value)
     // this can be optimized once connected with database 
 
-    const {data} = await useFetch('/api/shift', {
+    const {data, status, error} = await useFetch('/api/shift', {
         method: 'post',
         body: shift_form.value
     })
 
     console.log(data)
+    console.log(status)
+    console.log(error)
 
-
-    // **** date is coming from the addshiftmodal ** when its opened)
-
-
-
-//     addShift(shift_form.value.staff_id, addShiftModal.value.date!, shift_form.value.position, shift_form.value.shift_start_time, shift_form.value.shift_end_time )
-//  close_add_shiftModal()
+ close_add_shiftModal()
     toast.success({title:"Success", message:"Shift Added"})
     
 }
