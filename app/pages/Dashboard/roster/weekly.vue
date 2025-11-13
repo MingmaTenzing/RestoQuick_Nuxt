@@ -1,13 +1,21 @@
 <script lang="ts" setup>
-import {mockStaff, type Staff} from "../../../lib/roster-mockdata"
-console.log(mockStaff.length)
+import type { Staff } from '~/generated/prisma/client';
 
 
-const { staffisDragged} = useStaffDrag()
 
-function startDrag(event: DragEvent, staff: Staff) {
+const { data: staffs } = useFetch<Staff[]>("/api/staff");
+
+
+
+// the drag is drop feature for it 
+//set for future as it's not feasilbe at the momment for the design;
+// will come back once it feels it needs it.
+const { staffisDragged } = useStaffDrag()
+
+
+function startDrag(event: DragEvent, data:Staff) {
     
-    event.dataTransfer?.setData('staffId', staff.id)
+    event.dataTransfer?.setData('staffId', data.id)
 
     staffisDragged();
     
@@ -31,7 +39,7 @@ function startDrag(event: DragEvent, staff: Staff) {
     
         <div class="flex flex-wrap gap-2">
             
-            <div v-for="data in mockStaff" draggable="true" @dragstart="startDrag($event, data)">
+            <div v-for="data in staffs" draggable="true" @dragstart="startDrag($event, data)">
                 
                 <RosterComponentsStaffs :staff="data"></RosterComponentsStaffs>
             </div>

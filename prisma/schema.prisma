@@ -30,13 +30,19 @@ enum LeaveStatus {
 }
 
 model Staff {
-  id            String         @id @default(uuid())
-  firstname     String
-  lastName      String
-  role          Role
-  email         String         @unique
-  phone         String
-  availability  String[] // stores an array of available days
+  id           String   @id @default(uuid())
+  firstname    String
+  lastName     String
+  role         Role
+  email        String   @unique
+  phone        String
+  availability String[] // stores an array of available days
+  // the availability doesn't have types need to look into it later
+  // once everything is running please check this to make sure 
+  //availability data type is valid when user makes a post request
+  // it should be = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+  //at the moment i'm aware and manually doing it so it's fine 
+
   shifts        Shift[]
   leaveRequests LeaveRequest[]
 }
