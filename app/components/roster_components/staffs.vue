@@ -1,10 +1,16 @@
 <script lang="ts" setup>
+import type { Staff } from '~/generated/prisma/client';
 
-import type { Staff } from '~/lib/roster-mockdata'
+
 
 const props = defineProps<{ staff: Staff }>()
 
+
+
+
 const weekDays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+
+
 
 
 const isAvailable = (day: string) => props.staff.availability.includes(day)

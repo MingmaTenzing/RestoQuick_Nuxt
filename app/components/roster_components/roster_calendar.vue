@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 
+import type { Shift } from '~/generated/prisma/client';
 import { mockStaff } from '~/lib/roster-mockdata';
 const {
     weekDates,
@@ -10,15 +11,18 @@ const {
 
 } = useWeekNavigation();
 
-const isaddShift_Modal_Open = ref<boolean>(false)
 
-const { shifts } = useRoster();
+
 
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
 
+// the useFetch call is watching addShiftModal.value to refetch data if it changes
+// the reason for this is user will open the addshiftmodal and then it will close automatically once its done.
+// this elemenates creating another separate variable to watch
+// but with further development it might change. for now its fine.
+const { data: shifts } = await useFetch<Shift[]>("/api/shift",  {watch: [addShiftModal.value]} )
 
-
-
+console.log(shifts)
 
 </script>
 
@@ -101,10 +105,11 @@ const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShift
 
    <!-- staff shift time and name -->
 
-        <div   v-for="shift in shifts.filter((shift) => shift.date.toDateString() == date.date.toDateString())" :key="shift.id">
+        <div   v-for="shift in shifts?.filter((shift) =>new Date(shift.date).toISOString().split('T')[0] ===
+      new Date(date.date).toISOString().split('T')[0])" :key="shift.id">
 
 
-            <roster-components-staff-shift :shift_id="shift.id" :staff_id="shift.staffId"></roster-components-staff-shift>
+            <roster-components-staff-shift :shift="shift"></roster-components-staff-shift>
             </div>
 
     </div>

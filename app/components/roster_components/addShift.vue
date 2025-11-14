@@ -1,40 +1,66 @@
 <script setup lang="ts">
-import { mockStaff, type Staff } from '~/lib/roster-mockdata';
+
+import { title } from 'process';
+import type { Prisma, Staff , Shift} from '~/generated/prisma/client';
 
 const toast = useToast();
-
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
-const {shifts, addShift } = useRoster()
+
+const {data: staffs} = await useFetch("/api/staff")
+
+
 
 const is_select_staff_open = ref<boolean>(false)
 
+
 const selected_staff = ref<Staff>();
 
-const shift_form = ref({
-    staff_id: "",
-    shift_start_time: '',
-    shift_end_time: '',
-    position: ''
+const shift_form = ref<Prisma.ShiftUncheckedCreateInput>({
+    startTime: '',
+    endTime: '',
+   staffId: '',
+
+    //    date comes from the addshiftmodal composable
+    date: addShiftModal.value.date!, 
+
+    position: '',
+   
+  
 
 })
 
 
 
-function submit_shift() {
+
+
+async function submit_shift() {
+
+    console.log(shift_form.value)
     // this can be optimized once connected with database 
 
+    const {data, status, error} = await useFetch('/api/shift', {
+        method: 'post',
+        body: shift_form.value
+    })
 
-    // **** date is coming from the addshiftmodal ** when its opened)
-    addShift(shift_form.value.staff_id, addShiftModal.value.date!, shift_form.value.position, shift_form.value.shift_start_time, shift_form.value.shift_end_time )
- close_add_shiftModal()
-    toast.success({title:"Success", message:"Shift Added"})
+    if (status.value == 'success' && data.value?.response) {
+        
+        toast.success({title:"Success", message:"Shift Added"})
+        close_add_shiftModal()
+    }
+  else if (status.value == 'error') {
+
+    toast.error({title: "Error", message: error.value?.message})
+  }
+
     
 }
 
-function onSelectStaff(staff:Staff) {
-    selected_staff.value = staff;
+function onSelectStaff(staff: Staff) {
+    
+    selected_staff.value = staff; //to show it if staff is selected in the input itself
     is_select_staff_open.value = false
-    shift_form.value.staff_id = staff.id;
+    shift_form.value.staffId = staff.id;
 }
 
 
@@ -84,7 +110,7 @@ function onSelectStaff(staff:Staff) {
                          </div>
 
                     <div v-if="is_select_staff_open" class=" absolute w-full h-[260px] overflow-y-scroll  z-10  space-y-2  bg-background  shadow-2xl rounded-lg ">
-                        <div v-on:click="() => onSelectStaff(staff)" class="hover:bg-accent" v-for="staff in mockStaff" :key="staff.id" >
+                        <div v-on:click="() => onSelectStaff(staff)" class="hover:bg-accent" v-for="staff in staffs" :key="staff.id" >
                             <div class="flex  items-center justify-between p-2 ">
                                 <div class=" flex space-x-2 items-center">
 
@@ -114,7 +140,7 @@ function onSelectStaff(staff:Staff) {
                     Start Time
                 </span>
                 <div class=" border border-border   p-2 rounded-lg">
-                    <input required class="outline-none text-primary  " type="time" v-model="shift_form.shift_start_time" />
+                    <input required class="outline-none text-primary  " type="time" v-model="shift_form.startTime" />
                 
 
                 </div>
@@ -127,7 +153,7 @@ function onSelectStaff(staff:Staff) {
                     End Time
                 </span>
                 <div class=" border border-border focus:border-ring  p-2 rounded-lg">
-                    <input required class="outline-none text-primar" type="time" v-model="shift_form.shift_end_time"/>
+                    <input required class="outline-none text-primar" type="time" v-model="shift_form.endTime"/>
 
                 </div>
                 

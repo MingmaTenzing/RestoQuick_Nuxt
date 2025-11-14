@@ -12,6 +12,7 @@
   "dependencies": {
     "@nuxt/image": "^1.11.0",
     "@nuxtjs/color-mode": "^3.5.2",
+    "@prisma/client": "^6.19.0",
     "@tailwindcss/vite": "^4.1.16",
     "@vueuse/core": "^14.0.0",
     "@vueuse/nuxt": "^14.0.0",
@@ -22,5 +23,11 @@
     "tailwindcss": "^4.1.16",
     "vue": "^3.5.22",
     "vue-router": "^4.6.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "prisma": "^6.19.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   }
 }

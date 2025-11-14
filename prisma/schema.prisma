@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  Chef
+  Waiter
+  Bartender
+  Manager
+  Cook
+  Kitchen_Hand
+}
+
+enum LeaveStatus {
+  pending
+  approved
+  rejected
+}
+
+model Staff {
+  id           String   @id @default(uuid())
+  firstname    String
+  lastName     String
+  role         Role
+  email        String   @unique
+  phone        String
+  availability String[] // stores an array of available days
+  // the availability doesn't have types need to look into it later
+  // once everything is running please check this to make sure 
+  //availability data type is valid when user makes a post request
+  // it should be = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+  //at the moment i'm aware and manually doing it so it's fine 
+
+  shifts        Shift[]
+  leaveRequests LeaveRequest[]
+}
+
+model Shift {
+  id        String   @id @default(uuid())
+  staffId   String
+  date      DateTime
+  startTime String
+  endTime   String
+  position  String
+  staff     Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+}
+
+model LeaveRequest {
+  id          String      @id @default(uuid())
+  staffId     String
+  startDate   DateTime
+  endDate     DateTime
+  reason      String
+  status      LeaveStatus @default(pending)
+  submittedAt DateTime    @default(now())
+  staff       Staff       @relation(fields: [staffId], references: [id], onDelete: Cascade)
+}

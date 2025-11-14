@@ -1,25 +1,11 @@
 <script lang="ts" setup>
-import { mockStaff, type Shift, type Staff } from '~/lib/roster-mockdata';
-
-const props = defineProps<{ staff_id: string, shift_id: string }>()
+import type { Shift, Staff } from '~/generated/prisma/client';
 
 
-const { shifts: allShifts, edit_shift_time, remove_shift} = useRoster()
-
-// mocking fetching data of staff
-const staff = ref<Staff>()
-const shift = ref<Shift>();
-onMounted(() => {
-// find the staf
-    staff.value = mockStaff.find((employee) => props.staff_id == employee.id)
-   
-
-    // find the shift
-    shift.value = allShifts.value.find((shift) => shift.id == props.shift_id)
-   console.log(shift.value)
+const props = defineProps<{ shift: Shift}>()
 
 
-})
+const {data:staff} = await useFetch(() => `/api/staff/${props.shift.staffId}`)
 
 
 </script>
@@ -38,6 +24,7 @@ onMounted(() => {
         <span class=" text-xs xl:text-base font-medium">{{ staff?.firstname }} {{ staff?.lastName[0] }}.</span>
    
            <span class="text-[10px] lg:text-sm">{{shift?.startTime}} - {{shift?.endTime}}</span>
+           <span class="text-[10px] lg:text-xs font-light text-muted-foreground">{{ shift.position }}</span>
            <!-- <span class="text-xs">9:00 - 10:00</span> -->
        
  

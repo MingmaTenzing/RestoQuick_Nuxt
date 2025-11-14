@@ -4,12 +4,17 @@ interface shiftModal {
 }
 export const useAddShiftModal = () => {
   const addShiftModal = useState<shiftModal>("addshiftModal", () => ({
+    //date is set here so it's easy to track when adding shift
     date: null,
     isOpen: false,
   }));
 
-  // methods for closing and opening the add shift popover
   const open_add_shiftModal = (date: Date) => (
+    //here open_add_shiftModal is takes and sets the date value.
+
+    //the reason for this is cause user is clicking add shift on the calendar itself
+    // so doing this will make it easier to track on which date should the shift be added or modified.
+
     (addShiftModal.value.date = date),
     (addShiftModal.value.isOpen = true),
     document.body.classList.add("overflow-hidden")
