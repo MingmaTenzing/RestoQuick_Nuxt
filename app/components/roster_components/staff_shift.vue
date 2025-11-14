@@ -7,22 +7,6 @@ const props = defineProps<{ shift: Shift}>()
 
 const {data:staff} = await useFetch(() => `/api/staff/${props.shift.staffId}`)
 
-// const { shifts: allShifts, edit_
-// // mocking fetching data of staff
-// const staff = ref<Staff>()
-// const shift = ref<Shift>();
-// onMounted(() => {
-// // find the staf
-//     staff.value = mockStaff.find((employee) => props.staff_id == employee.id)
-   
-
-//     // find the shift
-//     shift.value = allShifts.value.find((shift) => shift.id == props.shift_id)
-//    console.log(shift.value)
-
-
-// })
-
 
 </script>
 

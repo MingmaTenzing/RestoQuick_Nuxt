@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
+import { title } from 'process';
 import type { Prisma, Staff , Shift} from '~/generated/prisma/client';
 
 const toast = useToast();
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
-const { shifts, addShift } = useRoster() //need to move it to server
 
 const {data: staffs} = await useFetch("/api/staff")
 
@@ -43,12 +43,16 @@ async function submit_shift() {
         body: shift_form.value
     })
 
-    console.log(data)
-    console.log(status)
-    console.log(error)
+    if (status.value == 'success' && data.value?.response) {
+        
+        toast.success({title:"Success", message:"Shift Added"})
+        close_add_shiftModal()
+    }
+  else if (status.value == 'error') {
 
- close_add_shiftModal()
-    toast.success({title:"Success", message:"Shift Added"})
+    toast.error({title: "Error", message: error.value?.message})
+  }
+
     
 }
 

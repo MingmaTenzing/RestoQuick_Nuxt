@@ -13,14 +13,14 @@ const {
 
 
 
-const { number, add, less} = useNumber()
-// const { shifts } = useRoster();
 
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
 
-
-const { data: shifts } = await useFetch<Shift[]>("/api/shift",  {watch: [addShiftModal.value]}
-  )
+// the useFetch call is watching addShiftModal.value to refetch data if it changes
+// the reason for this is user will open the addshiftmodal and then it will close automatically once its done.
+// this elemenates creating another separate variable to watch
+// but with further development it might change. for now its fine.
+const { data: shifts } = await useFetch<Shift[]>("/api/shift",  {watch: [addShiftModal.value]} )
 
 console.log(shifts)
 
@@ -32,9 +32,6 @@ console.log(shifts)
 <template> 
 
 <div class=" " >
-
-    <button v-on:click="add" class=" rounded-lg border">Add more {{ number }}</button>
-    <button v-on:click="less" class=" rounded-lg border">Less more {{ number }}</button>
     <div class=" flex justify-between items-center w-full my-4">
 
         <span class=" text-2xl font-semibold">Weekly 
