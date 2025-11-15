@@ -15,12 +15,13 @@ const {
 
 
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
+const {editshiftModal} = useeditShiftModal()
 
 // the useFetch call is watching addShiftModal.value to refetch data if it changes
 // the reason for this is user will open the addshiftmodal and then it will close automatically once its done.
 // this elemenates creating another separate variable to watch
 // but with further development it might change. for now its fine.
-const { data: shifts } = await useFetch<Shift[]>("/api/shift",  {watch: [addShiftModal.value]} )
+const { data: shifts } = await useFetch<Shift[]>("/api/shift",  {watch: [addShiftModal.value, editshiftModal.value]} )
 
 console.log(shifts)
 
@@ -123,8 +124,7 @@ console.log(shifts)
 <!-- addd shift modal form -->
 
   <roster-components-add-shift v-if="addShiftModal.isOpen"></roster-components-add-shift>
-
-
+<roster-components-edit-shift v-if="editshiftModal.isOpen"></roster-components-edit-shift>
 
 </div>
 
