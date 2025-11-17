@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { stat } from 'fs';
 import { title } from 'process';
+import { inject } from 'vue';
 import type { Shift, Staff } from '~/generated/prisma/client';
 
 const props = defineProps<{ shift: Shift}>()
@@ -8,6 +9,9 @@ const props = defineProps<{ shift: Shift}>()
 const toast = useToast()
 
 const {editshiftModal, open_edit_shiftModal,close_edit_shiftModal } = useeditShiftModal()
+
+// Inject the refetch trigger function from parent roster_calendar
+const triggerShiftRefetch = inject<() => void>('triggerShiftRefetch', () => {})
 
 const { data: staff } = await useFetch(() => `/api/staff/${props.shift.staffId}`) 
 
@@ -20,7 +24,9 @@ async function deleteShift() {
 
     if (deleted_Staff.value && status.value === "success") {
         
-                       toast.success({title:"Success", message:"Shift Deleted"})
+        toast.success({title:"Success", message:"Shift Deleted"})
+        // Trigger refetch in parent component
+        triggerShiftRefetch()
 
     }
     else if (error) {
@@ -57,7 +63,7 @@ async function deleteShift() {
 </div>
                
                <div v-on:click="deleteShift()">
-                 <i class=" pi pi-trash    text-muted-foreground hover:text-primary"></i>
+                 <i class=" pi pi-trash    text-muted-foreground hover:text-destructive cursor-pointer"></i>
                </div>
         </div>
       

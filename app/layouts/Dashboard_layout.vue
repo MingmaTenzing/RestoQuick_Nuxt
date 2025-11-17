@@ -25,14 +25,6 @@ const { isSidebar_open, isTabletOrLarger } = useSideBar()
 
 
 
-  
-<Transition name="fade">
-        <div
-          v-if="isSidebar_open && !isTabletOrLarger"
-          class="fixed inset-0 bg-black/50 backdrop-blur-sm z-0 "
-          @click="isSidebar_open = false"
-        ></div>
-      </Transition>
 
       <Transition name="slide"> 
       

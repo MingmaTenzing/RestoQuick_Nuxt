@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 
 import type { Shift } from '~/generated/prisma/client';
+import { ref, provide } from 'vue';
 import { mockStaff } from '~/lib/roster-mockdata';
 const {
     weekDates,
@@ -17,11 +18,22 @@ const {
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
 const {editshiftModal} = useeditShiftModal()
 
+// Reactive ref to trigger refetch on shift deletion
+const shiftDeleteTrigger = ref(false)
+
+// Function to trigger shift deletion refetch
+const triggerShiftRefetch = () => {
+  shiftDeleteTrigger.value = !shiftDeleteTrigger.value
+}
+
+// Provide the trigger function to child components
+provide('triggerShiftRefetch', triggerShiftRefetch)
+
 // the useFetch call is watching addShiftModal.value to refetch data if it changes
 // the reason for this is user will open the addshiftmodal and then it will close automatically once its done.
 // this elemenates creating another separate variable to watch
 // but with further development it might change. for now its fine.
-const { data: shifts } = await useFetch<Shift[]>("/api/shift",  {watch: [addShiftModal.value, editshiftModal.value]} )
+const { data: shifts } = await useFetch<Shift[]>("/api/shift",  {watch: [addShiftModal.value, editshiftModal.value, shiftDeleteTrigger]} )
 
 console.log(shifts)
 
