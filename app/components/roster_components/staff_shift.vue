@@ -8,6 +8,11 @@ const props = defineProps<{ shift: Shift}>()
 
 const toast = useToast()
 
+//route to check is it's in print-roster route
+//if yes hide the edit and delete button
+const route = useRoute()
+
+
 const {editshiftModal, open_edit_shiftModal,close_edit_shiftModal } = useeditShiftModal()
 
 // Inject the refetch trigger function from parent roster_calendar
@@ -48,7 +53,7 @@ async function deleteShift() {
 
      
        <div class=" flex flex-col bg-accent p-2 rounded-lg w-full border hover:border-dashed hover:border-ring">
-        <div v-on:click="open_edit_shiftModal(shift.id)"  class="cursor-pointer flex justify-end   text-muted-foreground hover:text-primary">
+        <div v-if="route.path !== '/print-roster'" v-on:click="open_edit_shiftModal(shift.id)"  class="cursor-pointer flex justify-end   text-muted-foreground hover:text-primary">
             <i class=" pi pi-pencil"></i>
            
         </div>
@@ -62,7 +67,7 @@ async function deleteShift() {
 
 </div>
                
-               <div v-on:click="deleteShift()">
+               <div v-if="route.path !== '/print-roster'" v-on:click="deleteShift()">
                  <i class=" pi pi-trash    text-muted-foreground hover:text-destructive cursor-pointer"></i>
                </div>
         </div>

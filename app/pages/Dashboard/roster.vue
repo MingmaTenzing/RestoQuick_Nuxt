@@ -26,7 +26,7 @@ const route = useRoute();
 
    
 
-        <button class=" border-border  border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-lg"> <i class=" pi text-muted-foreground pi-print"></i> <span>Print Roster</span> </button>
+        <NuxtLink to="/print-roster" class=" border-border  border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-lg"> <i class=" pi text-muted-foreground pi-print"></i> <span>Print Roster</span> </NuxtLink>
     </div>
             
   
