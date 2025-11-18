@@ -1,14 +1,8 @@
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
-
 
 // Fetch leave requests
-const { data: leaveRequests } = await useFetch('/api/leave-requests')
+const { data: leaveRequests, refresh } = await useFetch('/api/leave-requests')
 console.log(leaveRequests.value)
-
-// Filter state
-const filterStatus = ref<'all' | 'pending' | 'approved' | 'rejected'>('all')
-
 
 // Computed filtered requests
 
@@ -40,6 +34,19 @@ const getStatusIcon = (status: string) => {
   }
 }
 
+
+async function updateStatus(status: string, request_id: string) {
+  const {data:update_request_status, status: put_status} = await useFetch(() => `/api/leave-requests/${request_id}`, {
+    method: 'put',
+    body: { status }
+  })
+  if (update_request_status.value && put_status.value == "success" ){
+    // if the update_status is complelet it will recall the useFetch api call 
+    //using the refresh function
+    refresh();
+  }
+  
+}
 </script>
 
 <template>
@@ -140,11 +147,11 @@ Approved    </button>
 
         <!-- Action Buttons (for pending requests) -->
         <div v-if="request.status === 'pending'" class="flex gap-2 mt-4 pt-4 border-t border-border">
-          <button class="flex-1 px-4 py-2 bg-green-500/10 text-green-500 hover:bg-green-500/20 rounded-lg border border-green-500/20 transition-colors flex items-center justify-center gap-2">
+          <button v-on:click="updateStatus('approved', request.id)" class="flex-1 px-4 py-2 bg-green-500/10 text-green-500 hover:bg-green-500/20 rounded-lg border border-green-500/20 transition-colors flex items-center justify-center gap-2">
             <i class="pi pi-check"></i>
             Approve
           </button>
-          <button class="flex-1 px-4 py-2 bg-red-500/10 text-destructive hover:bg-red-500/20 rounded-lg border border-red-500/20 transition-colors flex items-center justify-center gap-2">
+          <button v-on:click="updateStatus('rejected', request.id)"  class="flex-1 px-4 py-2 bg-red-500/10 text-destructive hover:bg-red-500/20 rounded-lg border border-red-500/20 transition-colors flex items-center justify-center gap-2">
             <i class="pi pi-times"></i>
             Reject
           </button>
@@ -152,10 +159,6 @@ Approved    </button>
       </div>
     </div>
 
-    <!-- Empty State -->
-    <!-- <div v-else class="text-center py-12">
-      <i class="pi pi-inbox text-4xl text-muted-foreground mb-4"></i>
-      <p class="text-muted-foreground">No {{ filterStatus !== 'all' ? filterStatus : '' }} leave requests found</p>
-    </div> -->
+   
   </div>
 </template>

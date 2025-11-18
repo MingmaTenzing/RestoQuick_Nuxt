@@ -4,13 +4,14 @@ import { read } from "fs";
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
   const leave_request_id = getRouterParam(event, "request_id");
-  const status = await readBody(event);
+  const body = await readBody(event);
+
   const updated_leave_request = await prisma.leaveRequest.update({
     where: {
       id: leave_request_id,
     },
     data: {
-      status: status,
+      status: body.status,
     },
   });
   return updated_leave_request;
