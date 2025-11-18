@@ -4,6 +4,7 @@ import { ref, computed } from 'vue'
 
 // Fetch leave requests
 const { data: leaveRequests } = await useFetch('/api/leave-requests')
+console.log(leaveRequests.value)
 
 // Filter state
 const filterStatus = ref<'all' | 'pending' | 'approved' | 'rejected'>('all')
@@ -56,13 +57,13 @@ const getStatusIcon = (status: string) => {
 
     <!-- Filter Tabs -->
     <div class="flex gap-2">
-    <button  class=" border px-4 py-2 rounded-lg border-border hover:bg-foreground hover:text-background">
+    <button  class=" border px-4 py-2 rounded-lg border-border  bg-card hover:bg-accent hover:border hover:border-ring">
         All Requests
     </button>
-    <button class=" border px-4 py-2 rounded-lg border-border hover:bg-foreground hover:text-background">
+    <button class=" border px-4 py-2 rounded-lg bg-amber-500/10 hover:border hover:border-amber-500/20 hover:bg-amber-500/20 text-amber-500 border-amber-500/20 ">
        Pending
     </button>
-    <button class=" border px-4 py-2 rounded-lg border-border hover:bg-foreground hover:text-background">
+    <button class=" border px-4 py-2 rounded-lg bg-green-500/10 hover:border hover:border-green-500/20 hover:bg-green-500/20 text-green-500 border-green-500/20">
 Approved    </button>
     </div>
 
@@ -73,18 +74,18 @@ Approved    </button>
         :key="request.id"
         class="border border-border rounded-lg p-4 bg-card hover:bg-accent/50 transition-colors"
       >
-        <div class="flex  items-start gap-4">
+        <div class=" ">
           <!-- Request Info -->
-          <div class="flex-1">
+          <div class=" gap-2 flex flex-col">
             <div class=" flex items-start gap-4">
 
                 <div class="flex items-center gap-3 mb-3">
                   <div class="w-10 h-10 bg-accent rounded-full flex justify-center items-center">
-                   {{request.staffId[0]}}
+                   {{request.staff.firstname[0]}}{{ request.staff.lastName[0] }}
                   </div>
                   <div>
-                    <h3 class="font-medium">{staff name}</h3>
-                    <p class="text-sm text-muted-foreground">{{ request.reason}}</p>
+                    <h3 class="font-medium">{{ request.staff.firstname }} {{ request.staff.lastName }}</h3>
+                  
                   </div>
                 </div>
                   <!-- Status Badge -->
@@ -92,22 +93,35 @@ Approved    </button>
                 <i :class="['pi', getStatusIcon(request.status)]"></i>
                 <span class="text-sm font-medium capitalize">{{ request.status }}</span>
               </div>
+              
+            </div>
+             <!--reason  -->
+            <div>
+  <p class="text-sm text-muted-foreground">Reason: {{ request.reason}}</p>
             </div>
 
             <!-- Dates -->
             <div class="flex items-center gap-4 mb-2">
               <div class="text-sm">
                 <span class="text-muted-foreground">From:</span>
-                <span class="font-medium ml-2">{{new Date(request.startDate).toLocaleDateString()}}</span>
+                <span class="font-medium ml-2">{{new Date(request.startDate).toLocaleDateString('en-AU', {
+    month: 'short',
+    year: 'numeric',
+                day:'2-digit'
+              }) }}</span>
               </div>
               <div class="text-muted-foreground">→</div>
               <div class="text-sm">
                 <span class="text-muted-foreground">To:</span>
-                <span class="font-medium ml-2">{{ new Date(request.endDate).toLocaleDateString()}}</span>
+                <span class="font-medium ml-2">{{ new Date(request.endDate).toLocaleDateString('en-AU', {
+    month: 'short',
+    year: 'numeric',
+                day:'2-digit'
+              }) }}</span>
               </div>
               <div class="text-sm bg-accent px-2 py-1 rounded">
                 <span class="text-muted-foreground">Duration:</span>
-                <span class="font-medium ml-2"> 5 day(s)</span>
+                <span class="font-medium ml-2">{{ Math.ceil((new Date(request.endDate).getTime() - new Date(request.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1 }} day(s)</span>
               </div>
             </div>
 

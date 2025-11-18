@@ -39,23 +39,32 @@ const route = useRoute();
 
 
         <!-- total staff card -->
-    <div class="border rounded-lg w-full shadow   p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
- <div class=" flex justify-between">
+    <div class="border  rounded-lg w-full shadow   p-6 border-border bg-card text-card-foreground h-[170px] flex items-center justify-between ">
+  
+  <!-- total stafff -->
+        <div class=" flex flex-col justify-between h-full">
+      <div class=" ">
 
-    <span class=" font-light">Total Staff</span>
-    <i class=" pi text-muted-foreground pi-users"></i>
-
-
-    
- </div>
+  <span class=" font-light">Total Staff</span>
  
+  
+</div>
 
- <div class=" flex flex-col">
-  <span class=" text-lg md:text-2xl font-bold">6</span>
-  <span class=" text-muted-foreground font-light text-sm">Active employees</span>
-    
- </div>
-        
+
+<div class=" flex flex-col">
+<span class=" text-lg md:text-2xl font-bold">6</span>
+<span class=" text-muted-foreground font-light text-sm">Active employees</span>
+  
+</div>
+      
+
+  </div>
+
+  <!-- stafficon -->
+<div>
+    <i class=" pi pi-users text-[120px] text-muted-foregroun d  opacity-5 font-light"></i>
+</div>
+  
 
 
         </div>
@@ -63,50 +72,67 @@ const route = useRoute();
 
 
         <!-- this week card -->
-    <div class="border rounded-lg w-full shadow   p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
- <div class=" flex justify-between">
+   <div class="border  rounded-lg w-full shadow   p-6 border-border bg-card text-card-foreground h-[170px] flex items-center justify-between ">
+  
+  <!-- this weeek -->
+        <div class=" flex flex-col justify-between h-full">
+      <div class=" ">
 
-    <span class=" font-light">This Week</span>
-    <i class=" pi text-muted-foreground pi-calendar"></i>
-
-
-    
- </div>
+  <span class=" font-light">This Week</span>
  
+  
+</div>
 
- <div class=" flex flex-col">
-  <span class=" text-lg md:text-2xl font-bold">42</span>
-  <span class=" text-muted-foreground font-light text-sm">Total Shifts Scheduled</span>
-    
- </div>
-        
+
+<div class=" flex flex-col">
+<span class=" text-lg md:text-2xl font-bold">42</span>
+<span class=" text-muted-foreground font-light text-sm">Shifts Scheduled</span>
+  
+</div>
+      
+
+  </div>
+
+  <!-- calendar icon -->
+<div>
+    <i class=" pi pi-calendar text-[120px] text-muted-foregroun d  opacity-5 font-light"></i>
+</div>
+  
 
 
         </div>
 
 
         <!-- pending leaves card -->
-    <div class="border rounded-lg w-full shadow  shadow-ring p-6 border-border bg-card text-card-foreground h-[170px] flex flex-col justify-between">
- <div class=" flex justify-between">
+   <div class="border  rounded-lg w-full shadow   p-6 border-border bg-card text-card-foreground h-[170px] flex items-center justify-between ">
+  
+  <!-- pendin leave request -->
+        <div class=" flex flex-col justify-between h-full">
+      <div class=" ">
 
-    <span class=" font-light">Pending Leave Requests</span>
-    <i class=" pi text-muted-foreground pi-clock"></i>
-
-
-    
- </div>
+  <span class=" font-light">Pending Leave Requests</span>
  
+  
+</div>
 
- <div class=" flex flex-col">
-  <span class=" text-lg md:text-2xl font-bold">6</span>
-  <span class=" text-muted-foreground font-light text-sm">Active employees</span>
-    
- </div>
-        
+
+<div class=" flex flex-col">
+<span class=" text-lg md:text-2xl font-bold">12</span>
+<span class=" text-muted-foreground font-light text-sm">Requests for leave </span>
+  
+</div>
+      
+
+  </div>
+
+  <!-- stafficon -->
+<div>
+    <i class=" pi pi-clock text-[120px]    opacity-5 font-light"></i>
+</div>
+  
 
 
         </div>
-
 
 
 
