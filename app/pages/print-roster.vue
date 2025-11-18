@@ -1,5 +1,9 @@
 <script lang="ts" setup>
 
+definePageMeta( {
+    colorMode: 'light'
+}
+)
 import type { Shift } from '~/generated/prisma/client';
 import { ref, provide } from 'vue';
 import { mockStaff } from '~/lib/roster-mockdata';
@@ -44,11 +48,10 @@ console.log(shifts)
 
 <template> 
 
-<div class=" " >
+<div class=" p-4 " >
     <div class=" flex justify-between items-center w-full my-4">
 
-        <span class=" text-2xl font-semibold">Weekly 
-            Schedule</span>
+        <span class=" text-2xl font-semibold">Roster for {{ weekRangeText }}</span>
 
             <div class=" flex gap-4 items-center">
                 <button v-on:click="previousWeek()" class=" border px-4 py-2 bg-card hover:border-ring  rounded-lg"><</button>
@@ -109,11 +112,11 @@ console.log(shifts)
  <div    class='  flex flex-col gap-2 p-2   min-h-[120px] border-2 border-dashed rounded-lg hover:border-ring'>
 
 <!-- add shift button -->
-      <button v-on:click="open_add_shiftModal(date.date)" class=" flex justify-end">
+      <!-- <button v-on:click="open_add_shiftModal(date.date)" class=" flex justify-end">
            <i class=" pi pi-plus"></i>
            
            
-      </button>
+      </button> -->
 
 
    <!-- staff shift time and name -->
@@ -133,13 +136,16 @@ console.log(shifts)
     </section>   
     
     
-<!-- addd shift modal form -->
 
-  <roster-components-add-shift v-if="addShiftModal.isOpen"></roster-components-add-shift>
-<roster-components-edit-shift v-if="editshiftModal.isOpen"></roster-components-edit-shift>
 
 </div>
 
 
 
 </template>
+
+<style>
+
+
+
+</style>

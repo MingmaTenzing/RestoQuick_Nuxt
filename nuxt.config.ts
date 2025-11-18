@@ -15,6 +15,12 @@ export default defineNuxtConfig({
   routeRules: {
     "/dashboard": { ssr: false },
   },
+
+  router: {
+    options: {
+      scrollBehaviorType: "smooth",
+    },
+  },
   // colorMode: {
   //   preference: "system", // default value of $colorMode.preference
   //   fallback: "dark", // fallback value if not system preference found

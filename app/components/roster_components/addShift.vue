@@ -167,7 +167,7 @@ function onSelectStaff(staff: Staff) {
                 ">
                    Position
                 </span>
-                <input class="outline-none border border-border rounded-lg p-2 text-sm" type="text" v-model="shift_form.position" placeholder="eg:- Kitchen, Receiption, Front, Floor"/>
+                <input  class="outline-none border border-border rounded-lg p-2 text-sm" type="text" v-model="shift_form.position" placeholder="eg:- Kitchen, Receiption, Front, Floor"/>
 
 
     </section>
@@ -176,8 +176,8 @@ function onSelectStaff(staff: Staff) {
 
     <section class=" flex justify-end space-x-2 items-center text-sm">
 
-        <button class="px-4  py-2  hover:border-ring rounded-lg border border-border ">Cancel</button>
-        <button  class="px-4  py-2  hover:border-ring rounded-lg border border-border bg-green-600  text-green-50 ">Add Shift
+        <button v-on:click="close_add_shiftModal()" class="px-4  py-2  hover:border-ring rounded-lg border border-border ">Cancel</button>
+        <button type="submit" class="px-4  py-2  hover:border-ring rounded-lg border border-border bg-green-600  text-green-50 ">Add Shift
 
         </button>
     </section>
