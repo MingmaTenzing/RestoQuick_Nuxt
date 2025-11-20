@@ -8,7 +8,10 @@ definePageMeta({
 
 const currentTab = ref('all')
 
-const { data:bookings} = await useFetch('/api/bookings')
+const { data: bookings } = await useFetch('/api/bookings')
+
+
+
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -30,6 +33,27 @@ const getStatusColor = (status: string) => {
 }
 
 
+const isAddBooking_dialog_open = ref<boolean>(false);
+
+
+function openAddBookingDialog() {
+  // opens the modal and stops the background body scroll
+  isAddBooking_dialog_open.value = true;
+  document.body.classList.add("overflow-hidden")
+}
+
+
+
+function handle_close_dialog() {
+  //the child component <booking-components-add-booking-modal>  emits the event and this function is used to handle 
+  // when it clicks on the close button
+
+  isAddBooking_dialog_open.value = false;
+    document.body.classList.add("overflow-remove")
+
+
+}
+
 
 
 
@@ -50,7 +74,7 @@ const getStatusColor = (status: string) => {
         </div>
         <span class="text-accent-foreground/60">Manage table bookings and customer reservations</span>
       </div>
-      <button
+      <button v-on:click="openAddBookingDialog"
   
         class="border-border border px-4 py-2 flex justify-center items-center space-x-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
       >
@@ -234,5 +258,16 @@ const getStatusColor = (status: string) => {
 
     
     </div>
+  </div>
+
+
+  <!-- new bookings dialog -->
+  <div v-if="isAddBooking_dialog_open">
+
+    <!-- here the @dialog-closed is the emit event name -->
+
+    <booking-components-add-booking-modal @diaglog-closed="handle_close_dialog"></booking-components-add-booking-modal>
+
+
   </div>
 </template>

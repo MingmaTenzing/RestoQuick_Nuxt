@@ -10,17 +10,24 @@ const newBooking = ref({
   tableId: undefined
 })
 
-const dialogOpen = ref(false)
+const emit = defineEmits(['diaglogClosed'])
 
+
+function closeDialog() {
+// when this function is called it emits the dialogClosed event to the parent.
+  emit('diaglogClosed')
+}
 </script>
 <template>
 
 
 <!-- Add Booking Modal -->
-    <div v-if="dialogOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div class="  flex  justify-center items-center fixed w-screen h-screen bg-background/90 backdrop-blur-xs  top-0 z-10 left-0">
       <div class="bg-card text-foreground rounded-xl shadow-xl border border-border p-6 w-full max-w-md relative">
+        <!-- this button is used for closing the modal -->
         <button
-          @click="dialogOpen = false"
+        
+          v-on:click="closeDialog"
           class="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
         >
           <i class="pi pi-times text-xl"></i>
@@ -87,7 +94,7 @@ const dialogOpen = ref(false)
           <div class="flex gap-2 pt-2">
             <button
               type="button"
-              @click="dialogOpen = false"
+             v-on:click="closeDialog"
               class="flex-1 px-4 py-2 rounded-lg border border-border bg-muted text-foreground hover:bg-accent transition-colors"
             >
               Cancel
