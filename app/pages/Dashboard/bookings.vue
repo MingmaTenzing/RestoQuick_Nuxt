@@ -171,9 +171,15 @@ const formatTime = (time: string) => {
 <template>
   <div class="space-y-6">
     <!-- Header Section -->
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between">
       <div>
-        <h1 class="text-2xl md:text-4xl font-bold">Reservations</h1>
+        <div class="flex items-center gap-4">
+          
+          <h1 class="text-2xl md:text-6xl ">Reservations</h1>
+          
+          <i class=" pi-bookmark-fill pi text-2xl  text-amber-400"></i>
+
+        </div>
         <span class="text-accent-foreground/60">Manage table bookings and customer reservations</span>
       </div>
       <button
@@ -186,13 +192,13 @@ const formatTime = (time: string) => {
     </div>
 
     <!-- Stats Cards Grid -->
-    <div class="flex flex-col gap-4 md:flex-row w-full">
+    <div class="flex flex-col gap-4 md:flex-row md:justify-around w-full md:flex-wrap lg:flex-nowrap">
       <!-- Total Bookings -->
-      <div class="border rounded-lg w-full shadow p-6 border-border bg-card text-card-foreground h-[170px] flex items-center justify-between">
+      <div class="border rounded-lg   shadow p-6  border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Total Bookings</span>
           <div class="flex flex-col">
-            <span class="text-lg md:text-2xl font-bold">{{ bookings.length }}</span>
+            <span class="text-lg md:text-4xl lg:text-5xl  font-medium ">{{ bookings.length }}</span>
             <span class="text-muted-foreground font-light text-sm">This month</span>
           </div>
         </div>
@@ -202,11 +208,11 @@ const formatTime = (time: string) => {
       </div>
 
       <!-- Confirmed Bookings -->
-      <div class="border rounded-lg w-full shadow p-6 border-border bg-card text-card-foreground h-[170px] flex items-center justify-between">
+      <div class="border rounded-lg   shadow p-6  border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Confirmed</span>
           <div class="flex flex-col">
-            <span class="text-lg md:text-2xl font-bold text-green-500">{{ confirmedCount }}</span>
+            <span class="text-lg md:text-4xl lg:text-5xl  font-medium text-green-600">{{ confirmedCount }}</span>
             <span class="text-muted-foreground font-light text-sm">Ready to serve</span>
           </div>
         </div>
@@ -216,11 +222,11 @@ const formatTime = (time: string) => {
       </div>
 
       <!-- Total Guests -->
-      <div class="border rounded-lg w-full shadow p-6 border-border bg-card text-card-foreground h-[170px] flex items-center justify-between">
+      <div class="border rounded-lg   shadow p-6  border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Total Guests</span>
           <div class="flex flex-col">
-            <span class="text-lg md:text-2xl font-bold">{{ totalGuests }}</span>
+            <span class="text-lg md:text-4xl lg:text-5xl  font-medium ">{{ totalGuests }}</span>
             <span class="text-muted-foreground font-light text-sm">Expected arrivals</span>
           </div>
         </div>
@@ -230,11 +236,11 @@ const formatTime = (time: string) => {
       </div>
 
       <!-- Voice Agent -->
-      <div class="border rounded-lg w-full shadow p-6 border-border bg-card text-card-foreground h-[170px] flex items-center justify-between">
+      <div class="border rounded-lg   shadow p-6  border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Via Voice Agent</span>
           <div class="flex flex-col">
-            <span class="text-lg md:text-2xl font-bold text-primary">{{ voiceAgentBookings.length }}</span>
+            <span class="text-lg md:text-4xl lg:text-5xl  font-medium text-primary">{{ voiceAgentBookings.length }}</span>
             <span class="text-muted-foreground font-light text-sm">Automated bookings</span>
           </div>
         </div>

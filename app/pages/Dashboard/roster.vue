@@ -15,7 +15,7 @@ const route = useRoute();
     <div class="flex justify-between items-center">
         <!-- headers  -->
         <div>
-            <h1 class="text-2xl md:text-4xl font-bold">Roster Management </h1>
+            <h1 class="text-2xl md:text-6xl">Roster Management </h1>
         <span class=" text-accent-foreground/60">Manage staff schedules, leave requests, and availability
         </span>
     
