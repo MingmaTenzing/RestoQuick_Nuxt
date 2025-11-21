@@ -23,10 +23,13 @@ const new_booking_form = ref<BookingCreateInput>(
   }
 ); 
 
+const reset_copy_booking_form = ref({...new_booking_form.value})
+
 
 function closeDialog() {
 // when this function is called it emits the dialogClosed event to the parent.
   emit('diaglogClosed')
+  new_booking_form.value = reset_copy_booking_form.value
 }
 
 
@@ -50,11 +53,12 @@ try {
   })
   if (response) {
     toast.success({title:"Booking Submitted", message:"You will be notified soon"})
-    
+    new_booking_form.value = reset_copy_booking_form.value;
   }
 } catch (error) {
   console.log(error)
-  toast.error({title: "Error", message:'Please call for booking.'})
+  toast.error({ title: "Error", message: 'Please call for booking.' })
+  new_booking_form.value = reset_copy_booking_form.value
 }
   
   
