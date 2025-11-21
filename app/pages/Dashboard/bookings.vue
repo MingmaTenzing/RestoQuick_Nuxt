@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { stat } from 'fs';
 import { ref, computed } from 'vue'
-import type { Booking } from '~/generated/prisma/client';
+import type { Booking, BookingStatus } from '~/generated/prisma/client';
 
 
 definePageMeta({
@@ -9,14 +10,30 @@ definePageMeta({
 
 const currentTab = ref('all')
 
-
+const toast = useToast();
 
 const isAddBooking_dialog_open = ref<boolean>(false);
 
 const { data: bookings, refresh } = await useFetch<Booking[]>('/api/bookings')
 
 
+const today_booking = computed(() => {
+  const today = new Date().toISOString().split('T')[0];
+  return bookings.value?.filter((booking) => new Date(booking.bookingTime).toISOString().split('T')[0] == today)
+})
 
+const upcoming_bookings = computed(() => {
+  const now = new Date(); // current date & time
+
+  return bookings.value?.filter(b => {
+    const bookingDate = new Date(b.bookingTime);
+    return bookingDate > now;
+  });
+});
+
+console.log(upcoming_bookings.value)
+
+console.log(today_booking.value)
 
 
 function openAddBookingDialog() {
@@ -42,6 +59,36 @@ function handle_close_dialog() {
 
 
 }
+
+
+async function update_booking_status(status: BookingStatus, booking_id: string) {
+  // the booking status is emitted by the child component
+  //<booking_details_card>
+
+  try {
+const response = await $fetch(`/api/bookings/${booking_id}`, {
+        method: 'put', 
+  body: {
+    status: status
+  }
+            
+})
+
+    if (response) {
+      toast.success({ title: "Booking Updated" })
+      // once the response is received it will refetch the intial bookings request
+      refresh();
+  
+}
+
+  } catch (error) {
+    console.log(error)
+    toast.error({title:"System Error "})
+    
+  }
+
+}
+
 
 
  
@@ -143,6 +190,7 @@ function handle_close_dialog() {
     <div class="space-y-4">
       <div class="flex gap-2 border-b border-border">
         <button
+        v-on:click="currentTab = 'all'"
  
           :class="[
             'px-4 py-2 text-sm font-medium border-b-2 transition-colors',
@@ -162,7 +210,7 @@ function handle_close_dialog() {
               : 'border-transparent text-muted-foreground hover:text-foreground'
           ]"
         >
-          Today ({{ 4}})
+          Today ({{ today_booking?.length}})
         </button>
         <button
           @click="currentTab = 'upcoming'"
@@ -173,7 +221,7 @@ function handle_close_dialog() {
               : 'border-transparent text-muted-foreground hover:text-foreground'
           ]"
         >
-          Upcoming ({{ 4 }})
+          Upcoming ({{ upcoming_bookings?.length }})
         </button>
       </div>
 
@@ -186,7 +234,31 @@ function handle_close_dialog() {
         <section v-else v-for="booking in bookings"
             :key="booking.id" >
 
-            <booking-components-booking-details-card :booking_details="booking"></booking-components-booking-details-card>
+            <booking-components-booking-details-card @update-status="update_booking_status" :booking_details="booking"></booking-components-booking-details-card>
+          
+        </section>
+      </div>
+      <div v-if="currentTab === 'today'" class="space-y-4">
+        <div v-if="bookings?.length === 0" class="border border-border rounded-lg bg-card p-12 text-center">
+          <i class="pi pi-inbox text-4xl text-muted-foreground mb-4 block"></i>
+          <p class="text-muted-foreground">No bookings yet</p>
+        </div>
+        <section v-else v-for="booking in today_booking"
+            :key="booking.id" >
+
+            <booking-components-booking-details-card @update-status="update_booking_status" :booking_details="booking"></booking-components-booking-details-card>
+          
+        </section>
+      </div>
+      <div v-if="currentTab === 'upcoming'" class="space-y-4">
+        <div v-if="bookings?.length === 0" class="border border-border rounded-lg bg-card p-12 text-center">
+          <i class="pi pi-inbox text-4xl text-muted-foreground mb-4 block"></i>
+          <p class="text-muted-foreground">No bookings yet</p>
+        </div>
+        <section v-else v-for="booking in upcoming_bookings"
+            :key="booking.id" >
+
+            <booking-components-booking-details-card @update-status="update_booking_status" :booking_details="booking"></booking-components-booking-details-card>
           
         </section>
       </div>
@@ -201,7 +273,7 @@ function handle_close_dialog() {
 
     <!-- here the @dialog-closed is the emit event name -->
 
-    <booking-components-add-booking-modal @diaglog-closed="handle_close_dialog"></booking-components-add-booking-modal>
+    <booking-components-add-booking-modal  @diaglog-closed="handle_close_dialog"></booking-components-add-booking-modal>
 
 
   </div>

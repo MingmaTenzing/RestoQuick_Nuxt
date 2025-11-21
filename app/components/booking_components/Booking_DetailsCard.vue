@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import type { Booking } from '~/generated/prisma/client';
+import type { Booking, BookingStatus } from '~/generated/prisma/client';
 
 
 defineProps<{ booking_details: Booking }>();
+
+const emit = defineEmits<{
+  (e: 'update-status', status: BookingStatus, id: string): void
+}>()
+
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -78,14 +83,14 @@ const getStatusColor = (status: string) => {
             </div>
 
             <div v-if="booking_details.status === 'PENDING'" class="flex gap-2 pt-3 border-t border-border">
-              <button
+              <button v-on:click="emit('update-status', 'CONFIRMED', booking_details.id)"
                 
                 class="flex-1 px-3 py-2 rounded-lg border border-border bg-green-500/10 text-green-500 hover:bg-green-500/20 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
               >
                 <i class="pi pi-check"></i>
                 Confirm
               </button>
-              <button
+              <button v-on:click="emit('update-status', 'CANCELLED', booking_details.id)"
                 class="flex-1 px-3 py-2 rounded-lg border border-border bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
               >
                 <i class="pi pi-times"></i>
