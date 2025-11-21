@@ -200,3 +200,30 @@
         /* Firefox */
     }
 }
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(0%);
+    opacity: 0.6;
+    cursor: pointer;
+    z-index: 0;
+}
+
+.dark-mode input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(100%);
+    opacity: 0.6;
+    cursor: pointer;
+    z-index: 0;
+}
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(0%);
+    opacity: 0.6;
+    cursor: pointer;
+    z-index: 0;
+}
+
+.dark-mode input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(100%);
+    opacity: 0.6;
+    cursor: pointer;
+    z-index: 0;
+}

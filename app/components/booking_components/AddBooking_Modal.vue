@@ -1,22 +1,67 @@
 
 <script setup lang="ts">
+import type { BookingCreateInput } from '~/generated/prisma/models';
 
-const newBooking = ref({
-  customerName: '',
-  customerPhone: '',
-  bookingTime: '',
-  guestCount: 2,
-  specialRequest: '',
-  tableId: undefined
-})
 
+const toast = useToast();
 const emit = defineEmits(['diaglogClosed'])
+
+const new_booking_form = ref<BookingCreateInput>(
+  // table can be assigned when booking as well but its optional 
+  // but most of the time its just customer details and later
+  //restaurant decide to assign a table so it can be updated by the restaurant manager
+  // from the dashboard.
+  //so here table id is not assigned in the booking 
+  {
+    customerName: '',
+    customerPhone: '',
+    bookingTime: new Date().toISOString(),
+    guestCount: 1,
+    specialRequest: '',
+
+
+  }
+); 
 
 
 function closeDialog() {
 // when this function is called it emits the dialogClosed event to the parent.
   emit('diaglogClosed')
 }
+
+
+async function submit_booking() {
+//here we are converting the booking time to DATETIME Cuase prisma expects this type
+  new_booking_form.value.bookingTime = new Date(new_booking_form.value.bookingTime).toISOString();
+
+  //form submission for booking
+
+
+try {
+  
+  const response = await $fetch('/api/bookings', {
+    method: 'post',
+    body: {
+      booking: new_booking_form.value
+    }
+
+    
+    
+  })
+  if (response) {
+    toast.success({title:"Booking Submitted", message:"You will be notified soon"})
+    
+  }
+} catch (error) {
+  console.log(error)
+  toast.error({title: "Error", message:'Please call for booking.'})
+}
+  
+  
+ 
+  
+}
+
 </script>
 <template>
 
@@ -36,11 +81,11 @@ function closeDialog() {
         <h2 class="text-2xl font-bold mb-1">Create New Booking</h2>
         <p class="text-muted-foreground text-sm mb-6">Add a new table reservation to the system</p>
 
-        <form  class="space-y-4">
+        <form @submit.prevent="submit_booking"  class="space-y-4">
           <div>
             <label class="block mb-2 text-sm font-medium text-muted-foreground">Customer Name *</label>
             <input
-              v-model="newBooking.customerName"
+              v-model="new_booking_form.customerName"
               type="text"
               class="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none placeholder-muted-foreground"
               placeholder="John Doe"
@@ -51,7 +96,7 @@ function closeDialog() {
           <div>
             <label class="block mb-2 text-sm font-medium text-muted-foreground">Phone *</label>
             <input
-              v-model="newBooking.customerPhone"
+              v-model="new_booking_form.customerPhone"
               type="tel"
               class="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none placeholder-muted-foreground"
               placeholder="+1 234-567-8900"
@@ -62,7 +107,7 @@ function closeDialog() {
           <div>
             <label class="block mb-2 text-sm font-medium text-muted-foreground">Booking Date & Time *</label>
             <input
-              v-model="newBooking.bookingTime"
+              v-model="new_booking_form.bookingTime"
               type="datetime-local"
               class="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none"
               required
@@ -72,10 +117,10 @@ function closeDialog() {
           <div>
             <label class="block mb-2 text-sm font-medium text-muted-foreground">Number of Guests *</label>
             <input
-              v-model.number="newBooking.guestCount"
+              v-model.number="new_booking_form.guestCount"
               type="number"
               min="1"
-              max="20"
+              max="25"
               class="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none"
               required
             />
@@ -84,7 +129,7 @@ function closeDialog() {
           <div>
             <label class="block mb-2 text-sm font-medium text-muted-foreground">Special Requests</label>
             <textarea
-              v-model="newBooking.specialRequest"
+              v-model="new_booking_form.specialRequest"
               class="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none placeholder-muted-foreground resize-none"
               rows="3"
               placeholder="Window seat, birthday party, allergies, etc."
