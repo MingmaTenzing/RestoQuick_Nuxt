@@ -12,11 +12,16 @@
       </p>
       <div class="">
         <button class="bg-violet-500 text-white px-4 py-2">View Dashboard</button>
+     
       </div>
     </div>
 
     <div class="drop-shadow-2xl drop-shadow-violet-200 dark:drop-shadow-violet-800">
       <img src="../../assets/images/TitleSection_Image.webp" class="w-full lg:h-[700px] object-cover" />
     </div>
+  </section>
+
+  <section>
+
   </section>
 </template>
