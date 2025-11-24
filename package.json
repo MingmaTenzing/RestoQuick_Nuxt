@@ -16,6 +16,7 @@
     "@prisma/client": "^6.19.0",
     "@tailwindcss/vite": "^4.1.16",
     "@unhead/vue": "^2.0.19",
+    "@vapi-ai/web": "^2.5.1",
     "@vueuse/core": "^14.0.0",
     "@vueuse/nuxt": "^14.0.0",
     "izitoast": "^1.4.0",

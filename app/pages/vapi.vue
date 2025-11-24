@@ -1,41 +1,33 @@
-<script>
-useHead({
-    script: [
-        {
-            src: "https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js",
-            async: true,
-            type: 'text/javascript'
-        
-    }
-]
+<script setup lang="js">
 
+
+onMounted(() => {
+
+    var vapiInstance = null;
+      const assistant = "a5801983-f1ae-401f-a06f-7ad5231ec2aa"; // Substitute with your assistant ID
+      const apiKey = '326280f7-5532-4764-b83c-04bd4c95008e'; // Substitute with your Public key from Vapi Dashboard.
+      const buttonConfig = {}; // Modify this as required
+      (function (d, t) {
+        var g = document.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+        g.src =
+          "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+        g.defer = true;
+        g.async = true;
+        s.parentNode.insertBefore(g, s);
+        g.onload = function () {
+          vapiInstance = window.vapiSDK.run({
+            apiKey: apiKey, // mandatory   
+            assistant: assistant, // mandatory
+            config: buttonConfig, // optional
+          });
+        };
+      })(document, "script");
 })
 </script>
-
 <template>
-    <vapi-widget
-  public-key="326280f7-5532-4764-b83c-04bd4c95008e"
-  assistant-id="a5801983-f1ae-401f-a06f-7ad5231ec2aa"
-  mode="voice"
-  theme="dark"
-  base-bg-color="#000000"
-  accent-color="#14B8A6"
-  cta-button-color="#000000"
-  cta-button-text-color="#ffffff"
-  border-radius="large"
-  size="full"
-  position="bottom-right"
-  title="TALK WITH AI"
-  start-button-text="Start"
-  end-button-text="End Call"
-  chat-first-message="Hey, How can I help you today?"
-  chat-placeholder="Type your message..."
-  voice-show-transcript="true"
-  consent-required="true"
-  consent-title="Terms and conditions"
-  consent-content="By clicking Agree, and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as otherwise described in our Terms of Service."
-  consent-storage-key="vapi_widget_consent"
-></vapi-widget>
+    <p>dfd</p>
+
 
 
 </template>
