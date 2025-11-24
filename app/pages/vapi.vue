@@ -4,8 +4,8 @@
 onMounted(() => {
 
     var vapiInstance = null;
-      const assistant = "a5801983-f1ae-401f-a06f-7ad5231ec2aa"; // Substitute with your assistant ID
-      const apiKey = '326280f7-5532-4764-b83c-04bd4c95008e'; // Substitute with your Public key from Vapi Dashboard.
+      const assistant = process.env.VAPI_ASSISTANT_ID; // Substitute with your assistant ID
+      const apiKey = process.env.VAPI_AI_PUBLIC_KEY; // Substitute with your Public key from Vapi Dashboard.
       const buttonConfig = {}; // Modify this as required
       (function (d, t) {
         var g = document.createElement(t),
