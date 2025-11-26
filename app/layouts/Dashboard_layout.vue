@@ -20,18 +20,22 @@ const { isSidebar_open, isTabletOrLarger } = useSideBar()
 <Dashboard_NavBar></Dashboard_NavBar>
 
 
-<div class=" md:flex">
+<div class=" md:flex ">
 
 
 
-
-
-      <Transition name="slide"> 
-      
+<div class="absolute left-0 top-20 lg:static z-0">
+  <Transition name="slide"> 
   
-      <Dashboard_SideBar v-if="isSidebar_open || isTabletOrLarger" class="absolute left-0 top-20 lg:static z-0"  ></Dashboard_SideBar>
-      </Transition>
-<div class=" p-4 w-full">
+  <!-- the heeight of the sidebar is the same as the slot below to match with each other -->
+  <Dashboard_SideBar v-if="isSidebar_open || isTabletOrLarger" class=""  ></Dashboard_SideBar>
+  </Transition>
+
+</div>
+
+
+      <!-- the height is set to screen-4rem and overflow-y-scroll to give immersive experience -->
+<div class=" p-4 w-full h-[calc(100vh-4rem)] overflow-y-scroll  hide-scrollbar">
 
   <slot></slot>
 </div>
@@ -76,5 +80,16 @@ const { isSidebar_open, isTabletOrLarger } = useSideBar()
 .slide-leave-to {
   transform: translateX(-100%);
   opacity: 0;
+}
+
+.hide-scrollbar {
+  /* For WebKit browsers */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  /* For IE and Edge */
+  -ms-overflow-style: none;
+  /* For Firefox */
+  scrollbar-width: none;
 }
 </style>

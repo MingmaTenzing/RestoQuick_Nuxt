@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
 
-  modules: ["@nuxt/image", "@nuxtjs/color-mode", "nuxt-toast"],
+  modules: ["@nuxt/image", "@nuxtjs/color-mode", "nuxt-toast", "@nuxt/scripts"],
 
   routeRules: {
     "/dashboard": { ssr: false },
@@ -21,6 +21,19 @@ export default defineNuxtConfig({
       scrollBehaviorType: "smooth",
     },
   },
+
+  // app: {
+  //   head: {
+  //     title: "Resto Quick",
+  //     script: [
+  //       {
+  //         defer: "true",
+  //         src: "https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js",
+  //         type: "text/javascript",
+  //       },
+  //     ],
+  //   },
+  // },
   // colorMode: {
   //   preference: "system", // default value of $colorMode.preference
   //   fallback: "dark", // fallback value if not system preference found

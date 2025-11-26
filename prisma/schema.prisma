@@ -67,3 +67,43 @@ model LeaveRequest {
   submittedAt DateTime    @default(now())
   staff       Staff       @relation(fields: [staffId], references: [id], onDelete: Cascade)
 }
+
+//booking
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  SEATED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+// 2. Model to manage Restaurant Tables
+model Table {
+  id       String @id @default(uuid())
+  number   String @unique // e.g. "A1", "12", "Bar-1"
+  capacity Int // How many people fit at this table
+
+  bookings Booking[]
+}
+
+// 3. The Main Booking Model
+model Booking {
+  id String @id @default(uuid())
+
+  customerName  String
+  customerPhone String
+
+  // Booking Details
+  bookingTime    DateTime // Combines Date and Time
+  guestCount     Int
+  specialRequest String? // e.g. "High chair needed", "Allergy", "GF"
+  status         BookingStatus @default(PENDING)
+
+  // Relations
+  tableId String? // Nullable so that booking can be taken without necessarily setting a table first.
+  table   Table?  @relation(fields: [tableId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

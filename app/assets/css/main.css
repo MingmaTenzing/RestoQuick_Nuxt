@@ -166,6 +166,12 @@
     --shadow-xl: var(--shadow-xl);
     --shadow-2xl: var(--shadow-2xl);
 }  
+
+
+
+
+
+
 @layer base {
     * {
         @apply border-border outline-ring/50;
@@ -193,4 +199,31 @@
         scrollbar-width: none;
         /* Firefox */
     }
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(0%);
+    opacity: 0.6;
+    cursor: pointer;
+    z-index: 0;
+}
+
+.dark-mode input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(100%);
+    opacity: 0.6;
+    cursor: pointer;
+    z-index: 0;
+}
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(0%);
+    opacity: 0.6;
+    cursor: pointer;
+    z-index: 0;
+}
+
+.dark-mode input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(100%);
+    opacity: 0.6;
+    cursor: pointer;
+    z-index: 0;
 }
