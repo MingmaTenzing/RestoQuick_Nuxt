@@ -26,7 +26,7 @@ onMounted(() => {
 })
 </script>
 <template>
-    <p>dfd</p>
+    <p>this is vapi assistants</p>
 
 
 
