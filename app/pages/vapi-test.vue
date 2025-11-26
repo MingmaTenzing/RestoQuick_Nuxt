@@ -132,6 +132,14 @@ const endcall = () => {
       >
         End Call
       </button>
+      <button 
+        @click="endcall"
+        :disabled="callStatus === 'idle'"
+        class="bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white p-4 rounded-lg border border-border font-semibold transition-colors"
+      >
+        End Call
+      </button>
+      
     </div>
   </div>
 </template>
