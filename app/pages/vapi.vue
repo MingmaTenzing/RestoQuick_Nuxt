@@ -1,11 +1,12 @@
 <script setup lang="js">
 
+const runtimeConfig = useRuntimeConfig();
 
-onMounted(() => {
+
+
+
 
     var vapiInstance = null;
-      const assistant = process.env.VAPI_ASSISTANT_ID; // Substitute with your assistant ID
-      const apiKey = process.env.VAPI_AI_PUBLIC_KEY; // Substitute with your Public key from Vapi Dashboard.
       const buttonConfig = {}; // Modify this as required
       (function (d, t) {
         var g = document.createElement(t),
@@ -17,13 +18,13 @@ onMounted(() => {
         s.parentNode.insertBefore(g, s);
         g.onload = function () {
           vapiInstance = window.vapiSDK.run({
-            apiKey: apiKey, // mandatory   
-            assistant: assistant, // mandatory
+            apiKey: runtimeConfig.public.VAPI_PUBLIC_KEY, // mandatory   
+            assistant: runtimeConfig.public.VAPI_ASSISTANT_KEY, // mandatory
             config: buttonConfig, // optional
           });
         };
       })(document, "script");
-})
+
 </script>
 <template>
     <p>this is vapi assistants</p>

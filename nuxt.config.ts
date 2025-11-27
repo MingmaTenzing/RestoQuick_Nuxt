@@ -14,11 +14,19 @@ export default defineNuxtConfig({
 
   routeRules: {
     "/dashboard": { ssr: false },
+    "/vapi": { ssr: false },
   },
 
   router: {
     options: {
       scrollBehaviorType: "smooth",
+    },
+  },
+
+  runtimeConfig: {
+    public: {
+      VAPI_PUBLIC_KEY: process.env.NUXT_VAPI_PUBLIC_KEY,
+      VAPI_ASSISTANT_KEY: process.env.NUXT_VAPI_ASSISTANT_KEY,
     },
   },
 
