@@ -10,9 +10,13 @@
         Automate scheduling, inventory, and operations with a single, intuitive platform that thinks
         like a manager — and works faster than one.
       </p>
-      <div class="">
+      <div class="flex  space-x-2  ">
         <button class="bg-violet-500 text-white px-4 py-2">View Dashboard</button>
-     
+  
+  <div class= "w-5 relative">
+
+    <vapi-call-button></vapi-call-button>
+  </div>
       </div>
     </div>
 
