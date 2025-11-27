@@ -8,16 +8,8 @@ const runtimeConfig = useRuntimeConfig();
 
     var vapiInstance = null;
       const buttonConfig = {
- background: '#ffffff',
-            color: '#ffffff',
-            border: 'none',
-            borderRadius: '100px',
-            padding: '16px 24px',
-            fontSize: '16px',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            boxShadow: '0 4px 12px rgba(18, 165, 148, 0.3)',
-            transition: 'all 0.3s ease',
+     color:white
+
  
 };; // Modify this as required
       (function (d, t) {

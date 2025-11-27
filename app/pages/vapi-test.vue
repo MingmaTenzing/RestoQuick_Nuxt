@@ -8,12 +8,14 @@ const runtimeConfig = useRuntimeConfig();
 const public_key = runtimeConfig.public.VAPI_PUBLIC_KEY;
 const assistant_id = runtimeConfig.public.VAPI_ASSISTANT_KEY;
 
-const vapi = ref();
+const vapi = ref<Vapi>();
 const isConnected = ref<boolean>(false)
 const isSpeaking = ref<boolean>(false)
 const transcript = ref([]);
 
+onMounted(() => {
 
+})
   const vapiInstance = new Vapi(public_key);
 
   vapi.value = vapiInstance;
@@ -44,12 +46,12 @@ const transcript = ref([]);
 
 
 
- async function startCall() {
+  function startCall() {
    
    
-     await vapi.value.start(
-   'a5801983-f1ae-401f-a06f-7ad5231ec2aa'
-    )
+    vapi.value!.start({
+      
+     })
       
   
 }
