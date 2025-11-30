@@ -83,7 +83,7 @@ async function endCall() {
     ></div>
 
     <div class="relative z-10">
-        <div class="  p-6 flex   gap-6 justify-between w-[800px] items-center     bg-background border border-border rounded-xl ">
+        <div class="  p-6 flex flex-col md:flex-row   gap-6 justify-between w-[800px] items-center     bg-background border border-border rounded-xl ">
 
     <div class=" w-1/2">
          <div class=" text-2xl font-sme flex items-center gap-2 text-primary">

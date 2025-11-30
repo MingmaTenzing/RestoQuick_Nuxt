@@ -1,6 +1,4 @@
 export default defineEventHandler(async (event) => {
-
-
   const prisma = usePrisma();
 
   const all_bookings = await prisma.booking.findMany({
