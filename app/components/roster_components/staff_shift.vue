@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { stat } from 'fs';
-import { title } from 'process';
+
 import { inject } from 'vue';
 import type { Shift, Staff } from '~/generated/prisma/client';
 

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import { title } from 'process';
 import type { Prisma, Staff , Shift} from '~/generated/prisma/client';
 
 const toast = useToast();
