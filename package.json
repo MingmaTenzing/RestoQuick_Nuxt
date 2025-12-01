@@ -9,7 +9,7 @@
     "preview": "nuxt preview",
       
 
-    "postinstall": "nuxt prepare; prisma generate"
+    "postinstall": "nuxt prepare && prisma generate"
   },
   "dependencies": {
     "@nuxt/image": "^1.11.0",
