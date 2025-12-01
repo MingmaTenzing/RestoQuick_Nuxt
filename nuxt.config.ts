@@ -15,6 +15,9 @@ export default defineNuxtConfig({
   routeRules: {
     "/dashboard": { ssr: false },
     "/vapi": { ssr: false },
+    "/vapi-test": {
+      ssr: false,
+    },
   },
 
   router: {
@@ -24,6 +27,9 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    VAPI_PUBLIC_KEY: process.env.NUXT_VAPI_PUBLIC_KEY,
+    VAPI_ASSISTANT_KEY: process.env.NUXT_VAPI_ASSISTANT_KEY,
+
     public: {
       VAPI_PUBLIC_KEY: process.env.NUXT_VAPI_PUBLIC_KEY,
       VAPI_ASSISTANT_KEY: process.env.NUXT_VAPI_ASSISTANT_KEY,

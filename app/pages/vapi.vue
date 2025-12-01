@@ -23,8 +23,39 @@ const runtimeConfig = useRuntimeConfig();
             config: buttonConfig, // optional
           });
         };
-      })(document, "script");
+        if (vapiInstance) {
+  
+          vapiInstance.on('call-start', () => {
+              console.log('call started')
+            })
+            
+           vapiInstance.on('call-end', () => {
+              console.log('call ended')
+            })
+           vapiInstance.on('speech-start', () => {
+              console.log('speech started')
+            })
+            
+           vapiInstance.on('speech-end', () => {
+              console.log('speech end')
+            }
+            )
+           vapiInstance.on('message', (message) => {
+              console.log(message)
+            })
+}
 
+
+
+
+        
+      }
+
+
+
+      )(document, "script");
+
+  
 </script>
 <template>
     <p>this is vapi assistants</p>

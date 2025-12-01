@@ -17,7 +17,10 @@ import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
       <!-- the hero section  with gradient background-->
       <BackgroundGrid class="">
         <div class="lg:w-[1200px] m-auto p-4">
-          <TitleSection></TitleSection>
+        
+
+            <TitleSection></TitleSection>
+          
         </div>
       </BackgroundGrid>
     </section>
