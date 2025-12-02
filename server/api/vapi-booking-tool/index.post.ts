@@ -1,57 +1,45 @@
 import { Vapi } from "@vapi-ai/server-sdk";
-import { create } from "node:domain";
+import { Prisma } from "~/generated/prisma/client";
 
 export default defineEventHandler(async (event) => {
-  let args;
-
   const prisma = usePrisma();
   const body = await readBody(event);
-  const toolCall = body.toolCalls?.[0];
-  console.log(body);
-  console.log(toolCall);
 
-  if (!toolCall) {
-    throw createError({
-      status: 400,
-      statusMessage: "bad request no too call provided",
-    });
-  }
+  const data = body.message;
+  console.log;
+  const tool_callId = data.toolCallList[0].id;
+  console.log(typeof data.toolCallList[0].function.arguments);
+  const args = data.toolCallList[0].function.arguments;
+  const {
+    guestCount,
+    bookingTime,
+    customerName,
+    customerPhone,
+    specialRequest,
+  } = args;
 
-  const rawArgs = toolCall.function?.arguments;
+  console.log(guestCount, bookingTime, customerName);
+
   try {
-    args = JSON.parse(rawArgs);
-  } catch (error) {
-    throw createError({
-      status: 500,
-      statusMessage: "cannot parse the arguments",
+    await prisma.booking.create({
+      data: {
+        customerName: customerName,
+        customerPhone: customerPhone,
+        specialRequest: specialRequest,
+        guestCount: guestCount,
+        bookingTime: new Date(bookingTime),
+      },
     });
-  }
 
-  console.log(args);
-
-  const create_booking = await prisma.booking.create({
-    data: {
-      bookingTime: args.bookingTime,
-      guestCount: args.guestCount,
-      customerName: args.customerName,
-      customerPhone: args.customerPhone,
-      specialRequest: args.specialRequest,
-    },
-  });
-
-  if (create_booking) {
     return {
       results: [
         {
-          toolCallId: toolCall.toolCallList[0].id,
-          result: `Booking has been made successfully `,
+          toolCallId: tool_callId,
+          result: `Booking has been created successfully`,
         },
       ],
     };
-  } else {
-    throw createError({
-      status: 500,
-      statusMessage: "Internal error creating booking",
-    });
+  } catch (error) {
+    return error;
   }
 });
