@@ -7,6 +7,8 @@ export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
   const body = await readBody(event);
   const toolCall = body.toolCalls?.[0];
+  console.log(body);
+  console.log(toolCall);
 
   if (!toolCall) {
     throw createError({
