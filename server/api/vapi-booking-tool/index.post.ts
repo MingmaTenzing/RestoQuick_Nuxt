@@ -6,9 +6,8 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
   const data = body.message;
-  console.log;
+
   const tool_callId = data.toolCallList[0].id;
-  console.log(typeof data.toolCallList[0].function.arguments);
   const args = data.toolCallList[0].function.arguments;
   const {
     guestCount,
@@ -17,8 +16,6 @@ export default defineEventHandler(async (event) => {
     customerPhone,
     specialRequest,
   } = args;
-
-  console.log(guestCount, bookingTime, customerName);
 
   try {
     await prisma.booking.create({
