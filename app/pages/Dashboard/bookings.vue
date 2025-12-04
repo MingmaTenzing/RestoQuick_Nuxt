@@ -14,7 +14,7 @@ const toast = useToast();
 
 const isAddBooking_dialog_open = ref<boolean>(false);
 
-const { data: bookings, refresh } = await useFetch<Booking[]>('/api/bookings', {
+const { data: bookings, refresh, status:bookings_loading } = await useFetch<Booking[]>('/api/bookings', {
   lazy:true
 })
 
@@ -24,6 +24,11 @@ const today_booking = computed(() => {
   return bookings.value?.filter((booking) => new Date(booking.bookingTime).toISOString().split('T')[0] == today)
 })
 
+
+const totalGuestCount = computed(() => {
+  return bookings.value?.reduce((sum, b) => sum + b.guestCount, 0);
+});
+
 const upcoming_bookings = computed(() => {
   const now = new Date(); // current date & time
 
@@ -32,6 +37,14 @@ const upcoming_bookings = computed(() => {
     return bookingDate > now;
   });
 });
+
+const total_confirmed_booking = computed(() => {
+  return bookings.value?.filter((booking) => booking.status == 'CONFIRMED').length
+})
+
+const total_pending_bookings = computed(() => {
+  return bookings.value?.filter((booking) => booking.status == "PENDING").length
+})
 
 console.log(upcoming_bookings.value)
 
@@ -102,6 +115,8 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
 </script>
 
 <template>
+
+
   <div class="space-y-6">
     <!-- Header Section -->
     <div class="flex justify-between">
@@ -126,6 +141,7 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
         
       </div>
     </div>
+     
 
     <!-- Stats Cards Grid -->
     <div class="flex flex-col gap-4 md:flex-row md:justify-around w-full md:flex-wrap lg:flex-nowrap">
@@ -134,7 +150,9 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Total Bookings</span>
           <div class="flex flex-col">
-            <span class="text-lg md:text-4xl lg:text-5xl  font-medium ">{{ bookings?.length }}</span>
+            <span v-if="bookings_loading =='pending'" class=" w-[100px] h-12  bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+     
+            <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium ">{{ bookings?.length }}</span>
             <span class="text-muted-foreground font-light text-sm">This month</span>
           </div>
         </div>
@@ -148,7 +166,8 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Confirmed</span>
           <div class="flex flex-col">
-            <span class="text-lg md:text-4xl lg:text-5xl  font-medium text-green-600">{{ 4}}</span>
+            <span v-if="bookings_loading == 'pending'" class="w-10 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+            <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium text-green-600">{{ total_confirmed_booking}}</span>
             <span class="text-muted-foreground font-light text-sm">Ready to serve</span>
           </div>
         </div>
@@ -162,7 +181,9 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Total Guests</span>
           <div class="flex flex-col">
-            <span class="text-lg md:text-4xl lg:text-5xl  font-medium ">{{ 20}}</span>
+            <span v-if="bookings_loading == 'pending'" class="w-14 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+
+            <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium ">{{ totalGuestCount}}</span>
             <span class="text-muted-foreground font-light text-sm">Expected arrivals</span>
           </div>
         </div>
@@ -176,7 +197,9 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Pending</span>
           <div class="flex flex-col">
-            <span class="text-lg md:text-4xl lg:text-5xl  font-medium text-primary">{{ 8 }}</span>
+              <span v-if="bookings_loading == 'pending'" class="w-14 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+
+            <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium text-primary">{{ total_pending_bookings }}</span>
             <span class="text-muted-foreground font-light text-sm">Awaiting confirmation</span>
           </div>
         </div>
@@ -186,13 +209,13 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
       </div>
     </div>
 
-    
 
+ 
     <!-- Tabs Navigation -->
     <div class="space-y-4">
       <div class="flex gap-2 border-b border-border">
         <button
-        v-on:click="currentTab = 'all'"
+        v-on:click="currentTab = 'all'" 
  
           :class="[
             'px-4 py-2 text-sm font-medium border-b-2 transition-colors',
@@ -226,6 +249,8 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
           Upcoming ({{ upcoming_bookings?.length }})
         </button>
       </div>
+   
+      
 
       <!-- All Bookings Tab -->
       <div v-if="currentTab === 'all'" class="space-y-4">
@@ -233,7 +258,16 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
           <i class="pi pi-inbox text-4xl text-muted-foreground mb-4 block"></i>
           <p class="text-muted-foreground">No bookings yet</p>
         </div>
-        <section v-else v-for="booking in bookings"
+        
+
+        <section v-if="bookings_loading == 'pending'">
+          <booking-components-loading-booking></booking-components-loading-booking>
+        </section>
+
+     
+
+      
+        <section v-if="bookings_loading == 'success'" v-for="booking in bookings"
             :key="booking.id" >
 
             <booking-components-booking-details-card @update-status="update_booking_status" :booking_details="booking"></booking-components-booking-details-card>
@@ -267,6 +301,10 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
 
     
     </div>
+
+
+
+    
   </div>
 
 
@@ -279,4 +317,8 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
 
 
   </div>
+
+
+
+  
 </template>
