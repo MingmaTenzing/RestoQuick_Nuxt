@@ -4,6 +4,7 @@
  
 </script>
 <template>
+  <NuxtLoadingIndicator></NuxtLoadingIndicator>
   <NuxtLayout>
 
     <NuxtPage ></NuxtPage>
