@@ -7,8 +7,8 @@ definePageMeta({
 // const { data } = await useFetch('/api/users');
 
 
-const {data,error ,status}= await useFetch("/api/shift")
-console.log(data.value)
+// const {data,error ,status}= await useFetch("/api/shift")
+// console.log(data.value)
 
 </script>
 
@@ -18,7 +18,4 @@ console.log(data.value)
     i'm dashboard
     <button class="border">add users</button>
 
-<div>
-    {{ data }}
-</div>
 </template>

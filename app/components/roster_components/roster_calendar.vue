@@ -33,7 +33,7 @@ provide('triggerShiftRefetch', triggerShiftRefetch)
 // the reason for this is user will open the addshiftmodal and then it will close automatically once its done.
 // this elemenates creating another separate variable to watch
 // but with further development it might change. for now its fine.
-const { data: shifts } = await useFetch<Shift[]>("/api/shift",  {watch: [addShiftModal.value, editshiftModal.value, shiftDeleteTrigger]} )
+const { data: shifts, status } = await useFetch<Shift[]>("/api/shift",  {watch: [addShiftModal.value, editshiftModal.value, shiftDeleteTrigger], lazy:true}, )
 
 console.log(shifts)
 
@@ -118,7 +118,12 @@ console.log(shifts)
 
    <!-- staff shift time and name -->
 
-        <div   v-for="shift in shifts?.filter((shift) =>new Date(shift.date).toISOString().split('T')[0] ===
+
+   <div v-if="status == 'pending'">
+ <roster-components-shift-loading></roster-components-shift-loading>
+  </div>
+
+        <div  v-else  v-for="shift in shifts?.filter((shift) =>new Date(shift.date).toISOString().split('T')[0] ===
       new Date(date.date).toISOString().split('T')[0])" :key="shift.id">
 
 
