@@ -7,6 +7,13 @@ export default defineEventHandler(async (event) => {
 
   const data = body.message;
 
+  if (!data) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Bad Request, No Body provided",
+    });
+  }
+
   const tool_callId = data.toolCallList[0].id;
   const args = data.toolCallList[0].function.arguments;
   const {
