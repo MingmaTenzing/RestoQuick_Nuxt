@@ -14,7 +14,9 @@ const toast = useToast();
 
 const isAddBooking_dialog_open = ref<boolean>(false);
 
-const { data: bookings, refresh } = await useFetch<Booking[]>('/api/bookings')
+const { data: bookings, refresh } = await useFetch<Booking[]>('/api/bookings', {
+  lazy:true
+})
 
 
 const today_booking = computed(() => {
