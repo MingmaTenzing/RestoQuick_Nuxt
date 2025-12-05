@@ -84,6 +84,7 @@ model Table {
   capacity Int // How many people fit at this table
 
   bookings Booking[]
+  orders   Order[]
 }
 
 // 3. The Main Booking Model
@@ -103,6 +104,55 @@ model Booking {
   tableId String? // Nullable so that booking can be taken without necessarily setting a table first.
   table   Table?  @relation(fields: [tableId], references: [id])
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Order
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  SERVED
+  COMPLETED
+  CANCELLED
+}
+
+model Order {
+  id String @id @default(uuid())
+
+  // Order Details
+  orderNumber String      @unique // e.g. "ORD-001", "ORD-2025-001"
+  status      OrderStatus @default(PENDING)
+  totalAmount Float       @default(0) // Total price of the order
+
+  // Relations
+  tableId String?
+  table   Table?  @relation(fields: [tableId], references: [id], onDelete: SetNull)
+
+  // Order Items
+  items OrderItem[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id String @id @default(uuid())
+
+  // Item Details
+  itemName            String
+  quantity            Int     @default(1)
+  unitPrice           Float
+  specialInstructions String? // e.g. "No onions", "Extra spicy", "Allergy: Nuts"
+
+  // Relations
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
