@@ -108,6 +108,29 @@ model Booking {
   updatedAt DateTime @updatedAt
 }
 
+// Menu
+enum MenuCategory {
+  APPETIZER
+  MAIN_COURSE
+  DESSERT
+  BEVERAGE
+  SIDE
+  SALAD
+}
+
+model MenuItem {
+  id          String       @id @default(uuid())
+  name        String
+  description String?
+  price       Float
+  category    MenuCategory
+  imageUrl    String? // Optional image URL for the menu item
+  isAvailable Boolean      @default(true) // Whether the item is currently available
+
+  // Relations
+  orderItems OrderItem[]
+}
+
 // Order
 enum OrderStatus {
   PENDING
@@ -143,9 +166,9 @@ model OrderItem {
   id String @id @default(uuid())
 
   // Item Details
-  itemName            String
+  itemName            String // Keep for backward compatibility, can be derived from MenuItem
   quantity            Int     @default(1)
-  unitPrice           Float
+  unitPrice           Float // Price at time of order (snapshot)
   specialInstructions String? // e.g. "No onions", "Extra spicy", "Allergy: Nuts"
 
   // Relations
@@ -155,4 +178,7 @@ model OrderItem {
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  menuItem   MenuItem? @relation(fields: [menuItemId], references: [id])
+  menuItemId String?
 }
