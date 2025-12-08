@@ -1,14 +1,11 @@
 <script setup lang="ts">
+
 // Note: Order and OrderStatus types will be available after running: npx prisma generate
 // For now using any - regenerate Prisma client to get proper types
-type Order = any
-type OrderStatus = 'PENDING' | 'CONFIRMED' | 'PREPARING' | 'READY' | 'SERVED' | 'COMPLETED' | 'CANCELLED'
 
-defineProps<{ order_details: Order }>();
+import type {OrderDetailsWithInclude} from "../../../types/orderwithInclude";
 
-const emit = defineEmits<{
-  (e: 'update-status', status: OrderStatus, id: string): void
-}>()
+defineProps<{ order_details: OrderDetailsWithInclude }>();
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -31,6 +28,8 @@ const getStatusColor = (status: string) => {
   }
 }
 
+
+//need to have a look at the formate currency later on 
 const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -96,64 +95,6 @@ const formatCurrency = (amount: number) => {
           </div>
           <span class="text-sm font-semibold">{{ formatCurrency(item.unitPrice * item.quantity) }}</span>
         </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div v-if="order_details.status === 'PENDING'" class="flex gap-2 pt-3 border-t border-border">
-        <button 
-          v-on:click="emit('update-status', 'CONFIRMED', order_details.id)"
-          class="flex-1 px-3 py-2 rounded-lg border border-border bg-green-500/10 text-green-500 hover:bg-green-500/20 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
-        >
-          <i class="pi pi-check"></i>
-          Confirm
-        </button>
-        <button 
-          v-on:click="emit('update-status', 'CANCELLED', order_details.id)"
-          class="flex-1 px-3 py-2 rounded-lg border border-border bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
-        >
-          <i class="pi pi-times"></i>
-          Cancel
-        </button>
-      </div>
-
-      <div v-else-if="order_details.status === 'CONFIRMED'" class="flex gap-2 pt-3 border-t border-border">
-        <button 
-          v-on:click="emit('update-status', 'PREPARING', order_details.id)"
-          class="flex-1 px-3 py-2 rounded-lg border border-border bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
-        >
-          <i class="pi pi-spinner"></i>
-          Start Preparing
-        </button>
-      </div>
-
-      <div v-else-if="order_details.status === 'PREPARING'" class="flex gap-2 pt-3 border-t border-border">
-        <button 
-          v-on:click="emit('update-status', 'READY', order_details.id)"
-          class="flex-1 px-3 py-2 rounded-lg border border-border bg-cyan-500/10 text-cyan-500 hover:bg-cyan-500/20 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
-        >
-          <i class="pi pi-check-circle"></i>
-          Mark Ready
-        </button>
-      </div>
-
-      <div v-else-if="order_details.status === 'READY'" class="flex gap-2 pt-3 border-t border-border">
-        <button 
-          v-on:click="emit('update-status', 'SERVED', order_details.id)"
-          class="flex-1 px-3 py-2 rounded-lg border border-border bg-purple-500/10 text-purple-500 hover:bg-purple-500/20 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
-        >
-          <i class="pi pi-send"></i>
-          Mark Served
-        </button>
-      </div>
-
-      <div v-else-if="order_details.status === 'SERVED'" class="flex gap-2 pt-3 border-t border-border">
-        <button 
-          v-on:click="emit('update-status', 'COMPLETED', order_details.id)"
-          class="flex-1 px-3 py-2 rounded-lg border border-border bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
-        >
-          <i class="pi pi-check-double"></i>
-          Complete Order
-        </button>
       </div>
     </div>
   </section>

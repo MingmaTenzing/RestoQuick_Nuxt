@@ -237,15 +237,8 @@ export default defineEventHandler(async (event) => {
 
   // Create all menu items
 
-  const createItems = await prisma.menuItem.create({
-    data: {
-      name: "Bruschetta",
-      description:
-        "Toasted bread topped with fresh tomatoes, basil, and garlic",
-      price: 8.99,
-      category: MenuCategory.APPETIZER,
-      isAvailable: true,
-    },
+  const createItems = await prisma.menuItem.createMany({
+    data: menuItemsData,
   });
   return createItems;
 });

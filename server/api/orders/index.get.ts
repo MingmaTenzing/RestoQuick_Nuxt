@@ -4,8 +4,13 @@ export default defineEventHandler(async (event) => {
   const all_orders = await prisma.order.findMany({
     include: {
       table: true,
-      items: true,
+      items: {
+        include: {
+          menuItem: true,
+        },
+      },
     },
+
     orderBy: {
       createdAt: "desc",
     },
