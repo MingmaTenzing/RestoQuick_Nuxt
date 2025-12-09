@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import type{ MenuItem } from '~/generated/prisma/client';
-import { menuItems } from '~/lib/menu-data';
+import { MenuCategory, type MenuItem } from '~/generated/prisma/client';
+
+
 
 
 
@@ -9,13 +10,27 @@ const { data:menu_items } = useFetch<MenuItem[]>('/api/menu-items')
 
 const show_cart = ref(true)
 
-const categories = [
+
+
+// the enum is not working when setting Menucategory.category.. so 
+// here in dummy_categories... i've explicitly defineed the category name
+const dummy_categories = [
     { id: "all", name: "All", icon: "🍽️" },
-    { id: "appetizers", name: "Starters", icon: "🥗" },
-    { id: "mains", name: "Mains", icon: "🍖" },
-    { id: "desserts", name: "Desserts", icon: "🍰" },
-    { id: "drinks", name: "Drinks", icon: "🍹" },
+    { id: "appetizers", name: 'APPETIZER', icon: "🥗" },
+    { id: "mains", name: 'MAIN_COURSE', icon: "🍖" },
+    { id: "desserts", name: 'DESSERT', icon: "🍰" },
+    { id: "drinks", name:' BEVERAGE', icon: "🍹" },
+    { id: "sides", name: 'SIDE', icon: "🥟" },
   ]
+
+// const categories = [
+//     { id: "all", name: "All", icon: "🍽️" },
+//     { id: "appetizers", name: MenuCategory.APPETIZER.toString(), icon: "🥗" },
+//     { id: "mains", name: MenuCategory.MAIN_COURSE.toString(), icon: "🍖" },
+//     { id: "desserts", name: MenuCategory.DESSERT.toString(), icon: "🍰" },
+//     { id: "drinks", name: MenuCategory.BEVERAGE.toString(), icon: "🍹" },
+//     { id: "sides", name: MenuCategory.SIDE.toString(), icon: "🥟" },
+//   ]
 </script>
 
 <template >
@@ -32,7 +47,7 @@ const categories = [
 
 <!-- category -->
  <section class=" flex  gap-2 overflow-x-scroll ">
-     <div  v-for="category in categories" :key="category.id" class=" ">
+     <div  v-for="category in dummy_categories" :key="category.id" class=" ">
  
          <div class=" flex space-x-2 rounded-full border px-4 py-2">
              <span>{{category.icon}}</span>
@@ -106,7 +121,7 @@ const categories = [
 
     <!-- view cart button-->
 
-    <div @click="show_cart = !show_cart" class="bg-green-600 w-full text-white  p-4 rounded-lg flex space-x-2 items-center justify-center">
+    <div @click="show_cart = !show_cart" class="bg-green-600 w-full text-white  p-4  flex space-x-2 items-center justify-center">
         <i class=" pi pi-shopping-cart"></i>
         <div>View Cart</div>
         <div>(2 item)</div>
