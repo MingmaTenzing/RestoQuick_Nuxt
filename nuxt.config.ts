@@ -36,28 +36,4 @@ export default defineNuxtConfig({
       VAPI_ASSISTANT_KEY: process.env.NUXT_VAPI_ASSISTANT_KEY,
     },
   },
-
-  // app: {
-  //   head: {
-  //     title: "Resto Quick",
-  //     script: [
-  //       {
-  //         defer: "true",
-  //         src: "https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js",
-  //         type: "text/javascript",
-  //       },
-  //     ],
-  //   },
-  // },
-  // colorMode: {
-  //   preference: "system", // default value of $colorMode.preference
-  //   fallback: "dark", // fallback value if not system preference found
-  //   hid: "nuxt-color-mode-script",
-  //   globalName: "__NUXT_COLOR_MODE__",
-  //   componentName: "ColorScheme",
-  //   classPrefix: "",
-  //   classSuffix: "",
-  //   storage: "localStorage", // or 'sessionStorage' or 'cookie'
-  //   storageKey: "nuxt-color-mode",
-  // },
 });
