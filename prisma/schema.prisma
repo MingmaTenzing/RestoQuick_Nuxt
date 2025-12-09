@@ -136,6 +136,12 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum OrderType {
+  TAKEAWAY
+  DINING
+  UBER
+}
+
 model Order {
   id String @id @default(uuid())
 
@@ -143,6 +149,8 @@ model Order {
   orderNumber String      @unique // e.g. "ORD-001", "ORD-2025-001"
   status      OrderStatus @default(PENDING)
   totalAmount Float       @default(0) // Total price of the order
+
+  orderType OrderType @default(DINING)
 
   // Relations
   tableId String?

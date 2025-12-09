@@ -3,6 +3,7 @@
 // Note: Order and OrderStatus types will be available after running: npx prisma generate
 // For now using any - regenerate Prisma client to get proper types
 
+
 import type {OrderDetailsWithInclude} from "../../../types/orderwithInclude";
 
 defineProps<{ order_details: OrderDetailsWithInclude }>();

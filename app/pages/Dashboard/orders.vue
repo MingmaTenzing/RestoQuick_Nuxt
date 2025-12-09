@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { Order } from '~/generated/prisma/client';
-import type { OrderGetPayload } from '~/generated/prisma/models';
+
 import type{ OrderDetailsWithInclude } from '~~/types/orderwithInclude';
 
 definePageMeta({
@@ -11,6 +10,8 @@ definePageMeta({
 const { data: orders, status: orders_loading } = await useFetch<OrderDetailsWithInclude[]>('/api/orders', {
   lazy: true
 })
+
+console.log(orders)
 
 // Stats for all orders
 const totalRevenue = computed(() => {
@@ -126,9 +127,9 @@ const formatCurrency = (amount: number) => {
       </section>
 
       <section v-if="orders_loading == 'success'" v-for="order in orders" :key="order.id">
-        <order-components-order-details-card 
+        <OrderDashboardComponentsOrderDetailsCard
           :order_details="order"
-        ></order-components-order-details-card>
+        ></OrderDashboardComponentsOrderDetailsCard>
       </section>
     </div>
   </div>
