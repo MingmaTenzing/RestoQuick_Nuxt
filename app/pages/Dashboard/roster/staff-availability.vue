@@ -29,9 +29,9 @@ function startDrag(event: DragEvent, data:Staff) {
     
         <div class="flex flex-wrap gap-2">
             
-            <div v-for="data in staffs" draggable="true" @dragstart="startDrag($event, data)">
+            <div v-for="staff in staffs" draggable="true" :key="staff.id" @dragstart="startDrag($event, staff)">
                 
-                <RosterComponentsStaffs :staff="data"></RosterComponentsStaffs>
+                <RosterComponentsStaffs :staff="staff"></RosterComponentsStaffs>
             </div>
         </div>
     </div>

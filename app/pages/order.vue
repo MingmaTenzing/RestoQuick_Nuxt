@@ -6,11 +6,11 @@ import { MenuCategory, type MenuItem } from '~/generated/prisma/client';
 
 
 const { data: menu_items } = useFetch<MenuItem[]>('/api/menu-items')
+const {  cart_items} = useOrderCart()
 
 
-
-// here in dummy_categories... i've explicitly defineed the category name
-const dummy_categories = [
+// here  i've explicitly defineed the category name
+const categories = [
     { id: "all", name: "All", icon: "🍽️" },
     { id: "appetizers", name: 'APPETIZER', icon: "🥗" },
     { id: "mains", name: 'MAIN_COURSE', icon: "🍖" },
@@ -41,23 +41,13 @@ const show_cart = ref(true);
 console.log(selectedCategory.value)
 
 
- 
-// the enum is not working when setting Menucategory.category.. so 
-
-
-// const categories = [
-//     { id: "all", name: "All", icon: "🍽️" },
-//     { id: "appetizers", name: MenuCategory.APPETIZER.toString(), icon: "🥗" },
-//     { id: "mains", name: MenuCategory.MAIN_COURSE.toString(), icon: "🍖" },
-//     { id: "desserts", name: MenuCategory.DESSERT.toString(), icon: "🍰" },
-//     { id: "drinks", name: MenuCategory.BEVERAGE.toString(), icon: "🍹" },
-//     { id: "sides", name: MenuCategory.SIDE.toString(), icon: "🥟" },
-//   ]
 </script>
 
 <template >
 <main class="w-full p-4 space-y-6 h-screen ">
 
+
+    <!-- header -->
     <section class=" flex space-x-2 items-center ">
         <img src="../assets/images/RestroMate.png"  class="invert w-20 not-dark:invert-0"></img>
        <div class=" flex flex-col">
@@ -89,7 +79,7 @@ console.log(selectedCategory.value)
 
     
     <!-- list of menu items -->
-        <div  v-for="item in selectedCategory_menu_items" class=" space-y-4 last:pb-26">
+        <div  v-for="item in selectedCategory_menu_items" :key="item.id" class=" space-y-4 last:pb-26">
  
             <OrderComponentsMenuItem :menu_item="item" ></OrderComponentsMenuItem>           
 
@@ -97,11 +87,6 @@ console.log(selectedCategory.value)
 
 
 </section>
-
-
-
-
-
 
 
 
@@ -132,10 +117,12 @@ console.log(selectedCategory.value)
         <!-- food items cart list -->
 
         <section class="space-y-4 h-[400px] overflow-y-scroll">
+ <div v-for="item in cart_items" :key="item.menuItemId">
+                
+                            <!-- list of cart items -->
+                             <OrderComponentsCartItem :cart_item="item" ></OrderComponentsCartItem>
+            </div>
 
-
-            <!-- list of cart items -->
-             <OrderComponentsCartItem></OrderComponentsCartItem>
 
 
         </section>

@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { MenuItem } from '~/generated/prisma/client';
-import type { OrderInclude, OrderItemInclude } from '~/generated/prisma/models';
 import type Order_Cart_Item from '~~/types/order-cart';
-import type { OrderDetailsWithInclude } from '~~/types/orderwithInclude';
 
 
 const props = defineProps<{
@@ -55,7 +53,7 @@ function add_item_to_cart() {
                         <label  class=" text-xs font-light text-muted-foreground">
                             Sepcial Instruction
                         </label>
-                        <textarea v-model="special_instruction"  class=" text-xs w-full rounded-lg outline-none border p-2" placeholder=" E.g. Extra Spicy, Less Rice"></textarea>
+                        <textarea v-model="special_instruction" :key="menu_item.id"  class=" text-xs w-full rounded-lg outline-none border p-2" placeholder=" E.g. Extra Spicy, Less Rice"></textarea>
                     </div>
                     <div>
                         <button @click="add_item_to_cart()" class=" bg-amber-500  text-amber-50  rounded-lg p-2 text-sm">

@@ -26,9 +26,26 @@ export const useOrderCart = () => {
     cart_items.value = filtered_items;
   };
 
+  const increase_quantity = (item_in_cart: Order_Cart_Item) => {
+    const find_item = cart_items.value.find(
+      (item) => item.menuItemId == item_in_cart.menuItemId
+    );
+
+    find_item!.quantity++;
+  };
+  const decrease_quantity = (item_in_cart: Order_Cart_Item) => {
+    const find_item = cart_items.value.find(
+      (item) => item.menuItemId == item_in_cart.menuItemId
+    );
+
+    find_item!.quantity--;
+  };
+
   return {
     cart_items,
     add_to_cart,
     remove_from_cart,
+    increase_quantity,
+    decrease_quantity,
   };
 };
