@@ -5,14 +5,10 @@ import { MenuCategory, type MenuItem } from '~/generated/prisma/client';
 
 
 
-const { data:menu_items } = useFetch<MenuItem[]>('/api/menu-items')
-
-
-const show_cart = ref(true)
+const { data: menu_items } = useFetch<MenuItem[]>('/api/menu-items')
 
 
 
-// the enum is not working when setting Menucategory.category.. so 
 // here in dummy_categories... i've explicitly defineed the category name
 const dummy_categories = [
     { id: "all", name: "All", icon: "🍽️" },
@@ -21,7 +17,33 @@ const dummy_categories = [
     { id: "desserts", name: 'DESSERT', icon: "🍰" },
     { id: "drinks", name:' BEVERAGE', icon: "🍹" },
     { id: "sides", name: 'SIDE', icon: "🥟" },
-  ]
+]
+
+
+const selectedCategory = ref("All")
+
+
+const selectedCategory_menu_items = computed(() =>
+
+{
+    if (selectedCategory.value == 'All') {
+        console.log(selectedCategory.value)
+        return menu_items.value;
+    }
+    else {
+        
+        return  menu_items.value?.filter((item) => item.category == selectedCategory.value)
+    }}
+);
+
+const show_cart = ref(true);
+
+console.log(selectedCategory.value)
+
+
+ 
+// the enum is not working when setting Menucategory.category.. so 
+
 
 // const categories = [
 //     { id: "all", name: "All", icon: "🍽️" },
@@ -49,7 +71,7 @@ const dummy_categories = [
  <section class=" flex  gap-2 overflow-x-scroll ">
      <div  v-for="category in dummy_categories" :key="category.id" class=" ">
  
-         <div class=" flex space-x-2 rounded-full border px-4 py-2">
+         <div v-on:click="selectedCategory = category.name" class=" flex space-x-2 rounded-full border px-4 py-2">
              <span>{{category.icon}}</span>
              <span> {{category.name}}</span>
              
@@ -65,7 +87,7 @@ const dummy_categories = [
 
     
     <!-- list of menu items -->
-        <div  v-for="item in menu_items" class=" space-y-4 last:pb-26">
+        <div  v-for="item in selectedCategory_menu_items" class=" space-y-4 last:pb-26">
  
             <OrderComponentsMenuItem :menu_item="item" ></OrderComponentsMenuItem>           
 

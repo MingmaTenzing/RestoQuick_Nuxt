@@ -7,6 +7,7 @@ import type { OrderDetailsWithInclude } from '~~/types/orderwithInclude';
 const props = defineProps<{
  menu_item: MenuItem
 }>()
+
 </script>
 
 
@@ -19,10 +20,10 @@ const props = defineProps<{
                 <div class="space-y-2 w-full">
                     <div class=" flex justify-between items-center">
 
-                        <span class="text-lg font-semibold ">{{ menu_item.name }}</span>
-                        <span class=" bg-accent p-2 rounded-lg font-semibold"> ${{ menu_item.price }}</span>
+                        <span class="text-lg font-semibold ">{{ menu_item?.name }}</span>
+                        <span class=" bg-accent p-2 rounded-lg font-semibold"> ${{ menu_item?.price }}</span>
                     </div>
-                    <p class=" text-muted-foreground font-light text-sm">{{ menu_item.description }}</p>
+                    <p class=" text-muted-foreground font-light text-sm">{{ menu_item?.description }}</p>
 
 
                     <!-- add or minus the items number button -->
