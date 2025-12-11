@@ -1,12 +1,37 @@
 <script setup lang="ts">
 import type { MenuItem } from '~/generated/prisma/client';
 import type { OrderInclude, OrderItemInclude } from '~/generated/prisma/models';
+import type Order_Cart_Item from '~~/types/order-cart';
 import type { OrderDetailsWithInclude } from '~~/types/orderwithInclude';
 
 
 const props = defineProps<{
  menu_item: MenuItem
 }>()
+
+
+const { add_to_cart, remove_from_cart, cart_items } = useOrderCart();
+
+const special_instruction  = ref('')
+
+function add_item_to_cart() {
+    console.log(props.menu_item)
+
+    const order_cart_item: Order_Cart_Item = {
+        itemName: props.menu_item.name,
+        quantity: 1, 
+        unitPrice: props.menu_item.price,
+        menuItemId: props.menu_item.id,
+        specialInstructions: special_instruction.value,
+        
+    }
+
+    add_to_cart(order_cart_item)
+
+
+
+}
+
 
 </script>
 
@@ -26,7 +51,20 @@ const props = defineProps<{
                     <p class=" text-muted-foreground font-light text-sm">{{ menu_item?.description }}</p>
 
 
+                    <div>
+                        <label  class=" text-xs font-light text-muted-foreground">
+                            Sepcial Instruction
+                        </label>
+                        <textarea v-model="special_instruction"  class=" text-xs w-full rounded-lg outline-none border p-2" placeholder=" E.g. Extra Spicy, Less Rice"></textarea>
+                    </div>
+                    <div>
+                        <button @click="add_item_to_cart()" class=" bg-amber-500  text-amber-50  rounded-lg p-2 text-sm">
+                            Add to cart
+                        </button>
+                    </div>
                     <!-- add or minus the items number button -->
+                    
+                    <!-- will work on this later once the cart state is done -->
                     <div class=" flex items-center justify-between">
                         <div class=" rounded-lg border p-2 w-10 h-10 flex justify-center items-center">
 

@@ -67,21 +67,23 @@ console.log(selectedCategory.value)
 
     </section>
 
-<!-- category -->
+<!-- categories -->
 <section class=" flex  gap-2 overflow-x-scroll no-scrollbar">
      <div  v-for="category in dummy_categories" :key="category.id" class=" ">
  
-         <div v-on:click="selectedCategory = category.name" class=" flex space-x-2 rounded-full border px-4 py-2">
+         <button v-on:click="selectedCategory = category.name" class=" flex space-x-2 rounded-full border px-4 py-2">
              <span>{{category.icon}}</span>
              <span> {{category.name}}</span>
              
-         </div>
+         </button>
  
      </div>
 
     </section>
 
 
+
+    <!-- menu items list -->
  <section class=" space-y-4 overflow-y-scroll no-scrollbar h-[500px]">
 
 
