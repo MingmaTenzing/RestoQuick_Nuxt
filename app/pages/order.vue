@@ -76,7 +76,7 @@ console.log(selectedCategory.value)
 
 
     <!-- menu items list -->
- <section class=" space-y-4 overflow-y-scroll no-scrollbar h-[500px]">
+ <section class=" space-y-4 overflow-y-scroll no-scrollbar ">
 
 
     
@@ -92,59 +92,131 @@ console.log(selectedCategory.value)
 
 
 
-<!-- the position is set the fixed  -->
-<section class="w-full   fixed bottom-0 left-0">
 
-<!-- order summary popup when clicked on view cart -->
-    <div v-if="show_cart" class="h-[500px] bg-card p-4 rounded-t-xl">
-
-
-        <!-- order summary header -->
-        <div class=" mb-4 flex justify-between ">
-
-            
-            <div class=" flex flex-col">
-                <span class="font-bold text-2xl">Order Summary</span>
-                <span class=" font-light text-muted-foreground text-sm">Table Unknown</span>
-
-            </div>
-            <div>
-                <i class=" pi pi-times"></i>
-            </div>
-
-        </div>
+<!-- view Cart component  -->
 
 
 
-        <!-- food items cart list -->
+        <!-- the position is set the fixed  -->
 
-        <section class="space-y-4 h-[400px] overflow-y-scroll">
- <div v-for="item in cart_items" :key="item.menuItemId">
+    <section class="w-full   fixed bottom-0 left-0">
+
+        <Transition name="slide-fade">
+
+        
+    
+    <!-- order summary popup when clicked on view cart -->
+        <div v-if="show_cart" class="h-[70vh] bg-card p-4 rounded-t-xl flex flex-col justify-between">
+    
+    
+            <!-- order summary header -->
+            <section class=" mb-4 flex justify-between ">
+    
                 
-                            <!-- list of cart items -->
-                             <OrderComponentsCartItem :cart_item="item" ></OrderComponentsCartItem>
-            </div>
+                <div class=" flex flex-col">
+                    <span class="font-bold text-2xl">Order Summary</span>
+                    <span class=" font-light text-muted-foreground text-sm">Table Unknown</span>
+    
+                </div>
+                <div @click="show_cart = false">
+                    <i class=" pi pi-times"></i>
+                </div>
+    
+            </section>
+    
+    
+    
+            <!-- food items cart list -->
+
+            <section class=" flex ">
+
+            </section>
+    
+            <section class="space-y-4  overflow-y-scroll flex-1 ">
 
 
+                 <div class="" v-for="item in cart_items" :key="item.menuItemId">
+                    
+                                <!-- list of cart items -->
+                                 <OrderComponentsCartItem :cart_item="item" ></OrderComponentsCartItem>
+                </div>
+      
 
-        </section>
 
+                
+                
+                
+            </section>
+            
+            
+            <!-- total cost and tax -->
+              <section>
+    
+                        <!-- subtotal and tax -->
+                    <div class=" flex  justify-between  border-t border-b py-2">
+                        <div class=" flex flex-col space-y-2">
+    
+                            <span class=" font-semibold ">SubTotal</span>
+                            <span class=" text-sm">Tax (0%)</span>
+                        </div>
+                        <div class=" flex flex-col  space-y-2">
+                            <span>$500</span>
+                            <span class=" text-sm">$0</span>
+                        </div>
+                    </div>
+        
+                    <!-- final total price -->
+                    <div class=" flex justify-between items-center py-2">
+                        <span class=" font-bold">Total</span>
+                        <span class=" font-bold">$500</span>
+                    </div>
+                </section>
+    
+        </div>
+    
+        <!-- view cart button-->
+    
+        
+        
+    </Transition>
+    
 
-    </div>
-
-    <!-- view cart button-->
-
-    <div @click="show_cart = !show_cart" class="bg-green-600 w-full text-white  p-4  flex space-x-2 items-center justify-center">
+    <!-- view cart buttons -->
+    <div v-if="!show_cart && cart_items.length>0" @click="show_cart = !show_cart" class="bg-amber-600 w-full text-white  p-4  flex space-x-2 items-center justify-center">
         <i class=" pi pi-shopping-cart"></i>
         <div>View Cart</div>
         <div>(2 item)</div>
         <div class="font-bold">$65.45</div>
 
     </div>
+    <div v-if="show_cart"  class="bg-green-600 w-full text-white  p-4  flex space-x-2 items-center justify-center">
+        <div>Checkout</div>
+      
 
+    </div>
     
-
-</section>
+    </section>
 </main>
 
 </template>
+
+
+<style>
+    /*
+  Enter and leave animations can use different
+  durations and timing functions.
+*/
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(20px);
+  opacity: 0;
+}
+</style>
