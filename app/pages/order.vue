@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-import { MenuCategory, type MenuItem } from '~/generated/prisma/client';
+import type { MenuItem } from '~/generated/prisma/client';
+
+
 
 
 
@@ -59,7 +61,7 @@ console.log(selectedCategory.value)
 
 <!-- categories -->
 <section class=" flex  gap-2 overflow-x-scroll no-scrollbar">
-     <div  v-for="category in dummy_categories" :key="category.id" class=" ">
+     <div  v-for="category in categories" :key="category.id" class=" ">
  
          <button v-on:click="selectedCategory = category.name" class=" flex space-x-2 rounded-full border px-4 py-2">
              <span>{{category.icon}}</span>
