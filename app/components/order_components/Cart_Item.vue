@@ -7,6 +7,10 @@ const props = defineProps<{
 
 const { increase_quantity, decrease_quantity, remove_from_cart } =
   useOrderCart();
+
+
+
+
 </script>
 
 <template>

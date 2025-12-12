@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { create } from 'node:domain';
 import type { MenuItem } from '~/generated/prisma/client';
 
 
@@ -23,6 +24,7 @@ const categories = [
 
 
 const selectedCategory = ref("All")
+const show_cart = ref(true);
 
 
 const selectedCategory_menu_items = computed(() =>
@@ -38,9 +40,17 @@ const selectedCategory_menu_items = computed(() =>
     }}
 );
 
-const show_cart = ref(true);
 
-console.log(selectedCategory.value)
+async function place_order() {
+    const create_order = await $fetch("/api/orders", {
+        method: 'POST',
+        body: {
+            cart_items: cart_items.value
+        }
+    })
+
+    console.log(create_order)
+}
 
 
 </script>
@@ -189,7 +199,9 @@ console.log(selectedCategory.value)
         <div class="font-bold">$65.45</div>
 
     </div>
-    <div v-if="show_cart"  class="bg-green-600 w-full text-white  p-4  flex space-x-2 items-center justify-center">
+
+    <!-- checkout button -->
+    <div @click="place_order()" v-if="show_cart"  class="bg-green-600 w-full text-white  p-4  flex space-x-2 items-center justify-center">
         <div>Checkout</div>
       
 
