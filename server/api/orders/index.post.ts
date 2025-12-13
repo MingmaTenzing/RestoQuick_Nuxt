@@ -1,14 +1,18 @@
+import { table } from "node:console";
+
 export default eventHandler(async (event) => {
   const prisma = usePrisma();
 
   // Read request body - expects cart items
   const body = await readBody(event);
-  const cart_items = body.cart_items || [];
-  const tableId = body.tableId || null;
-  const orderType = body.orderType || "DINING";
-  const specialInstructions = body.specialInstructions || null;
 
-  console.log(body.cart_items);
+  const { cart_items, tableId, orderType, specialInstructions } = body;
+  // const cart_items = body.cart_items || [];
+  // const tableId = body.tableId || null;
+  // const orderType = body.orderType || "DINING";
+  // const specialInstructions = body.specialInstructions || null;
+
+  console.log(cart_items, tableId, specialInstructions);
 
   // Validate cart items
   if (!Array.isArray(cart_items) || cart_items.length === 0) {
