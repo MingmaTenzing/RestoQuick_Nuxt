@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { create } from 'node:domain';
 import type { MenuItem } from '~/generated/prisma/client';
+import type Order_Cart_Item from '~~/types/order-cart';
 
 
 
@@ -26,6 +27,11 @@ const categories = [
 const selectedCategory = ref("All")
 const show_cart = ref(true);
 
+const totalAmount = computed(() => 
+  cart_items.value.reduce((sum: number, item: Order_Cart_Item) => {
+    return sum + item.unitPrice * item.quantity;
+  }, 0).toFixed(2)
+)
 
 const selectedCategory_menu_items = computed(() =>
 
@@ -170,7 +176,7 @@ async function place_order() {
                             <span class=" text-sm">Tax (0%)</span>
                         </div>
                         <div class=" flex flex-col  space-y-2">
-                            <span>$500</span>
+                            <span>${{ totalAmount }}</span>
                             <span class=" text-sm">$0</span>
                         </div>
                     </div>
@@ -178,7 +184,7 @@ async function place_order() {
                     <!-- final total price -->
                     <div class=" flex justify-between items-center py-2">
                         <span class=" font-bold">Total</span>
-                        <span class=" font-bold">$500</span>
+                        <span class=" font-bold">${{totalAmount}}</span>
                     </div>
                 </section>
     
@@ -195,8 +201,8 @@ async function place_order() {
     <div v-if="!show_cart && cart_items.length>0" @click="show_cart = !show_cart" class="bg-amber-600 w-full text-white  p-4  flex space-x-2 items-center justify-center">
         <i class=" pi pi-shopping-cart"></i>
         <div>View Cart</div>
-        <div>(2 item)</div>
-        <div class="font-bold">$65.45</div>
+        <div>{{ cart_items.length }}</div>
+        <div class="font-bold">${{totalAmount}}</div>
 
     </div>
 
