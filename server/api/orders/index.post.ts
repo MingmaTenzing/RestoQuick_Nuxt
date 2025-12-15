@@ -15,7 +15,7 @@ export default eventHandler(async (event) => {
   console.log(cart_items, tableId, specialInstructions);
 
   // Validate cart items
-  if (!Array.isArray(cart_items) || cart_items.length === 0) {
+  if (!cart_items ||  cart_items.length === 0) {
     throw createError({
       statusCode: 400,
       statusMessage: "Cart cannot be empty",
