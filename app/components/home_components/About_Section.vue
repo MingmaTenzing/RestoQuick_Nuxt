@@ -87,7 +87,7 @@ const about_items = ref<accordionItems[]>([
     <section class=" flex flex-col gap-6 md:flex-row md:items-center">
       <div class=" space-y-4 relative md:w-[50%] h-[480px] overflow-y-scroll  no-scrollbar  ">
 
-        <div v-for="item in about_items">
+        <div v-for="item in about_items" :key="item.title">
           <About_Section_Accordion :item="item"></About_Section_Accordion>
         </div>
 

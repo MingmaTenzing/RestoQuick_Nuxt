@@ -1,12 +1,41 @@
 <script setup lang="ts">
 import type { MenuItem } from '~/generated/prisma/client';
-import type { OrderInclude, OrderItemInclude } from '~/generated/prisma/models';
-import type { OrderDetailsWithInclude } from '~~/types/orderwithInclude';
+import type Order_Cart_Item from '~~/types/order-cart';
+
+
 
 
 const props = defineProps<{
  menu_item: MenuItem
 }>()
+
+
+const { add_to_cart, remove_from_cart, cart_items } = useOrderCart();
+
+
+const special_instruction  = ref('')
+
+function add_item_to_cart() {
+    console.log(props.menu_item)
+
+    const order_cart_item: Order_Cart_Item = {
+        itemName: props.menu_item.name,
+        quantity: 1, 
+        unitPrice: props.menu_item.price,
+        menuItemId: props.menu_item.id,
+        specialInstructions: special_instruction.value,
+        
+    }
+
+    add_to_cart(order_cart_item)
+
+    
+
+
+
+}
+
+
 </script>
 
 
@@ -19,14 +48,34 @@ const props = defineProps<{
                 <div class="space-y-2 w-full">
                     <div class=" flex justify-between items-center">
 
-                        <span class="text-lg font-semibold ">{{ menu_item.name }}</span>
-                        <span class=" bg-accent p-2 rounded-lg font-semibold"> ${{ menu_item.price }}</span>
+                        <span class="text-lg font-semibold ">{{ menu_item?.name }}</span>
+                        <span class=" bg-accent p-2 rounded-lg font-semibold"> ${{ menu_item?.price }}</span>
                     </div>
-                    <p class=" text-muted-foreground font-light text-sm">{{ menu_item.description }}</p>
+                    <p class=" text-muted-foreground font-light text-sm">{{ menu_item?.description }}</p>
 
 
+                    <div>
+                        <label  class=" text-xs font-light text-muted-foreground">
+                            Sepcial Instruction
+                        </label>
+                        <textarea v-model="special_instruction" :key="menu_item.id"  class=" text-xs w-full rounded-lg outline-none border p-2" placeholder=" E.g. Extra Spicy, Less Rice"></textarea>
+                    </div>
+                    <div>
+                        <div v-if="!cart_items.find((item) => item.menuItemId == menu_item.id)" class=" flex justify-end">
+                            <button @click="add_item_to_cart()" class=" bg-amber-600  text-amber-50  rounded-lg p-2 text-sm">
+                                Add to cart
+                            </button>
+                        </div>
+                        <div v-else class=" flex justify-end">
+                            <button class=" bg-muted text-muted-foreground rounded-lg p-2 text-sm">Added to Cart</button>
+
+                        </div>
+
+                    </div>
                     <!-- add or minus the items number button -->
-                    <div class=" flex items-center justify-between">
+                    
+                    <!-- will work on this later once the cart state is done -->
+                    <!-- <div class=" flex items-center justify-between">
                         <div class=" rounded-lg border p-2 w-10 h-10 flex justify-center items-center">
 
                             <span class=" ">-</span>
@@ -40,7 +89,7 @@ const props = defineProps<{
 
                             <span class=" ">+</span>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
             </div>
