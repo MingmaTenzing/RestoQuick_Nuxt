@@ -240,5 +240,7 @@ export default defineEventHandler(async (event) => {
   const createItems = await prisma.menuItem.createMany({
     data: menuItemsData,
   });
+
+  console.log(createItems);
   return createItems;
 });
