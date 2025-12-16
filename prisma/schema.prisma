@@ -151,7 +151,7 @@ model Order {
   orderNo Int @unique @default(autoincrement())
 
   // 🧾 Human-readable code (ODR-0001)
-  orderNumber String      @unique
+  orderNumber String?     @unique
   status      OrderStatus @default(PENDING)
   totalAmount Float       @default(0) // Total price of the order
 

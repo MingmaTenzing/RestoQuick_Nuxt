@@ -1,14 +1,21 @@
-import { table } from "node:console";
-
+import type Order_Cart_Item from "../../../types/order-cart";
 export default eventHandler(async (event) => {
   const prisma = usePrisma();
 
   // Read request body - expects cart items
   const body = await readBody(event);
 
-  const { cart_items, tableId, orderType } = body;
+  const { cart_items, table_id } = body;
 
-  console.log(cart_items, tableId);
+  console.log(cart_items, table_id);
+
+  //validates table id
+  if (!table_id) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "No table found.. please scan the qr code",
+    });
+  }
 
   // Validate cart items
   if (!cart_items || cart_items.length === 0) {
@@ -23,25 +30,19 @@ export default eventHandler(async (event) => {
     return sum + item.unitPrice * item.quantity;
   }, 0);
 
-  // Generate order number (e.g., ORD-2025-001)
-  const orderNumber = `ORD-${Date.now()}`;
-
   try {
     // Create order with items from cart
     const order = await prisma.order.create({
       data: {
-        orderNumber,
-        status: "PENDING",
         totalAmount,
-        orderType,
-        tableId,
+
+        tableId: table_id,
         items: {
-          create: cart_items.map((item: any) => ({
+          create: cart_items.map((item: Order_Cart_Item) => ({
             itemName: item.itemName,
             quantity: item.quantity,
             unitPrice: item.unitPrice,
-            specialInstructions:
-              item.specialInstructions || specialInstructions,
+            specialInstructions: item.specialInstructions,
           })),
         },
       },

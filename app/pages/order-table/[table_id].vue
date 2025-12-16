@@ -76,7 +76,7 @@ async function place_order() {
 
     <!-- header -->
     <section class=" flex space-x-2 items-center ">
-        <img src="../assets/images/RestroMate.png"  class="invert w-20 not-dark:invert-0"></img>
+        <img src="../../assets/images/RestroMate.png"  class="invert w-20 not-dark:invert-0"></img>
        <div class=" flex flex-col">
            <span class=" text-2xl font-semibold">Order Now</span>
            <span class=" text-muted-foreground text-sm font-light">Table Unknown</span>
