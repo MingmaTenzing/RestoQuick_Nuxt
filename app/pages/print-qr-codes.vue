@@ -20,7 +20,7 @@ const { data:tables } = useFetch("/api/tables");
   
             <div class=" p-6 flex flex-col space-y-4  items-center rounded-lg border  w-[220px]"  v-for="table in tables" :key="table.id">
                 <span class=" text-lg">{{ table.number }}</span>
-                <Qrcode :value="table.id" ></Qrcode>
+                <Qrcode :value="`https://resto-quick-nuxt.vercel.app/order-table/${table.id}`" ></Qrcode>
                 <span class=" text-center text-muted-foreground font-light text-sm">Scan to view menu and order</span>
               
             </div>

@@ -1,3 +1,4 @@
+import { OrderItemCreateWithoutOrderInput } from "~/generated/prisma/models";
 import type Order_Cart_Item from "../../../types/order-cart";
 export default eventHandler(async (event) => {
   const prisma = usePrisma();
@@ -5,9 +6,9 @@ export default eventHandler(async (event) => {
   // Read request body - expects cart items
   const body = await readBody(event);
 
-  const { cart_items, table_id } = body;
+  const cart_items: Order_Cart_Item[] = body.cart_items;
 
-  console.log(cart_items, table_id);
+  const table_id = body.table_id;
 
   //validates table id
   if (!table_id) {
@@ -26,9 +27,19 @@ export default eventHandler(async (event) => {
   }
 
   // Calculate total amount
-  const totalAmount = cart_items.reduce((sum: number, item: any) => {
+  const totalAmount = cart_items.reduce((sum: number, item) => {
     return sum + item.unitPrice * item.quantity;
   }, 0);
+
+  const order_items: OrderItemCreateWithoutOrderInput[] = cart_items.map(
+    (item) => ({
+      itemName: item.itemName,
+      quantity: item.quantity,
+      unitPrice: item.unitPrice,
+      menuItemId: item.menuItemId,
+      specialInstructions: item.specialInstructions,
+    })
+  );
 
   try {
     // Create order with items from cart
@@ -38,12 +49,7 @@ export default eventHandler(async (event) => {
 
         tableId: table_id,
         items: {
-          create: cart_items.map((item: Order_Cart_Item) => ({
-            itemName: item.itemName,
-            quantity: item.quantity,
-            unitPrice: item.unitPrice,
-            specialInstructions: item.specialInstructions,
-          })),
+          create: order_items,
         },
       },
       include: {
@@ -56,11 +62,11 @@ export default eventHandler(async (event) => {
       statusCode: 201,
       data: order,
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error creating order:", error);
     throw createError({
       statusCode: 500,
-      statusMessage: error.message || "Failed to create order",
+      statusMessage: "Failed to create order",
     });
   }
 });

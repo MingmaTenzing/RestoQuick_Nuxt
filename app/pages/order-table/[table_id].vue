@@ -8,12 +8,14 @@ import type Order_Cart_Item from '~~/types/order-cart';
 
 
 const { data: menu_items } = useFetch<MenuItem[]>('/api/menu-items')
-const { cart_items } = useOrderCart()
+const { cart_items, empty_cart } = useOrderCart()
 
 // router param with table id 
 
-const table_id = useRoute().params;
-console.log(table_id.table_id)
+const route = useRoute();
+
+const table_id = route.params.table_id;
+
 
 
 
@@ -65,7 +67,9 @@ async function place_order() {
     })
 
     console.log(create_order)
+    
 }
+
 
 
 </script>

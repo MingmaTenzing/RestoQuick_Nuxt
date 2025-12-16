@@ -33,7 +33,7 @@ export const useOrderCart = () => {
 
     find_item!.quantity++;
   };
-  
+
   const decrease_quantity = (item_in_cart: Order_Cart_Item) => {
     const find_item = cart_items.value.find(
       (item) => item.menuItemId == item_in_cart.menuItemId
@@ -44,9 +44,13 @@ export const useOrderCart = () => {
     }
   };
 
+  const empty_cart = () => {
+    cart_items.value = [];
+  };
   return {
     cart_items,
     add_to_cart,
+    empty_cart,
     remove_from_cart,
     increase_quantity,
     decrease_quantity,
