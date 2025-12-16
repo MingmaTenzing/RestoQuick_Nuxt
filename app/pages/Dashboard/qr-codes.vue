@@ -42,6 +42,11 @@ const { data:tables } = useFetch("/api/tables");
                 <Qrcode :value="table.id" ></Qrcode>
                 <span class=" text-muted-foreground font-light text-sm">Scan to view menu and order</span>
                
+               <!-- only for dev -->
+                <NuxtLink :to="`/order-table/${table.id}`">
+
+                    <button class="p-2 border rounded-lg">Order On Table (for Dev)</button>
+                </NuxtLink>
             </div>
 
         </div>

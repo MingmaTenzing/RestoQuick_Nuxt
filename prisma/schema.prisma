@@ -146,7 +146,12 @@ model Order {
   id String @id @default(uuid())
 
   // Order Details
-  orderNumber String      @unique // e.g. "ORD-001", "ORD-2025-001"
+
+  // 🔢 Auto-increment number (DB responsibility)
+  orderNo Int @unique @default(autoincrement())
+
+  // 🧾 Human-readable code (ODR-0001)
+  orderNumber String      @unique
   status      OrderStatus @default(PENDING)
   totalAmount Float       @default(0) // Total price of the order
 

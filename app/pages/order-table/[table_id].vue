@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { table } from 'node:console';
 import { create } from 'node:domain';
 import type { MenuItem } from '~/generated/prisma/client';
 import type Order_Cart_Item from '~~/types/order-cart';
@@ -6,11 +7,21 @@ import type Order_Cart_Item from '~~/types/order-cart';
 
 
 
-
-
-
 const { data: menu_items } = useFetch<MenuItem[]>('/api/menu-items')
-const {  cart_items} = useOrderCart()
+const { cart_items } = useOrderCart()
+
+// router param with table id 
+
+const table_id = useRoute().params;
+console.log(table_id.table_id)
+
+
+
+
+const selectedCategory = ref("All")
+const show_cart = ref(true);
+
+
 
 
 // here  i've explicitly defineed the category name
@@ -23,9 +34,6 @@ const categories = [
     { id: "sides", name: 'SIDE', icon: "🥟" },
 ]
 
-
-const selectedCategory = ref("All")
-const show_cart = ref(true);
 
 const totalAmount = computed(() => 
   cart_items.value.reduce((sum: number, item: Order_Cart_Item) => {
@@ -51,7 +59,8 @@ async function place_order() {
     const create_order = await $fetch("/api/orders", {
         method: 'POST',
         body: {
-            cart_items: cart_items.value
+            cart_items: cart_items.value,
+            table_id: table_id,
         }
     })
 
