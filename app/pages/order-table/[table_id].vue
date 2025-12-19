@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { table } from 'node:console';
-import { create } from 'node:domain';
+
 import type { MenuItem } from '~/generated/prisma/client';
 import type Order_Cart_Item from '~~/types/order-cart';
 
@@ -8,13 +7,20 @@ import type Order_Cart_Item from '~~/types/order-cart';
 
 
 const { data: menu_items } = useFetch<MenuItem[]>('/api/menu-items')
-const { cart_items, empty_cart } = useOrderCart()
+const { cart_items } = useOrderCart()
+const { set_table_id, table_id} = useTableId()
 
 // router param with table id 
-
 const route = useRoute();
 
-const table_id = route.params.table_id;
+//the table_id is set to the composable when the qr code is scanned the redirected to this page with the table id; 
+set_table_id(route.params.table_id);
+
+
+
+
+
+
 
 
 
