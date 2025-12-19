@@ -6,43 +6,65 @@ const { stripe, isLoading } = useClientStripe();
 const { cart_items } = useOrderCart();
 const {table_id } = useTableId();
 
+onMounted(async() => {
+   
 
 
-
-watch(stripe, 
-    async () => {
-
-
-        if (stripe.value) {
+      
         
-            const fetchClientSecret = async () => {
+        
                 const { clientSecret } = await $fetch('/api/stripe-checkout', {
                     method: 'POST',
                     body: {
-                        cart_items: cart_items,
-                        table_id: table_id
+                        cart_items: cart_items.value,
+                        table_id: table_id.value,
                 }
               })
-
               
-
-                console.log(clientSecret);
-                return clientSecret;
-            };
+                  const checkout = await stripe.value.initEmbeddedCheckout(
+                      {clientSecret: clientSecret as string}
+                  );
+                  
+                
+                  // Mount Checkout
+                  checkout.mount('#checkout');
+            }
 
       
-            
+    
+    
+)
+
+
+// watch(stripe,
+//     async () => {
+
+
+//         if (stripe.value) {
         
-            const checkout = await stripe.value.initEmbeddedCheckout(
-                 {clientSecret: ''}
-            );
-          
-            // Mount Checkout
-            checkout.mount('#checkout');
-    }
-    }, {
-    immediate: true
-})
+        
+//                 const { clientSecret } = await $fetch('/api/stripe-checkout', {
+//                     method: 'POST',
+//                     body: {
+//                         cart_items: cart_items.value,
+//                         table_id: table_id.value,
+//                 }
+//               })
+              
+//                   const checkout = await stripe.value.initEmbeddedCheckout(
+//                       {clientSecret: clientSecret as string}
+//                   );
+                  
+                
+//                   // Mount Checkout
+//                   checkout.mount('#checkout');
+//             };
+
+      
+//     }
+//     , {
+//     immediate: true
+// })
 
 
 
