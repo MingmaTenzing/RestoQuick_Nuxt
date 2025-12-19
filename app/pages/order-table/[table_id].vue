@@ -21,7 +21,7 @@ const table_id = route.params.table_id;
 
 
 const selectedCategory = ref("All")
-const show_cart = ref(true);
+const show_cart = ref(false);
 
 
 

@@ -2,12 +2,9 @@ import { OrderItemCreateWithoutOrderInput } from "~/generated/prisma/models";
 import type Order_Cart_Item from "../../../types/order-cart";
 export default eventHandler(async (event) => {
   const prisma = usePrisma();
-
-  // Read request body - expects cart items
   const body = await readBody(event);
-
+  // Read request body - expects cart items
   const cart_items: Order_Cart_Item[] = body.cart_items;
-
   const table_id = body.table_id;
 
   //validates table id
@@ -31,6 +28,8 @@ export default eventHandler(async (event) => {
     return sum + item.unitPrice * item.quantity;
   }, 0);
 
+  //mapping the cart_items coming from the request body to match order_schema_data_type
+  // for the database.
   const order_items: OrderItemCreateWithoutOrderInput[] = cart_items.map(
     (item) => ({
       itemName: item.itemName,
@@ -40,6 +39,25 @@ export default eventHandler(async (event) => {
       specialInstructions: item.specialInstructions,
     })
   );
+
+  //mapping data for stripe line_items
+  const stripe_line_items = cart_items.map((item) => ({
+    price_data: {
+      currency: "aud",
+      unit_amount: item.unitPrice * 100, //the reason for multiplying by 100 is due cause unit_amount should be in cents;
+      metadata: {
+        table_id: table_id, //this is to reference the table_id when checkout completes to add to database
+      },
+      product_data: {
+        name: item.itemName,
+        metadata: {
+          menuItemId: item.menuItemId, //this is to reference menuitemid lookup.. on database for future purpose.
+        },
+        // images: ["https://example.com/katsu-curry.png"],
+      },
+    },
+    quantity: 2,
+  }));
 
   try {
     // Create order with items from cart
