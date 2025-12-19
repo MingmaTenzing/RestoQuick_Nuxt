@@ -17,15 +17,6 @@ const route = useRoute();
 set_table_id(route.params.table_id);
 
 
-
-
-
-
-
-
-
-
-
 const selectedCategory = ref("All")
 const show_cart = ref(false);
 
@@ -63,18 +54,18 @@ const selectedCategory_menu_items = computed(() =>
 );
 
 
-async function place_order() {
-    const create_order = await $fetch("/api/orders", {
-        method: 'POST',
-        body: {
-            cart_items: cart_items.value,
-            table_id: table_id,
-        }
-    })
+// async function place_order() {
+//     const create_order = await $fetch("/api/orders", {
+//         method: 'POST',
+//         body: {
+//             cart_items: cart_items.value,
+//             table_id: table_id,
+//         }
+//     })
 
-    console.log(create_order)
+//     console.log(create_order)
     
-}
+// }
 
 
 
@@ -226,11 +217,18 @@ async function place_order() {
     </div>
 
     <!-- checkout button -->
-    <div @click="place_order()" v-if="show_cart"  class="bg-green-600 w-full text-white  p-4  flex space-x-2 items-center justify-center">
+    <!-- <div @click="place_order()" v-if="show_cart"  class="bg-green-600 w-full text-white  p-4  flex space-x-2 items-center justify-center">
         <div>Checkout</div>
       
 
-    </div>
+    </div> -->
+
+    <!-- checkout button link -->
+    <NuxtLink to="/order-table/checkout"  v-if="show_cart"  class="bg-green-600 w-full text-white  p-4  flex space-x-2 items-center justify-center">
+        <div>Checkout</div>
+      
+
+    </NuxtLink>
     
     </section>
 </main>
