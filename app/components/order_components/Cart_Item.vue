@@ -17,7 +17,7 @@ const { increase_quantity, decrease_quantity, remove_from_cart } =
   <div class="flex border-b pb-4 justify-between">
     <div class="flex items-center gap-2">
       <NuxtImg
-        src="https://foodish-api.com/images/pizza/pizza40.jpg"
+        src="https://www.foodandwine.com/thmb/jldKZBYIoXJWXodRE9ut87K8Mag=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/crispy-comte-cheesburgers-FT-RECIPE0921-6166c6552b7148e8a8561f7765ddf20b.jpg"
         width="80"
         class="rounded-lg"
       />

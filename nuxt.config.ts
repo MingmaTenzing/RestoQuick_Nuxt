@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     "@nuxtjs/color-mode",
     "nuxt-toast",
     "@nuxt/scripts",
+    "@unlok-co/nuxt-stripe",
   ],
 
   routeRules: {
@@ -36,10 +37,16 @@ export default defineNuxtConfig({
     VAPI_PUBLIC_KEY: process.env.NUXT_VAPI_PUBLIC_KEY,
     VAPI_ASSISTANT_KEY: process.env.NUXT_VAPI_ASSISTANT_KEY,
     DATABASE_URL: process.env.DATABASE_URL,
+    stripe: {
+      key: process.env.STRIPE_SECRET_KEY,
+    },
 
     public: {
       VAPI_PUBLIC_KEY: process.env.NUXT_VAPI_PUBLIC_KEY,
       VAPI_ASSISTANT_KEY: process.env.NUXT_VAPI_ASSISTANT_KEY,
+      stripe: {
+        key: process.env.STRIPE_PUBLIC_KEY,
+      },
     },
   },
 });

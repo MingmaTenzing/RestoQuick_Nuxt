@@ -43,7 +43,7 @@ function add_item_to_cart() {
 
 
      <div class=" border flex p-4 gap-2  rounded-lg">
-                <NuxtImg  src="https://foodish-api.com/images/burger/burger67.jpg" width="200" height="200" class="rounded-lg w-[100px] h-[100px] object-cover"/>
+                <NuxtImg  src="https://www.foodandwine.com/thmb/jldKZBYIoXJWXodRE9ut87K8Mag=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/crispy-comte-cheesburgers-FT-RECIPE0921-6166c6552b7148e8a8561f7765ddf20b.jpg" width="200" height="200" class="rounded-lg w-[100px] h-[100px] object-cover"/>
 
                 <div class="space-y-2 w-full">
                     <div class=" flex justify-between items-center">
