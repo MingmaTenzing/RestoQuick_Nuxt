@@ -21,7 +21,7 @@ function add_item_to_cart() {
     const order_cart_item: Order_Cart_Item = {
         itemName: props.menu_item.name,
         quantity: 1, 
-        unitPrice: props.menu_item.price,
+        unitPrice: props.menu_item.priceCents,
         menuItemId: props.menu_item.id,
         specialInstructions: special_instruction.value,
         
@@ -49,7 +49,7 @@ function add_item_to_cart() {
                     <div class=" flex justify-between items-center">
 
                         <span class="text-lg font-semibold ">{{ menu_item?.name }}</span>
-                        <span class=" bg-accent p-2 rounded-lg font-semibold"> ${{ menu_item?.price }}</span>
+                        <span class=" bg-accent p-2 rounded-lg font-semibold"> ${{ menu_item?.priceCents/100 }}</span>
                     </div>
                     <p class=" text-muted-foreground font-light text-sm">{{ menu_item?.description }}</p>
 

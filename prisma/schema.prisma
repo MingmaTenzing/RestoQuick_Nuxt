@@ -116,7 +116,7 @@ model MenuItem {
   id          String       @id @default(uuid())
   name        String
   description String?
-  price       Float
+  priceCents  Int
   category    MenuCategory
   imageUrl    String? // Optional image URL for the menu item
   isAvailable Boolean      @default(true) // Whether the item is currently available
@@ -151,9 +151,9 @@ model Order {
   orderNo Int @unique @default(autoincrement())
 
   // 🧾 Human-readable code (ODR-0001)
-  orderNumber String?     @unique
-  status      OrderStatus @default(PENDING)
-  totalAmount Float       @default(0) // Total price of the order
+  orderNumber      String?     @unique
+  status           OrderStatus @default(PENDING)
+  totalAmountCents Int         @default(0) // Total price of the order
 
   orderType OrderType @default(DINING)
 
@@ -175,7 +175,7 @@ model OrderItem {
   // Item Details
   itemName            String // Keep for backward compatibility, can be derived from MenuItem
   quantity            Int     @default(1)
-  unitPrice           Float // Price at time of order (snapshot)
+  unitPriceCents      Int // Price at time of order (snapshot)
   specialInstructions String? // e.g. "No onions", "Extra spicy", "Allergy: Nuts"
 
   // Relations

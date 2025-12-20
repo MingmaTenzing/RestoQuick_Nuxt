@@ -1,5 +1,7 @@
 import type Order_Cart_Item from "../../types/order-cart";
 export const useOrderCart = () => {
+  //useOrderCart has two states (cart_items and table_id)
+
   const cart_items = useState<Order_Cart_Item[]>("order-cart-items", () => []);
 
   const add_to_cart = (item: Order_Cart_Item) => {

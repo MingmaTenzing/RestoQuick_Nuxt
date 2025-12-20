@@ -46,6 +46,8 @@ export default defineNuxtConfig({
       VAPI_ASSISTANT_KEY: process.env.NUXT_VAPI_ASSISTANT_KEY,
       stripe: {
         key: process.env.STRIPE_PUBLIC_KEY,
+
+        // manualClientLoad: true,
       },
     },
   },
