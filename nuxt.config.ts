@@ -37,6 +37,7 @@ export default defineNuxtConfig({
     VAPI_PUBLIC_KEY: process.env.NUXT_VAPI_PUBLIC_KEY,
     VAPI_ASSISTANT_KEY: process.env.NUXT_VAPI_ASSISTANT_KEY,
     DATABASE_URL: process.env.DATABASE_URL,
+    HOST: process.env.HOST,
     stripe: {
       key: process.env.STRIPE_SECRET_KEY,
     },
@@ -44,6 +45,7 @@ export default defineNuxtConfig({
     public: {
       VAPI_PUBLIC_KEY: process.env.NUXT_VAPI_PUBLIC_KEY,
       VAPI_ASSISTANT_KEY: process.env.NUXT_VAPI_ASSISTANT_KEY,
+      HOST: process.env.HOST,
       stripe: {
         key: process.env.STRIPE_PUBLIC_KEY,
 

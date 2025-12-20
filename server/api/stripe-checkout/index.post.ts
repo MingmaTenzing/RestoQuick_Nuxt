@@ -2,6 +2,7 @@ import { useServerStripe } from "#stripe/server";
 import type Order_Cart_Item from "~~/types/order-cart";
 
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig();
   const stripe = await useServerStripe(event);
   const body = await readBody(event);
 
@@ -34,7 +35,7 @@ export default defineEventHandler(async (event) => {
       table_id: table_id, //this is to reference the table_id when checkout completes to add to database
     },
     line_items: stripe_line_items,
-    return_url: `http://localhost:3000/session_id={CHECKOUT_SESSION_ID}`,
+    return_url: `${config.HOST}/return?session_id={CHECKOUT_SESSION_ID}`,
   });
 
   return {
