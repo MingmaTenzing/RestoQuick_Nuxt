@@ -34,7 +34,7 @@ export default eventHandler(async (event) => {
     (item) => ({
       itemName: item.itemName,
       quantity: item.quantity,
-      unitPrice: item.unitPrice,
+      unitPriceCents: item.unitPrice,
       menuItemId: item.menuItemId,
       specialInstructions: item.specialInstructions,
     })
@@ -63,8 +63,7 @@ export default eventHandler(async (event) => {
     // Create order with items from cart
     const order = await prisma.order.create({
       data: {
-        totalAmount,
-
+        totalAmountCents: totalAmount,
         tableId: table_id,
         items: {
           create: order_items,

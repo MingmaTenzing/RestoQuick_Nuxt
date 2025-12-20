@@ -2,21 +2,23 @@
 
 
 
-const { stripe, loadStripe } = useClientStripe();
+const { stripe, isLoading } = useClientStripe();
 const { cart_items } = useOrderCart();
 const { table_id } = useTableId();
+
 
 const checkout = ref()
 
 
-onMounted(async () => {
-  const loaded = await loadStripe();
-  if (!loaded) {
-    console.error('Failed to load Stripe.js');
-    return;
-  }
-  stripe.value = loaded;
 
+
+onMounted( async () => {
+
+  
+    if (!stripe.value) {
+        return console.error("Stripe not loaded")
+    
+ }
   const { clientSecret } = await $fetch('/api/stripe-checkout', {
     method: 'POST',
     body: {
@@ -30,6 +32,12 @@ onMounted(async () => {
     checkout.value.mount('#checkout');
   checkout.value.destro
 });
+
+
+
+
+
+
 
 onBeforeRouteLeave(() => {
     checkout.value.destroy();
@@ -49,7 +57,19 @@ onBeforeRouteLeave(() => {
   
     <div class=" bg-white flex justify-center items-center h-screen ">
 
-        <div class=" w-full  " id="checkout">
+       
+
+  <div v-if="isLoading" class="flex items-center justify-center w-full h-full">
+    <div
+      class="h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" ></div>
+  </div>
+
+
+
+
+     
+
+        <div v-else class=" w-full  " id="checkout">
        
         </div>
     </div>

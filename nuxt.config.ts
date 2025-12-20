@@ -47,7 +47,7 @@ export default defineNuxtConfig({
       stripe: {
         key: process.env.STRIPE_PUBLIC_KEY,
 
-        manualClientLoad: true,
+        // manualClientLoad: true,
       },
     },
   },

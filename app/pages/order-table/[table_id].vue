@@ -36,7 +36,7 @@ const categories = [
 
 const totalAmount = computed(() => 
   cart_items.value.reduce((sum: number, item: Order_Cart_Item) => {
-    return sum + item.unitPrice * item.quantity;
+    return sum + (item.unitPrice/100) * item.quantity;
   }, 0).toFixed(2)
 )
 
