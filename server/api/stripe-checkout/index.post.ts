@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   const stripe_line_items = cart_items.map((item: Order_Cart_Item) => ({
     price_data: {
       currency: "aud",
-      unit_amount: item.unitPrice * 100, //the reason for multiplying by 100 is due cause unit_amount should be in cents;
+      unit_amount: Math.round(item.unitPrice * 100), //the reason for multiplying by 100 is due cause unit_amount should be in cents;
       product_data: {
         name: item.itemName,
         metadata: {
