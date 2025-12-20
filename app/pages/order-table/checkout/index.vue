@@ -10,9 +10,7 @@ const { table_id } = useTableId();
 const checkout = ref()
 
 
-
-
-onMounted( async () => {
+watch(stripe, async () => {
 
   
     if (!stripe.value) {
@@ -24,13 +22,15 @@ onMounted( async () => {
     body: {
       cart_items: cart_items.value,
       table_id: table_id.value,
-    }
+      }
   });
 
   checkout.value = await stripe.value.initEmbeddedCheckout({ clientSecret: clientSecret as string });
   // Mount Checkout
     checkout.value.mount('#checkout');
-  checkout.value.destro
+
+}, {
+    immediate: true
 });
 
 
