@@ -1,5 +1,5 @@
 import { useServerStripe } from "#stripe/server";
-import Order_Cart_Item from "~~/types/order-cart";
+import type Order_Cart_Item from "~~/types/order-cart";
 
 export default defineEventHandler(async (event) => {
   const stripe = await useServerStripe(event);
@@ -7,6 +7,8 @@ export default defineEventHandler(async (event) => {
 
   const cart_items: Order_Cart_Item[] = body.cart_items;
   const table_id = body.table_id;
+
+  console.log(cart_items, table_id);
 
   //mapping data for stripe line_items
   const stripe_line_items = cart_items.map((item: Order_Cart_Item) => ({
