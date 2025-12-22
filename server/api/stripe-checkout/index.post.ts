@@ -17,7 +17,8 @@ export default defineEventHandler(async (event) => {
   const stripe_line_items = cart_items.map((item: Order_Cart_Item) => ({
     price_data: {
       currency: "aud",
-      unit_amount: item.unitPrice, //the reason for multiplying by 100 is due cause unit_amount should be in cents;
+      unit_amount: item.unitPrice,
+
       product_data: {
         name: item.itemName,
         metadata: {
@@ -26,6 +27,12 @@ export default defineEventHandler(async (event) => {
         },
         // images: ["https://example.com/katsu-curry.png"],
       },
+    },
+    //here metadata is set to line_item cause its easier to access it without calling for another price api..
+    metadata: {
+      name: item.itemName,
+      menuItemId: item.menuItemId,
+      specialInstructions: item.specialInstructions || "",
     },
     quantity: item.quantity,
   }));
@@ -40,7 +47,7 @@ export default defineEventHandler(async (event) => {
       table_id: table_id, //this is to reference the table_id when checkout completes to add to database
     },
     line_items: stripe_line_items,
-    return_url: `${config.HOST}/return?session_id={CHECKOUT_SESSION_ID}`,
+    return_url: `${config.HOST}/oder-tabe/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
   });
 
   return {
