@@ -1,6 +1,8 @@
 import { useServerStripe } from "#stripe/server";
 import type Order_Cart_Item from "~~/types/order-cart";
 
+//this endpoint create checkout session
+
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const stripe = await useServerStripe(event);
