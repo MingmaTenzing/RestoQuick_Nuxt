@@ -31,6 +31,9 @@ export default defineEventHandler(async (event) => {
   const session = await stripe.checkout.sessions.create({
     ui_mode: "embedded",
     mode: "payment",
+    invoice_creation: {
+      enabled: true,
+    },
     metadata: {
       table_id: table_id, //this is to reference the table_id when checkout completes to add to database
     },
