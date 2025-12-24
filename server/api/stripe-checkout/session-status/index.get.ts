@@ -28,11 +28,15 @@ export default defineEventHandler(async (event) => {
   }
 
   //here's by this point its obvious that the session.status is complete so can proceed to add line_items to order table
-  console.log(lineItems);
+  const metadata = lineItems.data[0].metadata;
+
+  const table_id = session.metadata;
 
   return {
     status: session.status,
     customer_email: session.customer_details?.email,
     lineItems: lineItems,
+    table: table_id,
+    product_metadata: metadata,
   };
 });
