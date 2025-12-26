@@ -29,15 +29,19 @@ export default defineEventHandler(async (event) => {
   }
 
   // check existing order first
-  const existingOrder = await prisma.order.findUnique({
+  const existing_order = await prisma.order.findUnique({
     where: {
       checkoutSessionId: session.id,
     },
+    include: {
+      table: true,
+      items: true,
+    },
   });
 
-  if (existingOrder) {
+  if (existing_order) {
     throw createError({
-      status: 200,
+      status: 409,
       statusMessage: "order already created ",
     });
   }
@@ -79,7 +83,11 @@ export default defineEventHandler(async (event) => {
     });
     console.log(order);
     return {
-      data: order,
+      order,
+      customerDetails: {
+        email: session.customer_details?.email,
+        name: session.customer_details?.name,
+      },
     };
   } catch (error) {
     console.error("Error creating order:", error);
