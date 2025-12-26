@@ -3,13 +3,14 @@
 //and then use that items for adding it to database;
 
 import { useServerStripe } from "#stripe/server";
+import { OrderItemCreateManyOrderInput } from "~/generated/prisma/models";
+
 export default defineEventHandler(async (event) => {
   const stripe = await useServerStripe(event);
-
+  const prisma = usePrisma();
   const query = getQuery(event);
 
   const session_id = query.session_id as string;
-  console.log(session_id);
 
   const session = await stripe.checkout.sessions.retrieve(session_id);
   const lineItems = await stripe.checkout.sessions.listLineItems(session_id);
@@ -18,7 +19,7 @@ export default defineEventHandler(async (event) => {
   if (session.status == "expired") {
     throw createError({
       statusCode: 410,
-      message: "Checkout Session has expired",
+      statusMessage: "Checkout Session has expired",
     });
   } else if (session.status == "open") {
     return {
@@ -27,16 +28,70 @@ export default defineEventHandler(async (event) => {
     };
   }
 
+  // check existing order first
+  const existingOrder = await prisma.order.findUnique({
+    where: {
+      checkoutSessionId: session.id,
+    },
+  });
+
+  if (existingOrder) {
+    throw createError({
+      status: 200,
+      statusMessage: "order already created ",
+    });
+  }
+
   //here's by this point its obvious that the session.status is complete so can proceed to add line_items to order table
-  const metadata = lineItems.data[0].metadata;
 
-  const table_id = session.metadata;
+  if (!lineItems) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Cannot get the line_items using the session id",
+    });
+  }
 
-  return {
-    status: session.status,
-    customer_email: session.customer_details?.email,
-    lineItems: lineItems,
-    table: table_id,
-    product_metadata: metadata,
-  };
+  const mapped_order_data: OrderItemCreateManyOrderInput[] = lineItems.data.map(
+    (item) => ({
+      itemName: item.metadata!.name,
+      quantity: item.quantity!,
+      unitPriceCents: item.price!.unit_amount!,
+      specialInstructions: item.metadata!.specialInstructions,
+      menuItemId: item.metadata!.menuItemId,
+    })
+  );
+
+  try {
+    // Create order with items from cart
+    const order = await prisma.order.create({
+      data: {
+        checkoutSessionId: session.id,
+        totalAmountCents: session.amount_total!,
+        tableId: session.metadata!.table_id!,
+        items: {
+          create: mapped_order_data,
+        },
+      },
+      include: {
+        items: true,
+        table: true,
+      },
+    });
+    console.log(order);
+    return {
+      data: order,
+    };
+  } catch (error) {
+    console.error("Error creating order:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Failed to create order",
+    });
+  }
+  // return {
+  //   status: session.status,
+  //   customer_email: session.customer_details?.email,
+  //   lineItems: lineItems,
+  //   table: table_id,
+  // };
 });

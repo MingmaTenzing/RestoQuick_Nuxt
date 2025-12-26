@@ -150,6 +150,8 @@ model Order {
   // 🔢 Auto-increment number (DB responsibility)
   orderNo Int @unique @default(autoincrement())
 
+  checkoutSessionId String @unique // 🔒 prevents duplicates orders by checking if order's been made already using the checkout ssession id.
+
   // 🧾 Human-readable code (ODR-0001)
   orderNumber      String?     @unique
   status           OrderStatus @default(PENDING)

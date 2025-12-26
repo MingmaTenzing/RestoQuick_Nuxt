@@ -21,14 +21,17 @@ export default defineEventHandler(async (event) => {
 
       product_data: {
         name: item.itemName,
+        //here the metadata is included so it can be looked up by making a products_object request
+        //however for this we need to make make a separate api call... so its just here for reference
+        // the line_item itself includes metada object below for easily accessing the itemname,menuid, and special instructions
         metadata: {
-          menuItemId: item.menuItemId, //this is to reference menuitemid lookup.. on database for future purpose.
-          specialInstruction: item.specialInstructions || " ", //special instruction fallsback to empty string if nothing provided
+          menuItemId: item.menuItemId,
+          specialInstruction: item.specialInstructions || " ",
         },
         // images: ["https://example.com/katsu-curry.png"],
       },
     },
-    //here metadata is set to line_item cause its easier to access it without calling for another price api..
+    //here metadata is set to line_item cause its easier to access it without calling for another price/product object api..
     metadata: {
       name: item.itemName,
       menuItemId: item.menuItemId,
@@ -47,7 +50,7 @@ export default defineEventHandler(async (event) => {
       table_id: table_id, //this is to reference the table_id when checkout completes to add to database
     },
     line_items: stripe_line_items,
-    return_url: `${config.HOST}/oder-tabe/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+    return_url: `${config.HOST}/order-table/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
   });
 
   return {
