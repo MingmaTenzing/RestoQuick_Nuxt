@@ -75,7 +75,7 @@ const formatCurrency = (amount: number) => {
         </div>
         <div class="flex items-center gap-2 text-sm">
           <i class="pi pi-dollar text-muted-foreground"></i>
-          <span class="font-semibold">{{ formatCurrency(order_details.totalAmount) }}</span>
+          <span class="font-semibold">{{ formatCurrency(order_details.totalAmountCents/100) }}</span>
         </div>
       </div>
 
@@ -88,13 +88,13 @@ const formatCurrency = (amount: number) => {
             <div class="flex items-center gap-2 mt-1">
               <span class="text-xs text-muted-foreground">Qty: {{ item.quantity }}</span>
               <span class="text-xs text-muted-foreground">×</span>
-              <span class="text-xs text-muted-foreground">{{ formatCurrency(item.unitPrice) }}</span>
+              <span class="text-xs text-muted-foreground">{{ formatCurrency(item.unitPriceCents/100) }}</span>
             </div>
             <p v-if="item.specialInstructions" class="text-xs text-amber-500 mt-1">
               <i class="pi pi-info-circle"></i> {{ item.specialInstructions }}
             </p>
           </div>
-          <span class="text-sm font-semibold">{{ formatCurrency(item.unitPrice * item.quantity) }}</span>
+          <span class="text-sm font-semibold">{{ formatCurrency((item.unitPriceCents/100) * item.quantity) }}</span>
         </div>
       </div>
     </div>

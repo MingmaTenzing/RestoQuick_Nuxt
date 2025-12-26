@@ -15,8 +15,7 @@ console.log(orders)
 
 // Stats for all orders
 const totalRevenue = computed(() => {
-  return orders.value?.reduce((sum, order) => sum + order.totalAmount, 0) || 0;
-});
+return (orders.value?.reduce((sum, order) => sum + order.totalAmountCents, 0) ?? 0) / 100;});
 
 const active_orders = computed(() => {
   return orders.value?.filter(order => 
