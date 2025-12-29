@@ -5,8 +5,7 @@ definePageMeta( {
 }
 )
 import type { Shift } from '~/generated/prisma/client';
-import { ref, provide } from 'vue';
-import { mockStaff } from '~/lib/roster-mockdata';
+
 const {
     weekDates,
     weekRangeText,
@@ -18,28 +17,8 @@ const {
 
 
 
+const { data: shifts } = await useFetch<Shift[]>("/api/shift" )
 
-const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
-const {editshiftModal} = useeditShiftModal()
-
-// Reactive ref to trigger refetch on shift deletion
-const shiftDeleteTrigger = ref(false)
-
-// Function to trigger shift deletion refetch
-const triggerShiftRefetch = () => {
-  shiftDeleteTrigger.value = !shiftDeleteTrigger.value
-}
-
-// Provide the trigger function to child components
-provide('triggerShiftRefetch', triggerShiftRefetch)
-
-// the useFetch call is watching addShiftModal.value to refetch data if it changes
-// the reason for this is user will open the addshiftmodal and then it will close automatically once its done.
-// this elemenates creating another separate variable to watch
-// but with further development it might change. for now its fine.
-const { data: shifts } = await useFetch<Shift[]>("/api/shift",  {watch: [addShiftModal.value, editshiftModal.value, shiftDeleteTrigger]} )
-
-console.log(shifts)
 
 </script>
 
@@ -83,40 +62,9 @@ console.log(shifts)
 
 
 
-<!-- drag and drop is not the best suit so will be moving to adding manually from the shift container
- this section is only being commented out but will have a look in the future possibilities so its not removed-->
-<!-- 
-        <div @drop="onDrop($event, date.date) "
-        @dragover.prevent  
-       
-
-        :class="['  flex flex-col gap-2 p-2   min-h-[120px] border-2 border-dashed rounded-lg', isStaffDragged?'border-amber-600':'']">
-
-        <div   v-for="shift in shifts.filter((shift) => shift.date.toDateString() == date.date.toDateString())" :key="shift.id">
-            <div>
-              
-
-                <div>
-                    <roster-components-staff-shift :staff_id="shift.staffId" :shift_id="shift.id" ></roster-components-staff-shift>
-                </div>
-
-               
-            </div>
-            
-        </div>
-
-        </div> -->
-    
-
         <!-- shifts of the day container-->
  <div    class='  flex flex-col gap-2 p-2   min-h-[120px] border-2 border-dashed rounded-lg hover:border-ring'>
 
-<!-- add shift button -->
-      <!-- <button v-on:click="open_add_shiftModal(date.date)" class=" flex justify-end">
-           <i class=" pi pi-plus"></i>
-           
-           
-      </button> -->
 
 
    <!-- staff shift time and name -->
