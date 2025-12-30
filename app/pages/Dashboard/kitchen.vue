@@ -71,80 +71,9 @@ definePageMeta({
 
         <!-- orders -->
 
-        <section class=" flex ">
+        <section class=" flex flex-wrap gap-2 ">
 
-            <div class=" w-full p-4 border rounded-lg space-y-4">
-
-                <!-- table number and time ago order was placed -->
-                <div>
-                    <p class=" text-xl font-semibold">Table 5</p>
-                    <div class=" flex gap-2 items-center text-muted-foreground font-light">
-                        <i class=" pi pi-clock"></i>
-                        <p>4 mins ago</p>
-                    </div>
-
-                </div>
-
-
-                <!-- order items -->
-
-                <div >
-                    <div class=" flex justify-between">
-                        <div class=" flex space-x-2">
-                            <p>2x</p>
-                            <p>Classic Burger</p>
-                        </div>
-                        <div>
-                            <span>$25.98</span>
-                        </div>
-                    </div>
-                    
-                    <div class=" flex justify-between">
-                        <div class=" flex space-x-2">
-                            <p>2x</p>
-                            <p>Classic Burger</p>
-                        </div>
-                        <div>
-                            <span>$25.98</span>
-                        </div>
-                    </div>
-
-
-                </div>
-
-
-                    <!--  special instructions -->
-                <div class=" bg-accent p-2 rounded-lg text-sm">
-
-
-                    <p class=" font-light text-muted-foreground">Special Instructions</p>
-                    <p>No onions on one burger please</p>
-
-
-                </div>
-
-
-                <!-- customer -->
-
-                <div>
-                    <p>Customer: {{ 'Sarah Williams' }}</p>
-                </div>
-
-                <!-- divider line -->
-
-                <div class=" w-full h-[0.1px] bg-foreground/20 mt-4 mb-4" />
-
-
-                <!-- ready button -->
-
-                <div >
-                    <button class="w-full py-2 rounded-lg font-bold  bg-amber-500 text-white ">Mark as Ready</button>
-                </div>
-
-
-
-            </div>
-            <div class=" w-full p-4 border rounded-lg space-y-4">
+            <div class=" w-[308px] p-4 border  rounded-lg space-y-4">
 
                 <!-- table number and time ago order was placed -->
                 <div>
@@ -215,7 +144,7 @@ definePageMeta({
 
 
             </div>
-            <div class=" w-full p-4 border rounded-lg space-y-4">
+            <div class=" w-[308px] p-4 border  rounded-lg space-y-4">
 
                 <!-- table number and time ago order was placed -->
                 <div>
@@ -286,7 +215,7 @@ definePageMeta({
 
 
             </div>
-            <div class=" w-full p-4 border rounded-lg space-y-4">
+            <div class=" w-[308px] p-4 border  rounded-lg space-y-4">
 
                 <!-- table number and time ago order was placed -->
                 <div>
@@ -357,7 +286,78 @@ definePageMeta({
 
 
             </div>
-            <div class=" w-full p-4 border rounded-lg space-y-4">
+            <div class=" w-[308px] p-4 border  rounded-lg space-y-4">
+
+                <!-- table number and time ago order was placed -->
+                <div>
+                    <p class=" text-xl font-semibold">Table 5</p>
+                    <div class=" flex gap-2 items-center text-muted-foreground font-light">
+                        <i class=" pi pi-clock"></i>
+                        <p>4 mins ago</p>
+                    </div>
+
+                </div>
+
+
+                <!-- order items -->
+
+                <div >
+                    <div class=" flex justify-between">
+                        <div class=" flex space-x-2">
+                            <p>2x</p>
+                            <p>Classic Burger</p>
+                        </div>
+                        <div>
+                            <span>$25.98</span>
+                        </div>
+                    </div>
+                    
+                    <div class=" flex justify-between">
+                        <div class=" flex space-x-2">
+                            <p>2x</p>
+                            <p>Classic Burger</p>
+                        </div>
+                        <div>
+                            <span>$25.98</span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                    <!--  special instructions -->
+                <div class=" bg-accent p-2 rounded-lg text-sm">
+
+
+                    <p class=" font-light text-muted-foreground">Special Instructions</p>
+                    <p>No onions on one burger please</p>
+
+
+                </div>
+
+
+                <!-- customer -->
+
+                <div>
+                    <p>Customer: {{ 'Sarah Williams' }}</p>
+                </div>
+
+                <!-- divider line -->
+
+                <div class=" w-full h-[0.1px] bg-foreground/20 mt-4 mb-4" />
+
+
+                <!-- ready button -->
+
+                <div >
+                    <button class="w-full py-2 rounded-lg font-bold  bg-amber-500 text-white ">Mark as Ready</button>
+                </div>
+
+
+
+            </div>
+            <div class=" w-[308px] p-4 border  rounded-lg space-y-4">
 
                 <!-- table number and time ago order was placed -->
                 <div>

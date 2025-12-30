@@ -70,6 +70,7 @@ export default defineEventHandler(async (event) => {
     const order = await prisma.order.create({
       data: {
         checkoutSessionId: session.id,
+        customerName: session.customer_details!.name!,
         totalAmountCents: session.amount_total!,
         tableId: session.metadata!.table_id!,
         items: {
