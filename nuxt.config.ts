@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     "nuxt-toast",
     "@nuxt/scripts",
     "@unlok-co/nuxt-stripe",
+    "nuxt-time",
   ],
 
   routeRules: {
