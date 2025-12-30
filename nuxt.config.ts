@@ -20,6 +20,12 @@ export default defineNuxtConfig({
     "nuxt-time",
   ],
 
+  nitro: {
+    experimental: {
+      websocket: true,
+    },
+  },
+
   routeRules: {
     "/dashboard": { ssr: false },
     "/vapi": { ssr: false },
