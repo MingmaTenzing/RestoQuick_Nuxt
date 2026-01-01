@@ -16,7 +16,7 @@ export default defineWebSocketHandler({
     console.log("[ws] close", peer, event);
   },
 
-  error(peer, error) {
-    console.log("[ws] error", peer, error);
-  },
+  //   error(peer, error) {
+  //     console.log("[ws] error", peer, error);
+  //   },
 });
