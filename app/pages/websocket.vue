@@ -9,13 +9,24 @@ const message = ref('')
 
 const history = ref<string[]>([])
 
+const messageforServer = {
+     type:'message',
+      name: "ming",
+      aim: "peace",
+}
+
 function sendMessage() {
     history.value.push(`client: ${message.value} `)
-    send(message.value);
+    let test = JSON.stringify(messageforServer)
+    send(test)
     message.value= ""
 }
 
 watch(data, (newValue) => {
+
+    console.log(typeof newValue)
+    let value = JSON.parse(newValue);
+    console.log(value)
     history.value.push(`server: ${newValue}`)
 })
 
