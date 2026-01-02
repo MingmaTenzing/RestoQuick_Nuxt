@@ -1,14 +1,36 @@
 <script lang="ts" setup>
+import { useWebSocket } from '@vueuse/core';
 import { ref, computed } from 'vue'
 import Order_Item from '~/components/kitchenDisplay_components/Order_Item.vue';
 import type{ OrderDetailsWithInclude } from '~~/types/orderwithInclude';
+import type websocket_payload from '~~/types/websocket_payload';
 
 definePageMeta({
     layout: 'dashboard-layout'
 })
 
-const { data } = useFetch<OrderDetailsWithInclude[]>("/api/orders")
-console.log(data.value)
+const all_orders = ref<OrderDetailsWithInclude[]>()
+
+// connection to websocket
+const { status, data, send, close } = useWebSocket(`ws://localhost:3000/api/websocket`)
+
+//initial data fetch from the database
+const { data: orders } = useFetch<OrderDetailsWithInclude[]>("/api/orders")
+
+all_orders.value = orders.value;
+
+console.log(all_orders.value)
+
+
+watch(data, (newValue: websocket_payload) => {
+
+    all_orders.value?.push(newValue.payload)
+
+
+
+
+})
+
 
 </script>
 
@@ -16,6 +38,7 @@ console.log(data.value)
 <template>
 
     <main>
+        {{ status }}
             <!-- header -->
         <section class=" space-y-4">
  <div>
@@ -78,7 +101,7 @@ console.log(data.value)
 
         <section class=" flex flex-wrap gap-2 ">
           
-   <div v-for="order in data" :key="order.id" >
+   <div v-for="order in all_orders" :key="order.id" >
 
     <Order_Item :order="order"></Order_Item>
    </div>

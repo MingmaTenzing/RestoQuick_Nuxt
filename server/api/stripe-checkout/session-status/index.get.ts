@@ -79,7 +79,11 @@ export default defineEventHandler(async (event) => {
         },
       },
       include: {
-        items: true,
+        items: {
+          include: {
+            menuItem: true,
+          },
+        },
         table: true,
       },
     });

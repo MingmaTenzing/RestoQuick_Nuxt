@@ -16,7 +16,7 @@ async function markOrder_as_ready() {
 
               
     
-                    <div class=" w-[300px] p-4 border  rounded-lg space-y-4">
+                    <div class=" w-75 p-4 border  rounded-lg space-y-4">
         
                         <!-- table number and time ago order was placed -->
                         <div class="flex justify-between">
@@ -66,16 +66,19 @@ async function markOrder_as_ready() {
                         </div>
         
 
-                        
-        
+                                                <!-- divider line -->
+
+                                <div class=" w-full h-[0.1px] bg-foreground/20 mt-4 mb-4" />
+
                         <!-- customer -->
         
                         <div >
                             <p>Customer: <span class=" font-semibold">{{ order.customerName }}</span> </p>
                         </div>
         
-                        <!-- divider line -->
         
+
+
                         <div class=" w-full h-[0.1px] bg-foreground/20 mt-4 mb-4" />
         
         
