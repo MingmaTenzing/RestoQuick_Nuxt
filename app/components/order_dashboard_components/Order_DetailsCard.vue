@@ -52,7 +52,7 @@ const formatCurrency = (amount: number) => {
               <i class="pi pi-shopping-cart text-accent-foreground"></i>
             </div>
             <div>
-              <h3 class="font-bold text-base">{{ order_details.orderNumber }}</h3>
+              <h3 class="font-bold text-base">{{ order_details.orderNo }}</h3>
               <p class="text-xs text-muted-foreground">
                 {{ new Date(order_details.createdAt).toLocaleString() }}
               </p>

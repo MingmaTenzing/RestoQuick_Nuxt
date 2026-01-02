@@ -14,7 +14,7 @@ export default defineWebSocketHandler({
     peer.publish(room, message.text());
   },
 
-  close(peer, event) {
+  close(peer, message) {
     remove_peer(peer);
     peer.publish(room, "a user left chat");
   },

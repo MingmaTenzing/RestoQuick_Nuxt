@@ -1,4 +1,3 @@
-import { PrismaClient, Role } from "~/generated/prisma/client";
 import { usePrisma } from "~~/server/utils/prisma";
 
 export default defineEventHandler(async () => {

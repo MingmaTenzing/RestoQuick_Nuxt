@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { stat } from 'fs';
 import { ref, computed } from 'vue'
 import type { Booking, BookingStatus } from '~/generated/prisma/client';
 

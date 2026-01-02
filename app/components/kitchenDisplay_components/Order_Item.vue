@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { Prisma } from '~/generated/prisma/client';
 
 import type {OrderDetailsWithInclude } from "../../../types/orderwithInclude"
 const props = defineProps<{
