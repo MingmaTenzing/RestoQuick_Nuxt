@@ -2,6 +2,7 @@ import type { Message, Peer } from "crossws";
 import { addPeer, remove_peer } from "../utils/kitchenSocket";
 
 const room = "KITCHEN";
+
 export default defineWebSocketHandler({
   open(peer) {
     addPeer(peer);
@@ -10,6 +11,7 @@ export default defineWebSocketHandler({
   },
 
   message(peer, message) {
+    // broadCast({ type: "order", payload: order });
     peer.send("im only visible to you at the moment");
     peer.publish(room, message.text());
   },

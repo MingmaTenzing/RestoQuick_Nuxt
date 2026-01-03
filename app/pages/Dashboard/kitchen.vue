@@ -9,27 +9,45 @@ definePageMeta({
     layout: 'dashboard-layout'
 })
 
-const all_orders = ref<OrderDetailsWithInclude[]>()
+
+const toast = useToast()
+
+const all_orders = ref<OrderDetailsWithInclude[]>([]);
+
 
 // connection to websocket
 const { status, data, send, close } = useWebSocket(`ws://localhost:3000/api/websocket`)
 
 //initial data fetch from the database
-const { data: orders } = useFetch<OrderDetailsWithInclude[]>("/api/orders")
+// const { data: orders } = useFetch<OrderDetailsWithInclude[]>("/api/orders")
 
-all_orders.value = orders.value;
+onMounted(async () => {
+    all_orders.value = await $fetch<OrderDetailsWithInclude[]>('/api/orders');
 
-console.log(all_orders.value)
+
+})
 
 
-watch(data, (newValue: websocket_payload) => {
 
-    all_orders.value?.push(newValue.payload)
+
+watch(data, (newValue: string) => {
+ toast.success({
+     title: 'success',
+        message: 'Order Received '
+    })
+    console.log(newValue)
+
+    let parsed_data: websocket_payload = JSON.parse(newValue)
+
+    all_orders.value.push(parsed_data.payload)
+ 
+   
 
 
 
 
 })
+
 
 
 </script>
@@ -39,6 +57,8 @@ watch(data, (newValue: websocket_payload) => {
 
     <main>
         {{ status }}
+
+        {{ data }}
             <!-- header -->
         <section class=" space-y-4">
  <div>
