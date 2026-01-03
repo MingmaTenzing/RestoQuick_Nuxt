@@ -4,7 +4,8 @@
 definePageMeta({
     colorMode:'light'
 })
-const { data:tables } = useFetch("/api/tables");
+const { data: tables } = useFetch("/api/tables");
+const runtime = useRuntimeConfig();
 
 </script>
 
@@ -20,7 +21,7 @@ const { data:tables } = useFetch("/api/tables");
   
             <div class=" p-6 flex flex-col space-y-4  items-center rounded-lg border  w-[220px]"  v-for="table in tables" :key="table.id">
                 <span class=" text-lg">{{ table.number }}</span>
-                <Qrcode :value="`https://resto-quick-nuxt.vercel.app/order-table/${table.id}`" ></Qrcode>
+                <Qrcode :value="`${runtime.public.BASE_URL}/order-table/${table.id}`" ></Qrcode>
                 <span class=" text-center text-muted-foreground font-light text-sm">Scan to view menu and order</span>
               
             </div>
