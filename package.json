@@ -27,6 +27,7 @@
     "commander": "^13.1.0",
     "crossws": "^0.4.1",
     "izitoast": "^1.4.0",
+    "magicast": "0.3.5",
     "nuxt": "^4.2.0",
     "nuxt-qrcode": "^0.4.8",
     "nuxt-time": "^1.0.3",
