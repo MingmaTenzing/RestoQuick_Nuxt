@@ -6,7 +6,13 @@
       "phases": {
         "install": {
           "cmds": ["npm ci --omit=dev"]
+        },
+        "build": {
+          "cmds": ["npm run build"]
         }
+      },
+      "environment": {
+        "NODE_VERSION": "22"
       }
     }
   },
