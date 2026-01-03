@@ -1,6 +1,9 @@
 {
   "name": "restoquick_nuxt",
   "type": "module",
+  "engines": {
+    "node": "22"
+  },
   "private": true,
   "scripts": {
     "build": "nuxt build",
