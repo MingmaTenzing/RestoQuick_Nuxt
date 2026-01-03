@@ -4,6 +4,7 @@
 
 import { useServerStripe } from "#stripe/server";
 import { OrderItemCreateManyOrderInput } from "~/generated/prisma/models";
+import { broadCast } from "../../../utils/kitchenSocket";
 
 export default defineEventHandler(async (event) => {
   const stripe = await useServerStripe(event);
@@ -70,6 +71,7 @@ export default defineEventHandler(async (event) => {
     const order = await prisma.order.create({
       data: {
         checkoutSessionId: session.id,
+        customerName: session.customer_details!.name!,
         totalAmountCents: session.amount_total!,
         tableId: session.metadata!.table_id!,
         items: {
@@ -77,11 +79,24 @@ export default defineEventHandler(async (event) => {
         },
       },
       include: {
-        items: true,
+        items: {
+          include: {
+            menuItem: true,
+          },
+        },
         table: true,
       },
     });
     console.log(order);
+
+    // Notify kitchen clients that a new order was created
+    try {
+      broadCast({ type: "ORDER_CREATED", payload: order });
+    } catch (e) {
+      // fail silently — broadcasting should not block order creation
+      console.warn("Failed to broadcast order created event", e);
+    }
+
     return {
       order,
       customerDetails: {

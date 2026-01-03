@@ -1,5 +1,6 @@
 import { OrderItemCreateWithoutOrderInput } from "~/generated/prisma/models";
 import type Order_Cart_Item from "../../../types/order-cart";
+import { broadCast } from "../../utils/kitchenSocket";
 export default eventHandler(async (event) => {
   const prisma = usePrisma();
   const body = await readBody(event);
@@ -65,6 +66,8 @@ export default eventHandler(async (event) => {
       data: {
         totalAmountCents: totalAmount,
         tableId: table_id,
+        checkoutSessionId: "", // Will be updated after Stripe checkout
+        customerName: "Guest",
         items: {
           create: order_items,
         },
@@ -74,6 +77,13 @@ export default eventHandler(async (event) => {
         table: true,
       },
     });
+
+    // Notify kitchen clients that a new order was created
+    try {
+      broadCast({ type: "ORDER_CREATED", payload: order });
+    } catch (e) {
+      console.warn("Failed to broadcast order created event", e);
+    }
 
     return {
       statusCode: 201,
