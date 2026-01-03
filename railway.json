@@ -4,8 +4,8 @@
     "nixpacksPlan": {
       "phases": {
         "install": {
-          "dependsOn": ["setup"],
-          "cmds": ["npm install"]
+         
+          "cmds": ["npm ci --force"]
         }
       }
     }
