@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { useWebSocket } from '@vueuse/core';
 
-
-const { status, data, send, open, close } = useWebSocket(`ws://localhost:3000/api/websocket`)
+const runtime = useRuntimeConfig();
+const { status, data, send, open, close } = useWebSocket(`${runtime.public.WEBSOCKET_HOST}/api/websocket`)
 
 
 const message = ref('')

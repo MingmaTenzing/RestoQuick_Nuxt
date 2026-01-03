@@ -14,9 +14,10 @@ const toast = useToast()
 
 const all_orders = ref<OrderDetailsWithInclude[]>([]);
 
+const runtime = useRuntimeConfig();
 
 // connection to websocket
-const { status, data, send, close } = useWebSocket(`ws://localhost:3000/api/websocket`)
+const { status, data, send, close } = useWebSocket(`${runtime.public.WEBSOCKET_HOST}/api/websocket`)
 
 //initial data fetch from the database
 // const { data: orders } = useFetch<OrderDetailsWithInclude[]>("/api/orders")
