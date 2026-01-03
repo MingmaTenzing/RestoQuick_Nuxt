@@ -36,9 +36,9 @@ watch(data, (newValue: string) => {
      title: 'success',
         message: 'Order Received '
     })
-    console.log(newValue)
-
+    
     let parsed_data: websocket_payload = JSON.parse(newValue)
+    console.log(parsed_data)
 
     all_orders.value.push(parsed_data.payload)
  

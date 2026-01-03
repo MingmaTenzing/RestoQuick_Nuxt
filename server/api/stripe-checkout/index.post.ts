@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
       table_id: table_id, //this is to reference the table_id when checkout completes to add to database
     },
     line_items: stripe_line_items,
-    return_url: `${config.HOST}/order-table/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+    return_url: `${config.BASE_URL}/order-table/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
   });
 
   return {
