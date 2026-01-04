@@ -4,6 +4,7 @@ import { ref, computed } from 'vue'
 import Order_Item from '~/components/kitchenDisplay_components/Order_Item.vue';
 import type{ OrderDetailsWithInclude } from '~~/types/orderwithInclude';
 import type websocket_payload from '~~/types/websocket_payload';
+import notification_sound from "../../assets/audio/new-notification-022-370046.mp3"
 
 definePageMeta({
     layout: 'dashboard-layout'
@@ -30,17 +31,24 @@ onMounted(async () => {
 
 
 
+// the watch looks at the data ref coming from useWebsocket and run everytime there's a new order
+
 
 watch(data, (newValue: string) => {
- toast.success({
-     title: 'success',
-        message: 'Order Received '
-    })
+
     
     let parsed_data: websocket_payload = JSON.parse(newValue)
     console.log(parsed_data)
 
     all_orders.value.push(parsed_data.payload)
+     toast.info({
+     title: 'success',
+        message: 'Order Received '
+     })
+
+     //plays the notification sound
+    const audio = new Audio(notification_sound);
+    audio.play();
  
    
 
