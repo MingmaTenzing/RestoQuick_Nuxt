@@ -1,19 +1,26 @@
 <script lang="ts" setup>
 import { useWebSocket } from '@vueuse/core';
-
+import notification_sound from "../assets/audio/new-notification-022-370046.mp3"
 const runtime = useRuntimeConfig();
 const { status, data, send, open, close } = useWebSocket(`${runtime.public.WEBSOCKET_HOST}/api/websocket`)
-
 
 const message = ref('')
 
 const history = ref<string[]>([])
 
 
+
+
+
 function sendMessage() {
     history.value.push(`client: ${message.value} `)
     send(message.value)
     message.value= ""
+}
+
+function playSound() {
+    const audio = new Audio(notification_sound)
+audio.play();
 }
 
 watch(data, (newValue) => {
@@ -23,12 +30,16 @@ watch(data, (newValue) => {
 })
 
 
+
+
 </script>
 
 
 <template>
 
     <div>
+
+        <button v-on:click="playSound" class=" border p-2">Play Sound</button>
         
         <h1>Working with websocket</h1>
 
