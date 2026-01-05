@@ -74,7 +74,7 @@ watch(data, (newValue: string) => {
 
 <template>
 
-    <main>
+    <main class=" space-y-6">
        
 
       
@@ -119,52 +119,7 @@ watch(data, (newValue: string) => {
     
 
  </div>
-            <!-- stats -->
-            <section class=" flex justify-around gap-4">
-                    <!-- pending orders -->
-                <div class="p-4 border bg-card rounded-lg h-40  justify-between flex flex-col w-full  ">
-                    <div class=" flex gap-2 text-lg text-amber-600 items-center">
-                        <p class=" ">Pending Orders </p>
-                        <i class=" pi pi-clock"></i>
-
-                    </div>
-        
-                    <div class=" flex flex-col">
-                        <span class=" text-4xl font-bold text-amber-600">7</span>
-                        <p class=" text-muted-foreground font-light text-sm">Currently in Kitchen</p>
-                    </div>
-                    
-                </div>
-        
-                <!-- completed orders -->
-                <div class="p-4 border bg-card rounded-lg h-40  justify-between flex flex-col w-full ">
-                     <div class=" flex gap-2 text-lg text-green-600 items-center">
-                        <p class=" ">Completed Orders </p>
-                        <i class=" pi pi-check-circle"></i>
-
-                    </div>
-                    <div class=" flex flex-col">
-                        <span class=" text-4xl font-bold text-green-600">78</span>
-                        <p class=" text-muted-foreground font-light text-sm">Completed by kitchen</p>
-                    </div>
-                    
-        
-                </div>
-        
-        
-                <!-- total orders -->
-                <div class="p-4 border bg-card rounded-lg h-40  justify-between flex flex-col w-full ">
-                    <p class=" text-lg">Total Orders (Today) </p>
-        
-                    <div class=" flex flex-col">
-                        <span class=" text-4xl font-bold">121</span>
-                        <p class=" text-muted-foreground font-light text-sm">Total for {{ new Date(Date.now()) }}</p>
-                    </div>
-                    
-                </div>
-              
-        
-            </section>
+            
         </section>
 
 
