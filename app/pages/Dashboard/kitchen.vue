@@ -21,17 +21,14 @@ const runtime = useRuntimeConfig();
 const { status, data, send, close } = useWebSocket(`${runtime.public.WEBSOCKET_HOST}/api/websocket`)
 
 //initial data fetch from the database
-// const { data: orders } = useFetch<OrderDetailsWithInclude[]>("/api/orders")
 
 onMounted(async () => {
     all_orders.value = await $fetch<OrderDetailsWithInclude[]>('/api/orders');
-
 
 })
 
 
 
-// the watch looks at the data ref coming from useWebsocket and run everytime there's a new order
 
 
 watch(data, (newValue: string) => {

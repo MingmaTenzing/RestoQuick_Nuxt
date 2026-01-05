@@ -6,10 +6,18 @@ const props = defineProps<{
 }>()
 
 
-
-async function markOrder_as_ready() {
-
-}
+async function markOrder_as_ready(order_id: string) {
+  try {
+    const updatedOrder = await $fetch("/api/orders", {
+      method: "PUT",
+      body: { order_id: order_id  },
+    });
+    console.log(updatedOrder)
+    
+  } catch (e) {
+    console.error("Failed to mark order as ready", e);
+  }
+} 
 </script>
 
 <template>
@@ -85,7 +93,7 @@ async function markOrder_as_ready() {
                         <!-- ready button -->
         
                         <div >
-                            <button class="w-full py-2 rounded-lg font-bold  bg-amber-500 text-white ">Mark as Ready</button>
+                            <button @click="markOrder_as_ready(order.id)" class="w-full py-2 rounded-lg font-bold  bg-amber-500 text-white ">Mark as Ready</button>
                         </div>
         
         
