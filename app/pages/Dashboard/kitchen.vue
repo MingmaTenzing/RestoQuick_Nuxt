@@ -107,7 +107,7 @@ watch(data, (newValue: string) => {
   </div>
   
   <div  class="flex items-center space-x-2 "
-        v-if="status == 'CONNECTING'"> 
+        v-if="status == 'CLOSED'"> 
         
         <div class=" w-4 h-4 rounded-full bg-destructive" />
         <p>Not Connected</p>
