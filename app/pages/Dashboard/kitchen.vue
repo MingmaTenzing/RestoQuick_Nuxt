@@ -35,19 +35,32 @@ watch(data, (newValue: string) => {
 
     
     let parsed_data: websocket_payload = JSON.parse(newValue)
-    console.log(parsed_data)
 
-    all_orders.value.push(parsed_data.payload)
-     toast.info({
-     title: 'success',
-        message: 'Order Received '
-     })
 
-     //plays the notification sound
-    const audio = new Audio(notification_sound);
-    audio.play();
- 
-   
+    if (parsed_data.type == 'ORDER_CREATED') {
+        
+        
+            all_orders.value.push(parsed_data.payload)
+             toast.info({
+            
+                title: 'New Order Received '
+             })
+        
+             //plays the notification sound
+            const audio = new Audio(notification_sound);
+            audio.play();
+         
+           
+    }
+
+    if (parsed_data.type == 'ORDER_UPDATED') {
+
+       all_orders.value =  all_orders.value.filter((item) => item.id !== parsed_data.payload.id)
+        toast.success({
+            title:"Order Marked as Ready"
+        })
+
+    }
 
 
 
@@ -62,15 +75,48 @@ watch(data, (newValue: string) => {
 <template>
 
     <main>
-        {{ status }}
+       
 
-        {{ data }}
+      
             <!-- header -->
         <section class=" space-y-4">
- <div>
-     <h2 class="text-2xl md:text-6xl"> Kitchen Display </h2>
-     <p class=" text-sm lg:text-base text-muted-foreground">Manage incoming order and preparation status</p>
- 
+ <div class=" flex justify-between items-center">
+    <div>
+        <h2 class="text-2xl md:text-6xl"> Kitchen Display </h2>
+        <p class=" text-sm lg:text-base text-muted-foreground">Manage incoming order and preparation status</p>
+
+    </div>
+
+    <!-- websocket status -->
+    <div class=" bg-accent rounded-full px-4 py-2">
+        
+
+               <div  class="flex items-center space-x-2 "
+        v-if="status == 'OPEN'"> 
+        
+        <div class=" w-4 h-4 rounded-full bg-green-500" />
+        <p>Connected</p>
+  </div>
+             
+  
+  <div  class="flex items-center space-x-2 "
+        v-if="status == 'CONNECTING'"> 
+        
+        <div class=" w-4 h-4 rounded-full bg-gray-500" />
+        <p>Connecting</p>
+  </div>
+  
+  <div  class="flex items-center space-x-2 "
+        v-if="status == 'CONNECTING'"> 
+        
+        <div class=" w-4 h-4 rounded-full bg-destructive" />
+        <p>Not Connected</p>
+  </div>
+
+    
+     
+    </div>
+    
 
  </div>
             <!-- stats -->
