@@ -1,9 +1,11 @@
+import { OrderStatus } from "~/generated/prisma/enums";
 import { broadCast } from "../../utils/kitchenSocket";
 
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
   const body = await readBody(event);
   const order_id = body.order_id;
+  const status: OrderStatus = body.status;
 
   if (!order_id) {
     throw createError({
@@ -15,7 +17,7 @@ export default defineEventHandler(async (event) => {
   try {
     const updatedOrder = await prisma.order.update({
       where: { id: order_id },
-      data: { status: "READY" },
+      data: { status: status },
       include: {
         items: {
           include: {

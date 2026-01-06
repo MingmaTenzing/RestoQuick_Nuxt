@@ -1,17 +1,20 @@
 <script lang="ts" setup>
 
 import { OrderStatus } from "~/generated/prisma/enums";
-import type {OrderDetailsWithInclude } from "../../../types/orderwithInclude"
+import type {OrderDetailsWithInclude } from "../../../../types/orderwithInclude"
 const props = defineProps<{
   order: OrderDetailsWithInclude
 }>()
 
 
-async function markOrder_as_ready(order_id: string) {
+async function recall_to_kitchen(order_id: string) {
   try {
     const updatedOrder = await $fetch("/api/orders", {
       method: "PUT",
-      body: { order_id: order_id, status: OrderStatus.READY  },
+      body: {
+        order_id: order_id, status: OrderStatus.PENDING
+        
+       },
     });
     console.log(updatedOrder)
     
@@ -25,7 +28,7 @@ async function markOrder_as_ready(order_id: string) {
 
               
     
-                    <div class=" w-75 p-4 border  rounded-lg space-y-4">
+                    <div class=" w-75 p-4 border border-border rounded-lg space-y-4">
         
                         <!-- table number and time ago order was placed -->
                         <div class="flex justify-between">
@@ -94,7 +97,7 @@ async function markOrder_as_ready(order_id: string) {
                         <!-- ready button -->
         
                         <div >
-                            <button @click="markOrder_as_ready(order.id)" class="w-full py-2 rounded-lg font-bold  bg-amber-500 text-white ">Mark as Ready</button>
+                            <button @click="recall_to_kitchen(order.id)" class="w-full py-2 rounded-lg font-bold   bg-accent text-accent-foreground "><i class="pi pi-replay"></i> Recall to Kitchen</button>
                         </div>
         
         
