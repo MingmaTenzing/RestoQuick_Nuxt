@@ -26,6 +26,9 @@ export default defineEventHandler(async (event) => {
       },
     });
 
+    // once the order is updates here its being broadCast to the websocket clients
+    // the
+
     broadCast({ type: "ORDER_UPDATED", payload: updatedOrder });
 
     return {
