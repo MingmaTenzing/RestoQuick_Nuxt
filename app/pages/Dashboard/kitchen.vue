@@ -7,6 +7,7 @@ import type websocket_payload from '~~/types/websocket_payload';
 import notification_sound from "../../assets/audio/new-notification-022-370046.mp3"
 import Complete_Order_Popup from '~/components/kitchenDisplay_components/Completed_Orders/Complete_Order_Popup.vue';
 import Loading_Order_Item from '~/components/kitchenDisplay_components/Loading_Order_Item.vue';
+import { parse } from 'path';
 
 definePageMeta({
     layout: 'dashboard-layout'
@@ -21,7 +22,6 @@ const loading_orders = ref(false)
 
 const runtime = useRuntimeConfig();
 
-const completed_orders_modal = ref(true)
 
 const { modal_state, open_completed_orders_modal} = useCompleted_Order_Modal()
 
@@ -43,6 +43,8 @@ onMounted(async () => {
 
 watch(data, (newValue: string) => {
 
+    console.log('new data')
+
     
     let parsed_data: websocket_payload = JSON.parse(newValue)
 
@@ -63,13 +65,21 @@ watch(data, (newValue: string) => {
            
     }
 
-    if (parsed_data.type == 'ORDER_UPDATED') {
+    if (parsed_data.type == 'ORDER_MARKED_READY') {
 
        all_orders.value =  all_orders.value.filter((item) => item.id !== parsed_data.payload.id)
         toast.success({
             title:"Order Marked as Ready"
         })
 
+    }
+    if (parsed_data.type == "ORDER_RECALL") {
+        all_orders.value.push(parsed_data.payload)
+        toast.question({
+          
+            title: 'Order Recalled'
+
+        })
     }
 
 
@@ -156,21 +166,33 @@ watch(data, (newValue: string) => {
        
 
         <!-- once order's loaded -->
-        <section v-else class=" flex flex-wrap gap-2 ">
+        <section v-else class=" ">
 
-          
-   <div  v-for="order in all_orders" :key="order.id" >
+          <div v-if="all_orders.length === 0">
+            <div class=" flex justify-center items-center w-full h-[70vh]">
+                <p class=" text-2xl text-muted-foreground">No Orders at the moment</p>
 
-    <Order_Item :order="order"></Order_Item>
-   </div>
+            </div>
+          </div>
+
+          <div v-else class=" flex flex-wrap gap-2 ">
+            <div v-for="order in all_orders" :key="order.id">
+              <Order_Item :order="order" />
+            </div>
+          </div>
+
         </section>
 
 
         <!-- popup for completed orders to callback -->
 
-      <div v-if="modal_state == true" class="fixed z-50 inset-0 flex items-center justify-center bg-background/80">
- <Complete_Order_Popup></Complete_Order_Popup>
-  </div>
+        <Transition>
+            <div v-if="modal_state == true" class="fixed z-50 inset-0 flex items-center justify-center bg-background/80">
+       <Complete_Order_Popup></Complete_Order_Popup>
+        </div>
+
+        </Transition>
+
 
     </main>
 </template>
