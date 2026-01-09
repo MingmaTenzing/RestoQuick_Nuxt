@@ -25,7 +25,7 @@ async function markOrder_as_ready(order_id: string) {
 
               
     
-                    <div class=" w-75 p-4 border  rounded-lg space-y-4">
+                    <div class=" w-75 p-4 bg-card border  rounded-lg space-y-4">
         
                         <!-- table number and time ago order was placed -->
                         <div class="flex justify-between">
@@ -94,7 +94,7 @@ async function markOrder_as_ready(order_id: string) {
                         <!-- ready button -->
         
                         <div >
-                            <button @click="markOrder_as_ready(order.id)" class="w-full py-2 rounded-lg font-bold  bg-amber-500 text-white ">Mark as Ready</button>
+                            <button @click="markOrder_as_ready(order.id)" class="w-full py-2 rounded-lg font-bold  bg-amber-600 text-white ">Mark as Ready</button>
                         </div>
         
         
