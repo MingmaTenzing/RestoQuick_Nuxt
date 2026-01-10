@@ -1,5 +1,3 @@
-import { read } from "fs";
-
 //this endpoint updates the staus of leaveRequest
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();

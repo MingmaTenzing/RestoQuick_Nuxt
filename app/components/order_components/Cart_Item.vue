@@ -60,7 +60,7 @@ const { increase_quantity, decrease_quantity, remove_from_cart } =
         <i class="pi pi-trash text-destructive"></i>
       </button>
       <span class="font-bold"
-        >${{ cart_item.quantity * (cart_item.unitPrice/100) }}</span
+        >${{ (cart_item.quantity * (cart_item.unitPrice/100) ).toFixed(2)}}</span
       >
     </div>
   </div>

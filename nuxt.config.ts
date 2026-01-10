@@ -18,7 +18,10 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "@unlok-co/nuxt-stripe",
     "nuxt-time",
+    "@vite-pwa/nuxt",
   ],
+
+  pwa: {},
 
   nitro: {
     experimental: {
