@@ -21,8 +21,6 @@ export default defineNuxtConfig({
     "@vite-pwa/nuxt",
   ],
 
-  pwa: {},
-
   nitro: {
     experimental: {
       websocket: true,
