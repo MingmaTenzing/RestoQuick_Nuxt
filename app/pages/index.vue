@@ -6,6 +6,8 @@ import TitleSection from '~/components/home_components/TitleSection.vue';
 import Trusted_By from '~/components/home_components/Trusted_By.vue';
 import BackgroundGrid from '~/components/ui/BackgroundGrid.vue';
 
+
+
 </script>
 
 <template>

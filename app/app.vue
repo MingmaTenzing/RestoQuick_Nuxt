@@ -6,6 +6,7 @@
  
 </script>
 <template>
+  <NuxtPwaManifest></NuxtPwaManifest>
 
   <NuxtLoadingIndicator></NuxtLoadingIndicator>
   <NuxtLayout>
