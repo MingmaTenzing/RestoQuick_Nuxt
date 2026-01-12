@@ -9,12 +9,22 @@ definePageMeta({
      layout: 'dashboard-layout'   
 })
 
-const { edit_table_modal, add_table_modal, open_add_table_mdoal, close_add_table_mdoal, open_edit_table_mdoal, close_edit_table_mdoal} = useManage_Table_Modal();
+const { edit_table_modal, add_table_modal, modal_boolean_for_fetching, open_add_table_mdoal, open_edit_table_mdoal,} = useManage_Table_Modal();
 
 
 const { data: tables, status, pending, error } = useFetch("/api/tables", {
-  watch: [edit_table_modal, add_table_modal]
+  watch: [modal_boolean_for_fetching]
 })
+
+const deleteTable = async (table: any) => {
+  if (!confirm(`Delete table ${table.number}?`)) return;
+  try {
+    await $fetch('/api/tables', { method: 'DELETE', body: { table_id: table.id } });
+    modal_boolean_for_fetching.value = !modal_boolean_for_fetching.value;
+  } catch (e) {
+    console.error(e);
+  }
+} 
 
 
 // async function addTable() {
@@ -59,8 +69,8 @@ const { data: tables, status, pending, error } = useFetch("/api/tables", {
             <td class="px-4 py-3">
               <div class="flex space-x-2">
                 <NuxtLink :to="`/order-table/$dd`" class="px-3 py-1 rounded-lg border hover:border-ring">QR</NuxtLink>
-                <button @click="open_edit_table_mdoal" class="px-3 py-1 rounded-lg border hover:border-ring">Edit</button>
-                <button class="px-3 py-1 rounded-lg border bg-destructive/20 text-destructive hover:border-destructive  ">Delete</button>
+                <button @click="open_edit_table_mdoal(table)" class="px-3 py-1 rounded-lg border hover:border-ring">Edit</button>
+                <button @click="deleteTable(table)" class="px-3 py-1 rounded-lg border bg-destructive/20 text-destructive hover:border-destructive">Delete</button>
               </div>
             </td>
           </tr>
