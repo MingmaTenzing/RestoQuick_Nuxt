@@ -70,7 +70,9 @@ const {data:tables, status, pending, error } = useFetch("/api/tables")
     <!-- Edit Modal (template only) -->
 
  <Transition>
-     <div v-if="edit_table_modal">
+     
+           <div  v-if="edit_table_modal"  class="fixed inset-0 z-50 flex items-center justify-center bg-background/80" aria-hidden="true">
+
 
      <Edit_Table_Modal_Component></Edit_Table_Modal_Component>
      </div>
@@ -82,22 +84,36 @@ const {data:tables, status, pending, error } = useFetch("/api/tables")
     <!-- Add Modal (template only) -->
 
 
+<Transition>
 
-        <div v-if="add_table_modal">
-    
-    
-           <Add_Table_Modal_Component>
-    
-           </Add_Table_Modal_Component>
-        </div>
+  <div v-if="add_table_modal" class="fixed inset-0 z-100 flex items-center justify-center bg-background/80" aria-hidden="true">
+  
+  
+  <Add_Table_Modal_Component>
+  
+  </Add_Table_Modal_Component>
+  </div>
+</Transition>
+  
+
      
     
   </div>
 </template>
 
-
 <style>
+/* The active classes manage the duration and timing function */
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
 
-
-
+/* The 'from' and 'to' states define the starting point of the enter 
+   and the ending point of the leave */
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+  /* Positive Y moves the element down; it will slide 'up' to 0 */
+  transform: translateY(30px); 
+}
 </style>

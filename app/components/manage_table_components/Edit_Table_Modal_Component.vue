@@ -6,8 +6,7 @@ const { edit_table_modal, add_table_modal, open_add_table_mdoal, close_add_table
 </script>
 
 <template>
-     <div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80" aria-hidden="true">
-      <div class="bg-white rounded-lg w-full max-w-md p-6 shadow-md">
+      <div class="bg-card rounded-lg w-full max-w-md p-6 shadow-md">
         <div class="flex justify-between items-center mb-4">
           <h3 class="text-lg font-medium">Edit Table</h3>
           <button @click="close_edit_table_mdoal" class="text-muted-foreground">✕</button>
@@ -26,9 +25,9 @@ const { edit_table_modal, add_table_modal, open_add_table_mdoal, close_add_table
 
           <div class="flex justify-end space-x-2 mt-6">
             <button @click.prevent="close_edit_table_mdoal" type="button" class="px-4 py-2 rounded border">Cancel</button>
-            <button type="submit" class="px-4 py-2 rounded bg-primary text-white">Save</button>
+            <button type="submit" class="px-4 py-2 rounded bg-card-foreground text-card">Save</button>
           </div>
         </form>
       </div>
-    </div>
+    
 </template>
