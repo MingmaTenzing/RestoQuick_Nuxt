@@ -12,7 +12,9 @@ definePageMeta({
 const { edit_table_modal, add_table_modal, open_add_table_mdoal, close_add_table_mdoal, open_edit_table_mdoal, close_edit_table_mdoal} = useManage_Table_Modal();
 
 
-const {data:tables, status, pending, error } = useFetch("/api/tables")
+const { data: tables, status, pending, error } = useFetch("/api/tables", {
+  watch: [edit_table_modal, add_table_modal]
+})
 
 
 // async function addTable() {
