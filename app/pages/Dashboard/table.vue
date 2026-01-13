@@ -1,35 +1,65 @@
 <script setup lang="ts">
+import type { NuxtError } from '#app';
 import Add_Table_Modal_Component from '~/components/manage_table_components/Add_Table_Modal_Component.vue';
 import Edit_Table_Modal_Component from '~/components/manage_table_components/Edit_Table_Modal_Component.vue';
-import { useManage_Table_Modal } from '~/composables/useManage_Table_Modal';
-
-
+import Table_QR_Code from '~/components/manage_table_components/Table_QR_Code.vue';
+import type { Table } from '~/generated/prisma/client';
 
 definePageMeta({
      layout: 'dashboard-layout'   
 })
 
-const { edit_table_modal, add_table_modal, modal_boolean_for_fetching, open_add_table_mdoal, open_edit_table_mdoal,} = useManage_Table_Modal();
+const { edit_table_modal, add_table_modal, open_add_table_modal, open_edit_table_modal,} = useManage_Table_Modal();
 
+const toast = useToast();
 
-const { data: tables, status, pending, error } = useFetch("/api/tables", {
-  watch: [modal_boolean_for_fetching]
+const qrModalShow = ref(false);
+
+const selectedTable_for_Qr = ref<Table>();
+
+const { data: tables, status, pending, error , refresh} = useFetch("/api/tables", {
 })
 
-const deleteTable = async (table: any) => {
-  if (!confirm(`Delete table ${table.number}?`)) return;
+async function delete_table(table_id: string) {
+
   try {
-    await $fetch('/api/tables', { method: 'DELETE', body: { table_id: table.id } });
-    modal_boolean_for_fetching.value = !modal_boolean_for_fetching.value;
-  } catch (e) {
-    console.error(e);
+    const delete_table = await $fetch(`/api/tables/${table_id}`, {
+      method:'DELETE',
+    })
+    if (delete_table) {
+      toast.warning({
+        title:"Table Deleted"
+      })
+    }
+    
+  } catch (error) {
+    const nuxtError = error as NuxtError;
+    toast.error({
+      title: nuxtError.statusMessage
+    })
+
+    
   }
-} 
+  finally {
+    //once the request is complete refresh will refetch the data
+    refresh()
+  }
+}
 
+function open_qr_modal(table: Table) {
+  selectedTable_for_Qr.value = table
+  qrModalShow.value = true;
+}
 
-// async function addTable() {
+function close_qr_modal() {
+  selectedTable_for_Qr.value = {
+    number: "",
+    capacity: 0,
+    id:''
+  }
+  qrModalShow.value = false
+}
 
-// }
 
 
 </script>
@@ -43,7 +73,7 @@ const deleteTable = async (table: any) => {
 
     </div>
       <div class="flex items-center space-x-3">
-        <button @click="open_add_table_mdoal" class=" bg-accent border hover:border-ring px-4 py-2 rounded-lg">Add Table</button>
+        <button @click="open_add_table_modal" class=" bg-accent border hover:border-ring px-4 py-2 rounded-lg">Add Table</button>
         <NuxtLink to="/print-qr-codes" class="px-4 py-2 rounded-lg border  hover:border-ring space-x-2"> <i class="pi pi-qrcode"></i> <span>Print All QR Codes</span></NuxtLink>
       </div>
     </div>
@@ -68,9 +98,9 @@ const deleteTable = async (table: any) => {
             <td class="px-4 py-3">{{table.capacity}}</td>
             <td class="px-4 py-3">
               <div class="flex space-x-2">
-                <NuxtLink :to="`/order-table/$dd`" class="px-3 py-1 rounded-lg border hover:border-ring">QR</NuxtLink>
-                <button @click="open_edit_table_mdoal(table)" class="px-3 py-1 rounded-lg border hover:border-ring">Edit</button>
-                <button @click="deleteTable(table)" class="px-3 py-1 rounded-lg border bg-destructive/20 text-destructive hover:border-destructive">Delete</button>
+                <button @click="open_qr_modal(table)" class="px-3 py-1 rounded-lg border hover:border-ring flex items-center space-x-2"><i class="pi pi-qrcode"></i> <span>QR</span></button>
+                <button @click="open_edit_table_modal(table.id)" class="px-3 py-1 rounded-lg border hover:border-ring">Edit</button>
+                <button class="px-3 py-1 rounded-lg border bg-destructive/20 text-destructive hover:border-destructive  " v-on:click="delete_table(table.id)">Delete</button>
               </div>
             </td>
           </tr>
@@ -83,7 +113,7 @@ const deleteTable = async (table: any) => {
 
  <Transition>
      
-           <div  v-if="edit_table_modal"  class="fixed inset-0 z-50 flex items-center justify-center bg-background/80" aria-hidden="true">
+           <div  v-if="edit_table_modal.isOpen"  class="fixed inset-0 z-50 flex items-center justify-center bg-background/80" aria-hidden="true">
 
 
      <Edit_Table_Modal_Component></Edit_Table_Modal_Component>
@@ -100,16 +130,20 @@ const deleteTable = async (table: any) => {
 
   <div v-if="add_table_modal" class="fixed inset-0 z-100 flex items-center justify-center bg-background/80" aria-hidden="true">
   
-  
-  <Add_Table_Modal_Component>
+   <!-- here  whenever the child emits the table-added event it will refresh the fetch  -->
+  <Add_Table_Modal_Component @table_added="refresh()">
   
   </Add_Table_Modal_Component>
   </div>
 </Transition>
   
+  <Transition>
+    <div v-if="qrModalShow" class="fixed inset-0 z-50 flex items-center justify-center bg-background/80" aria-hidden="true">
+ <Table_QR_Code  :table="selectedTable_for_Qr!" v-on:close="close_qr_modal"></Table_QR_Code>
 
-     
-    
+    </div>
+  </Transition>
+
   </div>
 </template>
 

@@ -1,60 +1,46 @@
+import { table } from "console";
 import { Prisma } from "~/generated/prisma/client";
 
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
+
   const body = await readBody(event);
 
-  const { table_id, table_number, capacity } = body;
+  const capacity = body.capacity;
+  const table_id = body.table_id;
 
   if (!table_id) {
     throw createError({
-      statusCode: 400,
-      statusMessage: "table_id is required",
+      status: 400,
+      message: "Please provie the table_id",
     });
   }
-
-  const data: Record<string, any> = {};
-
-  if (table_number !== undefined) {
-    data.number = table_number;
-  }
-
-  if (capacity !== undefined) {
-    const capacityInt = Number(capacity);
-    if (!Number.isInteger(capacityInt) || capacityInt <= 0) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: "capacity must be a positive integer",
-      });
-    }
-    data.capacity = capacityInt;
+  if (!capacity) {
+    throw createError({
+      statusCode: 400,
+      message: "Please provide the field - capacity to update",
+    });
   }
 
   try {
-    const updatedTable = await prisma.table.update({
-      where: { id: table_id },
-      data: data,
+    const update_table = await prisma.table.update({
+      where: {
+        id: table_id,
+      },
+      data: {
+        capacity: capacity,
+      },
     });
-
-    return {
-      statusCode: 200,
-      data: updatedTable,
-    };
+    return update_table;
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2002") {
+      if (error.code == "P2025") {
         throw createError({
-          message:
-            "Table number already exists. Please use a different table number",
-          statusCode: 409,
+          status: 500,
+          message: "Cannot find the Table_id, does not exit",
         });
       }
     }
-
-    console.error(error);
-    throw createError({
-      message: "Something went wrong",
-      statusCode: 500,
-    });
+    return error;
   }
 });
