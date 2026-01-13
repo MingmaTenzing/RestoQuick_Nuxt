@@ -1,43 +1,30 @@
+import { Prisma, PrismaClient } from "~/generated/prisma/client";
+
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
-  const tables_data = [
-    {
-      number: "A1",
-      capacity: 2,
-    },
-    {
-      number: "A2",
-      capacity: 2,
-    },
-    {
-      number: "B1",
-      capacity: 4,
-    },
-    {
-      number: "B2",
-      capacity: 4,
-    },
-    {
-      number: "C1",
-      capacity: 6,
-    },
-    {
-      number: "C2",
-      capacity: 6,
-    },
-    {
-      number: "Bar-1",
-      capacity: 1,
-    },
-    {
-      number: "Bar-2",
-      capacity: 1,
-    },
-  ];
+  const body = await readBody(event);
 
-  const tables = await prisma.table.createMany({
-    data: tables_data,
-  });
+  const { table_number, capacity } = body;
+  console.log(table_number, capacity);
+  try {
+    const create_table = await prisma.table.create({
+      data: {
+        number: table_number,
+        capacity: capacity,
+      },
+    });
 
-  return tables;
+    return create_table;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if ((error.code = "P2002")) {
+        throw createError({
+          message:
+            "Table Number Exists Already. Please use a differet table number",
+          statusCode: 409,
+        });
+      }
+    }
+    return error;
+  }
 });

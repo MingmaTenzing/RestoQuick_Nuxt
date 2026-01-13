@@ -34,9 +34,9 @@ console.log(route.path)
         <i class=" pi pi-box"></i>
         <span>Stock</span>
     </NuxtLink>
-    <NuxtLink to="/dashboard/qr-codes" :class="[ 'cursor-pointer flex space-x-4 items-center   text-sm xl:text-base text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/qrcodes' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
+    <NuxtLink to="/dashboard/tables" :class="[ 'cursor-pointer flex space-x-4 items-center   text-sm xl:text-base text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/tables' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
         <i class=" pi pi-qrcode"></i>
-        <span>QR Codes</span>
+        <span>Tables</span>
     </NuxtLink>
 
 
