@@ -83,19 +83,19 @@ function close_qr_modal() {
 
     <!-- Table list -->
     <div class="overflow-x-auto">
-      <table class="min-w-full  rounded-lg shadow-sm ">
+      <table class="min-w-full table-fixed rounded-lg shadow-sm ">
         <thead>
           <tr class="text-left text-sm text-muted-foreground">
            
-            <th class="px-4 py-3">Id</th>
-            <th class="px-4 py-3">Number</th>
-            <th class="px-4 py-3">Capacity</th>
-            <th class="px-4 py-3">Actions</th>
+            <th class="px-4 py-3 w-50">Id</th>
+            <th class="px-4 py-3 w-20">Number</th>
+            <th class="px-4 py-3 w-12">Capacity</th>
+            <th class="px-4 py-3 w-48">Actions</th>
           </tr>
         </thead>
-        <section v-if="pending">
+        <tbody class=" min-w-full " v-if="pending">
           <Table_Loading_Skeleton />
-        </section>
+        </tbody>
         <tbody v-else>
           <tr v-for="table in tables" class="border-t hover:bg-secondary/30">
             <td class="px-4 py-3">{{table.id}}</td>
