@@ -5,8 +5,10 @@ import Edit_Table_Modal_Component from '~/components/manage_table_components/Edi
 import Table_QR_Code from '~/components/manage_table_components/Table_QR_Code.vue';
 import type { Table } from '~/generated/prisma/client';
 
+
+
 definePageMeta({
-     layout: 'dashboard-layout'   
+  layout:'dashboard-layout'
 })
 
 const { edit_table_modal, add_table_modal, open_add_table_modal, open_edit_table_modal,} = useManage_Table_Modal();
@@ -65,7 +67,7 @@ function close_qr_modal() {
 </script>
 
 <template>
-  <div class="p-6">
+  <div class="">
     <div class="flex items-center justify-between mb-6">
      <div>
         <h2 class="text-2xl md:text-6xl"> Manage Tables</h2>
@@ -74,7 +76,7 @@ function close_qr_modal() {
     </div>
       <div class="flex items-center space-x-3">
         <button @click="open_add_table_modal" class=" bg-accent border hover:border-ring px-4 py-2 rounded-lg">Add Table</button>
-        <NuxtLink to="/print-qr-codes" class="px-4 py-2 rounded-lg border  hover:border-ring space-x-2"> <i class="pi pi-qrcode"></i> <span>Print All QR Codes</span></NuxtLink>
+        <NuxtLink to="/dashboard/tables/print-qr-codes" class="px-4 py-2 rounded-lg border  hover:border-ring space-x-2"> <i class="pi pi-qrcode"></i> <span>Print All QR Codes</span></NuxtLink>
       </div>
     </div>
 
