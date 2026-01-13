@@ -93,9 +93,9 @@ function close_qr_modal() {
             <th class="px-4 py-3">Actions</th>
           </tr>
         </thead>
-        <template v-if="pending">
+        <section v-if="pending">
           <Table_Loading_Skeleton />
-        </template>
+        </section>
         <tbody v-else>
           <tr v-for="table in tables" class="border-t hover:bg-secondary/30">
             <td class="px-4 py-3">{{table.id}}</td>
