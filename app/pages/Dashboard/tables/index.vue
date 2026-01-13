@@ -3,6 +3,7 @@ import type { NuxtError } from '#app';
 import Add_Table_Modal_Component from '~/components/manage_table_components/Add_Table_Modal_Component.vue';
 import Edit_Table_Modal_Component from '~/components/manage_table_components/Edit_Table_Modal_Component.vue';
 import Table_QR_Code from '~/components/manage_table_components/Table_QR_Code.vue';
+import Table_Loading_Skeleton from '~/components/manage_table_components/Table_Loading_Skeleton.vue';
 import type { Table } from '~/generated/prisma/client';
 
 
@@ -92,8 +93,10 @@ function close_qr_modal() {
             <th class="px-4 py-3">Actions</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Example row structure; replace with v-for / real data when wiring logic -->
+        <template v-if="pending">
+          <Table_Loading_Skeleton />
+        </template>
+        <tbody v-else>
           <tr v-for="table in tables" class="border-t hover:bg-secondary/30">
             <td class="px-4 py-3">{{table.id}}</td>
             <td class="px-4 py-3">{{table.number}}</td>
@@ -106,7 +109,6 @@ function close_qr_modal() {
               </div>
             </td>
           </tr>
-
         </tbody>
       </table>
     </div>
