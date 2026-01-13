@@ -118,7 +118,7 @@ function close_qr_modal() {
            <div  v-if="edit_table_modal.isOpen"  class="fixed inset-0 z-50 flex items-center justify-center bg-background/80" aria-hidden="true">
 
 
-     <Edit_Table_Modal_Component></Edit_Table_Modal_Component>
+     <Edit_Table_Modal_Component v-on:table_edited="refresh"></Edit_Table_Modal_Component>
      </div>
 
 

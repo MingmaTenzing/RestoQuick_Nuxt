@@ -6,7 +6,7 @@ import type { Table } from '~/generated/prisma/client';
 
 const {  close_edit_table_modal, edit_table_modal} = useManage_Table_Modal();
 
-const emit = defineEmits(['table_added'])
+const emit = defineEmits(['table_edited'])
 
 
 
@@ -23,7 +23,7 @@ async function editTable() {
 
   try {
 
-     const updatedTable = await $fetch<Table>('/api/tables', {
+    const updatedTable = await $fetch<Table>('/api/tables', {
       method: 'PUT',
       body: {
 
@@ -33,22 +33,22 @@ async function editTable() {
 
 
       }
-     })
+    })
 
     if (updatedTable) {
       toast.success({
-        title:  "Table Updated",
-        
+        title: "Table Updated",
+
       })
-     }
-    
+    }
+
   } catch (error) {
     const nuxtError = error as NuxtError;
-    if (nuxtError.statusCode == 500 && nuxtError.message == 
+    if (nuxtError.statusCode == 500 && nuxtError.message ==
       'Cannot find the Table_id, does not exit'
     ) {
-        toast.error({
-          title: 'Cannot find the table_id',
+      toast.error({
+        title: 'Cannot find the table_id',
         message: "The table doesn't exist "
       })
     }
@@ -66,12 +66,11 @@ async function editTable() {
   }
 
 
-  //regardless of the outcome here the table_added event is emitted to the parent 
-  //so that tables page can refetch the table data.. 
-  emit('table_added')
-    
-}
 
+  //regardless of the outcome here the table_edited event is emitted to the parent 
+  //so that tables page can refetch the table data.. 
+  emit('table_edited')
+}
 </script>
 
 <template>
