@@ -3,7 +3,7 @@ import Staff_Card from '~/components/staff_components/Staff_Card.vue';
 
 
 
-
+const { data: staffs } = useFetch("/api/staff");
 
 </script>
 
@@ -142,14 +142,13 @@ import Staff_Card from '~/components/staff_components/Staff_Card.vue';
 
     <!-- staff member card -->
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <!-- Staff Card -->
-     <Staff_Card></Staff_Card>
-     <Staff_Card></Staff_Card>
-     <Staff_Card></Staff_Card>
-     <Staff_Card></Staff_Card>
-     <Staff_Card></Staff_Card>
-     
-      
+
+        <!-- Staff Card -->
+        <div v-for="staff in staffs" :key="staff.id">
+            <Staff_Card :staff="staff"></Staff_Card>
+
+        </div>
+  
     </section>
 
 

@@ -33,19 +33,14 @@ enum WeekDay {
 }
 
 model Staff {
-  id           String    @id @default(uuid())
-  firstname    String
-  lastName     String
-  role         Role
-  email        String    @unique
-  phone        String
-  availability WeekDay[] // stores an array of available days
-  // the availability doesn't have types need to look into it later
-  // once everything is running please check this to make sure 
-  //availability data type is valid when user makes a post request
-  // it should be = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
-  //at the moment i'm aware and manually doing it so it's fine 
-
+  id                String         @id @default(uuid())
+  firstname         String
+  lastName          String
+  role              Role
+  email             String         @unique
+  phone             String
+  availability      WeekDay[]
+  joined_date       DateTime       @default(now())
   shifts            Shift[]
   leaveRequests     LeaveRequest[]
   profile_photo_url String         @default("https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/male-restaurant-manager-professional-headshot-KxLGqv1Sz4lzQ24KMNzzXLk4u89AEt.jpg")
