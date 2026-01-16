@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import Staff_Card from '~/components/staff_components/Staff_Card.vue';
+import { type Staff } from '~/generated/prisma/client';
 
 
 
-const { data: staffs } = useFetch("/api/staff");
+const { data: staffs } = useFetch<Staff[]>("/api/staff");
 
 </script>
 

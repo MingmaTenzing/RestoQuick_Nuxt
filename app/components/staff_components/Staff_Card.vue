@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import type { Staff, WeekDay } from '~/generated/prisma/client';
-
-
+import Edit_Staff_Modal from './Edit_Staff_Modal.vue';
 
 const props = defineProps<{ staff: Staff }>()
+
+const showEditModal = ref(false);
 
 // Week mapping
 const weekDays = [
@@ -21,7 +22,7 @@ const weekDays = [
 
 <template>
 
-    <div class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm group relative overflow-hidden border-border">
+    <div class="bg-card text-card-foreground  flex flex-col gap-6 rounded-xl border py-6 shadow-sm group relative overflow-hidden border-border">
         <div class="px-6 pt-6">
           <!-- Online Status Indicator -->
           <div class="absolute top-3 right-3">
@@ -48,10 +49,10 @@ const weekDays = [
               <i class="pi pi-phone text-xs"></i>
               <span>{{ staff.phone }}</span>
             </div>
-            <div class="flex items-center gap-2 text-muted-foreground">
+            <!-- <div class="flex items-center gap-2 text-muted-foreground">
               <i class="pi pi-dollar text-xs"></i>
               <span>$35/hr</span>
-            </div>
+            </div> -->
             <div class="flex items-center gap-2 text-muted-foreground">
               <i class="pi pi-calendar text-xs"></i>
               <span>{{staff.joined_date.toString()}}</span>
@@ -85,11 +86,18 @@ const weekDays = [
               <i class="pi pi-envelope text-xs"></i>
               Email
             </button>
-            <button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all border h-8 w-8 bg-transparent hover:bg-accent hover:text-accent-foreground">
-              <i class="pi pi-ellipsis-h text-xs"></i>
+            <button @click="showEditModal = true" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all border h-8 w-8 bg-transparent hover:bg-accent hover:text-accent-foreground">
+              <i class="pi pi-pencil text-xs"></i>
             </button>
           </div>
         </div>
+
+        <Transition>
+
+          <!-- Edit Modal -->
+          <Edit_Staff_Modal v-if="showEditModal" @close_modal="showEditModal = false" :staff="staff" />
+          
+        </Transition>
       </div>
      
 </template>
