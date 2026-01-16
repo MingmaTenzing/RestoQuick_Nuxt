@@ -36,16 +36,15 @@ const is_add_Staff_Modal = ref(false)
       <!-- Total Bookings -->
       <div class="border rounded-lg   shadow p-6  border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
         <div class="flex flex-col justify-between h-full">
-          <span class="font-light text-muted-foreground">Total Bookings</span>
+          <span class="font-light text-muted-foreground">Total Staff Count</span>
           <div class="flex flex-col">
             <!-- <span v-if="bookings_loading =='pending'" class=" w-[100px] h-12  bg-muted-foreground/20 animate-pulse rounded-lg"></span> -->
      
-            <span  class="text-lg md:text-4xl lg:text-5xl  font-medium ">{{ 10}}</span>
-            <span class="text-muted-foreground font-light text-sm">This month</span>
+            <span  class="text-lg md:text-4xl lg:text-5xl  font-medium ">{{ staffs?.length}}</span>
           </div>
         </div>
         <div>
-          <i class="pi pi-calendar text-[120px] text-muted-foreground opacity-5"></i>
+          <i class="pi pi-user text-[120px] text-muted-foreground opacity-5"></i>
         </div>
       </div>
       <div class="border rounded-lg   shadow p-6  border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
@@ -64,7 +63,7 @@ const is_add_Staff_Modal = ref(false)
       </div>
       <div class="border rounded-lg   shadow p-6  border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
         <div class="flex flex-col justify-between h-full">
-          <span class="font-light text-muted-foreground">Total Bookings</span>
+          <span class="font-light text-muted-foreground">Total Staff</span>
           <div class="flex flex-col">
             <!-- <span v-if="bookings_loading =='pending'" class=" w-[100px] h-12  bg-muted-foreground/20 animate-pulse rounded-lg"></span> -->
      
