@@ -1,10 +1,13 @@
 <script lang="ts" setup>
+import Add_Staff_Modal from '~/components/staff_components/Add_Staff_Modal.vue';
 import Staff_Card from '~/components/staff_components/Staff_Card.vue';
 import { type Staff } from '~/generated/prisma/client';
 
 
 
 const { data: staffs } = useFetch<Staff[]>("/api/staff");
+
+const is_add_Staff_Modal = ref(false)
 
 </script>
 
@@ -24,7 +27,7 @@ const { data: staffs } = useFetch<Staff[]>("/api/staff");
     </div>
 
     <div>
-       <button class=" bg-accent text-accent-foreground border border-border px-4 py-2 rounded-lg "> + Add Staff </button>
+       <button v-on:click="is_add_Staff_Modal = true" class=" bg-accent text-accent-foreground border border-border px-4 py-2 rounded-lg "> + Add Staff </button>
     </div>
 </section>
     
@@ -151,8 +154,10 @@ const { data: staffs } = useFetch<Staff[]>("/api/staff");
         </div>
   
     </section>
+<Transition>
 
-
+  <Add_Staff_Modal v-if="is_add_Staff_Modal" @close_modal="is_add_Staff_Modal = false"></Add_Staff_Modal>
+</Transition>
 
 </main>
 
