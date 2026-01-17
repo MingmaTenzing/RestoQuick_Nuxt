@@ -1,6 +1,7 @@
 
 <script setup lang="ts">
 
+import type { BookingCreateInput } from '~/generated/prisma/models';
 
 const toast = useToast();
 const emit = defineEmits(['diaglogClosed'])
