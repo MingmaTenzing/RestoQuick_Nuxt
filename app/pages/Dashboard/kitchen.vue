@@ -7,7 +7,6 @@ import type websocket_payload from '~~/types/websocket_payload';
 import notification_sound from "../../assets/audio/new-notification-022-370046.mp3"
 import Complete_Order_Popup from '~/components/kitchenDisplay_components/Completed_Orders/Complete_Order_Popup.vue';
 import Loading_Order_Item from '~/components/kitchenDisplay_components/Loading_Order_Item.vue';
-import { parse } from 'path';
 
 definePageMeta({
     layout: 'dashboard-layout'

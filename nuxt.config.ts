@@ -55,9 +55,6 @@ export default defineNuxtConfig({
   routeRules: {
     "/dashboard": { ssr: false },
     "/vapi": { ssr: false },
-    "/vapi-test": {
-      ssr: false,
-    },
   },
 
   router: {
