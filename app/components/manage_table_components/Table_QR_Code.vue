@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+
 import { useRuntimeConfig } from '#app';
 import type { Table } from '~/generated/prisma/client';
 
