@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "~/generated/prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 
     return create_table;
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error instanceof PrismaClientKnownRequestError) {
       if ((error.code = "P2002")) {
         throw createError({
           message:

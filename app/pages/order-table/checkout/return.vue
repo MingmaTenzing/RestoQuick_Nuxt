@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
 import type { Order, Prisma } from '~/generated/prisma/client';
-import type { OrderSelect } from '~/generated/prisma/models';
 
 
 type OrderWithItemsAndTable = Prisma.OrderGetPayload<{

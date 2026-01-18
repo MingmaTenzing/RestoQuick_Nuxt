@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import Add_Staff_Modal from '~/components/staff_components/Add_Staff_Modal.vue';
 import Staff_Card from '~/components/staff_components/Staff_Card.vue';
-import { type Staff } from '~/generated/prisma/client';
+import type { Staff } from '~/generated/prisma/client';
 
 
 
