@@ -153,6 +153,8 @@ const is_add_Staff_Modal = ref(false)
         </div>
   
     </section>
+
+    <!-- add staff modal -->
 <Transition>
 
   <Add_Staff_Modal v-if="is_add_Staff_Modal" @close_modal="is_add_Staff_Modal = false"></Add_Staff_Modal>

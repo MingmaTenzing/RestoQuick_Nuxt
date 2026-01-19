@@ -1,4 +1,3 @@
-import { Role } from "~/generated/prisma/enums";
 
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();

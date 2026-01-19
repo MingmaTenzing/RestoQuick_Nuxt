@@ -1,5 +1,38 @@
 <script lang="ts" setup>
-const emit = defineEmits(['close_modal'])
+import { Role, WeekDay } from '~/generated/prisma/enums';
+import type { StaffCreateInput } from '~/generated/prisma/models';
+    const emit = defineEmits(['close_modal'])
+
+
+
+const add_staff_form = reactive<StaffCreateInput>({
+
+  firstname: '',
+  lastName: '',
+  role: 'Bartender' , // just for now its set as the default value... will change as user puts input
+  email: '',
+  phone: '',
+  availability:['FRI','MON','MON'] ,
+  profile_photo_url: ''
+
+  
+})
+
+
+
+
+const add_availability_day = (available_day: WeekDay) => {
+   const is_already_added = add_staff_form.availability
+}
+
+
+watch(add_staff_form, () => {
+
+  console.log(add_staff_form)
+  console.log( add_staff_form.availability);
+})
+
+
 </script>
 
 <template>
@@ -20,6 +53,7 @@ const emit = defineEmits(['close_modal'])
             <input
               type="text"
               placeholder="First name"
+              v-model="add_staff_form.firstname"
               class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
@@ -28,6 +62,7 @@ const emit = defineEmits(['close_modal'])
             <input
               type="text"
               placeholder="Last name"
+              v-model="add_staff_form.lastName"
               class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
@@ -38,6 +73,7 @@ const emit = defineEmits(['close_modal'])
           <label class="text-sm font-medium">Email</label>
           <input
             type="email"
+            v-model="add_staff_form.email"
             placeholder="email@restaurant.com"
             class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
@@ -49,21 +85,34 @@ const emit = defineEmits(['close_modal'])
           <input
             type="tel"
             placeholder="555-0106"
+            v-model="add_staff_form.phone"
             class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
+        <div class="space-y-2">
+          <label class="text-sm font-medium">Profile Picture</label>
+          <input
+            type="file"
+            accept="image/*"
+            
+            
+            class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-ring"
+          />
+        </div>
+
+        
 
         <!-- Role -->
         <div class="space-y-2">
           <label class="text-sm font-medium">Role</label>
-          <select class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+          <select v-model="add_staff_form.role" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
             <option value="">Select role</option>
-            <option value="Chef">Chef</option>
-            <option value="Waiter">Waiter</option>
-            <option value="Bartender">Bartender</option>
-            <option value="Manager">Manager</option>
-            <option value="Cook">Cook</option>
-            <option value="Kitchen_Hand">Kitchen Hand</option>
+            <option :value="Role.Chef">Chef</option>
+            <option :value="Role.Waiter">Waiter</option>
+            <option :value="Role.Bartender">Bartender</option>
+            <option :value="Role.Manager">Manager</option>
+            <option :value="Role.Cook">Cook</option>
+            <option :value="Role.Kitchen_Hand">Kitchen Hand</option>
           </select>
         </div>
 
@@ -71,7 +120,7 @@ const emit = defineEmits(['close_modal'])
         <div class="space-y-2">
           <label class="text-sm font-medium">Availability</label>
           <div class="flex flex-wrap gap-2">
-            <button type="button" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground">Mon</button>
+            <button  type="button" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground">Mon</button>
             <button type="button" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground">Tue</button>
             <button type="button" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground">Wed</button>
             <button type="button" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-muted text-muted-foreground hover:bg-muted/80">Thu</button>
