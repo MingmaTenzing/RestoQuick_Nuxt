@@ -18,13 +18,17 @@ const add_staff_form = reactive<StaffCreateInput>({
   
 })
 
-
-
-
 const add_availability_day = (available_day: WeekDay) => {
    const is_already_added = add_staff_form.availability
 }
 
+
+function image_upload(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const image = input.files?.[0];
+  
+
+}
 
 watch(add_staff_form, () => {
 
@@ -89,15 +93,21 @@ watch(add_staff_form, () => {
             class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
+
+
+        <!-- profile picture -->
         <div class="space-y-2">
-          <label class="text-sm font-medium">Profile Picture</label>
+          <label class="text-sm font-medium">Profile Picture (Max - 300KB)</label>
           <input
             type="file"
             accept="image/*"
+            @change="image_upload($event)"
             
             
+            id="profile_picture_input"
             class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-ring"
           />
+
         </div>
 
         
