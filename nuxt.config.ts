@@ -73,6 +73,11 @@ export default defineNuxtConfig({
       key: process.env.STRIPE_SECRET_KEY,
     },
 
+    CLOUDINARY_API_SECRET_KEY: process.env.CLOUDINARY_API_SECRET_KEY,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_UPLOAD_PRESET: process.env.CLOUDINARY_UPLOAD_PRESET,
+
     public: {
       VAPI_PUBLIC_KEY: process.env.NUXT_VAPI_PUBLIC_KEY,
       VAPI_ASSISTANT_KEY: process.env.NUXT_VAPI_ASSISTANT_KEY,
