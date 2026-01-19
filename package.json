@@ -28,7 +28,6 @@
     "@vite-pwa/nuxt": "^1.1.0",
     "@vueuse/core": "^14.0.0",
     "@vueuse/nuxt": "^14.0.0",
-    "cloudinary": "^2.9.0",
     "commander": "^13.1.0",
     "crossws": "^0.4.1",
     "izitoast": "^1.4.0",

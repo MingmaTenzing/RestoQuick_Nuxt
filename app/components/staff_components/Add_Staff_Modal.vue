@@ -1,9 +1,12 @@
 <script lang="ts" setup>
+
 import { Role, WeekDay } from '~/generated/prisma/enums';
 import type { StaffCreateInput } from '~/generated/prisma/models';
-    const emit = defineEmits(['close_modal'])
 
 
+const emit = defineEmits(['close_modal'])
+const runtimeConfig = useRuntimeConfig();
+const toast = useToast()
 
 const add_staff_form = reactive<StaffCreateInput>({
 
@@ -23,11 +26,55 @@ const add_availability_day = (available_day: WeekDay) => {
 }
 
 
-function image_upload(event: Event) {
+async function image_upload(event: Event) {
   const input = event.target as HTMLInputElement;
+
+
   const image = input.files?.[0];
+
+
+  if (!image) {
+    return toast.error({
+      message:'No image provided'
+    })
+   }
+
+  // size guard (300KB)
+  if (image.size > 300 * 1024) {
+    toast.error({
+      message: "Image upload only supports upto 300kb"
+    })
+    input.value = ''
+    return
+  }
+
+  // type guard
+  if (!image.type.startsWith("image/")) {
+    toast.error({
+      message: "Only images allowed"
+    })
+    input.value = ''
+    return
+  }
+
+  const formData = new FormData();
+  formData.append("file", image)
+  formData.append('upload_preset', runtimeConfig.public.CLOUDINARY_UPLOAD_PRESET)
+
+
   
 
+
+
+  const upload_image = await $fetch(`https://api.cloudinary.com/v1_1/${runtimeConfig.public.CLOUDINARY_CLOUD_NAME}/image/upload`, {
+    method: 'POST',
+    body: 
+     formData
+  })
+
+  console.log(upload_image);
+  
+ 
 }
 
 watch(add_staff_form, () => {
