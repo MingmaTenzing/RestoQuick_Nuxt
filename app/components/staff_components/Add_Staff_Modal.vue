@@ -3,11 +3,21 @@
 import { Role, WeekDay } from '~/generated/prisma/enums';
 import type { StaffCreateInput } from '~/generated/prisma/models';
 
+import type { CloudinaryUploadResponse } from "../../../types/cloudinary"
+
 
 const emit = defineEmits(['close_modal'])
 const runtimeConfig = useRuntimeConfig();
 const toast = useToast()
 
+const image_uploading = ref(false)
+const image_upload_success = ref(false)
+// variable later used to storing the cloudinary uploaded image url
+const uploaded_photo_url = ref('')
+
+
+
+// form for adding staff
 const add_staff_form = reactive<StaffCreateInput>({
 
   firstname: '',
@@ -15,7 +25,7 @@ const add_staff_form = reactive<StaffCreateInput>({
   role: 'Bartender' , // just for now its set as the default value... will change as user puts input
   email: '',
   phone: '',
-  availability:['FRI','MON','MON'] ,
+  availability: [] ,
   profile_photo_url: ''
 
   
@@ -26,7 +36,10 @@ const add_availability_day = (available_day: WeekDay) => {
 }
 
 
+//whenever a new image is select image_upload function runs
 async function image_upload(event: Event) {
+  image_upload_success.value = false;
+  image_uploading.value = true;
   const input = event.target as HTMLInputElement;
 
 
@@ -57,22 +70,37 @@ async function image_upload(event: Event) {
     return
   }
 
+  // creating form data for sending the image file in post request.
   const formData = new FormData();
   formData.append("file", image)
   formData.append('upload_preset', runtimeConfig.public.CLOUDINARY_UPLOAD_PRESET)
 
 
+ try {
+   const upload_image = await $fetch<CloudinaryUploadResponse>(`https://api.cloudinary.com/v1_1/${runtimeConfig.public.CLOUDINARY_CLOUD_NAME}/image/upload`, {
+     method: 'POST',
+     body: 
+      formData
+   })
+
+  //setting photourl value once image is uploaded later used for adding staff request
+   uploaded_photo_url.value = upload_image.secure_url;
+   console.log(uploaded_photo_url.value)
+   image_upload_success.value = true;
+
   
+ } catch (error) {
 
+   console.error(error)
+  alert(error)
+   
+  
+ }
+ finally {
+   image_uploading.value = false;
+ }
 
-
-  const upload_image = await $fetch(`https://api.cloudinary.com/v1_1/${runtimeConfig.public.CLOUDINARY_CLOUD_NAME}/image/upload`, {
-    method: 'POST',
-    body: 
-     formData
-  })
-
-  console.log(upload_image);
+  
   
  
 }
@@ -144,7 +172,12 @@ watch(add_staff_form, () => {
 
         <!-- profile picture -->
         <div class="space-y-2">
-          <label class="text-sm font-medium">Profile Picture (Max - 300KB)</label>
+          <div class=" flex space-x-2">
+            <label class="text-sm font-medium">Profile Picture (Max - 300KB)</label>
+            <i v-if="image_uploading" class="pi pi-spinner animate-spin"></i>
+            <i v-if="image_upload_success" class="pi pi-check-circle text-green-600 "></i>
+
+          </div>
           <input
             type="file"
             accept="image/*"
