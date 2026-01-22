@@ -120,6 +120,8 @@ async function image_upload(event: Event) {
 const isDaySelected = (day: WeekDay): boolean => {
   return add_staff_form.availability.includes(day);
 }
+
+
 watch(add_staff_form, () => {
 
   console.log(add_staff_form)
