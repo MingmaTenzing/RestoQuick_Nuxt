@@ -9,16 +9,16 @@ import type { CloudinaryUploadResponse } from "../../../types/cloudinary"
 const emit = defineEmits(['close_modal'])
 const runtimeConfig = useRuntimeConfig();
 const toast = useToast()
-
 const image_uploading = ref(false)
 const image_upload_success = ref(false)
+
 // variable later used to storing the cloudinary uploaded image url
 const uploaded_photo_url = ref('')
 
 
 
 // form for adding staff
-const add_staff_form = reactive({
+const staff_form = reactive({
 
   firstname: '',
   lastName: '',
@@ -35,13 +35,13 @@ const add_availability_day = (available_day: WeekDay) => {
 
   // check the day if included already in the availability array.. a
 // if not then add else remove. 
-  const check_day = add_staff_form.availability.find((day) => available_day == day);
+  const check_day = staff_form.availability.find((day) => available_day == day);
 
   if (check_day) {
- return   add_staff_form.availability = add_staff_form.availability.filter((day) => day != check_day )
+ return   staff_form.availability = staff_form.availability.filter((day) => day != check_day )
   }
-  add_staff_form.availability.push(available_day)
-  console.log(add_staff_form.availability) 
+  staff_form.availability.push(available_day)
+  console.log(staff_form.availability) 
 
    }
 
@@ -95,9 +95,10 @@ async function image_upload(event: Event) {
    })
 
   //setting photourl value once image is uploaded later used for adding staff request
-   uploaded_photo_url.value = upload_image.secure_url;
-   console.log(uploaded_photo_url.value)
+   staff_form.profile_photo_url = upload_image.secure_url;
    image_upload_success.value = true;
+
+   console.log(staff_form)
 
   
  } catch (error) {
@@ -118,14 +119,36 @@ async function image_upload(event: Event) {
 
 
 const isDaySelected = (day: WeekDay): boolean => {
-  return add_staff_form.availability.includes(day);
+  return staff_form.availability.includes(day);
 }
 
 
-watch(add_staff_form, () => {
 
-  console.log(add_staff_form)
-  console.log( add_staff_form.availability);
+async function add_new_staff() {
+
+ try {
+   const response = await $fetch("/api/staff", 
+     {
+       method: 'POST',
+       body: {
+        staff: staff_form
+      }
+    }
+   )
+   if (response) {
+     toast.success({
+      title: "Staff Added"
+    })
+   }
+ } catch (error) {
+  console.log(error)
+ }
+
+}
+watch(staff_form, () => {
+
+  console.log(staff_form)
+  console.log( staff_form.availability);
 })
 
 
@@ -141,7 +164,7 @@ watch(add_staff_form, () => {
       </div>
 
       <!-- Form -->
-      <div class="space-y-6">
+      <form v-on:submit.prevent="add_new_staff" class="space-y-6">
         <!-- First & Last Name -->
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
@@ -149,7 +172,7 @@ watch(add_staff_form, () => {
             <input
               type="text"
               placeholder="First name"
-              v-model="add_staff_form.firstname"
+              v-model="staff_form.firstname"
               class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
@@ -158,7 +181,7 @@ watch(add_staff_form, () => {
             <input
               type="text"
               placeholder="Last name"
-              v-model="add_staff_form.lastName"
+              v-model="staff_form.lastName"
               class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
@@ -169,7 +192,7 @@ watch(add_staff_form, () => {
           <label class="text-sm font-medium">Email</label>
           <input
             type="email"
-            v-model="add_staff_form.email"
+            v-model="staff_form.email"
             placeholder="email@restaurant.com"
             class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
@@ -181,7 +204,7 @@ watch(add_staff_form, () => {
           <input
             type="tel"
             placeholder="555-0106"
-            v-model="add_staff_form.phone"
+            v-model="staff_form.phone"
             class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
@@ -212,7 +235,7 @@ watch(add_staff_form, () => {
         <!-- Role -->
         <div class="space-y-2">
           <label class="text-sm font-medium">Role</label>
-          <select v-model="add_staff_form.role" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+          <select v-model="staff_form.role" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
             <option value="">Select role</option>
             <option :value="Role.Chef">Chef</option>
             <option :value="Role.Waiter">Waiter</option>
@@ -249,11 +272,11 @@ watch(add_staff_form, () => {
         <button @click="emit('close_modal')" class="px-4 py-2 rounded-md border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
           Cancel
         </button>
-        <button class="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+        <button type="submit" class="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
           Add Staff
         </button>
       </div>
-    </div>
+      </form>
   </div>
 
   </div>

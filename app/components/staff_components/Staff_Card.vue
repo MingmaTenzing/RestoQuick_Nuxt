@@ -34,7 +34,7 @@ const weekDays = [
 
           <!-- Profile Section -->
           <div class="flex flex-col items-center text-center mb-4">
-            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/male-restaurant-manager-professional-headshot-KxLGqv1Sz4lzQ24KMNzzXLk4u89AEt.jpg" alt="David Martinez" class="h-20 w-20 rounded-full mb-3 ring-2 ring-background shadow-md object-cover" />
+            <img :src="staff.profile_photo_url" class="h-20 w-20 rounded-full mb-3 ring-2 ring-background shadow-md object-cover" />
             <h3 class="font-semibold">{{staff.firstname}} {{ staff.lastName }}</h3>
             <span class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap mt-1 bg-emerald-500/10 text-emerald-600 border-emerald-500/20">{{staff.role}}</span>
           </div>
