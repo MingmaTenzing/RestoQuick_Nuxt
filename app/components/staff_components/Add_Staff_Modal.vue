@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 
 import { Role, WeekDay } from '~/generated/prisma/enums';
-import type { StaffCreateInput } from '~/generated/prisma/models';
+// import type { StaffCreateInput } from '~/generated/prisma/models';
 
 import type { CloudinaryUploadResponse } from "../../../types/cloudinary"
 
@@ -18,24 +18,35 @@ const uploaded_photo_url = ref('')
 
 
 // form for adding staff
-const add_staff_form = reactive<StaffCreateInput>({
+const add_staff_form = reactive({
 
   firstname: '',
   lastName: '',
   role: 'Bartender' , // just for now its set as the default value... will change as user puts input
   email: '',
   phone: '',
-  availability: [] ,
+  availability: [] as WeekDay[],
   profile_photo_url: ''
 
   
 })
 
 const add_availability_day = (available_day: WeekDay) => {
-   const is_already_added = add_staff_form.availability
-}
+
+  // check the day if included already in the availability array.. a
+// if not then add else remove. 
+  const check_day = add_staff_form.availability.find((day) => available_day == day);
+
+  if (check_day) {
+ return   add_staff_form.availability = add_staff_form.availability.filter((day) => day != check_day )
+  }
+  add_staff_form.availability.push(available_day)
+  console.log(add_staff_form.availability) 
+
+   }
 
 
+   
 //whenever a new image is select image_upload function runs
 async function image_upload(event: Event) {
   image_upload_success.value = false;
@@ -105,6 +116,10 @@ async function image_upload(event: Event) {
  
 }
 
+
+const isDaySelected = (day: WeekDay): boolean => {
+  return add_staff_form.availability.includes(day);
+}
 watch(add_staff_form, () => {
 
   console.log(add_staff_form)
@@ -207,19 +222,25 @@ watch(add_staff_form, () => {
         </div>
 
         <!-- Availability -->
-        <div class="space-y-2">
+       <div class="space-y-2">
           <label class="text-sm font-medium">Availability</label>
           <div class="flex flex-wrap gap-2">
-            <button  type="button" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground">Mon</button>
-            <button type="button" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground">Tue</button>
-            <button type="button" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground">Wed</button>
-            <button type="button" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-muted text-muted-foreground hover:bg-muted/80">Thu</button>
-            <button type="button" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-muted text-muted-foreground hover:bg-muted/80">Fri</button>
-            <button type="button" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground">Sat</button>
-            <button type="button" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground">Sun</button>
+            <button 
+              v-for="day in [WeekDay.MON, WeekDay.TUE, WeekDay.WED, WeekDay.THU, WeekDay.FRI, WeekDay.SAT, WeekDay.SUN]"
+              :key="day"
+              @click="add_availability_day(day)" 
+              type="button"
+              :class="[
+                'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                isDaySelected(day) 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              ]"
+            >
+              {{ day.slice(0, 3) }}
+            </button>
           </div>
         </div>
-      </div>
 
       <!-- Footer -->
       <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end mt-8 pt-6 border-t">
@@ -231,5 +252,7 @@ watch(add_staff_form, () => {
         </button>
       </div>
     </div>
+  </div>
+
   </div>
 </template>
