@@ -10,27 +10,26 @@ const emit = defineEmits(['close_modal'])
 const runtimeConfig = useRuntimeConfig();
 const toast = useToast()
 const image_uploading = ref(false)
+const staff_add_loading = ref(false)
 const image_upload_success = ref(false)
 
-// variable later used to storing the cloudinary uploaded image url
-const uploaded_photo_url = ref('')
 
-
-
-// form for adding staff
-const staff_form = reactive({
-
+const defaultStaffForm = () => ({
   firstname: '',
   lastName: '',
-  role: 'Bartender' , // just for now its set as the default value... will change as user puts input
+  role: '',
   email: '',
   phone: '',
   availability: [] as WeekDay[],
   profile_photo_url: ''
-
-  
 })
 
+const staff_form = reactive(defaultStaffForm())
+
+// reset function
+function resetStaffForm() {
+  Object.assign(staff_form, defaultStaffForm())
+}
 const add_availability_day = (available_day: WeekDay) => {
 
   // check the day if included already in the availability array.. a
@@ -125,6 +124,7 @@ const isDaySelected = (day: WeekDay): boolean => {
 
 
 async function add_new_staff() {
+  staff_add_loading.value = true;
 
  try {
    const response = await $fetch("/api/staff", 
@@ -138,10 +138,22 @@ async function add_new_staff() {
    if (response) {
      toast.success({
       title: "Staff Added"
-    })
+     })
+
+     resetStaffForm();
+
+   
+
+     
    }
+
+
+
+   
  } catch (error) {
   console.log(error)
+ } finally {
+  staff_add_loading.value = false
  }
 
 }
@@ -272,9 +284,15 @@ watch(staff_form, () => {
         <button @click="emit('close_modal')" class="px-4 py-2 rounded-md border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
           Cancel
         </button>
-        <button type="submit" class="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-          Add Staff
-        </button>
+        <div>
+          <button  v-if="staff_add_loading" class="px-4 py-2 rounded-md w-26 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+            <i  class="pi pi-spinner animate-spin"></i>
+          </button>
+          <button v-else type="submit" class="px-4 py-2 w-26 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+            Add Staff
+          </button>
+
+        </div>
       </div>
       </form>
   </div>
