@@ -95,7 +95,7 @@ const weekDays = [
         <Transition>
 
           <!-- Edit Modal -->
-          <Edit_Staff_Modal v-if="showEditModal" @close_modal="showEditModal = false" :staff="staff" />
+          <Edit_Staff_Modal :edit_staff="staff"  v-if="showEditModal" @close_modal="showEditModal = false" :staff="staff" />
           
         </Transition>
       </div>
