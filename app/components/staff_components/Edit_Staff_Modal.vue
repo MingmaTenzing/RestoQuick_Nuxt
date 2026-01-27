@@ -8,7 +8,9 @@ import { Role, WeekDay } from '~/generated/prisma/enums';
 
 
 // here the staff is passed from the staff card
-const props = defineProps<{edit_staff: Staff}>()
+const props = defineProps<{ edit_staff: Staff }>()
+
+// the edit staff emits two event close modal and refetch-data when editing staff details is successfull
 const emit = defineEmits(['close_modal'])
 
 const toast = useToast();
@@ -60,6 +62,11 @@ async function submit_edit_staff() {
       toast.success({
         title:'Staff Details Updated'
       })
+
+      //this refreshes the data in the maing staff page
+      await refreshNuxtData('staffs')
+      emit('close_modal')
+      
     }
 
     

@@ -1,13 +1,28 @@
 <script lang="ts" setup>
 import Add_Staff_Modal from '~/components/staff_components/Add_Staff_Modal.vue';
 import Staff_Card from '~/components/staff_components/Staff_Card.vue';
-import type { Staff } from '~/generated/prisma/client';
+import {  Role, type Staff } from '~/generated/prisma/client';
 
 
 
-const { data: staffs } = useFetch<Staff[]>("/api/staff");
+//here useAsyncData uses the key 'staffs', which is used to refresh the data in child component'
+const { data: staffs } = await useAsyncData('staffs', () => $fetch<Staff[]>("/api/staff"));
+
+
+// the roles is copied as same as the schema
+//however if schema is updated it needs manual updating as well.
+const roles = [
+  "Chef",
+  "Waiter",
+  "Bartender",
+  "Manager",
+  "Cook",
+  "Kitchen_Hand",
+];
+
 
 const is_add_Staff_Modal = ref(false)
+const selected_role = ref('')
 
 </script>
 
@@ -111,25 +126,21 @@ const is_add_Staff_Modal = ref(false)
         <!-- Role Dropdown -->
         <div class="flex items-center gap-2">
           <span class="text-sm font-medium text-muted-foreground min-w-fit">Role:</span>
-          <select class="px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm">
-            <option value="">All Roles</option>
-            <option value="manager">Manager</option>
-            <option value="chef">Chef</option>
-            <option value="waiter">Waiter</option>
-            <option value="host">Host</option>
-          </select>
+          <div class=" border border-border px-2 py-2  space-x-2 flex items-center rounded-lg focus:outline-none">
+            <select v-model="selected_role" class="  appearance-none outline-none   bg-background text-foreground  text-sm">
+              <option class="" value="">All Roles</option>
+              <option v-for="role in roles" :key="role" :value="role">
+ {{ role }}
+              </option>
+            </select>
+            <i class="pi pi-angle-down"></i>
+           
+
+          </div>
+          
         </div>
 
-        <!-- Status Dropdown -->
-        <div class="flex items-center gap-2">
-          <span class="text-sm font-medium text-muted-foreground min-w-fit">Status:</span>
-          <select class="px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm">
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-        </div>
-
+     
         <!-- Sort Dropdown -->
         <div class="flex items-center gap-2">
           <span class="text-sm font-medium text-muted-foreground min-w-fit">Sort:</span>
@@ -159,6 +170,8 @@ const is_add_Staff_Modal = ref(false)
 
   <Add_Staff_Modal v-if="is_add_Staff_Modal" @close_modal="is_add_Staff_Modal = false"></Add_Staff_Modal>
 </Transition>
+
+ 
 
 </main>
 
