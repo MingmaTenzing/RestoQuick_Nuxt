@@ -185,7 +185,7 @@ async function submit_edit_staff() {
 
   <!-- Footer -->
   <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end mt-8 pt-6 border-t">
-    <button :disabled="isLoading" v-on:click="emit('close_modal')" class="px-4 py-2 rounded-md border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+    <button type="button" :disabled="isLoading" v-on:click="emit('close_modal')" class="px-4 py-2 rounded-md border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
       Cancel
     </button>
     <button v-if="!isLoading" type="submit" class="w-34 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
