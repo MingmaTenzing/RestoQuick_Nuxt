@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import { Role, WeekDay } from '~/generated/prisma/enums';
+import  { Role, WeekDay } from '~/generated/prisma/enums';
 // import type { StaffCreateInput } from '~/generated/prisma/models';
 
 import type { CloudinaryUploadResponse } from "../../../types/cloudinary"
@@ -17,7 +17,7 @@ const image_upload_success = ref(false)
 const defaultStaffForm = () => ({
   firstname: '',
   lastName: '',
-  role: '',
+  role: Role.Bartender,
   email: '',
   phone: '',
   availability: [] as WeekDay[],
