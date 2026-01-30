@@ -49,7 +49,7 @@ const roles = [
 
 const is_add_Staff_Modal = ref(false);
 const selected_role = ref<Role | "">("");
-
+const search_staff_name = ref("");
 //its either asc | dsc
 const sort_by = ref<SortOption>(SortOption.asc);
 
@@ -68,6 +68,15 @@ const filtered_staff_data = computed(() => {
 
   return filtered_staff;
 });
+
+async function searchStaff(staff_name: string) {
+  const response = await $fetch<Staff[]>("/api/staff", {
+    query: {
+      staff_name,
+    },
+  });
+  console.log(response);
+}
 </script>
 
 <template>
@@ -177,16 +186,20 @@ const filtered_staff_data = computed(() => {
     <!-- search bar and filter -->
     <section class="flex justify-between">
       <!-- Search Bar -->
-      <div class="relative w-1/3">
+      <form
+        class="border border-border w-[30%] rounded-lg bg-background text-foreground flex items-center justify-between space-x-2 px-4 py-2"
+        @submit.prevent="searchStaff(search_staff_name)"
+      >
         <input
+          v-model="search_staff_name"
           type="text"
-          placeholder="Search staff by name or role..."
-          class="w-full px-4 py-2 pl-10 border border-border rounded-lg bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+          placeholder="Search staff by name"
+          class="outline-none"
         />
-        <i
-          class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-        ></i>
-      </div>
+        <button type="submit">
+          <i class="pi pi-search text-muted-foreground"></i>
+        </button>
+      </form>
 
       <!-- Filters -->
       <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
