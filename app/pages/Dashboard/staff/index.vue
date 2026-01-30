@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import Add_Staff_Modal from '~/components/staff_components/Add_Staff_Modal.vue';
 import Staff_Card from '~/components/staff_components/Staff_Card.vue';
-import type { Staff } from '~/generated/prisma/client';
+import type { Role, Staff } from '~/generated/prisma/client';
 
 
 
@@ -18,11 +18,28 @@ const roles = [
   "Manager",
   "Cook",
   "Kitchen_Hand",
-];
+] as Role[];
 
 
 const is_add_Staff_Modal = ref(false)
-const selected_role = ref('')
+const selected_role = ref<Role | "">("")
+
+const filtered_staff_data = computed(() => {
+
+let filtered_staff = staffs.value
+  ? (selected_role.value
+      ? staffs.value.filter(staff => staff.role === selected_role.value)
+      : [...staffs.value])
+  : [];
+
+
+  return filtered_staff
+
+
+})
+
+
+
 
 </script>
 
@@ -158,7 +175,7 @@ const selected_role = ref('')
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
         <!-- Staff Card -->
-        <div v-for="staff in staffs" :key="staff.id">
+        <div v-for="staff in filtered_staff_data" :key="staff.id">
             <Staff_Card :staff="staff"></Staff_Card>
 
         </div>
