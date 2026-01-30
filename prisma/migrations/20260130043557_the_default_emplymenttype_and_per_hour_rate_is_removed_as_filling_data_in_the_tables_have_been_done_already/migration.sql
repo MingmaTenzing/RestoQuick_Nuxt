@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Staff" ALTER COLUMN "employmentType" DROP DEFAULT,
+ALTER COLUMN "perHourRate" DROP DEFAULT;

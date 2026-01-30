@@ -43,6 +43,13 @@ let filtered_staff = staffs.value
       : [...staffs.value])
   : [];
 
+if (sort_by.value === SortOption.asc) {
+    filtered_staff.sort((a, b) => a.firstname.localeCompare(b.firstname));
+} else if (sort_by.value === SortOption.dsc) {
+    filtered_staff.sort((a, b) => b.firstname.localeCompare(a.firstname));
+}
+
+
 
   return filtered_staff
 

@@ -32,6 +32,12 @@ enum WeekDay {
   SUN
 }
 
+enum EmploymentType {
+  PartTime
+  FullTime
+  Casual
+}
+
 model Staff {
   id                String         @id @default(uuid())
   firstname         String
@@ -39,6 +45,8 @@ model Staff {
   role              Role
   email             String         @unique
   phone             String
+  employmentType    EmploymentType
+  perHourRate       Decimal
   availability      WeekDay[]
   joined_date       DateTime       @default(now())
   shifts            Shift[]
