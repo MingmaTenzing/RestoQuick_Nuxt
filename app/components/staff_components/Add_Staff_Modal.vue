@@ -31,7 +31,10 @@ const defaultStaffForm = () => ({
   email: '',
   phone: '',
   availability: [] as WeekDay[],
-  profile_photo_url: ''
+  profile_photo_url: '',
+  employmentType: '',
+  perHourRate: 0.0 as Number,
+
 })
  
 const staff_form = reactive(defaultStaffForm())
@@ -40,6 +43,12 @@ const staff_form = reactive(defaultStaffForm())
 function resetStaffForm() {
   Object.assign(staff_form, defaultStaffForm())
 }
+
+const employmentTypes = ['PartTime',
+  'FullTime',
+  'Casual']
+
+
 const add_availability_day = (available_day: WeekDay) => {
 
   // check the day if included already in the availability array.. a
@@ -149,6 +158,7 @@ async function add_new_staff() {
      toast.success({
       title: "Staff Added"
      })
+      
 
      resetStaffForm();
 
@@ -163,22 +173,19 @@ async function add_new_staff() {
  } catch (error) {
   console.log(error)
  } finally {
-  staff_add_loading.value = false
+   staff_add_loading.value = false
+   await refreshNuxtData('staffs')
+  emit('close_modal')
  }
 
 }
-watch(staff_form, () => {
-
-  console.log(staff_form)
-  console.log( staff_form.availability);
-})
 
 
 </script>
 
 <template>
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80">
-    <div class="bg-background rounded-lg border p-6 shadow-lg w-full max-w-lg">
+    <div class="bg-background h-[80vh] overflow-y-scroll rounded-lg border p-6 shadow-lg w-full max-w-lg">
       <!-- Header -->
       <div class="flex flex-col gap-2 mb-6">
         <h2 class="text-lg font-semibold">Add Staff Member</h2>
@@ -186,12 +193,12 @@ watch(staff_form, () => {
       </div>
 
       <!-- Form -->
-      <form v-on:submit.prevent="add_new_staff" class="space-y-6">
+      <form v-on:submit.prevent="add_new_staff" class="space-y-4">
         <!-- First & Last Name -->
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
             <label class="text-sm font-medium">First Name</label>
-            <input
+            <input required
               type="text"
               placeholder="First name"
               v-model="staff_form.firstname"
@@ -200,9 +207,10 @@ watch(staff_form, () => {
           </div>
           <div class="space-y-2">
             <label class="text-sm font-medium">Last Name</label>
-            <input
+            <input required
               type="text"
               placeholder="Last name"
+            
               v-model="staff_form.lastName"
               class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
@@ -212,7 +220,7 @@ watch(staff_form, () => {
         <!-- Email -->
         <div class="space-y-2">
           <label class="text-sm font-medium">Email</label>
-          <input
+          <input required
             type="email"
             v-model="staff_form.email"
             placeholder="email@restaurant.com"
@@ -223,13 +231,44 @@ watch(staff_form, () => {
         <!-- Phone -->
         <div class="space-y-2">
           <label class="text-sm font-medium">Phone</label>
-          <input
+          <input required
             type="tel"
             placeholder="555-0106"
             v-model="staff_form.phone"
             class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
+
+         <!-- Employment Type & Hourly Rate -->
+    <div class="grid grid-cols-2 gap-4">
+      <div class="space-y-2">
+        <label class="text-sm font-medium">EmploymentType</label>
+        <select required v-model="staff_form.employmentType" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+       <option selected disabled>{{staff_form.employmentType}}</option>
+        <option v-for="employmentType in employmentTypes" :key="employmentType"  :value="employmentType">
+   {{ employmentType }}
+        </option>
+      </select>
+      </div>
+      <div class="space-y-2">
+        <label class="text-sm font-medium">Per hour Rate </label>
+        <div class="rounded-md border border-border   flex items-center px-3 py-2 space-x-2 outline-none">
+          <span>
+ $
+          </span>
+          <input required
+            v-model="staff_form.perHourRate"
+            type="number"
+            step="any"
+            placeholder="$/per_hour"
+            class="w-full  placeholder-muted-foreground  outline-none "
+          />
+        </div>
+      </div>
+
+    
+    </div>
+
 
 
         <!-- profile picture -->
@@ -240,7 +279,7 @@ watch(staff_form, () => {
             <i v-if="image_upload_success" class="pi pi-check-circle text-green-600 "></i>
 
           </div>
-          <input
+          <input required
             type="file"
             accept="image/*"
             @change="image_upload($event)"
@@ -257,7 +296,7 @@ watch(staff_form, () => {
         <!-- Role -->
          <div class="space-y-2">
       <label class="text-sm font-medium">Role</label>
-      <select v-model="staff_form.role" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+      <select required v-model="staff_form.role" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
        
         <option v-for="role in ROLES" :key="role"  :value="role">
    {{ role }}
@@ -288,7 +327,7 @@ watch(staff_form, () => {
         </div>
 
       <!-- Footer -->
-      <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end mt-8 pt-6 border-t">
+      <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end pt-6 border-t">
         <button @click="emit('close_modal')" class="px-4 py-2 rounded-md border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
           Cancel
         </button>

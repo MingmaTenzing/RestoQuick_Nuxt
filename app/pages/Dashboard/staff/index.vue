@@ -29,11 +29,6 @@ const selected_role = ref<Role | "">("")
   //its either asc | dsc
 const sort_by = ref<SortOption>(SortOption.asc)
 
-watch(sort_by, () => {
-    console.log(sort_by)
-  })
-
-
 
 const filtered_staff_data = computed(() => {
 

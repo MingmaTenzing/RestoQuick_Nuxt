@@ -18,6 +18,17 @@ const weekDays = [
   { label: "S", value: "SUN" },
 ]
 
+const formattedDate = computed(() => {
+ return new Date(props.staff.joined_date).toLocaleDateString('en-AU', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+})
+
+
+
+
 </script>
 
 
@@ -50,13 +61,22 @@ const weekDays = [
               <i class="pi pi-phone text-xs"></i>
               <span>{{ staff.phone }}</span>
             </div>
+            <div class="flex items-center gap-2 text-muted-foreground">
+              <i class="pi pi-briefcase
+ text-xs"></i>
+              <span>{{ staff.employmentType }}</span>
+            </div>
+            <div class="flex items-center gap-2 text-muted-foreground">
+              <i class="pi pi-clock text-xs"></i>
+              <span>${{ staff.perHourRate }}</span>
+            </div>
             <!-- <div class="flex items-center gap-2 text-muted-foreground">
               <i class="pi pi-dollar text-xs"></i>
               <span>$35/hr</span>
             </div> -->
             <div class="flex items-center gap-2 text-muted-foreground">
               <i class="pi pi-calendar text-xs"></i>
-              <span>{{staff.joined_date.toString()}}</span>
+             <span>{{ formattedDate }}</span>
             </div>
           </div>
 

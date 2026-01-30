@@ -17,6 +17,13 @@ const emit = defineEmits(['close_modal'])
 
 const toast = useToast();
 const isLoading = ref(false);
+enum EmploymentType {
+  
+}
+
+const employmentTypes = ['PartTime',
+  'FullTime',
+  'Casual']
 
 
 
@@ -27,8 +34,10 @@ const edit_staff_form = reactive({
   phone: props.edit_staff.phone,
   role: props.edit_staff.role,
   availability: props.edit_staff.availability, 
-  profile_photo_url: props.edit_staff.profile_photo_url
-  
+  profile_photo_url: props.edit_staff.profile_photo_url,
+
+  employmentType: props.edit_staff.employmentType,
+    perHourRate: props.edit_staff.perHourRate
 })
 
 
@@ -142,7 +151,7 @@ async function submit_edit_staff() {
       />
     </div>
 
-    <!-- Phone & Hourly Rate -->
+    <!-- Phone-->
     <div class="grid grid-cols-2 gap-4">
       <div class="space-y-2">
         <label class="text-sm font-medium">Phone</label>
@@ -152,6 +161,36 @@ async function submit_edit_staff() {
           placeholder="555-0106"
           class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         />
+      </div>
+    
+
+    
+    </div>
+    <!-- Employment Type & Hourly Rate -->
+    <div class="grid grid-cols-2 gap-4">
+      <div class="space-y-2">
+        <label class="text-sm font-medium">EmploymentType</label>
+        <select v-model="edit_staff_form.employmentType" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+       <option selected disabled>{{props.edit_staff.employmentType}}</option>
+        <option v-for="employmentType in employmentTypes" :key="employmentType"  :value="employmentType">
+   {{ employmentType }}
+        </option>
+      </select>
+      </div>
+      <div class="space-y-2">
+        <label class="text-sm font-medium">Per hour Rate </label>
+        <div class="rounded-md border border-border   flex items-center px-3 py-2 space-x-2 outline-none">
+          <span>
+ $
+          </span>
+          <input
+            v-model="edit_staff_form.perHourRate"
+            type="number"
+            step="any"
+            placeholder="$/per_hour"
+            class="w-full  placeholder-muted-foreground  outline-none "
+          />
+        </div>
       </div>
 
     
