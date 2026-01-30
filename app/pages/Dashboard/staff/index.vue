@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { SortOption } from '~/client_utils/enum';
 import Add_Staff_Modal from '~/components/staff_components/Add_Staff_Modal.vue';
 import Staff_Card from '~/components/staff_components/Staff_Card.vue';
 import type { Role, Staff } from '~/generated/prisma/client';
@@ -6,6 +7,7 @@ import type { Role, Staff } from '~/generated/prisma/client';
 
 
 //here useAsyncData uses the key 'staffs', which is used to refresh the data in child component'
+//the data returned from server is already in sorted in ascending order by name;
 const { data: staffs } = await useAsyncData('staffs', () => $fetch<Staff[]>("/api/staff"));
 
 
@@ -23,6 +25,15 @@ const roles = [
 
 const is_add_Staff_Modal = ref(false)
 const selected_role = ref<Role | "">("")
+
+  //its either asc | dsc
+const sort_by = ref<SortOption>(SortOption.asc)
+
+watch(sort_by, () => {
+    console.log(sort_by)
+  })
+
+
 
 const filtered_staff_data = computed(() => {
 
@@ -160,10 +171,12 @@ let filtered_staff = staffs.value
      
         <!-- Sort Dropdown -->
         <div class="flex items-center gap-2">
-          <span class="text-sm font-medium text-muted-foreground min-w-fit">Sort:</span>
-          <select class="px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm">
-            <option value="name">Name (A-Z)</option>
-            <option value="recent">Recent</option>
+          <span class="text-sm font-medium text-muted-foreground min-w-fit">Sort by Name:</span>
+          <select v-model="sort_by" class="px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm">
+            
+      
+            <option  :value="SortOption.asc">(A-Z)</option>
+            <option  :value="SortOption.dsc">(Z-A)</option>
           </select>
         </div>
       </div>
