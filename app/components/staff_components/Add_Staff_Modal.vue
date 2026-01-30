@@ -33,7 +33,7 @@ const defaultStaffForm = () => ({
   availability: [] as WeekDay[],
   profile_photo_url: ''
 })
-
+ 
 const staff_form = reactive(defaultStaffForm())
 
 // reset function
@@ -258,6 +258,7 @@ watch(staff_form, () => {
          <div class="space-y-2">
       <label class="text-sm font-medium">Role</label>
       <select v-model="staff_form.role" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+       
         <option v-for="role in ROLES" :key="role"  :value="role">
    {{ role }}
         </option>

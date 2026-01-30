@@ -5,7 +5,7 @@ import type { Prisma, Staff , Shift} from '~/generated/prisma/client';
 const toast = useToast();
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
 
-const {data: staffs} = await useFetch("/api/staff")
+const {data: staffs} = await useFetch<Staff[]>("/api/staff")
 
 
 
