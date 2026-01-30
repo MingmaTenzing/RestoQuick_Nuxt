@@ -1,9 +1,17 @@
 <script lang="ts" setup>
 
-import  { Role, WeekDay } from '~/generated/prisma/enums';
-// import type { StaffCreateInput } from '~/generated/prisma/models';
+// import  { Role, WeekDay } from '~/generated/prisma/enums';
 
+import { type Role, type WeekDay } from "~/generated/prisma/enums";
 import type { CloudinaryUploadResponse } from "../../../types/cloudinary"
+import { RoleandWeekDay_Constant } from "~/client_utils/constants";
+
+
+//here importing the role and weekday constant values 
+const { ROLES, WEEKDAYS } = RoleandWeekDay_Constant()
+
+
+
 
 
 const emit = defineEmits(['close_modal'])
@@ -14,10 +22,12 @@ const staff_add_loading = ref(false)
 const image_upload_success = ref(false)
 
 
+
+
 const defaultStaffForm = () => ({
   firstname: '',
   lastName: '',
-  role: Role.Bartender,
+  role: "" as Role,
   email: '',
   phone: '',
   availability: [] as WeekDay[],
@@ -245,31 +255,28 @@ watch(staff_form, () => {
         
 
         <!-- Role -->
-        <div class="space-y-2">
-          <label class="text-sm font-medium">Role</label>
-          <select v-model="staff_form.role" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
-            <option value="">Select role</option>
-            <option :value="Role.Chef">Chef</option>
-            <option :value="Role.Waiter">Waiter</option>
-            <option :value="Role.Bartender">Bartender</option>
-            <option :value="Role.Manager">Manager</option>
-            <option :value="Role.Cook">Cook</option>
-            <option :value="Role.Kitchen_Hand">Kitchen Hand</option>
-          </select>
-        </div>
+         <div class="space-y-2">
+      <label class="text-sm font-medium">Role</label>
+      <select v-model="staff_form.role" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+        <option v-for="role in ROLES" :key="role"  :value="role">
+   {{ role }}
+        </option>
+      </select>
+    </div>
+
 
         <!-- Availability -->
        <div class="space-y-2">
           <label class="text-sm font-medium">Availability</label>
           <div class="flex flex-wrap gap-2">
             <button 
-              v-for="day in [WeekDay.MON, WeekDay.TUE, WeekDay.WED, WeekDay.THU, WeekDay.FRI, WeekDay.SAT, WeekDay.SUN]"
+              v-for="day in WEEKDAYS"
               :key="day"
-              @click="add_availability_day(day)" 
+              @click="add_availability_day(day as WeekDay)" 
               type="button"
               :class="[
                 'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
-                isDaySelected(day) 
+                isDaySelected(day as WeekDay) 
                   ? 'bg-primary text-primary-foreground' 
                   : 'bg-muted text-muted-foreground hover:bg-muted/80'
               ]"

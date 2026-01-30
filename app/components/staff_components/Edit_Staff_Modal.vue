@@ -2,9 +2,10 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import type { Staff } from '~/generated/prisma/client';
-import { Role, WeekDay } from '~/generated/prisma/enums';
+import { RoleandWeekDay_Constant } from '~/client_utils/constants';
+import type { Staff, WeekDay } from '~/generated/prisma/client';
 
+const { ROLES, WEEKDAYS } = RoleandWeekDay_Constant()
 
 
 // here the staff is passed from the staff card
@@ -15,6 +16,8 @@ const emit = defineEmits(['close_modal'])
 
 const toast = useToast();
 const isLoading = ref(false);
+
+
 
 const edit_staff_form = reactive({
   firstname: props.edit_staff.firstname,
@@ -153,41 +156,37 @@ async function submit_edit_staff() {
     
     </div>
 
-    <!-- Role & Status -->
-   <div class="space-y-2">
+   
+   <!-- Role -->
+         <div class="space-y-2">
       <label class="text-sm font-medium">Role</label>
       <select v-model="edit_staff_form.role" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
-        <option value="">Select role</option>
-        <option :value="Role.Chef">Chef</option>
-        <option :value="Role.Waiter">Waiter</option>
-        <option :value="Role.Bartender">Bartender</option>
-        <option :value="Role.Manager">Manager</option>
-        <option :value="Role.Cook">Cook</option>
-        <option :value="Role.Kitchen_Hand">Kitchen Hand</option>
+        <option v-for="role in ROLES" :key="role"  :value="role">
+   {{ role }}
+        </option>
       </select>
     </div>
 
     <!-- Availability -->
-     <!-- Availability -->
-   <div class="space-y-2">
-      <label class="text-sm font-medium">Availability</label>
-      <div class="flex flex-wrap gap-2">
-        <button 
-          v-for="day in [WeekDay.MON, WeekDay.TUE, WeekDay.WED, WeekDay.THU, WeekDay.FRI, WeekDay.SAT, WeekDay.SUN]"
-          :key="day"
-          @click="add_availability_day(day)" 
-          type="button"
-          :class="[
-            'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
-            isDaySelected(day) 
-              ? 'bg-primary text-primary-foreground' 
-              : 'bg-muted text-muted-foreground hover:bg-muted/80'
-          ]"
-        >
-          {{ day.slice(0, 3) }}
-        </button>
-      </div>
-    </div>
+     <div class="space-y-2">
+          <label class="text-sm font-medium">Availability</label>
+          <div class="flex flex-wrap gap-2">
+            <button 
+              v-for="day in WEEKDAYS"
+              :key="day"
+              @click="add_availability_day(day as WeekDay)" 
+              type="button"
+              :class="[
+                'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                isDaySelected(day as WeekDay) 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              ]"
+            >
+              {{ day.slice(0, 3) }}
+            </button>
+          </div>
+        </div>
   </div>
 
   <!-- Footer -->

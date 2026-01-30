@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import type { Staff, WeekDay } from '~/generated/prisma/client';
+
+import type { Staff, WeekDay } from '~/generated/prisma/browser';
 import Edit_Staff_Modal from './Edit_Staff_Modal.vue';
 
 const props = defineProps<{ staff: Staff }>()
