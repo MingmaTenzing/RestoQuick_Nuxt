@@ -4,40 +4,7 @@ import Add_Staff_Modal from "~/components/staff_components/Add_Staff_Modal.vue";
 import Staff_Card from "~/components/staff_components/Staff_Card.vue";
 import type { Role, Staff } from "~/generated/prisma/client";
 
-//here useAsyncData uses the key 'staffs', which is used to refresh the data in child component'
-//the data returned from server is already in sorted in ascending order by name;
-const { data: staffs } = await useAsyncData("staffs", () =>
-  $fetch<Staff[]>("/api/staff")
-);
 
-// Leave requests for "Pending leave requests" stat
-const { data: leaveRequests } = await useAsyncData("staff-leave-requests", () =>
-  $fetch<{ id: string; status: string }[]>("/api/leave-requests")
-);
-
-// Staff-related stats computed from existing data
-const staffStats = computed(() => {
-  const list = staffs.value ?? [];
-  const managersCount = list.filter((s) => s.role === "Manager").length;
-  const fullTimeCount = list.filter(
-    (s) => s.employmentType === "FullTime"
-  ).length;
-  const kitchenStaffCount = list.filter((s) =>
-    ["Chef", "Cook", "Kitchen_Hand"].includes(s.role)
-  ).length;
-  const pendingLeaveCount =
-    leaveRequests.value?.filter((r) => r.status === "pending").length ?? 0;
-  return {
-    total: list.length,
-    managers: managersCount,
-    fullTime: fullTimeCount,
-    kitchenStaff: kitchenStaffCount,
-    pendingLeave: pendingLeaveCount,
-  };
-});
-
-// the roles is copied as same as the schema
-//however if schema is updated it needs manual updating as well.
 const roles = [
   "Chef",
   "Waiter",
@@ -50,9 +17,13 @@ const roles = [
 const is_add_Staff_Modal = ref(false);
 const selected_role = ref<Role | "">("");
 const search_staff_name = ref("");
+const toast = useToast()
 //its either asc | dsc
 const sort_by = ref<SortOption>(SortOption.asc);
-
+//search results
+const search_results = ref<Staff[]>([]);
+//boolean to check if the search results are being shown
+const show_search_results = ref(false);
 const filtered_staff_data = computed(() => {
   let filtered_staff = staffs.value
     ? selected_role.value
@@ -69,14 +40,59 @@ const filtered_staff_data = computed(() => {
   return filtered_staff;
 });
 
+
+//here useAsyncData uses the key 'staffs', which is used to refresh the data in child component'
+//the data returned from server is already in sorted in ascending order by name;
+const { data: staffs } = await useAsyncData("staffs", () =>
+  $fetch<Staff[]>("/api/staff")
+);  
+
+// Leave requests for "Pending leave requests" stat
+const { data: leaveRequests } = await useAsyncData("staff-leave-requests", () =>
+  $fetch<{ id: string; status: string }[]>("/api/leave-requests")
+);  
+
+// Staff-related stats computed from existing data
+const staffStats = computed(() => {
+  const list = staffs.value ?? [];
+  const managersCount = list.filter((s) => s.role === "Manager").length;
+  const fullTimeCount = list.filter(
+    (s) => s.employmentType === "FullTime"
+  ).length;  
+  const kitchenStaffCount = list.filter((s) =>
+    ["Chef", "Cook", "Kitchen_Hand"].includes(s.role)
+  ).length;  
+  const pendingLeaveCount =
+    leaveRequests.value?.filter((r) => r.status === "pending").length ?? 0;
+  return {
+    total: list.length,
+    managers: managersCount,
+    fullTime: fullTimeCount,
+    kitchenStaff: kitchenStaffCount,
+    pendingLeave: pendingLeaveCount,
+  };  
+});  
+
+// the roles is copied as same as the schema
+//however if schema is updated it needs manual updating as well.
 async function searchStaff(staff_name: string) {
-  const response = await $fetch<Staff[]>("/api/staff", {
+
+  try {
+    const response = await $fetch<Staff[]>("/api/staff", {
     query: {
       staff_name,
     },
   });
-  console.log(response);
+  search_results.value = response;
+  } catch (error) {
+    window.alert(error);
+    
+  }
+  finally {
+    show_search_results.value = true;
+  }
 }
+
 </script>
 
 <template>
@@ -197,8 +213,15 @@ async function searchStaff(staff_name: string) {
           class="outline-none"
         />
         <button type="submit">
-          <i class="pi pi-search text-muted-foreground"></i>
+          <i v-if="!show_search_results" class="pi pi-search text-muted-foreground"></i>
         </button>
+        <button type="button" v-on:click="show_search_results = false">
+
+          <i v-if="show_search_results" class="pi pi-times text-muted-foreground"></i>
+          
+
+        </button>
+
       </form>
 
       <!-- Filters -->
@@ -243,7 +266,14 @@ async function searchStaff(staff_name: string) {
     <!-- staff member card -->
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <!-- Staff Card -->
-      <div v-for="staff in filtered_staff_data" :key="staff.id">
+
+
+
+
+      <div v-if="show_search_results" v-for="staff in search_results" :key="staff.id">
+        <Staff_Card :staff="staff"></Staff_Card>
+      </div>
+      <div v-if="!show_search_results" v-for="staff in filtered_staff_data" :key="staff.id">
         <Staff_Card :staff="staff"></Staff_Card>
       </div>
     </section>
