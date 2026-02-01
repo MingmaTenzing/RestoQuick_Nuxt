@@ -2,6 +2,7 @@
 import { SortOption } from "~/client_utils/enum";
 import Add_Staff_Modal from "~/components/staff_components/Add_Staff_Modal.vue";
 import Staff_Card from "~/components/staff_components/Staff_Card.vue";
+import Staff_Card_Loading from "~/components/staff_components/Staff_Card_Loading.vue";
 import type { Role, Staff } from "~/generated/prisma/client";
 
 
@@ -263,11 +264,13 @@ async function searchStaff(staff_name: string) {
       </div>
     </section>
 
+
+
     <!-- staff member card -->
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <!-- Staff Card -->
 
-
+    <Staff_Card_Loading></Staff_Card_Loading>
 
 
       <div v-if="show_search_results" v-for="staff in search_results" :key="staff.id">
