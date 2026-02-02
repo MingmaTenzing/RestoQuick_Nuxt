@@ -130,13 +130,15 @@ const handleAddItem = (itemData: Omit<StockItem, 'id' | 'lastRestocked'>) => {
 </script>
 
 <template>
-  <div class="space-y-6 p-6 min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+  <div class="space-y-6 ">
     <!-- Header -->
     <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-3xl font-bold tracking-tight">Stock Management</h1>
-        <p class="text-muted-foreground mt-1">Track inventory levels and manage supplies</p>
-      </div>
+
+          <div class=" space-y-2 text-2xl md:text-6xl">
+          <h1 class="">Stock Management</h1>
+          <p class="text-muted-foreground text-lg ">Track inventory levels and manage supplies</p>
+        </div>
+   
       <button
         @click="isAddDialogOpen = true"
         class="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:shadow-lg flex items-center gap-2"

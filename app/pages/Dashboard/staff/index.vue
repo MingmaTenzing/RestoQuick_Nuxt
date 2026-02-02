@@ -116,8 +116,8 @@ function clear_search() {
           <h1 class="">Staff Management</h1>
           <i class="pi pi-user text-muted-foreground"></i>
         </div>
-        <span class="text-accent-foreground/60"
-          >Manager your team members, roles and availability</span
+        <p class="text-accent-foreground/60 text-lg mt-2"
+          >Manager your team members, roles and availability</p
         >
       </div>
 
