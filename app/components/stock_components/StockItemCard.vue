@@ -42,8 +42,8 @@ const getCategoryColor = (category: StockItem['category']) => {
 <template>
   <div
     :class="[
-      'rounded-lg border p-6 space-y-4 bg-card hover:shadow-md transition-shadow',
-      isLowStock(item) && 'border-2 border-yellow-500/50'
+      'rounded-lg border p-6 space-y-4 bg-card hover:shadow-md transition-shadow hover:border-ring',
+     
     ]"
   >
     <!-- Item Header -->
