@@ -205,3 +205,25 @@ model OrderItem {
   menuItem   MenuItem? @relation(fields: [menuItemId], references: [id])
   menuItemId String?
 }
+
+// Stock Management
+enum StockCategory {
+  INGREDIENTS
+  BEVERAGES
+  SUPPLIES
+  OTHER
+}
+
+model StockItem {
+  id              String        @id @default(uuid())
+  name            String
+  category        StockCategory @default(INGREDIENTS)
+  currentStock    Int           @default(0)
+  unit            String // e.g. "kg", "liters", "pieces", "boxes"
+  reorderLevel    Int // Minimum stock level before reordering
+  reorderQuantity Int // Quantity to order when restocking
+  supplier        String? // Optional supplier name
+  lastRestocked   DateTime      @default(now())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
