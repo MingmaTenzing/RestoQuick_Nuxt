@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const staffs = await prisma.staff.findMany({
     orderBy: { firstname: "asc" },
     ...(staffName
-      ? {
+      ? { 
           where: {
             OR: [
               { firstname: { contains: staffName, mode: "insensitive" } },
