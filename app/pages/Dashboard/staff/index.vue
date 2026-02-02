@@ -98,6 +98,13 @@ async function searchStaff(staff_name: string) {
   }
 }
 
+function clear_search() {
+  search_staff_name.value = "",
+    show_search_results.value = false,
+    search_results.value = [];
+    
+}
+
 </script>
 
 <template>
@@ -238,15 +245,16 @@ async function searchStaff(staff_name: string) {
         <input
           v-model="search_staff_name"
           type="text"
+          required
           placeholder="Search staff by name" 
           class="outline-none w-full"
         />
         <button type="submit">
           <i v-if="!show_search_results" class="pi pi-search text-muted-foreground"></i>
         </button>
-        <button type="button" v-on:click="show_search_results = false">
+        <button type="button" v-if="show_search_results" v-on:click="clear_search">
 
-          <i v-if="show_search_results" class="pi pi-times text-muted-foreground"></i>
+          <i  class="pi pi-times text-muted-foreground"></i>
           
 
         </button>
