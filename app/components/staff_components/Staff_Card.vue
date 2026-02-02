@@ -6,6 +6,9 @@ import Edit_Staff_Modal from './Edit_Staff_Modal.vue';
 const props = defineProps<{ staff: Staff }>()
 
 const showEditModal = ref(false);
+const showDeleteConfirm = ref(false);
+const isDeleting = ref(false);
+const toast = useToast();
 
 // Week mapping
 const weekDays = [
@@ -25,6 +28,29 @@ const formattedDate = computed(() => {
     day: 'numeric'
   })
 })
+
+async function deleteStaff() {
+  isDeleting.value = true;
+  try {
+    await $fetch(`/api/staff/${props.staff.id}`, {
+      method: 'DELETE'
+    });
+    toast.success({
+      title: 'Staff Deleted',
+      message: `${props.staff.firstname} ${props.staff.lastName} has been removed`
+    });
+    // Refresh the staff list
+    await refreshNuxtData('staffs');
+    showDeleteConfirm.value = false;
+  } catch (error) {
+    toast.error({
+      title: 'Error',
+      message: error instanceof Error ? error.message : 'Failed to delete staff member'
+    });
+  } finally {
+    isDeleting.value = false;
+  }
+}
 
 
 
@@ -110,14 +136,59 @@ const formattedDate = computed(() => {
             <button @click="showEditModal = true" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all border h-8 w-8 bg-transparent hover:bg-accent hover:text-accent-foreground">
               <i class="pi pi-pencil text-xs"></i>
             </button>
+            <button @click="showDeleteConfirm = true" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all border h-8 w-8 bg-transparent hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20">
+              <i class="pi pi-trash text-xs"></i>
+            </button>
           </div>
         </div>
 
         <Transition>
-
           <!-- Edit Modal -->
           <Edit_Staff_Modal :edit_staff="staff" v-if="showEditModal" @close_modal="showEditModal = false" :staff="staff" />
-          
+        </Transition>
+
+        <!-- Delete Confirmation Modal -->
+        <Transition>
+          <div
+            v-if="showDeleteConfirm"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            @click.self="showDeleteConfirm = false"
+          >
+            <div class="bg-card rounded-lg border border-border p-6 shadow-lg max-w-md w-full">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
+                  <i class="pi pi-exclamation-triangle text-destructive text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold">Delete Staff Member</h3>
+                  <p class="text-sm text-muted-foreground">This action cannot be undone</p>
+                </div>
+              </div>
+              <p class="text-sm text-foreground mb-6">
+                Are you sure you want to delete <strong>{{ staff.firstname }} {{ staff.lastName }}</strong>? 
+                This will permanently remove their profile, shifts, and leave requests.
+              </p>
+              <div class="flex justify-end gap-2">
+                <button
+                  type="button"
+                  :disabled="isDeleting"
+                  @click="showDeleteConfirm = false"
+                  class="px-4 py-2 rounded-md border border-border bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  :disabled="isDeleting"
+                  @click="deleteStaff"
+                  class="px-4 py-2 rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  <i v-if="isDeleting" class="pi pi-spinner animate-spin"></i>
+                  <span>{{ isDeleting ? 'Deleting...' : 'Delete' }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </Transition>
       </div>
      

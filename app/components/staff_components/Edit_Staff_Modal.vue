@@ -17,9 +17,7 @@ const emit = defineEmits(['close_modal'])
 
 const toast = useToast();
 const isLoading = ref(false);
-enum EmploymentType {
-  
-}
+
 
 const employmentTypes = ['PartTime',
   'FullTime',
