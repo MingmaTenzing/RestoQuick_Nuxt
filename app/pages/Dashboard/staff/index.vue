@@ -44,14 +44,14 @@ const filtered_staff_data = computed(() => {
 
 //here useAsyncData uses the key 'staffs', which is used to refresh the data in child component'
 //the data returned from server is already in sorted in ascending order by name;
-const { data: staffs, status } = await useAsyncData("staffs", () =>
+const { data: staffs, status: staffs_status } = await useAsyncData("staffs", () =>
   $fetch<Staff[]>("/api/staff"), {
     lazy: true
   }
 );  
 
 // Leave requests for "Pending leave requests" stat
-const { data: leaveRequests } = await useAsyncData("staff-leave-requests", () =>
+const { data: leaveRequests, status: leave_requests_status } = await useAsyncData("staff-leave-requests", () =>
   $fetch<{ id: string; status: string }[]>("/api/leave-requests"),{
     lazy:true
   }
@@ -135,9 +135,15 @@ async function searchStaff(staff_name: string) {
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Total Staff</span>
           <div class="flex flex-col">
-            <span class="text-lg md:text-4xl lg:text-5xl font-medium">{{
-              staffStats.total
-            }}</span>
+            <span
+              v-if="staffs_status === 'pending'"
+              class="w-24 h-10 md:h-12 lg:h-14 bg-muted rounded-lg animate-pulse"
+            ></span>
+            <span
+              v-else
+              class="text-lg md:text-4xl lg:text-5xl font-medium"
+              >{{ staffStats.total }}</span
+            >
           </div>
         </div>
         <div>
@@ -153,9 +159,15 @@ async function searchStaff(staff_name: string) {
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Managers</span>
           <div class="flex flex-col">
-            <span class="text-lg md:text-4xl lg:text-5xl font-medium">{{
-              staffStats.managers
-            }}</span>
+            <span
+              v-if="staffs_status === 'pending'"
+              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-lg animate-pulse"
+            ></span>
+            <span
+              v-else
+              class="text-lg md:text-4xl lg:text-5xl font-medium"
+              >{{ staffStats.managers }}</span
+            >
           </div>
         </div>
         <div>
@@ -171,9 +183,15 @@ async function searchStaff(staff_name: string) {
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Full-time Staff</span>
           <div class="flex flex-col">
-            <span class="text-lg md:text-4xl lg:text-5xl font-medium">{{
-              staffStats.fullTime
-            }}</span>
+            <span
+              v-if="staffs_status === 'pending'"
+              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-lg animate-pulse"
+            ></span>
+            <span
+              v-else
+              class="text-lg md:text-4xl lg:text-5xl font-medium"
+              >{{ staffStats.fullTime }}</span
+            >
           </div>
         </div>
         <div>
@@ -191,9 +209,15 @@ async function searchStaff(staff_name: string) {
             >Pending Leave Requests</span
           >
           <div class="flex flex-col">
-            <span class="text-lg md:text-4xl lg:text-5xl font-medium">{{
-              staffStats.pendingLeave
-            }}</span>
+            <span
+              v-if="leave_requests_status === 'pending'"
+              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-lg animate-pulse"
+            ></span>
+            <span
+              v-else
+              class="text-lg md:text-4xl lg:text-5xl font-medium"
+              >{{ staffStats.pendingLeave }}</span
+            >
           </div>
         </div>
         <div>
@@ -214,8 +238,8 @@ async function searchStaff(staff_name: string) {
         <input
           v-model="search_staff_name"
           type="text"
-          placeholder="Search staff by name"
-          class="outline-none"
+          placeholder="Search staff by name" 
+          class="outline-none w-full"
         />
         <button type="submit">
           <i v-if="!show_search_results" class="pi pi-search text-muted-foreground"></i>
@@ -274,7 +298,7 @@ async function searchStaff(staff_name: string) {
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <!-- Staff Card -->
 
-      <div v-if="status === 'pending'" v-for="number in 10" :key="number">
+      <div v-if="staffs_status === 'pending'" v-for="number in 10" :key="number">
         
 
         <Staff_Card_Loading></Staff_Card_Loading>
