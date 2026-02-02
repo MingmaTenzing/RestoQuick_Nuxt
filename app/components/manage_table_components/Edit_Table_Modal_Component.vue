@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { NuxtError } from '#app';
-import { table } from 'console';
 import type { Table } from '~/generated/prisma/client';
 
 

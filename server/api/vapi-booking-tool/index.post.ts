@@ -1,6 +1,3 @@
-import { Vapi } from "@vapi-ai/server-sdk";
-import { Prisma } from "~/generated/prisma/client";
-
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
   const body = await readBody(event);

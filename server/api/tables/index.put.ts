@@ -1,5 +1,4 @@
-import { table } from "console";
-import { Prisma } from "~/generated/prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
@@ -33,7 +32,7 @@ export default defineEventHandler(async (event) => {
     });
     return update_table;
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error instanceof PrismaClientKnownRequestError) {
       if (error.code == "P2025") {
         throw createError({
           status: 500,

@@ -17,7 +17,7 @@ const {editshiftModal, open_edit_shiftModal,close_edit_shiftModal } = useeditShi
 // Inject the refetch trigger function from parent roster_calendar
 const triggerShiftRefetch = inject<() => void>('triggerShiftRefetch', () => {})
 
-const { data: staff } = await useFetch(() => `/api/staff/${props.shift.staffId}`) 
+const { data: staff } = await useFetch<Staff>(() => `/api/staff/${props.shift.staffId}`) 
 
 
 
@@ -57,12 +57,17 @@ async function deleteShift() {
            
         </div>
         <div class="flex justify-between items-end ">
-<div class=" flex flex-col">
-    <span class=" text-xs xl:text-base font-medium">{{ staff?.firstname }} {{ staff?.lastName[0] }}.</span>
+<div class="  space-y-2">
 
-       <span class="text-[10px] lg:text-sm">{{shift?.startTime}} - {{shift?.endTime}}</span>
-       <span class="text-[10px] lg:text-xs font-light text-muted-foreground">{{ shift.position }}</span>
-     
+    <NuxtImg :src="staff?.profile_photo_url"  class=" w-10 h-10 object-cover rounded-full" ></NuxtImg>
+  <div class=" flex flex-col">
+      <span class=" text-xs xl:text-base font-medium">{{ staff?.firstname }} {{ staff?.lastName[0] }}.</span>
+  
+         <span class="text-[10px] lg:text-sm">{{shift?.startTime}} - {{shift?.endTime}}</span>
+         <span class="text-[10px] lg:text-xs font-light text-muted-foreground">{{ shift.position }}</span>
+       
+
+  </div>
 
 </div>
                
