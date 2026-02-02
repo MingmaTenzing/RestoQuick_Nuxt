@@ -68,49 +68,147 @@ function close_qr_modal() {
 </script>
 
 <template>
-  <div class="">
-    <div class="flex items-center justify-between mb-6">
-     <div>
-        <h2 class="text-2xl md:text-6xl"> Manage Tables</h2>
-        <p class=" text-sm lg:text-base text-muted-foreground"> Manage your tables and print qr codes.  </p>
-
-    </div>
-      <div class="flex items-center space-x-3">
-        <button @click="open_add_table_modal" class=" bg-accent border hover:border-ring px-4 py-2 rounded-lg">Add Table</button>
-        <NuxtLink to="/dashboard/tables/print-qr-codes" class="px-4 py-2 rounded-lg border  hover:border-ring space-x-2"> <i class="pi pi-qrcode"></i> <span>Print All QR Codes</span></NuxtLink>
+  <div class="p-6 space-y-6">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="space-y-1">
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Manage Tables</h1>
+        <p class="text-muted-foreground flex items-center gap-2">
+          <i class="pi pi-table text-amber-400" />
+          Organize seating and manage table layouts
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <button 
+          @click="open_add_table_modal" 
+          class="px-5 py-2.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:shadow-lg flex items-center gap-2 font-medium"
+        >
+          <i class="pi pi-plus"></i>
+          <span>New Table</span>
+        </button>
+        <NuxtLink 
+          to="/dashboard/tables/print-qr-codes" 
+          class="px-5 py-2.5 rounded-lg border border-border hover:bg-muted transition-all flex items-center gap-2 font-medium text-foreground"
+        >
+          <i class="pi pi-print"></i>
+          <span>Print QR Codes</span>
+        </NuxtLink>
       </div>
     </div>
 
-    <!-- Table list -->
-    <div class="overflow-x-auto">
-      <table class="min-w-full table-fixed rounded-lg shadow-sm ">
-        <thead>
-          <tr class="text-left text-sm text-muted-foreground">
-           
-            <th class="px-4 py-3 w-50">Id</th>
-            <th class="px-4 py-3 w-20">Number</th>
-            <th class="px-4 py-3 w-12">Capacity</th>
-            <th class="px-4 py-3 w-48">Actions</th>
-          </tr>
-        </thead>
-        <tbody class=" min-w-full " v-if="pending">
-          <Table_Loading_Skeleton />
-        </tbody>
-        <tbody v-else>
-          <tr v-for="table in tables" class="border-t hover:bg-secondary/30">
-            <td class="px-4 py-3">{{table.id}}</td>
-            <td class="px-4 py-3">{{table.number}}</td>
-            <td class="px-4 py-3">{{table.capacity}}</td>
-            <td class="px-4 py-3">
-              <div class="flex space-x-2">
-                <button @click="open_qr_modal(table)" class="px-3 py-1 rounded-lg border hover:border-ring flex items-center space-x-2"><i class="pi pi-qrcode"></i> <span>QR</span></button>
-                <button @click="open_edit_table_modal(table.id)" class="px-3 py-1 rounded-lg border hover:border-ring">Edit</button>
-                <button class="px-3 py-1 rounded-lg border bg-destructive/20 text-destructive hover:border-destructive  " v-on:click="delete_table(table.id)">Delete</button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <!-- Total Tables -->
+      <div class="rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-medium text-muted-foreground">Total Tables</span>
+          <i class="pi pi-table text-primary text-lg" />
+        </div>
+        <span v-if="pending" class="w-20 h-8 bg-muted animate-pulse rounded inline-block"></span>
+        <span v-else class="text-3xl font-bold block">{{ tables?.length || 0 }}</span>
+        <p class="text-xs text-muted-foreground">Active seating</p>
+      </div>
+
+      <!-- Total Capacity -->
+      <div class="rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-medium text-muted-foreground">Total Capacity</span>
+          <i class="pi pi-users text-green-600 text-lg" />
+        </div>
+        <span v-if="pending" class="w-20 h-8 bg-muted animate-pulse rounded inline-block"></span>
+        <span v-else class="text-3xl font-bold block">{{ tables?.reduce((sum, t) => sum + (t.capacity || 0), 0) || 0 }}</span>
+        <p class="text-xs text-muted-foreground">Total guests</p>
+      </div>
+
+      <!-- Average Capacity -->
+      <div class="rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-medium text-muted-foreground">Avg. Per Table</span>
+          <i class="pi pi-chart-bar text-blue-600 text-lg" />
+        </div>
+        <span v-if="pending" class="w-20 h-8 bg-muted animate-pulse rounded inline-block"></span>
+        <span v-else class="text-3xl font-bold block">{{ tables && tables.length > 0 ? Math.round(tables.reduce((sum, t) => sum + (t.capacity || 0), 0) / tables.length) : 0 }}</span>
+        <p class="text-xs text-muted-foreground">Seats per table</p>
+      </div>
+    </div>
+
+    <!-- Tables Section -->
+    <div class="rounded-lg border bg-card overflow-hidden">
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-muted/50 border-b border-border">
+            <tr>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">Table Number</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">Capacity</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">Table ID</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">Actions</th>
+            </tr>
+          </thead>
+          <tbody v-if="pending" class="divide-y divide-border">
+            <Table_Loading_Skeleton />
+          </tbody>
+          <tbody v-else-if="tables && tables.length === 0">
+            <tr>
+              <td colspan="4" class="px-6 py-12 text-center">
+                <i class="pi pi-inbox text-4xl text-muted-foreground mb-3 block opacity-50"></i>
+                <p class="text-muted-foreground mb-4">No tables yet. Create your first table to get started.</p>
+                <button 
+                  @click="open_add_table_modal" 
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  <i class="pi pi-plus"></i>
+                  <span>Add Table</span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tbody v-else class="divide-y divide-border">
+            <tr v-for="table in tables" :key="table.id" class="hover:bg-muted/20 transition-colors">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <i class="pi pi-table text-primary text-base"></i>
+                  </div>
+                  <span class="font-semibold text-foreground text-lg">{{ table.number }}</span>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-500/10 text-green-600 font-medium text-sm">
+                  <i class="pi pi-users"></i>
+                  {{ table.capacity }} seats
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                <code class="px-2.5 py-1.5 rounded bg-muted/50 text-xs font-mono text-foreground/80 max-w-xs truncate block">{{ table.id }}</code>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex gap-2">
+                  <button 
+                    @click="open_qr_modal(table)" 
+                    class="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-colors flex items-center gap-1.5 text-sm"
+                  >
+                    <i class="pi pi-qrcode"></i>
+                    QR
+                  </button>
+                  <button 
+                    @click="open_edit_table_modal(table.id)" 
+                    class="px-3 py-1.5 rounded-lg border border-border hover:bg-muted transition-colors font-medium text-sm"
+                  >
+                    <i class="pi pi-pencil"></i>
+                  </button>
+                  <button 
+                    @click="delete_table(table.id)" 
+                    class="px-3 py-1.5 rounded-lg border border-red-500/30 text-red-500 hover:bg-red-500/10 transition-colors font-medium text-sm"
+                  >
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- Edit Modal (template only) -->
