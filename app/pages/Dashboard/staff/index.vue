@@ -18,7 +18,7 @@ const roles = [
 const is_add_Staff_Modal = ref(false);
 const selected_role = ref<Role | "">("");
 const search_staff_name = ref("");
-const toast = useToast()
+
 //its either asc | dsc
 const sort_by = ref<SortOption>(SortOption.asc);
 //search results
@@ -44,13 +44,17 @@ const filtered_staff_data = computed(() => {
 
 //here useAsyncData uses the key 'staffs', which is used to refresh the data in child component'
 //the data returned from server is already in sorted in ascending order by name;
-const { data: staffs } = await useAsyncData("staffs", () =>
-  $fetch<Staff[]>("/api/staff")
+const { data: staffs, status } = await useAsyncData("staffs", () =>
+  $fetch<Staff[]>("/api/staff"), {
+    lazy: true
+  }
 );  
 
 // Leave requests for "Pending leave requests" stat
 const { data: leaveRequests } = await useAsyncData("staff-leave-requests", () =>
-  $fetch<{ id: string; status: string }[]>("/api/leave-requests")
+  $fetch<{ id: string; status: string }[]>("/api/leave-requests"),{
+    lazy:true
+  }
 );  
 
 // Staff-related stats computed from existing data
@@ -270,10 +274,14 @@ async function searchStaff(staff_name: string) {
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <!-- Staff Card -->
 
-    <Staff_Card_Loading></Staff_Card_Loading>
+      <div v-if="status === 'pending'" v-for="number in 10" :key="number">
+        
+
+        <Staff_Card_Loading></Staff_Card_Loading>
+      </div>
 
 
-      <div v-if="show_search_results" v-for="staff in search_results" :key="staff.id">
+      <div v-if="show_search_results " v-for="staff in search_results" :key="staff.id">
         <Staff_Card :staff="staff"></Staff_Card>
       </div>
       <div v-if="!show_search_results" v-for="staff in filtered_staff_data" :key="staff.id">
