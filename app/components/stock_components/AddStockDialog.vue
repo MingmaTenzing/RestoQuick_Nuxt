@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
-import type { StockItem } from './StockItemCard.vue'
+import type { StockItem } from '~/generated/prisma/client';
+import type { StockItemCreateInput, StockItemUncheckedCreateInput } from '~/generated/prisma/models';
 
 interface Props {
   open: boolean
@@ -8,30 +9,38 @@ interface Props {
 
 interface Emits {
   (e: 'update:open', value: boolean): void
-  (e: 'add-item', item: Omit<StockItem, 'id' | 'lastRestocked'>): void
+  (e: 'add-item', item: StockItemCreateInput): void
 }
-
+const emit = defineEmits<{
+  // <eventName>: <expected arguments>
+  change: []
+  update: [value: number] // named tuple syntax
+}>()
 const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
 
-const formData = reactive({
+const formData = reactive<StockItemCreateInput>({
   name: '',
-  category: 'ingredients' as StockItem['category'],
+  category: 'INGREDIENTS',
   currentStock: 0,
   unit: '',
   reorderLevel: 0,
   reorderQuantity: 0,
   supplier: '',
+   createdAt: new Date(),
+    updatedAt: new Date(),
 })
 
 const handleSubmit = () => {
-  emit('add-item', { ...formData })
+  emit('add-item', {
+   ...formData
+   
+  })
   resetForm()
 }
 
 const resetForm = () => {
   formData.name = ''
-  formData.category = 'ingredients'
+  formData.category = "INGREDIENTS",
   formData.currentStock = 0
   formData.unit = ''
   formData.reorderLevel = 0
