@@ -1,22 +1,14 @@
 <script setup lang="ts">
-export interface StockItem {
-  id: string
-  name: string
-  category: 'ingredients' | 'beverages' | 'supplies' | 'other'
-  currentStock: number
-  unit: string
-  reorderLevel: number
-  reorderQuantity: number
-  supplier?: string
-  lastRestocked: string
-}
+import type { StockCategory, StockItem } from '~/generated/prisma/client';
+
+
 
 interface Props {
   item: StockItem
 }
 
 interface Emits {
-  (e: 'update-stock', id: string, change: number): void
+  (e: 'delete', item: StockItem): void
   (e: 'restock', item: StockItem): void
 }
 
@@ -25,15 +17,15 @@ const emit = defineEmits<Emits>()
 
 const isLowStock = (item: StockItem) => item.currentStock <= item.reorderLevel
 
-const getCategoryColor = (category: StockItem['category']) => {
+const getCategoryColor = (category: StockCategory) => {
   switch (category) {
-    case 'ingredients':
+    case 'INGREDIENTS':
       return 'bg-orange-500/10 text-orange-600 border-orange-500/20'
-    case 'beverages':
+    case 'BEVERAGES':
       return 'bg-blue-500/10 text-blue-600 border-blue-500/20'
-    case 'supplies':
+    case 'SUPPLIES':
       return 'bg-purple-500/10 text-purple-600 border-purple-500/20'
-    case 'other':
+    case 'OTHER':
       return 'bg-gray-500/10 text-gray-600 border-gray-500/20'
   }
 }
@@ -42,8 +34,8 @@ const getCategoryColor = (category: StockItem['category']) => {
 <template>
   <div
     :class="[
-      'rounded-lg border p-6 space-y-4 bg-card hover:shadow-md transition-shadow',
-      isLowStock(item) && 'border-2 border-yellow-500/50'
+      'rounded-lg border p-6 space-y-4 bg-card hover:shadow-md transition-shadow hover:border-ring',
+     
     ]"
   >
     <!-- Item Header -->
@@ -98,24 +90,17 @@ const getCategoryColor = (category: StockItem['category']) => {
     <!-- Actions -->
     <div class="flex gap-2 pt-2 border-t">
       <button
-        @click="emit('update-stock', item.id, -1)"
-        class="flex-1 px-3 py-2 rounded-md border border-input bg-background hover:bg-accent transition-colors text-sm font-medium flex items-center justify-center gap-1"
-      >
-        <i class="pi pi-minus" />
-        Remove
-      </button>
-      <button
-        @click="emit('update-stock', item.id, 1)"
-        class="flex-1 px-3 py-2 rounded-md border border-input bg-background hover:bg-accent transition-colors text-sm font-medium flex items-center justify-center gap-1"
-      >
-        <i class="pi pi-plus" />
-        Add
-      </button>
-      <button
         @click="emit('restock', item)"
         class="flex-1 px-3 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium"
       >
-        Restock
+        Manage Stock
+      </button>
+      <button
+        @click="emit('delete', item)"
+        class="px-3 py-2 rounded-md border border-destructive/20 bg-destructive/20 text-destructive/90 hover:bg-destructive/90 hover:text-destructive-foreground transition-colors text-sm font-medium"
+        title="Delete item"
+      >
+        <i class="pi pi-trash" />
       </button>
     </div>
   </div>

@@ -1,42 +1,51 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
-import type { StockItem } from './StockItemCard.vue'
+import { reactive, ref } from 'vue'
+import { StockCategory } from '~/generated/prisma/enums';
+import type { StockItemCreateInput } from '~/generated/prisma/models';
 
 interface Props {
   open: boolean
+  isLoading?: boolean
 }
 
-interface Emits {
+
+
+const emit = defineEmits<{
   (e: 'update:open', value: boolean): void
-  (e: 'add-item', item: Omit<StockItem, 'id' | 'lastRestocked'>): void
-}
+  (e: 'add-item', value: StockItemCreateInput): void
+}>()
 
 const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
 
-const formData = reactive({
+const formData = reactive<StockItemCreateInput>({
   name: '',
-  category: 'ingredients' as StockItem['category'],
+  category: StockCategory.INGREDIENTS, //default value
   currentStock: 0,
   unit: '',
   reorderLevel: 0,
   reorderQuantity: 0,
   supplier: '',
+   createdAt: new Date(),
+    updatedAt: new Date(),
 })
 
-const handleSubmit = () => {
-  emit('add-item', { ...formData })
-  resetForm()
-}
 
 const resetForm = () => {
   formData.name = ''
-  formData.category = 'ingredients'
+  formData.category = StockCategory.INGREDIENTS, //default value
   formData.currentStock = 0
   formData.unit = ''
   formData.reorderLevel = 0
   formData.reorderQuantity = 0
   formData.supplier = ''
+}
+const handleSubmit = () => {
+  emit('add-item', {
+   ...formData
+   
+  })
+  resetForm()
+
 }
 
 const closeDialog = () => {
@@ -68,10 +77,10 @@ const closeDialog = () => {
             v-model="formData.category"
             class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           >
-            <option value="ingredients">Ingredients</option>
-            <option value="beverages">Beverages</option>
-            <option value="supplies">Supplies</option>
-            <option value="other">Other</option>
+            <option :value="StockCategory.INGREDIENTS">Ingredients</option>
+            <option :value="StockCategory.BEVERAGES">Beverages</option>
+            <option :value="StockCategory.SUPPLIES">Supplies</option>
+            <option :value="StockCategory.OTHER">Other</option>
           </select>
         </div>
 
@@ -140,9 +149,11 @@ const closeDialog = () => {
           </button>
           <button
             type="submit"
-            class="flex-1 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            :disabled="props.isLoading"
+            class="flex-1 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Add Item
+            <i v-if="props.isLoading" class="pi pi-spinner animate-spin" />
+            {{ props.isLoading ? 'Adding...' : 'Add Item' }}
           </button>
         </div>
       </form>
