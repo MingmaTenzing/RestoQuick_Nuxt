@@ -68,8 +68,6 @@ const handleRestock = async (stock_item: StockItem, quantity: number) => {
       }
     })
 
-
-    
     isRestockDialogOpen.value = false
     selectedItem.value = null
     if (update_stock) {
@@ -103,8 +101,8 @@ try {
 } catch (error) {
   
 } finally {
-  isAddDialogOpen.value = false
   isAddItemLoading.value = false
+  isAddDialogOpen.value = false
 
   
 
