@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { StockCategory } from '~/generated/prisma/enums';
 import type { StockItemCreateInput } from '~/generated/prisma/models';
 
 interface Props {
   open: boolean
+  isLoading?: boolean
 }
 
 
@@ -33,7 +34,6 @@ const handleSubmit = () => {
    ...formData
    
   })
-  resetForm()
 }
 
 const resetForm = () => {
@@ -147,9 +147,11 @@ const closeDialog = () => {
           </button>
           <button
             type="submit"
-            class="flex-1 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            :disabled="props.isLoading"
+            class="flex-1 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Add Item
+            <i v-if="props.isLoading" class="pi pi-spinner animate-spin" />
+            {{ props.isLoading ? 'Adding...' : 'Add Item' }}
           </button>
         </div>
       </form>

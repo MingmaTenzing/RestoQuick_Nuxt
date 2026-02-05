@@ -9,7 +9,7 @@ interface Props {
 
 interface Emits {
   (e: 'update:open', value: boolean): void
-  (e: 'restock', id: string, quantity: number): void
+  (e: 'restock', item: StockItem, quantity: number): void
 }
 
 const props = defineProps<Props>()
@@ -35,7 +35,7 @@ const decrementStock = () => {
 
 const handleConfirm = () => {
   if (props.item) {
-    emit('restock', props.item.id, adjustment.value)
+    emit('restock', props.item, adjustment.value)
     adjustment.value = 0
   }
 }

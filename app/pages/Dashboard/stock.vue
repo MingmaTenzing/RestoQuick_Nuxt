@@ -19,8 +19,9 @@ const filter = ref<'all' | 'low' | 'INGREDIENTS' | 'BEVERAGES' | 'SUPPLIES'>('al
 const searchQuery = ref('')
 const isAddDialogOpen = ref(false)
 const isRestockDialogOpen = ref(false)
+const isAddItemLoading = ref(false)
 const selectedItem = ref<StockItem | null>(null)
-
+const toast = useToast()
 const isLowStock = (item: StockItem) => item.currentStock <= item.reorderLevel
 
 const filteredItems = computed(() => {
@@ -48,28 +49,45 @@ const filterOptions = computed(() => [
   { value: 'SUPPLIES', label: 'Supplies' },
 ])
 
-const updateStock = (id: string, change: number) => {
-  if (!stockItems.value) return
-  const item = stockItems.value.find(i => i.id === id)
-  if (item) {
-    item.currentStock = Math.max(0, item.currentStock + change)
-    item.lastRestocked = new Date()
-  }
-}
-
 const openRestockDialog = (item: StockItem) => {
   selectedItem.value = item
   isRestockDialogOpen.value = true
 }
 
-const handleRestock = (id: string, quantity: number) => {
-  updateStock(id, quantity)
-  isRestockDialogOpen.value = false
-  selectedItem.value = null
+const handleRestock = async (stock_item: StockItem, quantity: number) => {
+  try {
+    
+ 
+
+    const newStock = stock_item.currentStock + quantity
+    
+    const update_stock = await $fetch(`/api/stock/${stock_item.id}`, {
+      method: 'PUT',
+      body: {
+        currentStock: newStock
+      }
+    })
+
+
+    
+    isRestockDialogOpen.value = false
+    selectedItem.value = null
+    if (update_stock) {
+      refresh();
+      toast.success({
+        title: "Stock Updated"
+      })
+      
+    }
+
+
+  } catch (error) {
+    console.error('Failed to update stock:', error)
+  }
 }
 
 const handleAddItem = async(itemData: StockItemCreateInput) => {
-
+isAddItemLoading.value = true
 try {
   
   const add_stock = await $fetch('/api/stock', {
@@ -79,16 +97,18 @@ try {
 
   console.log(add_stock)
   refresh() //refresh the fetch if adding stock is successful
+  toast.success({
+    title: 'stock added'
+  })
 } catch (error) {
   
 } finally {
   isAddDialogOpen.value = false
+  isAddItemLoading.value = false
 
   
+
 }
-
-
-  
 }
 </script>
 
@@ -163,6 +183,7 @@ try {
     <!-- Add Item Dialog -->
     <AddStockDialog
       v-model:open="isAddDialogOpen"
+        :is-loading="isAddItemLoading"
       @add-item="handleAddItem"
     />
 
