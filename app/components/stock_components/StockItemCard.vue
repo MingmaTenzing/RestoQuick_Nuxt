@@ -8,6 +8,7 @@ interface Props {
 }
 
 interface Emits {
+  (e: 'delete', item: StockItem): void
   (e: 'restock', item: StockItem): void
 }
 
@@ -90,9 +91,16 @@ const getCategoryColor = (category: StockCategory) => {
     <div class="flex gap-2 pt-2 border-t">
       <button
         @click="emit('restock', item)"
-        class="w-full px-3 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium"
+        class="flex-1 px-3 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium"
       >
         Manage Stock
+      </button>
+      <button
+        @click="emit('delete', item)"
+        class="px-3 py-2 rounded-md border border-destructive/20 bg-destructive/20 text-destructive/90 hover:bg-destructive/90 hover:text-destructive-foreground transition-colors text-sm font-medium"
+        title="Delete item"
+      >
+        <i class="pi pi-trash" />
       </button>
     </div>
   </div>

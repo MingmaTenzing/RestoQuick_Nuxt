@@ -29,13 +29,6 @@ const formData = reactive<StockItemCreateInput>({
     updatedAt: new Date(),
 })
 
-const handleSubmit = () => {
-  emit('add-item', {
-   ...formData
-   
-  })
-
-}
 
 const resetForm = () => {
   formData.name = ''
@@ -45,6 +38,14 @@ const resetForm = () => {
   formData.reorderLevel = 0
   formData.reorderQuantity = 0
   formData.supplier = ''
+}
+const handleSubmit = () => {
+  emit('add-item', {
+   ...formData
+   
+  })
+  resetForm()
+
 }
 
 const closeDialog = () => {

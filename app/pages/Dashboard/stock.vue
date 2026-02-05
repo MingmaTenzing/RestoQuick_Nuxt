@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import AddStockDialog from '~/components/stock_components/AddStockDialog.vue'
 import RestockDialog from '~/components/stock_components/RestockDialog.vue'
+import DeleteStockDialog from '~/components/stock_components/DeleteStockDialog.vue'
 import StockEmptyState from '~/components/stock_components/StockEmptyState.vue'
 import StockFilterBar from '~/components/stock_components/StockFilterBar.vue'
 import StockItemCard from '~/components/stock_components/StockItemCard.vue'
@@ -19,7 +20,9 @@ const filter = ref<'all' | 'low' | 'INGREDIENTS' | 'BEVERAGES' | 'SUPPLIES'>('al
 const searchQuery = ref('')
 const isAddDialogOpen = ref(false)
 const isRestockDialogOpen = ref(false)
+const isDeleteDialogOpen = ref(false)
 const isAddItemLoading = ref(false)
+const isDeleteLoading = ref(false)
 const selectedItem = ref<StockItem | null>(null)
 const toast = useToast()
 const isLowStock = (item: StockItem) => item.currentStock <= item.reorderLevel
@@ -52,6 +55,11 @@ const filterOptions = computed(() => [
 const openRestockDialog = (item: StockItem) => {
   selectedItem.value = item
   isRestockDialogOpen.value = true
+}
+
+const openDeleteDialog = (item: StockItem) => {
+  selectedItem.value = item
+  isDeleteDialogOpen.value = true
 }
 
 const handleRestock = async (stock_item: StockItem, quantity: number) => {
@@ -108,6 +116,29 @@ try {
 
 }
 }
+
+const handleDelete = async (item: StockItem) => {
+  isDeleteLoading.value = true
+  try {
+    await $fetch(`/api/stock/${item.id}`, {
+      method: 'DELETE'
+    })
+
+    refresh()
+    toast.success({
+      title: 'Stock item deleted'
+    })
+  } catch (error) {
+    console.error('Failed to delete stock item:', error)
+    toast.error({
+      title: 'Failed to delete item'
+    })
+  } finally {
+    isDeleteLoading.value = false
+    isDeleteDialogOpen.value = false
+    selectedItem.value = null
+  }
+}
 </script>
 
 <template>
@@ -145,10 +176,11 @@ try {
         icon-color="text-yellow-600"
       />
       <StockStatsCard
-        title="Stock Units"
-        :value="totalValue"
-        description="Total units in stock"
-        icon="pi pi-chart-line"
+        title="Items Below Reorder Level"
+        :value="lowStockCount"
+        description="Need immediate restocking"
+        icon="pi pi-alert"
+        icon-color="text-orange-600"
       />
       <StockStatsCard
         title="Categories"
@@ -172,6 +204,7 @@ try {
         :key="item.id"
         :item="item"
         @restock="openRestockDialog"
+        @delete="openDeleteDialog"
       />
     </div>
 
@@ -190,6 +223,14 @@ try {
       v-model:open="isRestockDialogOpen"
       :item="selectedItem"
       @restock="handleRestock"
+    />
+
+    <!-- Delete Dialog -->
+    <DeleteStockDialog
+      v-model:open="isDeleteDialogOpen"
+      :item="selectedItem"
+      :is-loading="isDeleteLoading"
+      @delete="handleDelete"
     />
   </div>
 </template>
