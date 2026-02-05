@@ -7,6 +7,8 @@ import StockEmptyState from '~/components/stock_components/StockEmptyState.vue'
 import StockFilterBar from '~/components/stock_components/StockFilterBar.vue'
 import StockItemCard from '~/components/stock_components/StockItemCard.vue'
 import StockStatsCard from '~/components/stock_components/StockStatsCard.vue'
+import StockStatsCardSkeleton from '~/components/stock_components/StockStatsCardSkeleton.vue'
+import StockItemCardSkeleton from '~/components/stock_components/StockItemCardSkeleton.vue'
 import type { StockItem } from '~/generated/prisma/client'
 import type { StockItemCreateInput } from '~/generated/prisma/models'
 
@@ -14,7 +16,7 @@ definePageMeta({
   layout: 'dashboard-layout'
 })
 
-const {data:stockItems, refresh} = useFetch<StockItem[]>("/api/stock")
+const {data:stockItems, refresh, status: stockStatus} = useFetch<StockItem[]>("/api/stock")
 
 const filter = ref<'all' | 'low' | 'INGREDIENTS' | 'BEVERAGES' | 'SUPPLIES'>('all')
 const searchQuery = ref('')
@@ -42,7 +44,6 @@ const filteredItems = computed(() => {
 
 const lowStockCount = computed(() => stockItems.value?.filter(isLowStock).length ?? 0)
 const totalItems = computed(() => stockItems.value?.length ?? 0)
-const totalValue = computed(() => stockItems.value?.reduce((sum, item) => sum + item.currentStock, 0) ?? 0)
 
 const filterOptions = computed(() => [
   { value: 'all', label: 'All Items' },
@@ -162,32 +163,37 @@ const handleDelete = async (item: StockItem) => {
 
     <!-- Stats Cards -->
     <div class="grid gap-4 md:grid-cols-4">
-      <StockStatsCard
-        title="Total Items"
-        :value="totalItems"
-        description="In inventory"
-        icon="pi pi-box"
-      />
-      <StockStatsCard
-        title="Low Stock Items"
-        :value="lowStockCount"
-        description="Need reordering"
-        icon="pi pi-exclamation-triangle"
-        icon-color="text-yellow-600"
-      />
-      <StockStatsCard
-        title="Items Below Reorder Level"
-        :value="lowStockCount"
-        description="Need immediate restocking"
-        icon="pi pi-alert"
-        icon-color="text-orange-600"
-      />
-      <StockStatsCard
-        title="Categories"
-        :value="4"
-        description="Item categories"
-        icon="pi pi-shopping-cart"
-      />
+      <template v-if="stockStatus === 'pending'">
+        <StockStatsCardSkeleton v-for="i in 4" :key="`stat-skeleton-${i}`" />
+      </template>
+      <template v-else>
+        <StockStatsCard
+          title="Total Items"
+          :value="totalItems"
+          description="In inventory"
+          icon="pi pi-box"
+        />
+        <StockStatsCard
+          title="Low Stock Items"
+          :value="lowStockCount"
+          description="Need reordering"
+          icon="pi pi-exclamation-triangle"
+          icon-color="text-yellow-600"
+        />
+        <StockStatsCard
+          title="Items Below Reorder Level"
+          :value="lowStockCount"
+          description="Need immediate restocking"
+          icon="pi pi-info"
+          icon-color="text-orange-600"
+        />
+        <StockStatsCard
+          title="Categories"
+          :value="4"
+          description="Item categories"
+          icon="pi pi-shopping-cart"
+        />
+      </template>
     </div>
 
     <!-- Search & Filters -->
@@ -198,18 +204,25 @@ const handleDelete = async (item: StockItem) => {
     />
 
     <!-- Stock Items Grid -->
-    <div v-if="filteredItems.length > 0" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <StockItemCard
-        v-for="item in filteredItems"
-        :key="item.id"
-        :item="item"
-        @restock="openRestockDialog"
-        @delete="openDeleteDialog"
-      />
-    </div>
+    <template v-if="stockStatus === 'pending'">
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <StockItemCardSkeleton v-for="i in 6" :key="`item-skeleton-${i}`" />
+      </div>
+    </template>
+    <template v-else>
+      <div v-if="filteredItems.length > 0" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <StockItemCard
+          v-for="item in filteredItems"
+          :key="item.id"
+          :item="item"
+          @restock="openRestockDialog"
+          @delete="openDeleteDialog"
+        />
+      </div>
 
-    <!-- Empty State -->
-    <StockEmptyState v-else />
+      <!-- Empty State -->
+      <StockEmptyState v-else />
+    </template>
 
     <!-- Add Item Dialog -->
     <AddStockDialog
