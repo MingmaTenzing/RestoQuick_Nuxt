@@ -54,18 +54,6 @@ const selectedCategory_menu_items = computed(() =>
 );
 
 
-// async function place_order() {
-//     const create_order = await $fetch("/api/orders", {
-//         method: 'POST',
-//         body: {
-//             cart_items: cart_items.value,
-//             table_id: table_id,
-//         }
-//     })
-
-//     console.log(create_order)
-    
-// }
 
 
 
