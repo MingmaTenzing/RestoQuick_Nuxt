@@ -153,7 +153,6 @@ try {
         v-for="item in filteredItems"
         :key="item.id"
         :item="item"
-        @update-stock="updateStock"
         @restock="openRestockDialog"
       />
     </div>

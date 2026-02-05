@@ -8,7 +8,6 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'update-stock', id: string, change: number): void
   (e: 'restock', item: StockItem): void
 }
 
@@ -90,24 +89,10 @@ const getCategoryColor = (category: StockCategory) => {
     <!-- Actions -->
     <div class="flex gap-2 pt-2 border-t">
       <button
-        @click="emit('update-stock', item.id, -1)"
-        class="flex-1 px-3 py-2 rounded-md border border-input bg-background hover:bg-accent transition-colors text-sm font-medium flex items-center justify-center gap-1"
-      >
-        <i class="pi pi-minus" />
-        Remove
-      </button>
-      <button
-        @click="emit('update-stock', item.id, 1)"
-        class="flex-1 px-3 py-2 rounded-md border border-input bg-background hover:bg-accent transition-colors text-sm font-medium flex items-center justify-center gap-1"
-      >
-        <i class="pi pi-plus" />
-        Add
-      </button>
-      <button
         @click="emit('restock', item)"
-        class="flex-1 px-3 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium"
+        class="w-full px-3 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium"
       >
-        Restock
+        Manage Stock
       </button>
     </div>
   </div>
