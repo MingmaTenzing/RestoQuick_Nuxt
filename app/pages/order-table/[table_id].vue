@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 
+import Cart_Item from '~/components/qr_order_components/Cart_Item.vue';
+import Menu_Item from '~/components/qr_order_components/Menu_Item.vue';
 import type { MenuItem } from '~/generated/prisma/client';
 import type Order_Cart_Item from '~~/types/order-cart';
 
@@ -97,7 +99,7 @@ const selectedCategory_menu_items = computed(() =>
     <!-- list of menu items -->
         <div  v-for="item in selectedCategory_menu_items" :key="item.id" class=" space-y-4 last:pb-26">
  
-            <OrderComponentsMenuItem :menu_item="item" ></OrderComponentsMenuItem>           
+            <Menu_Item :menu_item="item" ></Menu_Item>           
 
         </div>
 
@@ -152,7 +154,7 @@ const selectedCategory_menu_items = computed(() =>
                  <div class="" v-for="item in cart_items" :key="item.menuItemId">
                     
                                 <!-- list of cart items -->
-                                 <OrderComponentsCartItem :cart_item="item" ></OrderComponentsCartItem>
+                                 <Cart_Item :cart_item="item" ></Cart_Item>
                 </div>
       
 
