@@ -1,26 +1,24 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
-import type { StockItem } from '~/generated/prisma/client';
-import type { StockItemCreateInput, StockItemUncheckedCreateInput } from '~/generated/prisma/models';
+import { StockCategory } from '~/generated/prisma/enums';
+import type { StockItemCreateInput } from '~/generated/prisma/models';
 
 interface Props {
   open: boolean
 }
 
-interface Emits {
-  (e: 'update:open', value: boolean): void
-  (e: 'add-item', item: StockItemCreateInput): void
-}
+
+
 const emit = defineEmits<{
-  // <eventName>: <expected arguments>
-  change: []
-  update: [value: number] // named tuple syntax
+  (e: 'update:open', value: boolean): void
+  (e: 'add-item', value: StockItemCreateInput): void
 }>()
+
 const props = defineProps<Props>()
 
 const formData = reactive<StockItemCreateInput>({
   name: '',
-  category: 'INGREDIENTS',
+  category: StockCategory.INGREDIENTS, //default value
   currentStock: 0,
   unit: '',
   reorderLevel: 0,
@@ -40,7 +38,7 @@ const handleSubmit = () => {
 
 const resetForm = () => {
   formData.name = ''
-  formData.category = "INGREDIENTS",
+  formData.category = StockCategory.INGREDIENTS, //default value
   formData.currentStock = 0
   formData.unit = ''
   formData.reorderLevel = 0
@@ -77,10 +75,10 @@ const closeDialog = () => {
             v-model="formData.category"
             class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           >
-            <option value="ingredients">Ingredients</option>
-            <option value="beverages">Beverages</option>
-            <option value="supplies">Supplies</option>
-            <option value="other">Other</option>
+            <option :value="StockCategory.INGREDIENTS">Ingredients</option>
+            <option :value="StockCategory.BEVERAGES">Beverages</option>
+            <option :value="StockCategory.SUPPLIES">Supplies</option>
+            <option :value="StockCategory.OTHER">Other</option>
           </select>
         </div>
 

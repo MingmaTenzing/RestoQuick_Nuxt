@@ -4,73 +4,18 @@ import AddStockDialog from '~/components/stock_components/AddStockDialog.vue'
 import RestockDialog from '~/components/stock_components/RestockDialog.vue'
 import StockEmptyState from '~/components/stock_components/StockEmptyState.vue'
 import StockFilterBar from '~/components/stock_components/StockFilterBar.vue'
-import type { StockItem } from '~/components/stock_components/StockItemCard.vue'
 import StockItemCard from '~/components/stock_components/StockItemCard.vue'
 import StockStatsCard from '~/components/stock_components/StockStatsCard.vue'
+import type { StockItem } from '~/generated/prisma/client'
+import type { StockItemCreateInput } from '~/generated/prisma/models'
 
 definePageMeta({
   layout: 'dashboard-layout'
 })
 
-const stockItems = ref<StockItem[]>([
-  {
-    id: '1',
-    name: 'Olive Oil',
-    category: 'ingredients',
-    currentStock: 5,
-    unit: 'liters',
-    reorderLevel: 10,
-    reorderQuantity: 20,
-    supplier: 'Premium Oils Inc',
-    lastRestocked: '2026-02-01'
-  },
-  {
-    id: '2',
-    name: 'Tomato Sauce',
-    category: 'ingredients',
-    currentStock: 15,
-    unit: 'cans',
-    reorderLevel: 20,
-    reorderQuantity: 50,
-    supplier: 'Fresh Foods Co',
-    lastRestocked: '2026-01-28'
-  },
-  {
-    id: '3',
-    name: 'Cola',
-    category: 'beverages',
-    currentStock: 8,
-    unit: 'bottles',
-    reorderLevel: 15,
-    reorderQuantity: 30,
-    supplier: 'Beverage Distributors',
-    lastRestocked: '2026-01-30'
-  },
-  {
-    id: '4',
-    name: 'Paper Napkins',
-    category: 'supplies',
-    currentStock: 25,
-    unit: 'packs',
-    reorderLevel: 10,
-    reorderQuantity: 40,
-    supplier: 'Supply Hub',
-    lastRestocked: '2026-02-02'
-  },
-  {
-    id: '5',
-    name: 'Flour',
-    category: 'ingredients',
-    currentStock: 3,
-    unit: 'kg',
-    reorderLevel: 10,
-    reorderQuantity: 25,
-    supplier: 'Premium Oils Inc',
-    lastRestocked: '2026-01-25'
-  },
-])
+const {data:stockItems, refresh} = useFetch<StockItem[]>("/api/stock")
 
-const filter = ref<'all' | 'low' | 'ingredients' | 'beverages' | 'supplies'>('all')
+const filter = ref<'all' | 'low' | 'INGREDIENTS' | 'BEVERAGES' | 'SUPPLIES'>('all')
 const searchQuery = ref('')
 const isAddDialogOpen = ref(false)
 const isRestockDialogOpen = ref(false)
@@ -79,31 +24,36 @@ const selectedItem = ref<StockItem | null>(null)
 const isLowStock = (item: StockItem) => item.currentStock <= item.reorderLevel
 
 const filteredItems = computed(() => {
-  return stockItems.value.filter((item) => {
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-    if (filter.value === 'all') return matchesSearch
-    if (filter.value === 'low') return matchesSearch && isLowStock(item)
-    return matchesSearch && item.category === filter.value
-  })
+  if (stockItems.value) {
+    return stockItems.value.filter((item) => {
+      const matchesSearch = item.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+      if (filter.value === 'all') return matchesSearch
+      if (filter.value === 'low') return matchesSearch && isLowStock(item)
+      return matchesSearch && item.category === filter.value
+    })
+    
+  }
+  return [];
 })
 
-const lowStockCount = computed(() => stockItems.value.filter(isLowStock).length)
-const totalItems = computed(() => stockItems.value.length)
-const totalValue = computed(() => stockItems.value.reduce((sum, item) => sum + item.currentStock, 0))
+const lowStockCount = computed(() => stockItems.value?.filter(isLowStock).length ?? 0)
+const totalItems = computed(() => stockItems.value?.length ?? 0)
+const totalValue = computed(() => stockItems.value?.reduce((sum, item) => sum + item.currentStock, 0) ?? 0)
 
 const filterOptions = computed(() => [
   { value: 'all', label: 'All Items' },
   { value: 'low', label: 'Low Stock', count: lowStockCount.value },
-  { value: 'ingredients', label: 'Ingredients' },
-  { value: 'beverages', label: 'Beverages' },
-  { value: 'supplies', label: 'Supplies' },
+  { value: 'INGREDIENTS', label: 'Ingredients' },
+  { value: 'BEVERAGES', label: 'Beverages' },
+  { value: 'SUPPLIES', label: 'Supplies' },
 ])
 
 const updateStock = (id: string, change: number) => {
+  if (!stockItems.value) return
   const item = stockItems.value.find(i => i.id === id)
   if (item) {
     item.currentStock = Math.max(0, item.currentStock + change)
-    item.lastRestocked = new Date().toISOString().split('T')[0] || ''
+    item.lastRestocked = new Date()
   }
 }
 
@@ -118,14 +68,27 @@ const handleRestock = (id: string, quantity: number) => {
   selectedItem.value = null
 }
 
-const handleAddItem = (itemData: Omit<StockItem, 'id' | 'lastRestocked'>) => {
-  const newItem: StockItem = {
-    id: `s${Date.now()}`,
-    ...itemData,
-    lastRestocked: new Date().toISOString().split('T')[0] || '',
-  }
-  stockItems.value.push(newItem)
+const handleAddItem = async(itemData: StockItemCreateInput) => {
+
+try {
+  
+  const add_stock = await $fetch('/api/stock', {
+    method: 'POST',
+    body: itemData
+  })
+
+  console.log(add_stock)
+  refresh() //refresh the fetch if adding stock is successful
+} catch (error) {
+  
+} finally {
   isAddDialogOpen.value = false
+
+  
+}
+
+
+  
 }
 </script>
 

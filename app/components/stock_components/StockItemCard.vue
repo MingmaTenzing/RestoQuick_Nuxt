@@ -1,15 +1,7 @@
 <script setup lang="ts">
-export interface StockItem {
-  id: string
-  name: string
-  category: 'ingredients' | 'beverages' | 'supplies' | 'other'
-  currentStock: number
-  unit: string
-  reorderLevel: number
-  reorderQuantity: number
-  supplier?: string
-  lastRestocked: string
-}
+import type { StockCategory, StockItem } from '~/generated/prisma/client';
+
+
 
 interface Props {
   item: StockItem
@@ -25,15 +17,15 @@ const emit = defineEmits<Emits>()
 
 const isLowStock = (item: StockItem) => item.currentStock <= item.reorderLevel
 
-const getCategoryColor = (category: StockItem['category']) => {
+const getCategoryColor = (category: StockCategory) => {
   switch (category) {
-    case 'ingredients':
+    case 'INGREDIENTS':
       return 'bg-orange-500/10 text-orange-600 border-orange-500/20'
-    case 'beverages':
+    case 'BEVERAGES':
       return 'bg-blue-500/10 text-blue-600 border-blue-500/20'
-    case 'supplies':
+    case 'SUPPLIES':
       return 'bg-purple-500/10 text-purple-600 border-purple-500/20'
-    case 'other':
+    case 'OTHER':
       return 'bg-gray-500/10 text-gray-600 border-gray-500/20'
   }
 }
