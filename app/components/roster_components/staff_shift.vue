@@ -37,7 +37,7 @@ function deleteShift() {
 
      
        <div class=" flex flex-col bg-accent p-2 rounded-lg w-full border hover:border-dashed hover:border-ring">
-        <div v-if="route.path !== '/print-roster'" v-on:click="open_edit_shiftModal(shift.id)"  class="cursor-pointer flex justify-end   text-muted-foreground hover:text-primary">
+        <div v-if="route.path !== '/print-roster'" v-on:click="open_edit_shiftModal(shift)"  class="cursor-pointer flex justify-end   text-muted-foreground hover:text-primary">
             <i class=" pi pi-pencil"></i>
            
         </div>
