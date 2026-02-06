@@ -70,7 +70,7 @@ function onSelectStaff(staff: Staff) {
 <template>
     <div v-if="addShiftModal.isOpen" class=" flex  justify-center items-center fixed w-screen h-screen bg-background/90 backdrop-blur-xs  top-0 z-10 left-0">
 
-        <div class=" w-[500px] flex flex-col gap-4  p-4 bg-background   drop-shadow-lg border   drop-shadow-accent opacity-100 rounded-lg" >
+        <div class=" w-125 flex flex-col gap-4  p-4 bg-background   drop-shadow-lg border   drop-shadow-accent opacity-100 rounded-lg" >
             
             <section class=" space-y-2">
                 <!-- modal header -->
@@ -108,7 +108,7 @@ function onSelectStaff(staff: Staff) {
                          <i class=" pi pi-angle-down"></i>
                          </div>
 
-                    <div v-if="is_select_staff_open" class=" absolute w-full h-[260px] overflow-y-scroll  z-10  space-y-2  bg-background  shadow-2xl rounded-lg ">
+                    <div v-if="is_select_staff_open" class=" absolute w-full h-65 overflow-y-scroll  z-10  space-y-2  bg-background  shadow-2xl rounded-lg ">
                         <div v-on:click="() => onSelectStaff(staff)" class="hover:bg-accent" v-for="staff in staffs" :key="staff.id" >
                             <div class="flex  items-center justify-between p-2 ">
                                 <div class=" flex space-x-2 items-center">

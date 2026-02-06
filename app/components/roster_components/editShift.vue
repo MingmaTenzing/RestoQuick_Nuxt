@@ -79,7 +79,7 @@ async function submit_shift() {
 <template>
     <div  class=" flex  justify-center items-center fixed  w-screen h-screen bg-background/90 backdrop-blur-xs  top-0 z-10 left-0">
 
-        <div class=" w-[500px] flex flex-col gap-4  p-4 bg-background   drop-shadow-lg border   drop-shadow-accent opacity-100 rounded-lg" >
+        <div class=" w-125 flex flex-col gap-4  p-4 bg-background   drop-shadow-lg border   drop-shadow-accent opacity-100 rounded-lg" >
             
             <section class=" space-y-2">
                 <!-- modal header -->

@@ -2,8 +2,9 @@
 
 import { inject } from 'vue';
 import type { Shift, Staff } from '~/generated/prisma/client';
+import type { Shift_With_Staff_Payload } from '~~/types/shift_include_staff';
 
-const props = defineProps<{ shift: Shift}>()
+const props = defineProps<{ shift: Shift_With_Staff_Payload}>()
 
 const toast = useToast()
 
@@ -11,34 +12,18 @@ const toast = useToast()
 //if yes hide the edit and delete button
 const route = useRoute()
 
+const emit = defineEmits<{
+  // <eventName>: <expected arguments>
+  deleteShift: [value: string] // named tuple syntax
+}>()
 
 const {editshiftModal, open_edit_shiftModal,close_edit_shiftModal } = useeditShiftModal()
 
-// Inject the refetch trigger function from parent roster_calendar
-const triggerShiftRefetch = inject<() => void>('triggerShiftRefetch', () => {})
-
-const { data: staff } = await useFetch<Staff>(() => `/api/staff/${props.shift.staffId}`) 
-
-
-
-async function deleteShift() {
-    const { data: deleted_Staff ,status,error  } = await useFetch(() => `/api/shift/${props.shift.id}`, {
-        method:'delete'
-    })
-
-    if (deleted_Staff.value && status.value === "success") {
-        
-        toast.success({title:"Success", message:"Shift Deleted"})
-        // Trigger refetch in parent component
-        triggerShiftRefetch()
-
-    }
-    else if (error) {
-        toast.error({title:error.value?.name, message:error.value?.message})
-    }
-
-    
+function deleteShift() {
+  emit("deleteShift", props.shift.id)
 }
+
+
     
 
 
@@ -59,9 +44,9 @@ async function deleteShift() {
         <div class="flex justify-between items-end ">
 <div class="  space-y-2">
 
-    <NuxtImg :src="staff?.profile_photo_url"  class=" w-10 h-10 object-cover rounded-full" ></NuxtImg>
+    <NuxtImg :src="shift.staff?.profile_photo_url"  class=" w-10 h-10 object-cover rounded-full" ></NuxtImg>
   <div class=" flex flex-col">
-      <span class=" text-xs xl:text-base font-medium">{{ staff?.firstname }} {{ staff?.lastName[0] }}.</span>
+      <span class=" text-xs xl:text-base font-medium">{{ shift.staff?.firstname }} {{ shift.staff?.lastName[0] }}.</span>
   
          <span class="text-[10px] lg:text-sm">{{shift?.startTime}} - {{shift?.endTime}}</span>
          <span class="text-[10px] lg:text-xs font-light text-muted-foreground">{{ shift.position }}</span>

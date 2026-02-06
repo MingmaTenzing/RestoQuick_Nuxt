@@ -2,7 +2,9 @@
 
 import type { Shift } from '~/generated/prisma/client';
 import { ref, provide } from 'vue';
-import { mockStaff } from '~/lib/roster-mockdata';
+import type { ShiftGetPayload } from '~/generated/prisma/models';
+import type { Shift_With_Staff_Payload } from "../../../types/shift_include_staff"
+
 const {
     weekDates,
     weekRangeText,
@@ -17,25 +19,44 @@ const {
 
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
 const {editshiftModal} = useeditShiftModal()
+const toast = useToast();
 
-// Reactive ref to trigger refetch on shift deletion
-const shiftDeleteTrigger = ref(false)
-
-// Function to trigger shift deletion refetch
-const triggerShiftRefetch = () => {
-  shiftDeleteTrigger.value = !shiftDeleteTrigger.value
-}
-
-// Provide the trigger function to child components
-provide('triggerShiftRefetch', triggerShiftRefetch)
-
-// the useFetch call is watching addShiftModal.value to refetch data if it changes
-// the reason for this is user will open the addshiftmodal and then it will close automatically once its done.
-// this elemenates creating another separate variable to watch
-// but with further development it might change. for now its fine.
-const { data: shifts, status } = await useFetch<Shift[]>("/api/shift",  {watch: [addShiftModal.value, editshiftModal.value, shiftDeleteTrigger], lazy:true}, )
+// initial shifts fetch with staff data 
+const { data: shifts, status, refresh } = await useFetch<Shift_With_Staff_Payload[]>("/api/shift", {
+    lazy: true
+} )
 
 console.log(shifts)
+
+
+
+// this function is triggered from the emitted event from the staff shift component
+async function deleteShift(shiftId: string) {
+
+    try {
+        const delete_staff = await $fetch( `/api/shift/${shiftId}`, {
+            method:'delete'
+        })
+    
+        if (delete_staff) {
+            
+            toast.success({title:"Success", message:"Shift Deleted"})
+            // Trigger refetch in parent component
+            refresh()
+    
+        }
+        
+    } catch (error) {
+        const nuxtError = isNuxtError(error) ? error : null
+        toast.error({
+            title: nuxtError?.name ?? "Error",
+            message: nuxtError?.message ?? "Failed to delete shift"
+        })
+    }
+   
+    }
+
+    
 
 </script>
 
@@ -106,7 +127,7 @@ console.log(shifts)
     
 
         <!-- shifts of the day container-->
- <div    class='  flex flex-col gap-2 p-2   min-h-[120px] border-2 border-dashed rounded-lg hover:border-ring'>
+ <div    class='  flex flex-col gap-2 p-2   min-h-30 border-2 border-dashed rounded-lg hover:border-ring'>
 
 <!-- add shift button -->
       <button v-on:click="open_add_shiftModal(date.date)" class=" flex justify-end">
@@ -127,7 +148,7 @@ console.log(shifts)
       new Date(date.date).toISOString().split('T')[0])" :key="shift.id">
 
 
-            <roster-components-staff-shift :shift="shift"></roster-components-staff-shift>
+            <roster-components-staff-shift :shift="shift" @delete-shift="deleteShift"></roster-components-staff-shift>
             </div>
 
     </div>
