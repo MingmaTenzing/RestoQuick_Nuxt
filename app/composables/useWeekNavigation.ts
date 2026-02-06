@@ -62,9 +62,18 @@ export function useWeekNavigation() {
     return `${start.month} ${start.dayNumber} - ${end.month} ${end.dayNumber}`;
   });
 
+  // End of the week (Sunday)
+  const endOfWeek = computed(() => {
+    const start = new Date(startOfWeek.value);
+    start.setDate(start.getDate() + 6);
+    return start;
+  });
+
   return {
     weekDates,
     weekRangeText,
+    startOfWeek,
+    endOfWeek,
     nextWeek,
     previousWeek,
     goToCurrentWeek,

@@ -3,14 +3,18 @@
 import type { Prisma, Staff , Shift} from '~/generated/prisma/client';
 
 const toast = useToast();
+
+
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
 
-const {data: staffs} = await useFetch<Staff[]>("/api/staff")
+
+
+const {data: staffs} = await useFetch<Staff[]>("/api/staff", {lazy: true})
 
 
 
 const is_select_staff_open = ref<boolean>(false)
-
+const isSubmitting = ref<boolean>(false)
 
 const selected_staff = ref<Staff>();
 
@@ -37,20 +41,28 @@ async function submit_shift() {
     console.log(shift_form.value)
     // this can be optimized once connected with database 
 
-    const {data, status, error} = await useFetch('/api/shift', {
-        method: 'post',
-        body: shift_form.value
-    })
-
-    if (status.value == 'success' && data.value?.response) {
+    isSubmitting.value = true
+    try {
+        const add_shift = await $fetch('/api/shift', {
+            method: 'post',
+            body: shift_form.value
+        })
+    
+        if (add_shift) {
+            await refreshNuxtData('shifts')
+            toast.success({title:"Success", message:"Shift Added"})
+            close_add_shiftModal()
+        }
         
-        toast.success({title:"Success", message:"Shift Added"})
-        close_add_shiftModal()
+    } catch (error) {
+        const nuxtError = isNuxtError(error) ? error : null
+        toast.error({title: "Error", message: nuxtError?.message})
+    } finally {
+        isSubmitting.value = false
     }
-  else if (status.value == 'error') {
 
-    toast.error({title: "Error", message: error.value?.message})
-  }
+
+  
 
     
 }
@@ -112,8 +124,7 @@ function onSelectStaff(staff: Staff) {
                         <div v-on:click="() => onSelectStaff(staff)" class="hover:bg-accent" v-for="staff in staffs" :key="staff.id" >
                             <div class="flex  items-center justify-between p-2 ">
                                 <div class=" flex space-x-2 items-center">
-
-                                    <div class=" w-8 h-8 bg-accent text-accent-foreground text-xs rounded-full flex justify-center items-center">{{staff.firstname[0]}}{{ staff.lastName[0] }}</div>
+                                    <NuxtImg :src="staff.profile_photo_url" class=" w-8 h-8 rounded-full object-cover" ></NuxtImg>
                                     <span>{{ staff.firstname }} {{ staff.lastName[0] }}.</span>
                                 </div>
                             
@@ -175,9 +186,10 @@ function onSelectStaff(staff: Staff) {
 
     <section class=" flex justify-end space-x-2 items-center text-sm">
 
-        <button v-on:click="close_add_shiftModal()" class="px-4  py-2  hover:border-ring rounded-lg border border-border ">Cancel</button>
-        <button type="submit" class="px-4  py-2  hover:border-ring rounded-lg border border-border bg-green-600  text-green-50 ">Add Shift
-
+        <button type="button" v-on:click="close_add_shiftModal()" :disabled="isSubmitting" class="px-4  py-2  hover:border-ring rounded-lg border border-border disabled:opacity-50 disabled:cursor-not-allowed">Cancel</button>
+        <button type="submit" :disabled="isSubmitting" class="px-4  py-2  hover:border-ring rounded-lg border border-border bg-green-600  text-green-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+            <i v-if="isSubmitting" class="pi pi-spin pi-spinner"></i>
+            {{ isSubmitting ? 'Adding...' : 'Add Shift' }}
         </button>
     </section>
     </form>

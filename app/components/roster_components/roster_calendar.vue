@@ -8,6 +8,8 @@ import type { Shift_With_Staff_Payload } from "../../../types/shift_include_staf
 const {
     weekDates,
     weekRangeText,
+    startOfWeek,
+    endOfWeek,
     nextWeek,
     previousWeek,
     goToCurrentWeek,
@@ -21,12 +23,24 @@ const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShift
 const {editshiftModal} = useeditShiftModal()
 const toast = useToast();
 
-// initial shifts fetch with staff data 
-const { data: shifts, status, refresh } = await useFetch<Shift_With_Staff_Payload[]>("/api/shift", {
-    lazy: true
-} )
 
-console.log(shifts)
+
+//intial shifts fetch with staff data for current week
+const { data: shifts, status, refresh } = await useAsyncData(
+  "shifts",
+  () => $fetch<Shift_With_Staff_Payload[]>("/api/shift", {
+    query: {
+      startDate: startOfWeek.value.toISOString(),
+      endDate: endOfWeek.value.toISOString()
+    }
+  }), 
+  {
+    lazy: true,
+    watch: [startOfWeek, endOfWeek] // Refetch when week changes
+  }
+);  
+
+console.log(shifts.value)
 
 
 
@@ -56,6 +70,9 @@ async function deleteShift(shiftId: string) {
    
     }
 
+
+
+    
     
 
 </script>

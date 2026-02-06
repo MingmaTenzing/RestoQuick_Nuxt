@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Staff } from '~/generated/prisma/client';
+import type { Staff, WeekDay } from '~/generated/prisma/client';
 
 
 
@@ -8,12 +8,12 @@ const props = defineProps<{ staff: Staff }>()
 
 
 
-const weekDays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+const weekDays: WeekDay[] = ["MON" ,"TUE" ,"WED" ,"THU" ,"FRI" ,"SAT" ,"SUN"]
 
 
 
 
-const isAvailable = (day: string) => props.staff.availability.includes(day)
+const isAvailable = (day: WeekDay) => props.staff.availability.includes(day)
 
 
 
