@@ -5,6 +5,7 @@ definePageMeta( {
 }
 )
 import type { Shift } from '~/generated/prisma/client';
+import type { Shift_With_Staff_Payload } from '~~/types/shift_include_staff';
 
 const {
     weekDates,
@@ -12,12 +13,32 @@ const {
     nextWeek,
     previousWeek,
     goToCurrentWeek,
+    endOfWeek,
+    startOfWeek
 
 } = useWeekNavigation();
 
 
 
-const { data: shifts } = await useFetch<Shift[]>("/api/shift" )
+const { data: shifts, status, refresh } = await useAsyncData(
+
+  () => $fetch<Shift_With_Staff_Payload[]>("/api/shift", {
+    query: {
+      startDate: startOfWeek.value.toISOString(),
+      endDate: endOfWeek.value.toISOString()
+    }
+  }), 
+  {
+    
+    watch: [startOfWeek, endOfWeek] // Refetch when week changes
+  }
+);  
+
+
+function printRoster() {
+
+    window.print()
+}
 
 
 </script>
@@ -40,6 +61,7 @@ const { data: shifts } = await useFetch<Shift[]>("/api/shift" )
                 </span>
                 <button v-on:click="nextWeek()" class=" border px-4 bg-card hover:border-ring  py-2 rounded-lg">></button>
                 <button  v-on:click="goToCurrentWeek()" class=" rounded-lg border border-border bg-card hover:border-ring   px-4 py-2  text-accent-foreground">Get Current Week</button>
+                <button  v-on:click="printRoster()" class=" rounded-lg border border-border bg-card hover:border-ring   px-4 py-2  text-accent-foreground">Print Roster</button>
             </div>
     </div>
 
