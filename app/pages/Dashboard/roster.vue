@@ -1,12 +1,14 @@
 <script setup  lang="ts">
-
-
+import Roster_ai_sidebar_modal from '~/components/roster_components/roster_ai_sidebar_modal.vue';
 
 definePageMeta({
     layout: 'dashboard-layout'
 })
 
 const route = useRoute();
+const { open, isOpen } = useAiRosterModal()
+
+console.log(isOpen.value)
 </script>
 
 <template>
@@ -16,20 +18,23 @@ const route = useRoute();
         <!-- headers  -->
         <div>
             <h1 class="text-2xl md:text-6xl">Roster Management </h1>
-        <span class=" text-accent-foreground/60">Manage staff schedules, leave requests, and availability
-        </span>
-    
+            <span class=" text-accent-foreground/60">Manage staff schedules, leave requests, and availability</span>
         </div>
-    
-       
-    <div class=" ">
 
-   
+        <div class=" flex gap-3">
+            <button
+                class=" border-border border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-lg"
+                @click="open"
+            >
+                <i class=" pi text-muted-foreground pi-sparkles"></i>
+                <span>AI Suggestions</span>
+            </button>
 
-        <NuxtLink to="/print-roster" class=" border-border  border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-lg"> <i class=" pi text-muted-foreground pi-print"></i> <span>Print Roster</span> </NuxtLink>
-    </div>
-            
-  
+            <NuxtLink to="/print-roster" class=" border-border  border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-lg">
+                <i class=" pi text-muted-foreground pi-print"></i>
+                <span>Print Roster</span>
+            </NuxtLink>
+        </div>
     </div>
 
 
@@ -161,6 +166,11 @@ const route = useRoute();
 
 </div>
 
+
+<div v-if="isOpen">
+ <Roster_ai_sidebar_modal></Roster_ai_sidebar_modal>
+
+</div>
 
 
  
