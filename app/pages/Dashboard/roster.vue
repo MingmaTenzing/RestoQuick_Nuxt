@@ -1,6 +1,7 @@
 <script setup  lang="ts">
 import Roster_ai_sidebar_modal from '~/components/roster_components/roster_ai_sidebar_modal.vue';
 
+
 definePageMeta({
     layout: 'dashboard-layout'
 })
@@ -22,11 +23,13 @@ console.log(isOpen.value)
         </div>
 
         <div class=" flex gap-3">
+  
+
             <button
-                class=" border-border border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-lg"
+                class="border-border border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-lg"
                 @click="open"
             >
-                <i class=" pi text-muted-foreground pi-sparkles"></i>
+                <i class="pi pi-sparkles text-muted-foreground"></i>
                 <span>AI Suggestions</span>
             </button>
 
@@ -167,11 +170,12 @@ console.log(isOpen.value)
 </div>
 
 
-<div v-if="isOpen">
- <Roster_ai_sidebar_modal></Roster_ai_sidebar_modal>
-
-</div>
+  <div v-if="isOpen">
+    <Roster_ai_sidebar_modal />
+  </div>
 
 
  
 </template>
+<style>
+</style>
