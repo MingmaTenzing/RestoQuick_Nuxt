@@ -46,7 +46,7 @@ const { isOpen, close } = useAiRosterModal()
       </div>
 
       <!-- chat area -->
-      <div class="flex-1 min-h-0 overflow-y-auto  border-y  p-4 bg-background space-y-4">
+      <div class="flex-1 min-h-0 overflow-y-auto  border-y  p-4  space-y-4">
         <!-- user message -->
         <div class="flex justify-end">
           <div class="max-w-[80%] rounded-lg bg-primary text-primary-foreground px-3 py-2 text-sm">
@@ -77,7 +77,7 @@ const { isOpen, close } = useAiRosterModal()
       <div class="border-t  p-3 ">
         <textarea
           rows="3"
-          class="w-full resize-none border rounded-lg px-3 py-2 bg-background"
+          class="w-full resize-none border rounded-lg px-3 py-2 outline-none"
           placeholder="Ask the AI to optimize your roster..."
         ></textarea>
 

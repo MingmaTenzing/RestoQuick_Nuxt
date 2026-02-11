@@ -40,7 +40,6 @@ function printRoster() {
     window.print()
 }
 
-
 </script>
 
 
