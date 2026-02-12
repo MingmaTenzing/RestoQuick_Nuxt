@@ -40,8 +40,7 @@ const { data: shifts, status, refresh } = await useAsyncData(
   }
 );  
 
-console.log(shifts.value)
-
+console.log(shifts)
 
 
 // this function is triggered from the emitted event from the staff shift component

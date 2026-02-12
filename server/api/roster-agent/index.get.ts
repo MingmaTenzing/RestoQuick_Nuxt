@@ -1,6 +1,7 @@
 import { Agent, run, tool } from "@openai/agents";
 import { z } from "zod";
 import { usePrisma } from "~~/server/utils/prisma";
+import { Shift_with_Staff_Schema_Simple } from "../../../zod_schema/database_schema";
 
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
@@ -9,33 +10,7 @@ export default defineEventHandler(async (event) => {
     (query.message as string) ||
     "Suggest a roster for next week using available staff, shifts, and leave requests.";
 
-  const SuggestedShift = z.object({
-    date: z.string(),
-    staffId: z.string(),
-    staffName: z.string(),
-    role: z.string(),
-    startTime: z.string(),
-    endTime: z.string(),
-    position: z.string(),
-    reason: z.string(),
-  });
-
-  const RosterSuggestion = z.object({
-    weekStart: z.string(),
-    weekEnd: z.string(),
-    timezone: z.string(),
-    assumptions: z.array(z.string()),
-    coverageSummary: z.array(
-      z.object({
-        day: z.string(),
-        notes: z.string(),
-      }),
-    ),
-    suggestedShifts: z.array(SuggestedShift),
-    warnings: z.array(z.string()),
-  });
-
-  const asIsoDate = (value: Date) => value.toISOString().slice(0, 10);
+  // Helper to compute next week's date range
   const getNextWeekRange = () => {
     const now = new Date();
     const day = now.getDay();
@@ -49,13 +24,14 @@ export default defineEventHandler(async (event) => {
     return { start, end };
   };
 
+  const asIsoDate = (value: Date) => value.toISOString().split("T")[0];
   const { start: nextWeekStart, end: nextWeekEnd } = getNextWeekRange();
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
+  // Tool: Get all staff
   const getStaffTool = tool({
-    name: "get_staff",
+    name: "get_all_staff",
     description:
-      "Fetch all staff with role, employment type, availability, and hourly rate.",
+      "Fetch all staff with their roles, availability, and hourly rates.",
     parameters: z.object({}),
     execute: async () => {
       const staffs = await prisma.staff.findMany({
@@ -66,98 +42,105 @@ export default defineEventHandler(async (event) => {
         firstname: staff.firstname,
         lastName: staff.lastName,
         role: staff.role,
+        email: staff.email,
+        phone: staff.phone,
         employmentType: staff.employmentType,
-        perHourRate: staff.perHourRate.toString(),
+        perHourRate: Number(staff.perHourRate),
         availability: staff.availability,
+        joined_date: staff.joined_date.toISOString(),
+        shifts: [],
+        leaveRequests: [],
+        profile_photo_url: staff.profile_photo_url,
       }));
     },
   });
 
-  const getShiftsTool = tool({
-    name: "get_shifts",
-    description:
-      "Fetch shifts between a date range. Dates are expected in ISO format.",
-    parameters: z.object({
-      startDate: z.string(),
-      endDate: z.string(),
-    }),
-    execute: async ({ startDate, endDate }) => {
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      const shifts = await prisma.shift.findMany({
-        where: {
-          date: {
-            gte: start,
-            lte: end,
-          },
-        },
-        orderBy: {
-          date: "asc",
-        },
-      });
-      return shifts.map((shift) => ({
-        id: shift.id,
-        staffId: shift.staffId,
-        date: shift.date.toISOString(),
-        startTime: shift.startTime,
-        endTime: shift.endTime,
-        position: shift.position,
-      }));
-    },
-  });
-
+  // Tool: Get approved leave requests for next week
   const getLeaveRequestsTool = tool({
-    name: "get_leave_requests",
+    name: "get_approved_leaves",
     description:
-      "Fetch leave requests, optionally filtered by date range. Dates are ISO format.",
-    parameters: z.object({
-      startDate: z.string(),
-      endDate: z.string(),
-    }),
-    execute: async ({ startDate, endDate }) => {
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      const leaveRequests = await prisma.leaveRequest.findMany({
+      "Fetch approved leave requests for next week. Returns staff IDs who are on leave.",
+    parameters: z.object({}),
+    execute: async () => {
+      const leaves = await prisma.leaveRequest.findMany({
         where: {
-          startDate: {
-            lte: end,
-          },
-          endDate: {
-            gte: start,
-          },
-        },
-        orderBy: {
-          startDate: "asc",
+          status: "approved",
+          startDate: { lte: nextWeekEnd },
+          endDate: { gte: nextWeekStart },
         },
       });
-      return leaveRequests.map((leave) => ({
-        id: leave.id,
+      return leaves.map((leave) => ({
         staffId: leave.staffId,
-        startDate: leave.startDate.toISOString(),
-        endDate: leave.endDate.toISOString(),
-        status: leave.status,
+        startDate: asIsoDate(leave.startDate),
+        endDate: asIsoDate(leave.endDate),
         reason: leave.reason,
       }));
     },
   });
 
+  // Tool: Get existing shifts for next week
+  const getExistingShiftsTool = tool({
+    name: "get_existing_shifts",
+    description: "Fetch existing shifts already scheduled for next week.",
+    parameters: z.object({}),
+    execute: async () => {
+      const shifts = await prisma.shift.findMany({
+        where: {
+          date: { gte: nextWeekStart, lte: nextWeekEnd },
+        },
+        include: { staff: true },
+      });
+      return shifts.map((shift) => ({
+        id: shift.id,
+        staffId: shift.staffId,
+        date: shift.date.toISOString().split("T")[0],
+        startTime: shift.startTime,
+        endTime: shift.endTime,
+        position: shift.position,
+        staff: {
+          id: shift.staff.id,
+          firstname: shift.staff.firstname,
+          lastName: shift.staff.lastName,
+          role: shift.staff.role,
+          email: shift.staff.email,
+          phone: shift.staff.phone,
+          employmentType: shift.staff.employmentType,
+          perHourRate: Number(shift.staff.perHourRate),
+          availability: shift.staff.availability,
+          joined_date: shift.staff.joined_date.toISOString(),
+          shifts: [],
+          leaveRequests: [],
+          profile_photo_url: shift.staff.profile_photo_url,
+        },
+      }));
+    },
+  });
+
+  const RosterSuggestionOutput = z.object({
+    suggestedShifts: z.array(Shift_with_Staff_Schema_Simple),
+  });
+
   const agent = new Agent({
     name: "Roster Agent",
     model: "gpt-5-mini",
-    outputType: RosterSuggestion,
-    instructions:
-      "You are a helpful assistant that suggests a roster for next week. Use tools to fetch staff, shifts, and leave requests. Always pass startDate and endDate when calling tools that require them. Respect staff availability and approved leave. Keep suggestions practical and avoid conflicts. Output must match the provided schema.",
-    tools: [getStaffTool, getShiftsTool, getLeaveRequestsTool],
+    outputType: Shift_with_Staff_Schema_Simple,
+    instructions: `You are a helpful roster assistant. Your job is to suggest shifts for next week (${asIsoDate(nextWeekStart)} to ${asIsoDate(nextWeekEnd)}).
+    
+Steps:
+1. Use get_all_staff to fetch all available staff
+2. Use get_approved_leaves to identify who is on leave
+3. Use get_existing_shifts to see what's already scheduled
+4. Suggest new shifts to fill gaps, respecting:
+   - Staff availability (weekday preferences)
+   - Approved leave dates
+   - Avoiding schedule conflicts
+   - Mix of roles (Chef, Waiter, Bartender, etc.)
+
+Output the suggested shifts as an array matching the schema. Each shift must include full staff details.`,
+    tools: [getStaffTool, getLeaveRequestsTool, getExistingShiftsTool],
   });
 
-  const result = await run(
-    agent,
-    [
-      `Next week range: ${asIsoDate(nextWeekStart)} to ${asIsoDate(nextWeekEnd)} (${timezone}).`,
-      "Provide a full suggested roster for that week.",
-      userMessage,
-    ].join("\n"),
-  );
+  const result = await run(agent, userMessage);
 
-  return result.output ?? result;
+  return result;
 });

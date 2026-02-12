@@ -4,7 +4,7 @@ import Roster_ai_sidebar_modal from '~/components/roster_components/roster_ai_si
 
 
 import {mock_agent_result} from "../../../response"
-import { parse } from 'path';
+
 definePageMeta({
     layout: 'dashboard-layout'
 })
