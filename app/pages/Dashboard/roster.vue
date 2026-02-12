@@ -2,12 +2,20 @@
 import Roster_ai_sidebar_modal from '~/components/roster_components/roster_ai_sidebar_modal.vue';
 
 
+
+import {mock_agent_result} from "../../../response"
+import { parse } from 'path';
 definePageMeta({
     layout: 'dashboard-layout'
 })
 
 const route = useRoute();
 const { open, isOpen } = useAiRosterModal()
+
+const agentResponse = mock_agent_result.content[0]?.text;
+
+const parsed_data = JSON.parse(agentResponse!)
+console.log(parsed_data)
 
 console.log(isOpen.value)
 </script>
