@@ -1,43 +1,30 @@
 import { Agent, run, tool } from "@openai/agents";
 import { z } from "zod";
 import { usePrisma } from "~~/server/utils/prisma";
-import { Shift_with_Staff_Schema_Simple } from "../../../zod_schema/database_schema";
+import {
+  RosterAgentStructuredOutputSchema,
+  type RosterAgentStructuredOutput,
+} from "../../../zod_schema/roster_agent_schema";
 
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
   const query = getQuery(event);
   const userMessage =
-    (query.message as string) ||
-    "Suggest a roster for next week using available staff, shifts, and leave requests.";
-
-  // Helper to compute next week's date range
-  const getNextWeekRange = () => {
-    const now = new Date();
-    const day = now.getDay();
-    const daysUntilNextMonday = (8 - day) % 7 || 7;
-    const start = new Date(now);
-    start.setDate(now.getDate() + daysUntilNextMonday);
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(start);
-    end.setDate(start.getDate() + 6);
-    end.setHours(23, 59, 59, 999);
-    return { start, end };
-  };
-
-  const asIsoDate = (value: Date) => value.toISOString().split("T")[0];
-  const { start: nextWeekStart, end: nextWeekEnd } = getNextWeekRange();
+    (query.message as string) || "Suggest roster for next week";
 
   // Tool: Get all staff
-  const getStaffTool = tool({
-    name: "get_all_staff",
+  const get_staffs = tool({
+    name: "get_all_staff_members",
     description:
-      "Fetch all staff with their roles, availability, and hourly rates.",
+      "Get all staff members with role, employment type, weekday availability, hourly rate, and profile details. Use this first to decide who can work each day and role.",
     parameters: z.object({}),
+    strict: true,
     execute: async () => {
-      const staffs = await prisma.staff.findMany({
+      const staffList = await prisma.staff.findMany({
         orderBy: { firstname: "asc" },
       });
-      return staffs.map((staff) => ({
+
+      return staffList.map((staff) => ({
         id: staff.id,
         firstname: staff.firstname,
         lastName: staff.lastName,
@@ -48,52 +35,48 @@ export default defineEventHandler(async (event) => {
         perHourRate: Number(staff.perHourRate),
         availability: staff.availability,
         joined_date: staff.joined_date.toISOString(),
-        shifts: [],
         leaveRequests: [],
-        profile_photo_url: staff.profile_photo_url,
+        profile_photo_url: staff.profile_photo_url || "",
       }));
     },
   });
 
-  // Tool: Get approved leave requests for next week
-  const getLeaveRequestsTool = tool({
-    name: "get_approved_leaves",
+  const get_leave_request = tool({
+    name: "get_all_leave_requests",
     description:
-      "Fetch approved leave requests for next week. Returns staff IDs who are on leave.",
+      "Get all leave requests. Treat approved leave dates as unavailable and avoid assigning shifts for those staff on those dates.",
     parameters: z.object({}),
+    strict: true,
     execute: async () => {
-      const leaves = await prisma.leaveRequest.findMany({
-        where: {
-          status: "approved",
-          startDate: { lte: nextWeekEnd },
-          endDate: { gte: nextWeekStart },
-        },
-      });
-      return leaves.map((leave) => ({
+      const leaveRequests = await prisma.leaveRequest.findMany({});
+
+      return leaveRequests.map((leave) => ({
+        id: leave.id,
         staffId: leave.staffId,
-        startDate: asIsoDate(leave.startDate),
-        endDate: asIsoDate(leave.endDate),
+        startDate: leave.startDate.toISOString(),
+        endDate: leave.endDate.toISOString(),
         reason: leave.reason,
+        status: leave.status,
+        submittedAt: leave.submittedAt.toISOString(),
       }));
     },
   });
 
-  // Tool: Get existing shifts for next week
-  const getExistingShiftsTool = tool({
+  const get_existing_shifts = tool({
     name: "get_existing_shifts",
-    description: "Fetch existing shifts already scheduled for next week.",
+    description:
+      "Get existing shifts so you avoid duplicate or overlapping assignments when suggesting next-week roster.",
     parameters: z.object({}),
+    strict: true,
     execute: async () => {
       const shifts = await prisma.shift.findMany({
-        where: {
-          date: { gte: nextWeekStart, lte: nextWeekEnd },
-        },
         include: { staff: true },
       });
+
       return shifts.map((shift) => ({
         id: shift.id,
         staffId: shift.staffId,
-        date: shift.date.toISOString().split("T")[0],
+        date: shift.date.toISOString(),
         startTime: shift.startTime,
         endTime: shift.endTime,
         position: shift.position,
@@ -108,39 +91,66 @@ export default defineEventHandler(async (event) => {
           perHourRate: Number(shift.staff.perHourRate),
           availability: shift.staff.availability,
           joined_date: shift.staff.joined_date.toISOString(),
-          shifts: [],
           leaveRequests: [],
-          profile_photo_url: shift.staff.profile_photo_url,
+          profile_photo_url: shift.staff.profile_photo_url || "",
         },
       }));
     },
   });
 
-  const RosterSuggestionOutput = z.object({
-    suggestedShifts: z.array(Shift_with_Staff_Schema_Simple),
-  });
-
   const agent = new Agent({
     name: "Roster Agent",
     model: "gpt-5-mini",
-    outputType: Shift_with_Staff_Schema_Simple,
-    instructions: `You are a helpful roster assistant. Your job is to suggest shifts for next week (${asIsoDate(nextWeekStart)} to ${asIsoDate(nextWeekEnd)}).
-    
-Steps:
-1. Use get_all_staff to fetch all available staff
-2. Use get_approved_leaves to identify who is on leave
-3. Use get_existing_shifts to see what's already scheduled
-4. Suggest new shifts to fill gaps, respecting:
-   - Staff availability (weekday preferences)
-   - Approved leave dates
-   - Avoiding schedule conflicts
-   - Mix of roles (Chef, Waiter, Bartender, etc.)
 
-Output the suggested shifts as an array matching the schema. Each shift must include full staff details.`,
-    tools: [getStaffTool, getLeaveRequestsTool, getExistingShiftsTool],
+    outputType: RosterAgentStructuredOutputSchema,
+    instructions: `You are an expert roster planner for a restaurant.
+
+    Goal:
+    Create an on-point weekly roster for next week.
+
+    Use tools in this order:
+    1) get_all_staff_members
+    2) get_all_leave_requests
+    3) get_existing_shifts
+
+    Hard rules:
+    - Weekend (Saturday and Sunday) is busy: schedule more staff than weekdays.
+    - A Manager must be present on every shift.
+    - Weekdays are less busy: keep staffing lean but operationally safe.
+    - Casual staff can work a maximum of 24 total hours for the week.
+    - Respect each staff member's availability.
+    - Do not schedule staff on approved leave dates.
+    - Avoid overlapping shifts for the same staff member on the same day.
+
+    Planning guidance:
+    - Cover core service roles each day (kitchen + floor).
+    - Prioritize FullTime and PartTime for baseline coverage.
+    - Use Casual as flex support, especially to strengthen weekend coverage, while respecting the 24-hour cap.
+    - Balance shifts fairly when possible.
+
+    Output requirements:
+    - Return an object with key "shifts" containing the suggested shifts.
+    - shifts must be a non-empty array.
+    - Every shift must include a non-empty staffId and full staff details.
+    - Include full staff details in each suggested shift.
+    - Also include these chat fields for natural conversation in a modal:
+      1) assistantMessage: a concise natural-language summary of the plan.
+      2) whyThisRoster: bullet-style reasons for key staffing decisions.
+      3) staffingRisks: potential risks/gaps to watch.
+      4) followUpQuestions: smart clarifying questions to ask the manager.
+      5) nextActions: practical next steps manager can take now.`,
+    tools: [get_staffs, get_leave_request, get_existing_shifts],
   });
 
   const result = await run(agent, userMessage);
+  const output = result.finalOutput as RosterAgentStructuredOutput | null;
 
-  return result;
+  return {
+    shifts: output?.shifts ?? [],
+    assistantMessage: output?.assistantMessage ?? "",
+    whyThisRoster: output?.whyThisRoster ?? [],
+    staffingRisks: output?.staffingRisks ?? [],
+    followUpQuestions: output?.followUpQuestions ?? [],
+    nextActions: output?.nextActions ?? [],
+  };
 });

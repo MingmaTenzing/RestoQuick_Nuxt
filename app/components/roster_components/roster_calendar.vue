@@ -1,8 +1,5 @@
 <script lang="ts" setup>
 
-import type { Shift } from '~/generated/prisma/client';
-import { ref, provide } from 'vue';
-import type { ShiftGetPayload } from '~/generated/prisma/models';
 import type { Shift_With_Staff_Payload } from "../../../types/shift_include_staff"
 
 const {
@@ -40,8 +37,11 @@ const { data: shifts, status, refresh } = await useAsyncData(
   }
 );  
 
-console.log(shifts)
 
+setTimeout(() => {
+    console.log(shifts.value)
+    
+}, 3000);
 
 // this function is triggered from the emitted event from the staff shift component
 async function deleteShift(shiftId: string) {
