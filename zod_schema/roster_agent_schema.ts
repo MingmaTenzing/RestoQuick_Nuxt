@@ -41,37 +41,32 @@ export const RosterAgentLeaveRequestSchema = z.object({
   submittedAt: z.string(),
 });
 
-export const RosterAgentStaffSchema = z.object({
-  id: z.string(),
-  firstname: z.string(),
-  lastName: z.string(),
-  role: RosterRoleSchema,
-  email: z.string(),
-  phone: z.string(),
-  employmentType: RosterEmploymentTypeSchema,
-  perHourRate: z.number(),
-  availability: z.array(RosterWeekDaySchema),
-  joined_date: z.string(),
-  leaveRequests: z.array(RosterAgentLeaveRequestSchema).default([]),
-  profile_photo_url: z.string().optional().default(""),
-});
+// export const RosterAgentStaffSchema = z.object({
+//   id: z.string(),
+//   firstname: z.string(),
+//   lastName: z.string(),
+//   role: RosterRoleSchema,
+//   email: z.string(),
+//   phone: z.string(),
+//   employmentType: RosterEmploymentTypeSchema,
+//   perHourRate: z.number(),
+//   availability: z.array(RosterWeekDaySchema),
+//   joined_date: z.string(),
+//   leaveRequests: z.array(RosterAgentLeaveRequestSchema).default([]),
+//   profile_photo_url: z.string().optional().default(""),
+// });
 
 export const RosterAgentShiftSuggestionSchema = z.object({
   staffId: z.string(),
   date: z.string(),
   startTime: z.string(),
   endTime: z.string(),
-  position: z.string(),
-  staff: RosterAgentStaffSchema,
 });
 
 export const RosterAgentStructuredOutputSchema = z.object({
   shifts: z.array(RosterAgentShiftSuggestionSchema),
   assistantMessage: z.string().default(""),
-  whyThisRoster: z.array(z.string()).default([]),
-  staffingRisks: z.array(z.string()).default([]),
-  followUpQuestions: z.array(z.string()).default([]),
-  nextActions: z.array(z.string()).default([]),
+  warning: z.string().default(""),
 });
 
 export type RosterAgentStructuredOutput = z.infer<

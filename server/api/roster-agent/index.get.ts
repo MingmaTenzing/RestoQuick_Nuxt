@@ -10,7 +10,8 @@ export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
   const query = getQuery(event);
   const userMessage =
-    (query.message as string) || "Suggest roster for next week";
+    (query.message as string) ||
+    "Suggest roster for next week put mingma on every day from tuesday to sunday";
 
   // Tool: Get all staff
   const get_staffs = tool({
@@ -18,7 +19,7 @@ export default defineEventHandler(async (event) => {
     description:
       "Get all staff members with role, employment type, weekday availability, hourly rate, and profile details. Use this first to decide who can work each day and role.",
     parameters: z.object({}),
-    strict: true,
+
     execute: async () => {
       const staffList = await prisma.staff.findMany({
         orderBy: { firstname: "asc" },
@@ -29,14 +30,9 @@ export default defineEventHandler(async (event) => {
         firstname: staff.firstname,
         lastName: staff.lastName,
         role: staff.role,
-        email: staff.email,
-        phone: staff.phone,
         employmentType: staff.employmentType,
         perHourRate: Number(staff.perHourRate),
         availability: staff.availability,
-        joined_date: staff.joined_date.toISOString(),
-        leaveRequests: [],
-        profile_photo_url: staff.profile_photo_url || "",
       }));
     },
   });
@@ -46,7 +42,7 @@ export default defineEventHandler(async (event) => {
     description:
       "Get all leave requests. Treat approved leave dates as unavailable and avoid assigning shifts for those staff on those dates.",
     parameters: z.object({}),
-    strict: true,
+
     execute: async () => {
       const leaveRequests = await prisma.leaveRequest.findMany({});
 
@@ -62,84 +58,37 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  const get_existing_shifts = tool({
-    name: "get_existing_shifts",
-    description:
-      "Get existing shifts so you avoid duplicate or overlapping assignments when suggesting next-week roster.",
-    parameters: z.object({}),
-    strict: true,
-    execute: async () => {
-      const shifts = await prisma.shift.findMany({
-        include: { staff: true },
-      });
-
-      return shifts.map((shift) => ({
-        id: shift.id,
-        staffId: shift.staffId,
-        date: shift.date.toISOString(),
-        startTime: shift.startTime,
-        endTime: shift.endTime,
-        position: shift.position,
-        staff: {
-          id: shift.staff.id,
-          firstname: shift.staff.firstname,
-          lastName: shift.staff.lastName,
-          role: shift.staff.role,
-          email: shift.staff.email,
-          phone: shift.staff.phone,
-          employmentType: shift.staff.employmentType,
-          perHourRate: Number(shift.staff.perHourRate),
-          availability: shift.staff.availability,
-          joined_date: shift.staff.joined_date.toISOString(),
-          leaveRequests: [],
-          profile_photo_url: shift.staff.profile_photo_url || "",
-        },
-      }));
-    },
-  });
-
   const agent = new Agent({
     name: "Roster Agent",
     model: "gpt-5-mini",
 
     outputType: RosterAgentStructuredOutputSchema,
-    instructions: `You are an expert roster planner for a restaurant.
+    instructions: `You are a restaurant roster planner.
 
-    Goal:
-    Create an on-point weekly roster for next week.
+  Goal:
+  Create next week's roster quickly and return compact JSON.
 
-    Use tools in this order:
-    1) get_all_staff_members
-    2) get_all_leave_requests
-    3) get_existing_shifts
+  Priority policy:
+  - Treat the user's prompt/instructions as highest priority.
+  - If any default rule conflicts with the user's request, follow the user's request.
+  - Apply default rules only when they do not conflict with the user's request.
 
-    Hard rules:
-    - Weekend (Saturday and Sunday) is busy: schedule more staff than weekdays.
-    - A Manager must be present on every shift.
-    - Weekdays are less busy: keep staffing lean but operationally safe.
-    - Casual staff can work a maximum of 24 total hours for the week.
-    - Respect each staff member's availability.
-    - Do not schedule staff on approved leave dates.
-    - Avoid overlapping shifts for the same staff member on the same day.
+  Default rules:
+  - More staff on Saturday and Sunday than weekdays.
+  - At least one Manager on every shift.
+  - Casual staff max 24 total hours for the week.
+  - Respect staff availability.
+  - Do not assign staff on approved leave dates.
+  - Do not create overlapping shifts for the same staff on the same day.
 
-    Planning guidance:
-    - Cover core service roles each day (kitchen + floor).
-    - Prioritize FullTime and PartTime for baseline coverage.
-    - Use Casual as flex support, especially to strengthen weekend coverage, while respecting the 24-hour cap.
-    - Balance shifts fairly when possible.
-
-    Output requirements:
-    - Return an object with key "shifts" containing the suggested shifts.
-    - shifts must be a non-empty array.
-    - Every shift must include a non-empty staffId and full staff details.
-    - Include full staff details in each suggested shift.
-    - Also include these chat fields for natural conversation in a modal:
-      1) assistantMessage: a concise natural-language summary of the plan.
-      2) whyThisRoster: bullet-style reasons for key staffing decisions.
-      3) staffingRisks: potential risks/gaps to watch.
-      4) followUpQuestions: smart clarifying questions to ask the manager.
-      5) nextActions: practical next steps manager can take now.`,
-    tools: [get_staffs, get_leave_request, get_existing_shifts],
+  Output format (strict):
+  - Return only: shifts, assistantMessage, warning.
+  - shifts must be a non-empty array.
+  - Each shift must include only: staffId, date, startTime, endTime.
+  - assistantMessage should be concise, respectful, and conversational.
+  - warning should be concise, clear, and respectful.
+  - No extra keys. No markdown.`,
+    tools: [get_staffs, get_leave_request],
   });
 
   const result = await run(agent, userMessage);
@@ -148,9 +97,6 @@ export default defineEventHandler(async (event) => {
   return {
     shifts: output?.shifts ?? [],
     assistantMessage: output?.assistantMessage ?? "",
-    whyThisRoster: output?.whyThisRoster ?? [],
-    staffingRisks: output?.staffingRisks ?? [],
-    followUpQuestions: output?.followUpQuestions ?? [],
-    nextActions: output?.nextActions ?? [],
+    warning: output?.warning ?? "",
   };
 });
