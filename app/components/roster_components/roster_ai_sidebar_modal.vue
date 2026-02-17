@@ -1,16 +1,12 @@
 <script setup lang="ts">
-const { close: closeModal, send_prompt: sendPrompt } = useAiRosterModal();
-
-type ChatRole = "user" | "assistant" | "warning";
-
-interface ChatMessage {
-  role: ChatRole;
-  content: string;
-}
+const {
+  close: closeModal,
+  send_prompt: sendPrompt,
+  ai_response,
+} = useAiRosterModal();
 
 const prompt = ref("");
 const isLoading = ref(false);
-const chatMessages = ref<ChatMessage[]>([]);
 
 const askAi = async () => {
   const message = prompt.value.trim();
@@ -19,30 +15,11 @@ const askAi = async () => {
     return;
   }
 
-  chatMessages.value.push({
-    role: "user",
-    content: message,
-  });
-
   prompt.value = "";
   isLoading.value = true;
 
   try {
-    const response = await sendPrompt(message);
-
-    if (response.assistantMessage) {
-      chatMessages.value.push({
-        role: "assistant",
-        content: response.assistantMessage,
-      });
-    }
-
-    if (response.warning) {
-      chatMessages.value.push({
-        role: "warning",
-        content: response.warning,
-      });
-    }
+    await sendPrompt(message);
   } finally {
     isLoading.value = false;
   }
@@ -99,22 +76,16 @@ const askAi = async () => {
 
       <!-- chat area -->
       <div class="flex-1 min-h-0 overflow-y-auto  border-y  p-4  space-y-4">
-        <div
-          v-for="(message, index) in chatMessages"
-          :key="index"
-          :class="message.role === 'user' ? 'flex justify-end' : 'flex justify-start'"
-        >
+        <div v-if="ai_response.assistantMessage.content" class="flex justify-start">
           <div
-            :class="[
-              'max-w-[80%] rounded-lg px-3 py-2 text-sm',
-              message.role === 'user'
-                ? 'bg-primary text-primary-foreground'
-                : message.role === 'warning'
-                  ? 'bg-background border rounded-md text-xs'
-                  : 'border bg-muted',
-            ]"
+            class="max-w-[80%] rounded-lg px-3 py-2 text-sm border bg-muted"
           >
-            {{ message.content }}
+            {{ ai_response.assistantMessage.content }}
+          </div>
+        </div>
+        <div v-if="ai_response.assistantMessage.caution" class="flex justify-start">
+          <div class="max-w-[80%] rounded-lg px-3 py-2 text-sm bg-background border rounded-md text-xs">
+            {{ ai_response.assistantMessage.caution }}
           </div>
         </div>
       </div>

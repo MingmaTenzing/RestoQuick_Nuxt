@@ -4,8 +4,10 @@ import { type RosterAgentStructuredOutput } from "~~/zod_schema/roster_agent_sch
 
 interface AiRosterResponse {
   shifts: Shift_With_Staff_Payload[];
-  assistantMessage: string;
-  warning: string;
+  assistantMessage: {
+    content: string;
+    caution: string;
+  };
 }
 
 export const useAiRosterModal = () => {
@@ -13,8 +15,10 @@ export const useAiRosterModal = () => {
 
   const ai_response = useState<AiRosterResponse>("ai-roster-response", () => ({
     shifts: [],
-    assistantMessage: "",
-    warning: "",
+    assistantMessage: {
+      content: "",
+      caution: "",
+    },
   }));
 
   const open = () => {
@@ -64,7 +68,6 @@ export const useAiRosterModal = () => {
     return (ai_response.value = {
       shifts: mapped_response,
       assistantMessage: response.assistantMessage,
-      warning: response.warning,
     });
   };
 

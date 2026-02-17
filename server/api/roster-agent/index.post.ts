@@ -79,11 +79,12 @@ Default rules:
 - Do not create overlapping shifts for the same staff on the same day.
 
 Output format (strict):
-- Return only: shifts, assistantMessage, warning.
+- Return only: shifts, assistantMessage.
 - shifts must be a non-empty array.
 - Each shift must include only: staffId, date, startTime, endTime.
-- assistantMessage should be concise, respectful, and conversational.
-- warning should be concise, clear, and respectful.
+- assistantMessage must be an object with:
+  - content: concise, respectful, conversational summary
+  - caution: notable risk/constraint to keep in mind, or empty string
 - No extra keys. No markdown.`,
     tools: [get_staffs, get_leave_request],
   });
@@ -93,7 +94,9 @@ Output format (strict):
 
   return {
     shifts: output?.shifts ?? [],
-    assistantMessage: output?.assistantMessage ?? "",
-    warning: output?.warning ?? "",
+    assistantMessage: {
+      content: output?.assistantMessage?.content ?? "",
+      caution: output?.assistantMessage?.caution ?? "",
+    },
   };
 });

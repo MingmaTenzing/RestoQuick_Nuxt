@@ -63,10 +63,14 @@ export const RosterAgentShiftSuggestionSchema = z.object({
   endTime: z.string(),
 });
 
+export const RosterAgentAssistantMessageSchema = z.object({
+  content: z.string().default(""),
+  caution: z.string().default(""),
+});
+
 export const RosterAgentStructuredOutputSchema = z.object({
   shifts: z.array(RosterAgentShiftSuggestionSchema),
-  assistantMessage: z.string().default(""),
-  warning: z.string().default(""),
+  assistantMessage: RosterAgentAssistantMessageSchema,
 });
 
 export type RosterAgentStructuredOutput = z.infer<

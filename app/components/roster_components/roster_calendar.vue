@@ -186,9 +186,9 @@ async function deleteShift(shiftId: string) {
                     v-for="entry in shiftsForDate(date.date)"
                     :key="`${entry.isDraft ? 'draft' : 'saved'}-${entry.shift.id}`"
                 >
-                    <div v-if="entry.isDraft" class="flex flex-col bg-accent/40 p-2 rounded-lg w-full border border-dashed border-ring">
+                    <div v-if="entry.isDraft" class="flex flex-col  bg-secondary  p-2 rounded-lg w-full border border-dashed ">
                         <div class="flex justify-end">
-                            <span class="text-[10px] px-2 py-0.5 rounded-full border border-ring text-muted-foreground">Draft</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full border bg-amber-500/20 border-amber-600 bg-amberborder-amber-600/10 text-amber-600 font-medium">Draft</span>
                         </div>
                         <div class="flex justify-between items-end mt-1">
                             <div class="space-y-2">
