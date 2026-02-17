@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 
 import type { Shift_With_Staff_Payload } from "../../../types/shift_include_staff"
+import Roster_ai_sidebar_modal from "./roster_ai_sidebar_modal.vue";
 
 const {
     weekDates,
@@ -17,8 +18,11 @@ const {
 
 
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
+const {isOpen, ai_response} = useAiRosterModal()
 const {editshiftModal} = useeditShiftModal()
 const toast = useToast();
+
+
 
 
 
@@ -35,13 +39,30 @@ const { data: shifts, status, refresh } = await useAsyncData(
     lazy: true,
     watch: [startOfWeek, endOfWeek] // Refetch when week changes
   }
-);  
+); 
 
+const formatDateKey = (date: Date | string) =>
+    new Date(date).toISOString().split("T")[0];
 
-setTimeout(() => {
-    console.log(shifts.value)
-    
-}, 3000);
+const shiftsForDate = (date: Date) => {
+    const dayKey = formatDateKey(date);
+
+    const persisted = (shifts.value ?? [])
+        .filter((shift) => formatDateKey(shift.date) === dayKey)
+        .map((shift) => ({
+            shift,
+            isDraft: false,
+        }));
+
+    const draft = (ai_response.value.shifts ?? [])
+        .filter((shift) => formatDateKey(shift.date) === dayKey)
+        .map((shift) => ({
+            shift,
+            isDraft: true,
+        }));
+
+    return [...persisted, ...draft];
+};
 
 // this function is triggered from the emitted event from the staff shift component
 async function deleteShift(shiftId: string) {
@@ -160,12 +181,33 @@ async function deleteShift(shiftId: string) {
  <roster-components-shift-loading></roster-components-shift-loading>
   </div>
 
-        <div  v-else  v-for="shift in shifts?.filter((shift) =>new Date(shift.date).toISOString().split('T')[0] ===
-      new Date(date.date).toISOString().split('T')[0])" :key="shift.id">
+                <div
+                    v-else
+                    v-for="entry in shiftsForDate(date.date)"
+                    :key="`${entry.isDraft ? 'draft' : 'saved'}-${entry.shift.id}`"
+                >
+                    <div v-if="entry.isDraft" class="flex flex-col bg-accent/40 p-2 rounded-lg w-full border border-dashed border-ring">
+                        <div class="flex justify-end">
+                            <span class="text-[10px] px-2 py-0.5 rounded-full border border-ring text-muted-foreground">Draft</span>
+                        </div>
+                        <div class="flex justify-between items-end mt-1">
+                            <div class="space-y-2">
+                                <NuxtImg :src="entry.shift.staff?.profile_photo_url" class="w-10 h-10 object-cover rounded-full"></NuxtImg>
+                                <div class="flex flex-col">
+                                    <span class="text-xs xl:text-base font-medium">{{ entry.shift.staff?.firstname }} {{ entry.shift.staff?.lastName[0] }}.</span>
+                                    <span class="text-[10px] lg:text-sm">{{ entry.shift.startTime }} - {{ entry.shift.endTime }}</span>
+                                    <span class="text-[10px] lg:text-xs font-light text-muted-foreground">{{ entry.shift.position }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-
-            <roster-components-staff-shift :shift="shift" @delete-shift="deleteShift"></roster-components-staff-shift>
-            </div>
+                    <roster-components-staff-shift
+                        v-else
+                        :shift="entry.shift"
+                        @delete-shift="deleteShift"
+                    ></roster-components-staff-shift>
+                </div>
 
     </div>
 
@@ -178,7 +220,15 @@ async function deleteShift(shiftId: string) {
 <!-- addd shift modal form -->
 
   <roster-components-add-shift v-if="addShiftModal.isOpen"></roster-components-add-shift>
+
+  <!-- edit shift-modal -->
 <roster-components-edit-shift v-if="editshiftModal.isOpen"></roster-components-edit-shift>
+
+
+ <!-- ai roster modal -->
+ <div v-if="isOpen">
+    <roster_ai_sidebar_modal />
+  </div>
 
 </div>
 

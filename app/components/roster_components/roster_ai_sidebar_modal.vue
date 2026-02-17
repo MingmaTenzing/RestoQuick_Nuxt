@@ -1,5 +1,57 @@
 <script setup lang="ts">
-const { isOpen, close } = useAiRosterModal()
+const { close: closeModal, send_prompt: sendPrompt } = useAiRosterModal();
+
+type ChatRole = "user" | "assistant" | "warning";
+
+interface ChatMessage {
+  role: ChatRole;
+  content: string;
+}
+
+const prompt = ref("");
+const isLoading = ref(false);
+const chatMessages = ref<ChatMessage[]>([]);
+
+const askAi = async () => {
+  const message = prompt.value.trim();
+
+  if (!message || isLoading.value) {
+    return;
+  }
+
+  chatMessages.value.push({
+    role: "user",
+    content: message,
+  });
+
+  prompt.value = "";
+  isLoading.value = true;
+
+  try {
+    const response = await sendPrompt(message);
+
+    if (response.assistantMessage) {
+      chatMessages.value.push({
+        role: "assistant",
+        content: response.assistantMessage,
+      });
+    }
+
+    if (response.warning) {
+      chatMessages.value.push({
+        role: "warning",
+        content: response.warning,
+      });
+    }
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+
+
+
+
 </script>
 
 <template>
@@ -9,16 +61,16 @@ const { isOpen, close } = useAiRosterModal()
 
     <!-- sidebar -->
     <aside
-      class="absolute flex flex-col right-0 top-0 h-full w-full overflow-y-auto max-w-lg bg-card text-card-foreground shadow-xl  border-l border-border   "
+      class="absolute flex flex-col right-0 top-0 h-full w-full overflow-y-auto max-w-lg bg-sidebar text-card-foreground shadow-xl  border-l border-border   "
     >
 
     <div class=" p-6 space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <span class="text-xs border rounded-full px-2 py-0.5">AI</span>
+            <span class="text-xs border-green-500 border text-green-500 rounded-full px-2 py-0.5">AI</span>
             <h2 class="text-xl font-semibold">Roster Assistant</h2>
           </div>
-          <button v-on:click="close" class="border px-3 py-1 rounded-lg hover:border-ring">
+          <button v-on:click="closeModal" class="border px-3 py-1 rounded-lg hover:border-ring">
             Close
           </button>
         </div>
@@ -47,28 +99,22 @@ const { isOpen, close } = useAiRosterModal()
 
       <!-- chat area -->
       <div class="flex-1 min-h-0 overflow-y-auto  border-y  p-4  space-y-4">
-        <!-- user message -->
-        <div class="flex justify-end">
-          <div class="max-w-[80%] rounded-lg bg-primary text-primary-foreground px-3 py-2 text-sm">
-            Can you optimize this week’s roster for lunch peak?
-          </div>
-        </div>
-
-        <!-- ai message -->
-        <div class="flex justify-start">
-          <div class="max-w-[80%] rounded-lg border bg-muted px-3 py-2 text-sm space-y-2">
-            <p>
-              I suggest adding 1 extra waiter on Monday and Friday lunch hours
-              and extending the chef shift to 18:00.
-            </p>
-            <div class="bg-background border rounded-md p-2 text-xs">
-              <div class="font-medium">Suggested Changes</div>
-              <ul class="list-disc pl-4 mt-1 space-y-1">
-                <li>Mon: Add Waiter 11:00–15:00</li>
-                <li>Fri: Add Waiter 11:00–15:00</li>
-                <li>Extend Chef: 09:00–18:00</li>
-              </ul>
-            </div>
+        <div
+          v-for="(message, index) in chatMessages"
+          :key="index"
+          :class="message.role === 'user' ? 'flex justify-end' : 'flex justify-start'"
+        >
+          <div
+            :class="[
+              'max-w-[80%] rounded-lg px-3 py-2 text-sm',
+              message.role === 'user'
+                ? 'bg-primary text-primary-foreground'
+                : message.role === 'warning'
+                  ? 'bg-background border rounded-md text-xs'
+                  : 'border bg-muted',
+            ]"
+          >
+            {{ message.content }}
           </div>
         </div>
       </div>
@@ -76,14 +122,15 @@ const { isOpen, close } = useAiRosterModal()
       <!-- input + actions -->
       <div class="border-t  p-3 ">
         <textarea
+          v-model="prompt"
           rows="3"
           class="w-full resize-none border rounded-lg px-3 py-2 outline-none"
           placeholder="Ask the AI to optimize your roster..."
         ></textarea>
 
         <div class="flex items-center justify-between mt-3">
-          <button class="border px-4 py-2 rounded-lg hover:border-ring">
-            Ask AI
+          <button v-on:click="askAi" class="border px-4 py-2 rounded-lg hover:border-ring" :disabled="isLoading">
+            {{ isLoading ? 'Asking...' : 'Ask AI' }}
           </button>
           <button class="border px-4 py-2 rounded-lg hover:border-ring bg-accent text-accent-foreground">
             Apply Suggestions

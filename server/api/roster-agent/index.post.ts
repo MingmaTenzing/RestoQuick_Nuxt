@@ -8,18 +8,17 @@ import {
 
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
-  const query = getQuery(event);
-  const userMessage =
-    (query.message as string) ||
-    "Suggest roster for next week put mingma on every day from tuesday to sunday";
+  const body = await readBody<{ message: string }>(event);
 
-  // Tool: Get all staff
+  const user_message =
+    body?.message?.trim() ||
+    "create roster for next week put more staff on weekends cause we have a lot of bookings but make sure casuals only get 24 hours max";
+
   const get_staffs = tool({
     name: "get_all_staff_members",
     description:
       "Get all staff members with role, employment type, weekday availability, hourly rate, and profile details. Use this first to decide who can work each day and role.",
     parameters: z.object({}),
-
     execute: async () => {
       const staffList = await prisma.staff.findMany({
         orderBy: { firstname: "asc" },
@@ -42,7 +41,6 @@ export default defineEventHandler(async (event) => {
     description:
       "Get all leave requests. Treat approved leave dates as unavailable and avoid assigning shifts for those staff on those dates.",
     parameters: z.object({}),
-
     execute: async () => {
       const leaveRequests = await prisma.leaveRequest.findMany({});
 
@@ -61,38 +59,37 @@ export default defineEventHandler(async (event) => {
   const agent = new Agent({
     name: "Roster Agent",
     model: "gpt-5-mini",
-
     outputType: RosterAgentStructuredOutputSchema,
     instructions: `You are a restaurant roster planner.
 
-  Goal:
-  Create next week's roster quickly and return compact JSON.
+Goal:
+Create next week's roster quickly and return compact JSON.
 
-  Priority policy:
-  - Treat the user's prompt/instructions as highest priority.
-  - If any default rule conflicts with the user's request, follow the user's request.
-  - Apply default rules only when they do not conflict with the user's request.
+Priority policy:
+- Treat the user's prompt/instructions as highest priority.
+- If any default rule conflicts with the user's request, follow the user's request.
+- Apply default rules only when they do not conflict with the user's request.
 
-  Default rules:
-  - More staff on Saturday and Sunday than weekdays.
-  - At least one Manager on every shift.
-  - Casual staff max 24 total hours for the week.
-  - Respect staff availability.
-  - Do not assign staff on approved leave dates.
-  - Do not create overlapping shifts for the same staff on the same day.
+Default rules:
+- More staff on Saturday and Sunday than weekdays.
+- At least one Manager on every shift.
+- Casual staff max 24 total hours for the week.
+- Respect staff availability.
+- Do not assign staff on approved leave dates.
+- Do not create overlapping shifts for the same staff on the same day.
 
-  Output format (strict):
-  - Return only: shifts, assistantMessage, warning.
-  - shifts must be a non-empty array.
-  - Each shift must include only: staffId, date, startTime, endTime.
-  - assistantMessage should be concise, respectful, and conversational.
-  - warning should be concise, clear, and respectful.
-  - No extra keys. No markdown.`,
+Output format (strict):
+- Return only: shifts, assistantMessage, warning.
+- shifts must be a non-empty array.
+- Each shift must include only: staffId, date, startTime, endTime.
+- assistantMessage should be concise, respectful, and conversational.
+- warning should be concise, clear, and respectful.
+- No extra keys. No markdown.`,
     tools: [get_staffs, get_leave_request],
   });
 
-  const result = await run(agent, userMessage);
-  const output = result.finalOutput as RosterAgentStructuredOutput | null;
+  const result = await run(agent, user_message);
+  const output = result.finalOutput as RosterAgentStructuredOutput;
 
   return {
     shifts: output?.shifts ?? [],
