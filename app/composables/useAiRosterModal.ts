@@ -2,24 +2,28 @@ import type { Staff } from "~/generated/prisma/client";
 import type { Shift_With_Staff_Payload } from "~~/types/shift_include_staff";
 import { type RosterAgentStructuredOutput } from "~~/zod_schema/roster_agent_schema";
 
+interface AI_Conversation {
+  role: "AI" | "USER";
+  content: string;
+  caution?: string;
+}
 interface AiRosterResponse {
   shifts: Shift_With_Staff_Payload[];
-  assistantMessage: {
-    content: string;
-    caution: string;
-  };
+  assistantMessage: AI_Conversation[];
 }
 
 export const useAiRosterModal = () => {
   const isOpen = useState<boolean>("ai-roster-modal", () => false);
 
-  const ai_response = useState<AiRosterResponse>("ai-roster-response", () => ({
-    shifts: [],
-    assistantMessage: {
-      content: "",
-      caution: "",
-    },
-  }));
+  const response_loading = useState<boolean>("ai-respone-loading", () => false);
+
+  const ai_conversation = useState<AiRosterResponse>(
+    "ai-roster-conversation",
+    () => ({
+      shifts: [],
+      assistantMessage: [],
+    }),
+  );
 
   const open = () => {
     isOpen.value = true;
@@ -29,6 +33,13 @@ export const useAiRosterModal = () => {
   };
 
   const send_prompt = async (message: string) => {
+    //setting the loading state and pushing the message to conversation array
+    response_loading.value = true;
+    ai_conversation.value.assistantMessage.push({
+      role: "USER",
+      content: message,
+    });
+
     const response = await $fetch<RosterAgentStructuredOutput>(
       "/api/roster-agent",
       {
@@ -42,6 +53,7 @@ export const useAiRosterModal = () => {
     const staffs = await $fetch<Staff[]>("/api/staff");
     const staffById = new Map(staffs.map((staff) => [staff.id, staff]));
 
+    //mapped the response to match with shift_with_staff_payload
     const mapped_response = response.shifts.reduce<Shift_With_Staff_Payload[]>(
       (acc, shift) => {
         const get_staff = staffById.get(shift.staffId);
@@ -64,18 +76,23 @@ export const useAiRosterModal = () => {
       },
       [],
     );
-    console.log(mapped_response);
-    return (ai_response.value = {
-      shifts: mapped_response,
-      assistantMessage: response.assistantMessage,
+    response_loading.value = false;
+
+    ai_conversation.value.shifts = mapped_response;
+    ai_conversation.value.assistantMessage.push({
+      role: "AI",
+      content: response.assistantMessage.content,
+      caution: response.assistantMessage.caution,
     });
+    return ai_conversation.value;
   };
 
   return {
     isOpen,
     open,
     close,
-    ai_response,
+    ai_conversation,
     send_prompt,
+    response_loading,
   };
 };

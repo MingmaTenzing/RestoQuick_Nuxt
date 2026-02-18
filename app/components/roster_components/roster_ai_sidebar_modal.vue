@@ -2,26 +2,28 @@
 const {
   close: closeModal,
   send_prompt: sendPrompt,
-  ai_response,
+  ai_conversation,
+  response_loading
 } = useAiRosterModal();
 
 const prompt = ref("");
-const isLoading = ref(false);
+
 
 const askAi = async () => {
   const message = prompt.value.trim();
 
-  if (!message || isLoading.value) {
+  if (!message) {
     return;
   }
 
   prompt.value = "";
-  isLoading.value = true;
+ 
 
   try {
-    await sendPrompt(message);
-  } finally {
-    isLoading.value = false;
+    const response = await sendPrompt(message);
+   console.log(response)
+  } catch (error){
+    console.log(error)
   }
 };
 
@@ -76,16 +78,21 @@ const askAi = async () => {
 
       <!-- chat area -->
       <div class="flex-1 min-h-0 overflow-y-auto  border-y  p-4  space-y-4">
-        <div v-if="ai_response.assistantMessage.content" class="flex justify-start">
-          <div
-            class="max-w-[80%] rounded-lg px-3 py-2 text-sm border bg-muted"
-          >
-            {{ ai_response.assistantMessage.content }}
+        <div
+          v-for="(message, index) in ai_conversation.assistantMessage"
+          :key="`${message.role}-${index}`"
+          class="space-y-2"
+        >
+          <div :class="message.role === 'USER' ? 'flex justify-end' : 'flex justify-start'">
+            <div class="max-w-[80%] rounded-lg px-3 py-2 text-sm border" :class="message.role === 'USER' ? 'bg-accent' : 'bg-muted'">
+              {{ message.content }}
+            </div>
           </div>
-        </div>
-        <div v-if="ai_response.assistantMessage.caution" class="flex justify-start">
-          <div class="max-w-[80%] rounded-lg px-3 py-2 text-sm bg-background border rounded-md text-xs">
-            {{ ai_response.assistantMessage.caution }}
+
+          <div v-if="message.role === 'AI' && message.caution" class="flex justify-start">
+            <div class="max-w-[80%] rounded-md px-3 py-2 text-xs bg-background border">
+              {{ message.caution }}
+            </div>
           </div>
         </div>
       </div>
@@ -100,8 +107,8 @@ const askAi = async () => {
         ></textarea>
 
         <div class="flex items-center justify-between mt-3">
-          <button v-on:click="askAi" class="border px-4 py-2 rounded-lg hover:border-ring" :disabled="isLoading">
-            {{ isLoading ? 'Asking...' : 'Ask AI' }}
+          <button v-on:click="askAi" class="border px-4 py-2 rounded-lg hover:border-ring" :disabled="response_loading">
+            {{ response_loading ? 'Asking...' : 'Ask AI' }}
           </button>
           <button class="border px-4 py-2 rounded-lg hover:border-ring bg-accent text-accent-foreground">
             Apply Suggestions

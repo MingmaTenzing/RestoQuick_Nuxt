@@ -18,7 +18,7 @@ const {
 
 
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
-const {isOpen, ai_response} = useAiRosterModal()
+const {isOpen, ai_conversation} = useAiRosterModal()
 const {editshiftModal} = useeditShiftModal()
 const toast = useToast();
 
@@ -44,6 +44,10 @@ const { data: shifts, status, refresh } = await useAsyncData(
 const formatDateKey = (date: Date | string) =>
     new Date(date).toISOString().split("T")[0];
 
+// Builds the list of shifts for a given day by combining:
+// 1) persisted shifts loaded from the API, and
+// 2) temporary AI-generated draft shifts from the roster modal.
+// Each item is tagged with isDraft so the template can render saved vs draft UI differently.
 const shiftsForDate = (date: Date) => {
     const dayKey = formatDateKey(date);
 
@@ -54,7 +58,7 @@ const shiftsForDate = (date: Date) => {
             isDraft: false,
         }));
 
-    const draft = (ai_response.value.shifts ?? [])
+    const draft = (ai_conversation.value.shifts ?? [])
         .filter((shift) => formatDateKey(shift.date) === dayKey)
         .map((shift) => ({
             shift,
