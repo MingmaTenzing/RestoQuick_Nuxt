@@ -95,6 +95,37 @@ async function deleteShift(shiftId: string) {
     }
 
 
+async function saveDraftShift(shift: Shift_With_Staff_Payload) {
+    try {
+        const savedShift = await $fetch('/api/shift', {
+            method: 'post',
+            body: {
+                staffId: shift.staffId,
+                date: shift.date,
+                startTime: shift.startTime,
+                endTime: shift.endTime,
+                position: shift.position,
+            }
+        })
+
+        if (savedShift) {
+            ai_conversation.value.shifts = (ai_conversation.value.shifts ?? []).filter(
+                (draftShift) => draftShift.id !== shift.id,
+            )
+
+            await refresh()
+            toast.success({ title: 'Success', message: 'Shift Saved' })
+        }
+    } catch (error) {
+        const nuxtError = isNuxtError(error) ? error : null
+        toast.error({
+            title: nuxtError?.name ?? 'Error',
+            message: nuxtError?.message ?? 'Failed to save shift',
+        })
+    }
+}
+
+
 
     
     
@@ -190,21 +221,11 @@ async function deleteShift(shiftId: string) {
                     v-for="entry in shiftsForDate(date.date)"
                     :key="`${entry.isDraft ? 'draft' : 'saved'}-${entry.shift.id}`"
                 >
-                    <div v-if="entry.isDraft" class="flex flex-col  bg-secondary  p-2 rounded-lg w-full border border-dashed ">
-                        <div class="flex justify-end">
-                            <span class="text-[10px] px-2 py-0.5 rounded-full border bg-amber-500/20 border-amber-600 bg-amberborder-amber-600/10 text-amber-600 font-medium">Draft</span>
-                        </div>
-                        <div class="flex justify-between items-end mt-1">
-                            <div class="space-y-2">
-                                <NuxtImg :src="entry.shift.staff?.profile_photo_url" class="w-10 h-10 object-cover rounded-full"></NuxtImg>
-                                <div class="flex flex-col">
-                                    <span class="text-xs xl:text-base font-medium">{{ entry.shift.staff?.firstname }} {{ entry.shift.staff?.lastName[0] }}.</span>
-                                    <span class="text-[10px] lg:text-sm">{{ entry.shift.startTime }} - {{ entry.shift.endTime }}</span>
-                                    <span class="text-[10px] lg:text-xs font-light text-muted-foreground">{{ entry.shift.position }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <roster-components-draft-shift
+                        v-if="entry.isDraft"
+                        :shift="entry.shift"
+                        @save="saveDraftShift"
+                    ></roster-components-draft-shift>
 
                     <roster-components-staff-shift
                         v-else

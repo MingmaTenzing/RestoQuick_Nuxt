@@ -59,7 +59,10 @@ const askAi = async () => {
         </div>
 
     </div>
-      <div class="border border-t p-4  flex items-center gap-4">
+
+    <!-- weekly budget section commented out for now 
+     focusing creating roster just using chats -->
+      <!-- <div class="border border-t p-4  flex items-center gap-4">
         <div>
 
             <div class="text-sm font-medium">Weekly Budget</div>
@@ -74,7 +77,7 @@ const askAi = async () => {
             placeholder="5000"
           />
         </div>
-      </div>
+      </div> -->
 
       <!-- chat area -->
       <div class="flex-1 min-h-0 overflow-y-auto  border-y  p-4  space-y-4">
