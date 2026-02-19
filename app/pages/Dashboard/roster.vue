@@ -172,10 +172,7 @@ const { open, isOpen } = useAiRosterModal()
 </div>
 
 
-  <div v-if="isOpen">
-    <Roster_ai_sidebar_modal />
-  </div>
-
+ 
 
  
 </template>

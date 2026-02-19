@@ -107,8 +107,9 @@ const askAi = async () => {
         ></textarea>
 
         <div class="flex items-center justify-between mt-3">
-          <button v-on:click="askAi" class="border px-4 py-2 rounded-lg hover:border-ring" :disabled="response_loading">
-            {{ response_loading ? 'Asking...' : 'Ask AI' }}
+          <button v-on:click="askAi" class="border px-4 py-2 rounded-lg hover:border-ring flex items-center gap-2" :disabled="response_loading">
+            <i v-if="response_loading" class="pi pi-spin pi-spinner"></i>
+            <span>Ask AI</span>
           </button>
           <button class="border px-4 py-2 rounded-lg hover:border-ring bg-accent text-accent-foreground">
             Apply Suggestions
