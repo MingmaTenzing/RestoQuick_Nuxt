@@ -15,7 +15,7 @@ function save_shift(shift: Shift_With_Staff_Payload) {
 </script>
   
 <template>
-  <div class="flex flex-col bg-secondary p-2 rounded-lg w-full border border-dashed">
+  <div class="flex flex-col bg-secondary p-2 rounded-lg w-full border border-dashed hover:border-amber-500">
     <div class="flex justify-end">
       <span
         class="text-[10px] px-2 py-0.5 rounded-full border bg-amber-500/20 border-amber-600 text-amber-600 font-medium"
@@ -41,10 +41,17 @@ function save_shift(shift: Shift_With_Staff_Payload) {
       </div>
     </div>
 
-    <div class=" flex justify-end">
-        <button class="cursor-pointer hover:text-green-400" @click="save_shift(shift)">
-          <i class=" pi pi-save"></i>
-        </button>
+    <div class=" flex justify-end space-x-4">
+      <button class="cursor-pointer  hover:scale-120 transition-all ease-linear text-muted-foreground hover:text-primary" @click="save_shift(shift)">
+        <i class=" pi pi-pen-to-square"></i>
+      </button>
+      
+      <button class="cursor-pointer  hover:scale-120 transition-all ease-linear text-muted-foreground hover:text-primary" @click="save_shift(shift)">
+        <i class=" pi pi-save"></i>
+        
+      </button>
+      
     </div>
+   
   </div>
 </template>
