@@ -6,11 +6,17 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  save: [shift: Shift_With_Staff_Payload];
+  save: [shift: Shift_With_Staff_Payload],
+  edit: [shift: Shift_With_Staff_Payload],
+  
 }>();
 
 function save_shift(shift: Shift_With_Staff_Payload) {
   emit('save', shift);
+}
+
+function edit_shift(shift: Shift_With_Staff_Payload) {
+  emit('edit', shift);
 }
 </script>
   
@@ -42,7 +48,7 @@ function save_shift(shift: Shift_With_Staff_Payload) {
     </div>
 
     <div class=" flex justify-end space-x-4">
-      <button class="cursor-pointer  hover:scale-120 transition-all ease-linear text-muted-foreground hover:text-primary" @click="save_shift(shift)">
+      <button class="cursor-pointer  hover:scale-120 transition-all ease-linear text-muted-foreground hover:text-primary" @click="edit_shift(shift)">
         <i class=" pi pi-pen-to-square"></i>
       </button>
       

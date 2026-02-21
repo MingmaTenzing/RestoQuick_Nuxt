@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 
 import type { Shift_With_Staff_Payload } from "../../../types/shift_include_staff"
+import { useEditDraftShift } from '~~/app/composables/useEditDraftShift';
 import Roster_ai_sidebar_modal from "./roster_ai_sidebar_modal.vue";
 
 const {
@@ -20,6 +21,7 @@ const {
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
 const {isOpen, ai_conversation} = useAiRosterModal()
 const {editshiftModal} = useeditShiftModal()
+const { editDraftShiftModal, open_edit_draft_shiftModal } = useEditDraftShift()
 const toast = useToast();
 
 
@@ -224,6 +226,7 @@ async function saveDraftShift(shift: Shift_With_Staff_Payload) {
                     <roster-components-draft-shift
                         v-if="entry.isDraft"
                         :shift="entry.shift"
+                        @edit="open_edit_draft_shiftModal"
                         @save="saveDraftShift"
                     ></roster-components-draft-shift>
 
@@ -248,6 +251,9 @@ async function saveDraftShift(shift: Shift_With_Staff_Payload) {
 
   <!-- edit shift-modal -->
 <roster-components-edit-shift v-if="editshiftModal.isOpen"></roster-components-edit-shift>
+
+<roster-components-edit-draft-shift v-if="editDraftShiftModal.isOpen"></roster-components-edit-draft-shift>
+
 
 
  <!-- ai roster modal -->
