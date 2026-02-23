@@ -1,28 +1,34 @@
 <script setup lang="ts">
+import { useEditDraftShift } from '~/composables/useEditDraftShift';
 import type { Shift_With_Staff_Payload } from '~~/types/shift_include_staff';
 
-const props = defineProps<{
-  shift: Shift_With_Staff_Payload;
-}>();
+const { close_edit_draft_shiftModal , editDraftShiftModal, edit_draft_shift} = useEditDraftShift();
 
-const emit = defineEmits<{
-  close: [];
-  update: [shift: Shift_With_Staff_Payload];
-}>();
+
+
 
 const shift_form = ref({
-  startTime: props.shift.startTime,
-  endTime: props.shift.endTime,
-  position: props.shift.position,
+  startTime: editDraftShiftModal.value.shift?.startTime ?? '',
+  endTime: editDraftShiftModal.value.shift?.endTime ?? '',
+  position: editDraftShiftModal.value.shift?.position ?? '',
 });
 
 function submit_shift() {
-  emit('update', {
-    ...props.shift,
-    startTime: shift_form.value.startTime,
-    endTime: shift_form.value.endTime,
-    position: shift_form.value.position,
-  });
+    const currentShift = editDraftShiftModal.value.shift
+
+    if (!currentShift) {
+      return console.log("No Current Draft Shift")
+    }
+
+    const updatedShift: Shift_With_Staff_Payload = {
+      ...currentShift,
+      startTime: shift_form.value.startTime,
+      endTime: shift_form.value.endTime,
+      position: shift_form.value.position,
+    }
+
+    edit_draft_shift(updatedShift)
+
 }
 </script>
 
@@ -32,13 +38,13 @@ function submit_shift() {
       <section class="space-y-2">
         <div class="flex items-center justify-between">
           <span class="text-xl text-card-foreground font-semibold">Edit Draft Shift</span>
-          <button @click="emit('close')">
+          <button @click="close_edit_draft_shiftModal()">
             <i class="pi pi-times"></i>
           </button>
         </div>
 
         <div class="font-light text-muted-foreground">
-          Edit {{ shift.staff.firstname }} {{ shift.staff.lastName }}'s draft shift
+          Edit {{ editDraftShiftModal.shift?.staff.firstname }} {{ editDraftShiftModal.shift?.staff.lastName }}'s draft shift
         </div>
       </section>
 
@@ -51,7 +57,7 @@ function submit_shift() {
                 <input
                   disabled
                   class="text-muted-foreground font-light outline-none text-sm"
-                  :value="shift.staff.firstname"
+                  :value="editDraftShiftModal.shift?.staff.firstname"
                 >
               </div>
             </div>
@@ -79,7 +85,7 @@ function submit_shift() {
           </section>
 
           <section class="flex justify-end space-x-2 items-center text-sm">
-            <button type="button" @click="emit('close')" class="px-4 py-2 hover:border-ring rounded-lg border border-border">Cancel</button>
+            <button type="button" @click="close_edit_draft_shiftModal" class="px-4 py-2 hover:border-ring rounded-lg border border-border">Cancel</button>
             <button type="submit" class="px-4 py-2 hover:border-ring rounded-lg border border-border bg-green-600 text-green-50">
               Update Draft
             </button>

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { Shift_With_Staff_Payload } from '~~/types/shift_include_staff';
 
+
+const { open_edit_draft_shiftModal } = useEditDraftShift()
+
 defineProps<{
   shift: Shift_With_Staff_Payload;
 }>();
@@ -8,6 +11,7 @@ defineProps<{
 const emit = defineEmits<{
   save: [shift: Shift_With_Staff_Payload],
   edit: [shift: Shift_With_Staff_Payload],
+  delete: [shift: Shift_With_Staff_Payload],
   
 }>();
 
@@ -15,8 +19,10 @@ function save_shift(shift: Shift_With_Staff_Payload) {
   emit('save', shift);
 }
 
-function edit_shift(shift: Shift_With_Staff_Payload) {
-  emit('edit', shift);
+
+
+function delete_shift(shift: Shift_With_Staff_Payload) {
+  emit('delete', shift);
 }
 </script>
   
@@ -47,8 +53,9 @@ function edit_shift(shift: Shift_With_Staff_Payload) {
       </div>
     </div>
 
-    <div class=" flex justify-end space-x-4">
-      <button class="cursor-pointer  hover:scale-120 transition-all ease-linear text-muted-foreground hover:text-primary" @click="edit_shift(shift)">
+    <div class=" flex justify-end space-x-4 mt-2">
+      
+      <button class="cursor-pointer  hover:scale-120 transition-all ease-linear text-muted-foreground hover:text-primary" @click="open_edit_draft_shiftModal(shift)">
         <i class=" pi pi-pen-to-square"></i>
       </button>
       
@@ -57,6 +64,9 @@ function edit_shift(shift: Shift_With_Staff_Payload) {
         
       </button>
       
+      <button class="cursor-pointer  hover:scale-120 transition-all ease-linear text-muted-foreground hover:text-destructive" @click="delete_shift(shift)">
+        <i class=" pi pi-times"></i>
+      </button>
     </div>
    
   </div>
