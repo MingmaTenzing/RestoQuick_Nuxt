@@ -101,7 +101,7 @@ const askAi = async () => {
       </div>
 
       <!-- input + actions -->
-      <div class="border-t  p-3 ">
+      <form @submit.prevent="askAi" class="border-t  p-3 ">
         <textarea
           v-model="prompt"
           rows="3"
@@ -110,15 +110,15 @@ const askAi = async () => {
         ></textarea>
 
         <div class="flex items-center justify-between mt-3">
-          <button v-on:click="askAi" class="border px-4 py-2 rounded-lg hover:border-ring flex items-center gap-2" :disabled="response_loading">
+          <button type="submit" class="border px-4 py-2 rounded-lg hover:border-ring flex items-center gap-2" :disabled="response_loading">
             <i v-if="response_loading" class="pi pi-spin pi-spinner"></i>
             <span>Ask AI</span>
           </button>
-          <button class="border px-4 py-2 rounded-lg hover:border-ring bg-accent text-accent-foreground">
+          <button type="button" class="border px-4 py-2 rounded-lg hover:border-ring bg-accent text-accent-foreground">
             Apply Suggestions
           </button>
         </div>
-      </div>
+      </form>
     </aside>
   </div>
 </template>

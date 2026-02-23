@@ -19,7 +19,7 @@ const { isSidebar_open, open_side_bar, close_side_bar, isTabletOrLarger } = useS
         
     </div>
 
-        <img src="../../assets/images/RestroMate.png" width="100" class="dark:invert w-12 md:w-[100px]"/>
+        <img src="../../assets/images/RestoQuick.png" width="100" class="dark:invert w-12 md:w-[100px]"/>
     </div> 
  <div class=" flex items-center space-x-6">
     <div>

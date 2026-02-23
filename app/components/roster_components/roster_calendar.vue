@@ -20,7 +20,9 @@ const {
 
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
 const {isOpen, ai_conversation} = useAiRosterModal()
-const {editshiftModal} = useeditShiftModal()
+const { editshiftModal } = useeditShiftModal()
+
+const { editDraftShiftModal} = useEditDraftShift()
 const toast = useToast();
 
 
@@ -250,7 +252,7 @@ async function saveDraftShift(shift: Shift_With_Staff_Payload) {
   <!-- edit shift-modal -->
 <roster-components-edit-shift v-if="editshiftModal.isOpen"></roster-components-edit-shift>
 
-<edit_draft_shift ></edit_draft_shift>
+<edit_draft_shift v-if="editDraftShiftModal.isOpen"  ></edit_draft_shift>
 
 
 
