@@ -24,6 +24,7 @@ const { editshiftModal } = useeditShiftModal()
 
 const { editDraftShiftModal} = useEditDraftShift()
 const toast = useToast();
+const isSavingDraft = ref(false)
 
 
 
@@ -99,6 +100,7 @@ async function deleteShift(shiftId: string) {
 
 
 async function saveDraftShift(shift: Shift_With_Staff_Payload) {
+    isSavingDraft.value = true
     try {
         const savedShift = await $fetch('/api/shift', {
             method: 'post',
@@ -125,6 +127,8 @@ async function saveDraftShift(shift: Shift_With_Staff_Payload) {
             title: nuxtError?.name ?? 'Error',
             message: nuxtError?.message ?? 'Failed to save shift',
         })
+    } finally {
+        isSavingDraft.value = false
     }
 }
 
@@ -215,7 +219,7 @@ async function saveDraftShift(shift: Shift_With_Staff_Payload) {
    <!-- staff shift time and name -->
 
 
-   <div v-if="status == 'pending'">
+     <div v-if="status == 'pending' && !isSavingDraft">
  <roster-components-shift-loading></roster-components-shift-loading>
   </div>
 
