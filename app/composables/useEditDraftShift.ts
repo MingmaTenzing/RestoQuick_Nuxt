@@ -40,10 +40,17 @@ export const useEditDraftShift = () => {
     close_edit_draft_shiftModal();
   };
 
+  const remove_draft_shift = (draft_shift: Shift_With_Staff_Payload) => {
+    ai_conversation.value.shifts = (ai_conversation.value.shifts ?? []).filter(
+      (shift) => shift.id !== draft_shift.id,
+    );
+  };
+
   return {
     editDraftShiftModal,
     open_edit_draft_shiftModal,
     close_edit_draft_shiftModal,
     edit_draft_shift,
+    remove_draft_shift,
   };
 };

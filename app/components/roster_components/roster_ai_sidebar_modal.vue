@@ -104,6 +104,7 @@ const askAi = async () => {
       <form @submit.prevent="askAi" class="border-t  p-3 ">
         <textarea
           v-model="prompt"
+          @keydown.enter.exact.prevent="askAi"
           rows="3"
           class="w-full resize-none border rounded-lg px-3 py-2 outline-none"
           placeholder="Ask the AI to optimize your roster..."

@@ -2,7 +2,7 @@
 import type { Shift_With_Staff_Payload } from '~~/types/shift_include_staff';
 
 
-const { open_edit_draft_shiftModal } = useEditDraftShift()
+const { open_edit_draft_shiftModal, remove_draft_shift } = useEditDraftShift()
 
 defineProps<{
   shift: Shift_With_Staff_Payload;
@@ -22,6 +22,7 @@ function save_shift(shift: Shift_With_Staff_Payload) {
 
 
 function delete_shift(shift: Shift_With_Staff_Payload) {
+  remove_draft_shift(shift);
   emit('delete', shift);
 }
 </script>
