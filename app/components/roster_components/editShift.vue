@@ -8,6 +8,7 @@ import type { Prisma, Staff , Shift} from '~/generated/prisma/client';
 
 const toast = useToast();
 const {editshiftModal,  close_edit_shiftModal } = useeditShiftModal();
+const { is_useShiftMutating } = useShiftMutation()
 const isSubmitting = ref<boolean>(false);
 
 
@@ -38,6 +39,7 @@ const shift_form = ref<Prisma.ShiftUpdateWithoutStaffInput>({
 
 async function submit_shift() {
     isSubmitting.value = true
+    is_useShiftMutating.value = true
     try {
         const update_shift = await $fetch(`/api/shift/${editshiftModal.value.shift?.id}`, {
             method: 'put', 
@@ -54,6 +56,7 @@ async function submit_shift() {
         toast.error({title: "Error", message: nuxtError?.message})
     } finally {
         isSubmitting.value = false
+        is_useShiftMutating.value = false
     }
 }
 

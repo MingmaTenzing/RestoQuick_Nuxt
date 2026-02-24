@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { useEditDraftShift } from '~/composables/useEditDraftShift';
 import type { Shift_With_Staff_Payload } from '~~/types/shift_include_staff';
 
-const { close_edit_draft_shiftModal , editDraftShiftModal, edit_draft_shift} = useEditDraftShift();
+const { close_edit_draft_shiftModal , editDraftShiftModal, edit_draft_shift} = useDraftShift();
 
 
 

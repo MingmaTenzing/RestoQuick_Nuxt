@@ -37,7 +37,7 @@ function deleteShift() {
        
 
      
-       <div class=" flex flex-col bg-accent p-2 rounded-lg w-full border hover:border-dashed hover:border-ring">
+       <div class=" flex flex-col bg-accent p-1 rounded-lg w-full border hover:border-dashed hover:border-ring">
         <div v-if="!isPrintRosterPage" v-on:click="open_edit_shiftModal(shift)"  class="cursor-pointer flex justify-end   text-muted-foreground hover:text-primary">
             <i class=" pi pi-pencil"></i>
            
@@ -45,11 +45,11 @@ function deleteShift() {
         <div class="flex justify-between items-end ">
 <div :class="['flex', isPrintRosterPage ? 'flex-row items-center gap-2' : 'flex-col space-y-2']">
 
-    <NuxtImg :src="shift.staff?.profile_photo_url"  class=" w-10 h-10 object-cover rounded-full" ></NuxtImg>
+    <NuxtImg :src="shift.staff?.profile_photo_url"  class=" w-8 h-8 object-cover rounded-full" ></NuxtImg>
   <div class="flex flex-col">
       <span class=" text-xs xl:text-base font-medium">{{ shift.staff?.firstname }} {{ shift.staff?.lastName[0] }}.</span>
   
-         <span class="text-[10px] lg:text-sm">{{shift?.startTime}} - {{shift?.endTime}}</span>
+         <span class="text-xs">{{shift?.startTime}} - {{shift?.endTime}}</span>
          <span class="text-[10px] lg:text-xs font-light text-muted-foreground">{{ shift.position }}</span>
        
 

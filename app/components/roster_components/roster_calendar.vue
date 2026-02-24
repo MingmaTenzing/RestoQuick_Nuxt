@@ -22,9 +22,9 @@ const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShift
 const {isOpen, ai_conversation} = useAiRosterModal()
 const { editshiftModal } = useeditShiftModal()
 
-const { editDraftShiftModal} = useEditDraftShift()
+const { editDraftShiftModal} = useDraftShift()
+const { is_useShiftMutating } = useShiftMutation()
 const toast = useToast();
-const isSavingDraft = ref(false)
 
 
 
@@ -74,6 +74,7 @@ const shiftsForDate = (date: Date) => {
 
 // this function is triggered from the emitted event from the staff shift component
 async function deleteShift(shiftId: string) {
+    is_useShiftMutating.value = true
 
     try {
         const delete_staff = await $fetch( `/api/shift/${shiftId}`, {
@@ -84,7 +85,7 @@ async function deleteShift(shiftId: string) {
             
             toast.success({title:"Success", message:"Shift Deleted"})
             // Trigger refetch in parent component
-            refresh()
+            await refresh()
     
         }
         
@@ -94,13 +95,15 @@ async function deleteShift(shiftId: string) {
             title: nuxtError?.name ?? "Error",
             message: nuxtError?.message ?? "Failed to delete shift"
         })
+    } finally {
+        is_useShiftMutating.value = false
     }
    
     }
 
 
 async function saveDraftShift(shift: Shift_With_Staff_Payload) {
-    isSavingDraft.value = true
+    is_useShiftMutating.value = true
     try {
         const savedShift = await $fetch('/api/shift', {
             method: 'post',
@@ -128,7 +131,7 @@ async function saveDraftShift(shift: Shift_With_Staff_Payload) {
             message: nuxtError?.message ?? 'Failed to save shift',
         })
     } finally {
-        isSavingDraft.value = false
+        is_useShiftMutating.value = false
     }
 }
 
@@ -219,7 +222,7 @@ async function saveDraftShift(shift: Shift_With_Staff_Payload) {
    <!-- staff shift time and name -->
 
 
-     <div v-if="status == 'pending' && !isSavingDraft">
+     <div v-if="status == 'pending' && !is_useShiftMutating">
  <roster-components-shift-loading></roster-components-shift-loading>
   </div>
 

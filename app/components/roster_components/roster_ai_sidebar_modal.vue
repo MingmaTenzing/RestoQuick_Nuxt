@@ -6,8 +6,11 @@ const {
   response_loading
 } = useAiRosterModal();
 
-const prompt = ref("");
+const { save_all_draft_shift } = useDraftShift()
 
+const prompt = ref("");
+const toast = useToast()
+const is_applying_suggestions = ref(false)
 
 const askAi = async () => {
   const message = prompt.value.trim();
@@ -29,7 +32,32 @@ const askAi = async () => {
 
 
 
+async function apply_suggestion() {
+  is_applying_suggestions.value = true
+  try {
+    const data = await save_all_draft_shift()
 
+    if (!data) {
+      toast.info({
+        message: "No draft shifts to save",
+      })
+      return
+    }
+ 
+    if (data?.response.count) {
+      toast.success({
+        message: "Saved all Draft Shifts"
+      })
+    }
+    
+  } catch (error) {
+    toast.error({
+      message: error instanceof Error ? error.message : "Failed to save draft shifts",
+    })
+  } finally {
+    is_applying_suggestions.value = false
+  }
+}
 
 </script>
 
@@ -115,7 +143,8 @@ const askAi = async () => {
             <i v-if="response_loading" class="pi pi-spin pi-spinner"></i>
             <span>Ask AI</span>
           </button>
-          <button type="button" class="border px-4 py-2 rounded-lg hover:border-ring bg-accent text-accent-foreground">
+          <button type="button" @click="apply_suggestion" :disabled="is_applying_suggestions" class="border px-4 py-2 rounded-lg hover:border-ring bg-accent text-accent-foreground flex items-center gap-2">
+            <i v-if="is_applying_suggestions" class="pi pi-spin pi-spinner"></i>
             Apply Suggestions
           </button>
         </div>
