@@ -34,6 +34,15 @@ const { data: shifts, status, refresh } = await useAsyncData(
   }
 );  
 
+const formatDateKey = (date: Date | string) => {
+  const currentDate = new Date(date);
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDate.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
 
 function printRoster() {
 
@@ -90,8 +99,7 @@ function printRoster() {
 
    <!-- staff shift time and name -->
 
-        <div   v-for="shift in shifts?.filter((shift) =>new Date(shift.date).toISOString().split('T')[0] ===
-      new Date(date.date).toISOString().split('T')[0])" :key="shift.id">
+        <div   v-for="shift in shifts?.filter((shift) => formatDateKey(shift.date) === formatDateKey(date.date))" :key="shift.id">
 
 
             <roster-components-staff-shift :shift="shift"></roster-components-staff-shift>
