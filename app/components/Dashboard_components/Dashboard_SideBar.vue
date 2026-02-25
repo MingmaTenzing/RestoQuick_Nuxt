@@ -26,7 +26,7 @@ console.log(route.path)
         <i class=" pi pi-building-columns"></i>
         <span>Kitchen</span>
     </NuxtLink>
-    <NuxtLink to="/dashboard/menu" :class="[ 'cursor-pointer flex space-x-4 items-center   text-sm xl:text-base text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/kitchen' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
+    <NuxtLink to="/dashboard/menu" :class="[ 'cursor-pointer flex space-x-4 items-center   text-sm xl:text-base text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/menu' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
         <i class=" pi pi-file-check"></i>
         <span>Menu</span>
     </NuxtLink>
