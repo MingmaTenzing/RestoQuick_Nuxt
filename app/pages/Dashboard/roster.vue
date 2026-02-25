@@ -154,10 +154,9 @@ const { open, isOpen } = useAiRosterModal()
 
     <!-- nested roster routes links -->
 
-    <div class=" bg-accent py-1 px-2 rounded-lg flex gap-4 items-center  w-[520px]">
+    <div class=" bg-accent py-1 px-2 rounded-lg flex gap-4 items-center  w-[420px]">
 
         <NuxtLink to="/dashboard/roster/weekly" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/weekly' ? 'bg-background': '']">Weekly schedule</NuxtLink>
-        <NuxtLink to="/dashboard/roster/ai-optimizer" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/ai-optimizer' ? 'bg-background': '']">AI-optimizer</NuxtLink>
         <NuxtLink to="/dashboard/roster/leave-requests" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/leave-requests' ? 'bg-background': '']">Leave requests</NuxtLink>
         <NuxtLink to="/dashboard/roster/staff-availability" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/staff-availability' ? 'bg-background': '']">Staff Availability</NuxtLink>
 
