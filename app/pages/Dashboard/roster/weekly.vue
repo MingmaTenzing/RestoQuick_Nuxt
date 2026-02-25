@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { Staff } from '~/generated/prisma/client';
 
 
 

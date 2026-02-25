@@ -1,4 +1,6 @@
 <script setup  lang="ts">
+import Roster_ai_sidebar_modal from '~/components/roster_components/roster_ai_sidebar_modal.vue';
+
 
 
 
@@ -7,6 +9,9 @@ definePageMeta({
 })
 
 const route = useRoute();
+const { open, isOpen } = useAiRosterModal()
+
+
 </script>
 
 <template>
@@ -16,20 +21,25 @@ const route = useRoute();
         <!-- headers  -->
         <div>
             <h1 class="text-2xl md:text-6xl">Roster Management </h1>
-        <span class=" text-accent-foreground/60">Manage staff schedules, leave requests, and availability
-        </span>
-    
+            <span class=" text-accent-foreground/60">Manage staff schedules, leave requests, and availability</span>
         </div>
-    
-       
-    <div class=" ">
 
-   
-
-        <NuxtLink to="/print-roster" class=" border-border  border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-lg"> <i class=" pi text-muted-foreground pi-print"></i> <span>Print Roster</span> </NuxtLink>
-    </div>
-            
+        <div class=" flex gap-3">
   
+
+            <button
+                class="border-border border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-lg"
+                @click="open"
+            >
+                <i class="pi pi-sparkles text-muted-foreground"></i>
+                <span>AI Suggestions</span>
+            </button>
+
+            <NuxtLink to="/print-roster" class=" border-border  border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-lg">
+                <i class=" pi text-muted-foreground pi-print"></i>
+                <span>Print Roster</span>
+            </NuxtLink>
+        </div>
     </div>
 
 
@@ -144,10 +154,9 @@ const route = useRoute();
 
     <!-- nested roster routes links -->
 
-    <div class=" bg-accent py-1 px-2 rounded-lg flex gap-4 items-center  w-[520px]">
+    <div class=" bg-accent py-1 px-2 rounded-lg flex gap-4 items-center  w-[420px]">
 
         <NuxtLink to="/dashboard/roster/weekly" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/weekly' ? 'bg-background': '']">Weekly schedule</NuxtLink>
-        <NuxtLink to="/dashboard/roster/ai-optimizer" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/ai-optimizer' ? 'bg-background': '']">AI-optimizer</NuxtLink>
         <NuxtLink to="/dashboard/roster/leave-requests" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/leave-requests' ? 'bg-background': '']">Leave requests</NuxtLink>
         <NuxtLink to="/dashboard/roster/staff-availability" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/staff-availability' ? 'bg-background': '']">Staff Availability</NuxtLink>
 
@@ -162,6 +171,9 @@ const route = useRoute();
 </div>
 
 
+ 
 
  
 </template>
+<style>
+</style>

@@ -1,11 +1,14 @@
 <script lang="ts" setup>
 
-import type { Shift } from '~/generated/prisma/client';
-import { ref, provide } from 'vue';
-import { mockStaff } from '~/lib/roster-mockdata';
+import type { Shift_With_Staff_Payload } from "../../../types/shift_include_staff"
+import Edit_draft_shift from "./edit_draft_shift.vue";
+import Roster_ai_sidebar_modal from "./roster_ai_sidebar_modal.vue";
+
 const {
     weekDates,
     weekRangeText,
+    startOfWeek,
+    endOfWeek,
     nextWeek,
     previousWeek,
     goToCurrentWeek,
@@ -16,26 +19,132 @@ const {
 
 
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
-const {editshiftModal} = useeditShiftModal()
+const {isOpen, ai_conversation} = useAiRosterModal()
+const { editshiftModal } = useeditShiftModal()
 
-// Reactive ref to trigger refetch on shift deletion
-const shiftDeleteTrigger = ref(false)
+const { editDraftShiftModal} = useDraftShift()
+const { is_useShiftMutating } = useShiftMutation()
+const toast = useToast();
 
-// Function to trigger shift deletion refetch
-const triggerShiftRefetch = () => {
-  shiftDeleteTrigger.value = !shiftDeleteTrigger.value
+
+
+
+
+//intial shifts fetch with staff data for current week
+const { data: shifts, status, refresh } = await useAsyncData(
+  "shifts",
+  () => $fetch<Shift_With_Staff_Payload[]>("/api/shift", {
+    query: {
+      startDate: startOfWeek.value.toISOString(),
+      endDate: endOfWeek.value.toISOString()
+    }
+  }), 
+  {
+    lazy: true,
+    watch: [startOfWeek, endOfWeek] // Refetch when week changes
+  }
+); 
+
+const formatDateKey = (date: Date | string) => {
+    const currentDate = new Date(date);
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+};
+
+// Builds the list of shifts for a given day by combining:
+// 1) persisted shifts loaded from the API, and
+// 2) temporary AI-generated draft shifts from the roster modal.
+// Each item is tagged with isDraft so the template can render saved vs draft UI differently.
+const shiftsForDate = (date: Date) => {
+    const dayKey = formatDateKey(date);
+
+    const persisted = (shifts.value ?? [])
+        .filter((shift) => formatDateKey(shift.date) === dayKey)
+        .map((shift) => ({
+            shift,
+            isDraft: false,
+        }));
+
+    const draft = (ai_conversation.value.shifts ?? [])
+        .filter((shift) => formatDateKey(shift.date) === dayKey)
+        .map((shift) => ({
+            shift,
+            isDraft: true,
+        }));
+
+    return [...persisted, ...draft];
+};
+
+// this function is triggered from the emitted event from the staff shift component
+async function deleteShift(shiftId: string) {
+    is_useShiftMutating.value = true
+
+    try {
+        const delete_staff = await $fetch( `/api/shift/${shiftId}`, {
+            method:'delete'
+        })
+    
+        if (delete_staff) {
+            
+            toast.success({title:"Success", message:"Shift Deleted"})
+            // Trigger refetch in parent component
+            await refresh()
+    
+        }
+        
+    } catch (error) {
+        const nuxtError = isNuxtError(error) ? error : null
+        toast.error({
+            title: nuxtError?.name ?? "Error",
+            message: nuxtError?.message ?? "Failed to delete shift"
+        })
+    } finally {
+        is_useShiftMutating.value = false
+    }
+   
+    }
+
+
+async function saveDraftShift(shift: Shift_With_Staff_Payload) {
+    is_useShiftMutating.value = true
+    try {
+        const savedShift = await $fetch('/api/shift', {
+            method: 'post',
+            body: {
+                staffId: shift.staffId,
+                date: shift.date,
+                startTime: shift.startTime,
+                endTime: shift.endTime,
+                position: shift.position,
+            }
+        })
+
+        if (savedShift) {
+            ai_conversation.value.shifts = (ai_conversation.value.shifts ?? []).filter(
+                (draftShift) => draftShift.id !== shift.id,
+            )
+
+            await refresh()
+            toast.success({ title: 'Success', message: 'Shift Saved' })
+        }
+    } catch (error) {
+        const nuxtError = isNuxtError(error) ? error : null
+        toast.error({
+            title: nuxtError?.name ?? 'Error',
+            message: nuxtError?.message ?? 'Failed to save shift',
+        })
+    } finally {
+        is_useShiftMutating.value = false
+    }
 }
 
-// Provide the trigger function to child components
-provide('triggerShiftRefetch', triggerShiftRefetch)
 
-// the useFetch call is watching addShiftModal.value to refetch data if it changes
-// the reason for this is user will open the addshiftmodal and then it will close automatically once its done.
-// this elemenates creating another separate variable to watch
-// but with further development it might change. for now its fine.
-const { data: shifts, status } = await useFetch<Shift[]>("/api/shift",  {watch: [addShiftModal.value, editshiftModal.value, shiftDeleteTrigger], lazy:true}, )
 
-console.log(shifts)
+    
+    
 
 </script>
 
@@ -106,7 +215,7 @@ console.log(shifts)
     
 
         <!-- shifts of the day container-->
- <div    class='  flex flex-col gap-2 p-2   min-h-[120px] border-2 border-dashed rounded-lg hover:border-ring'>
+ <div    class='  flex flex-col gap-2 p-2   min-h-30 border-2 border-dashed rounded-lg hover:border-ring'>
 
 <!-- add shift button -->
       <button v-on:click="open_add_shiftModal(date.date)" class=" flex justify-end">
@@ -119,16 +228,27 @@ console.log(shifts)
    <!-- staff shift time and name -->
 
 
-   <div v-if="status == 'pending'">
+     <div v-if="status == 'pending' && !is_useShiftMutating">
  <roster-components-shift-loading></roster-components-shift-loading>
   </div>
 
-        <div  v-else  v-for="shift in shifts?.filter((shift) =>new Date(shift.date).toISOString().split('T')[0] ===
-      new Date(date.date).toISOString().split('T')[0])" :key="shift.id">
+                <div
+                    v-else
+                    v-for="entry in shiftsForDate(date.date)"
+                    :key="`${entry.isDraft ? 'draft' : 'saved'}-${entry.shift.id}`"
+                >
+                    <roster-components-draft-shift
+                        v-if="entry.isDraft"
+                        :shift="entry.shift"
+                        @save="saveDraftShift"
+                    ></roster-components-draft-shift>
 
-
-            <roster-components-staff-shift :shift="shift"></roster-components-staff-shift>
-            </div>
+                    <roster-components-staff-shift
+                        v-else
+                        :shift="entry.shift"
+                        @delete-shift="deleteShift"
+                    ></roster-components-staff-shift>
+                </div>
 
     </div>
 
@@ -141,7 +261,18 @@ console.log(shifts)
 <!-- addd shift modal form -->
 
   <roster-components-add-shift v-if="addShiftModal.isOpen"></roster-components-add-shift>
+
+  <!-- edit shift-modal -->
 <roster-components-edit-shift v-if="editshiftModal.isOpen"></roster-components-edit-shift>
+
+<edit_draft_shift v-if="editDraftShiftModal.isOpen"  ></edit_draft_shift>
+
+
+
+ <!-- ai roster modal -->
+ <div v-if="isOpen">
+    <roster_ai_sidebar_modal />
+  </div>
 
 </div>
 

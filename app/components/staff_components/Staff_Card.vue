@@ -29,15 +29,6 @@ const formattedDate = computed(() => {
 })
 
 
-function composeInGmail() {
-  const recipient = props.staff.email;
-  const subject = '';
-  const body = '';
-  
- const url =
-    'https://mail.google.com/mail/?view=cm&fs=1&to=test@example.com&su=Hello&body=Hi there'
-  window.open(url, '_blank')
-}
 
 </script>
 

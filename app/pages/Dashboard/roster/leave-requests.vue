@@ -1,10 +1,23 @@
 <script lang="ts" setup>
+import type { LeaveRequest, LeaveStatus, Staff } from "~/generated/prisma/client";
 
 // Fetch leave requests
-const { data: leaveRequests, refresh } = await useFetch('/api/leave-requests')
-console.log(leaveRequests.value)
+type LeaveRequestWithStaff = LeaveRequest & { staff: Staff };
+type LeaveFilter = "all" | LeaveStatus;
 
-// Computed filtered requests
+const { data: leaveRequests, refresh } = await useFetch<LeaveRequestWithStaff[]>("/api/leave-requests");
+
+const activeFilter = ref<LeaveFilter>("all");
+
+const filteredRequests = computed(() => {
+  const requests = leaveRequests.value ?? [];
+
+  if (activeFilter.value === "all") {
+    return requests;
+  }
+
+  return requests.filter((request) => request.status === activeFilter.value);
+});
 
 
 // Helper functions
@@ -35,8 +48,8 @@ const getStatusIcon = (status: string) => {
 }
 
 
-async function updateStatus(status: string, request_id: string) {
-  const {data:update_request_status, status: put_status} = await useFetch(() => `/api/leave-requests/${request_id}`, {
+async function updateStatus(status: LeaveStatus, request_id: string) {
+  const { data: update_request_status, status: put_status } = await useFetch(() => `/api/leave-requests/${request_id}`, {
     method: 'put',
     body: { status }
   })
@@ -58,26 +71,44 @@ async function updateStatus(status: string, request_id: string) {
         <span class="text-accent-foreground/60">Manage and approve staff leave requests</span>
       </div>
       <div class="text-sm text-muted-foreground">
-        Total: {{ leaveRequests!.length }} request(s)
+        Total: {{ filteredRequests.length }} request(s)
       </div>
     </div>
 
     <!-- Filter Tabs -->
     <div class="flex gap-2">
-    <button  class=" border px-4 py-2 rounded-lg border-border  bg-card hover:bg-accent hover:border hover:border-ring">
+    <button
+      @click="activeFilter = 'all'"
+      :class="[
+        'border px-4 py-1 rounded-lg hover:border',
+        activeFilter === 'all' ? 'border-ring bg-accent' : 'border-border bg-card hover:bg-accent hover:border-ring'
+      ]"
+    >
         All Requests
     </button>
-    <button class=" border px-4 py-2 rounded-lg bg-amber-500/10 hover:border hover:border-amber-500/20 hover:bg-amber-500/20 text-amber-500 border-amber-500/20 ">
+    <button
+      @click="activeFilter = 'pending'"
+      :class="[
+        'border px-4 py-1 rounded-lg hover:border hover:border-amber-500/20 text-amber-500',
+        activeFilter === 'pending' ? 'bg-amber-500/20 border-amber-500/20' : 'bg-amber-500/10 border-amber-500/20 hover:bg-amber-500/20'
+      ]"
+    >
        Pending
     </button>
-    <button class=" border px-4 py-2 rounded-lg bg-green-500/10 hover:border hover:border-green-500/20 hover:bg-green-500/20 text-green-500 border-green-500/20">
+    <button
+      @click="activeFilter = 'approved'"
+      :class="[
+        'border px-4 py-1 rounded-lg hover:border hover:border-green-500/20 text-green-500 border-green-500/20',
+        activeFilter === 'approved' ? 'bg-green-500/20' : 'bg-green-500/10 hover:bg-green-500/20'
+      ]"
+    >
 Approved    </button>
     </div>
 
     <!-- Leave Requests List -->
     <div class="space-y-3">
       <div
-        v-for="request in leaveRequests"
+        v-for="request in filteredRequests"
         :key="request.id"
         class="border border-border rounded-lg p-4 bg-card hover:bg-accent/50 transition-colors"
       >

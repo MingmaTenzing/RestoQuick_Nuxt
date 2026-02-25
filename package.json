@@ -17,8 +17,8 @@
     "@nuxt/image": "^1.11.0",
     "@nuxt/scripts": "^0.13.0",
     "@nuxtjs/color-mode": "^3.5.2",
+    "@openai/agents": "^0.4.6",
     "@prisma/adapter-pg": "^7.0.1",
-    "@prisma/client": "^7.1.0",
     "@prisma/extension-accelerate": "^3.0.0",
     "@tailwindcss/vite": "^4.1.16",
     "@unhead/vue": "^2.0.19",
@@ -40,12 +40,16 @@
     "srvx": "^0.10.0",
     "tailwindcss": "^4.1.16",
     "vue": "^3.5.22",
-    "vue-router": "^4.6.3"
+    "vue-router": "^4.6.3",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@prisma/client": "^7.3.0",
     "@types/node": "^24.10.0",
     "@vite-pwa/assets-generator": "^1.0.2",
-    "prisma": "^7.1.0",
+    "i": "^0.3.7",
+    "npm": "^11.9.0",
+    "prisma": "^7.3.0",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }

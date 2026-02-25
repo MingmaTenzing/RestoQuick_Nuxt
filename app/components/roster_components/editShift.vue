@@ -7,29 +7,27 @@ import type { Prisma, Staff , Shift} from '~/generated/prisma/client';
 //cause both of them are fetched on the staff component
 
 const toast = useToast();
-const {editshiftModal, close_edit_shiftModal } = useeditShiftModal();
+const {editshiftModal,  close_edit_shiftModal } = useeditShiftModal();
+const { is_useShiftMutating } = useShiftMutation()
+const isSubmitting = ref<boolean>(false);
 
 
 
 
-const {data:shift_with_staff} = await useFetch(() => `/api/shift/${editshiftModal.value.shiftId}`)
-
-console.log(shift_with_staff.value)
 
 const shift_form = ref<Prisma.ShiftUpdateWithoutStaffInput>({
 
     //start and endtime is coming binded to the input
-    startTime: '',
-    endTime: '',
-
+    startTime: editshiftModal.value.shift?.startTime,
+    endTime: editshiftModal.value.shift?.endTime,
     //is assigned later when submitting form
-   id:'',
+   id:editshiftModal.value.shift?.id,
 
     //    date comes from the addshiftmodal composable
-    date: new Date(Date.now()), //default, 
+    date: new Date(editshiftModal.value.shift?.date!), //default, 
 
     //position is binded to input as well
-    position: '',
+    position: editshiftModal.value.shift?.position,
    
   
 
@@ -40,34 +38,26 @@ const shift_form = ref<Prisma.ShiftUpdateWithoutStaffInput>({
 
 
 async function submit_shift() {
-
-
-    //the remaining form value is attached for the put request
-    shift_form.value.id = shift_with_staff.value?.id
-    shift_form.value.date = shift_with_staff.value?.date;
-    console.log(shift_form.value)
-
-
-    const { data, status, error } = await useFetch(() => `/api/shift/${shift_form.value.id}`, {
-        method: 'put', 
+    isSubmitting.value = true
+    is_useShiftMutating.value = true
+    try {
+        const update_shift = await $fetch(`/api/shift/${editshiftModal.value.shift?.id}`, {
+            method: 'put', 
             body: shift_form.value
-    
-})
+        })
 
-
-
-
-    if (status.value == 'success' && data.value) {
-        
-        toast.success({title:"Success", message:"Shift Updated"})
-        close_edit_shiftModal()
+        if (update_shift) {
+            toast.success({ title: "Success", message: "Shift Updated" })
+            await refreshNuxtData('shifts')
+            close_edit_shiftModal()
+        }
+    } catch (error) {
+        const nuxtError = isNuxtError(error) ? error : null
+        toast.error({title: "Error", message: nuxtError?.message})
+    } finally {
+        isSubmitting.value = false
+        is_useShiftMutating.value = false
     }
-  else if (status.value == 'error') {
-
-    toast.error({title: "Error", message: error.value?.message})
-  }
-
-    
 }
 
 
@@ -79,7 +69,7 @@ async function submit_shift() {
 <template>
     <div  class=" flex  justify-center items-center fixed  w-screen h-screen bg-background/90 backdrop-blur-xs  top-0 z-10 left-0">
 
-        <div class=" w-[500px] flex flex-col gap-4  p-4 bg-background   drop-shadow-lg border   drop-shadow-accent opacity-100 rounded-lg" >
+        <div class=" w-125 flex flex-col gap-4  p-4 bg-background   drop-shadow-lg border   drop-shadow-accent opacity-100 rounded-lg" >
             
             <section class=" space-y-2">
                 <!-- modal header -->
@@ -92,7 +82,7 @@ async function submit_shift() {
                    </button> 
                 </div>
     
-                <div class=" font-light text-muted-foreground" >Edit {{ shift_with_staff?.staff.firstname }} {{ shift_with_staff?.staff.lastName }}'s shift for {{ shift_form.date?.toLocaleString('en-AU', {
+                <div class=" font-light text-muted-foreground" >Edit {{ editshiftModal.shift?.staff.firstname }} {{ editshiftModal.shift?.staff.lastName }}'s shift for {{ shift_form.date?.toLocaleString('en-AU', {
     year: 'numeric',
     month: 'short',
                     day: '2-digit'
@@ -116,7 +106,7 @@ async function submit_shift() {
                      <div  class="border border-border  p-2 rounded-lg flex justify-between items-center ">
                         
 
-                        <input disabled  class=" text-muted-foreground font-light outline-none text-sm" placeholder="Select a staff member"  :value="shift_with_staff?.staff.firstname"></input>
+                        <input disabled  class=" text-muted-foreground font-light outline-none text-sm" placeholder="Select a staff member"  :value="editshiftModal.shift?.staff.firstname"></input>
                         
                          </div>
 
@@ -136,7 +126,7 @@ async function submit_shift() {
                     Start Time
                 </span>
                 <div class=" border border-border   p-2 rounded-lg">
-                    <input required class="outline-none text-primary  " type="time" :placeholder="shift_with_staff?.startTime"  v-model="shift_form.startTime" />
+                    <input required class="outline-none text-primary  " type="time" :placeholder="editshiftModal.shift?.startTime"  v-model="shift_form.startTime" />
                 
 
                 </div>
@@ -163,7 +153,7 @@ async function submit_shift() {
                 ">
                    Position
                 </span>
-                <input class="outline-none border border-border rounded-lg p-2 text-sm" type="text" v-model="shift_form.position" :placeholder="shift_with_staff?.position"/>
+                <input class="outline-none border border-border rounded-lg p-2 text-sm" type="text" v-model="shift_form.position" :placeholder="editshiftModal.shift?.position"/>
 
 
     </section>
@@ -172,9 +162,10 @@ async function submit_shift() {
 
     <section class=" flex justify-end space-x-2 items-center text-sm">
 
-        <button v-on:click="close_edit_shiftModal" class="px-4  py-2  hover:border-ring rounded-lg border border-border ">Cancel</button>
-        <button  class="px-4  py-2  hover:border-ring rounded-lg border border-border bg-green-600  text-green-50 ">Update Shift
-
+        <button type="button" v-on:click="close_edit_shiftModal" :disabled="isSubmitting" class="px-4  py-2  hover:border-ring rounded-lg border border-border disabled:opacity-50 disabled:cursor-not-allowed">Cancel</button>
+        <button type="submit" :disabled="isSubmitting" class="px-4  py-2  hover:border-ring rounded-lg border border-border bg-green-600  text-green-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+            <i v-if="isSubmitting" class="pi pi-spin pi-spinner"></i>
+            {{ isSubmitting ? 'Updating...' : 'Update Shift' }}
         </button>
     </section>
     </form>
