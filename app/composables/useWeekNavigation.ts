@@ -6,7 +6,9 @@ export function useWeekNavigation() {
     const date = new Date(currentDate.value);
     const day = date.getDay();
     const diff = day === 0 ? 6 : day - 1; // Adjust diff to make Monday the start
-    return new Date(date.setDate(date.getDate() - diff));
+    date.setDate(date.getDate() - diff);
+    date.setHours(0, 0, 0, 0);
+    return date;
   });
   // Generate array of dates for the week
   const weekDates = computed(() => {
@@ -66,6 +68,7 @@ export function useWeekNavigation() {
   const endOfWeek = computed(() => {
     const start = new Date(startOfWeek.value);
     start.setDate(start.getDate() + 6);
+    start.setHours(23, 59, 59, 999);
     return start;
   });
 

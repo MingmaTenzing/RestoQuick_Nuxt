@@ -45,8 +45,14 @@ const { data: shifts, status, refresh } = await useAsyncData(
   }
 ); 
 
-const formatDateKey = (date: Date | string) =>
-    new Date(date).toISOString().split("T")[0];
+const formatDateKey = (date: Date | string) => {
+    const currentDate = new Date(date);
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+};
 
 // Builds the list of shifts for a given day by combining:
 // 1) persisted shifts loaded from the API, and

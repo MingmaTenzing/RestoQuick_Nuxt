@@ -11,8 +11,17 @@ export default defineEventHandler(async (event) => {
     });
   }
   const startDate = new Date(query.startDate as string);
-
   const endDate = new Date(query.endDate as string);
+
+  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+    throw createError({
+      statusCode: 400,
+      message: "Invalid startDate or endDate query parameter",
+    });
+  }
+
+  startDate.setHours(0, 0, 0, 0);
+  endDate.setHours(23, 59, 59, 999);
 
   const data = await prisma.shift.findMany({
     where:
