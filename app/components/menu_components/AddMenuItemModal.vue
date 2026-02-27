@@ -1,82 +1,58 @@
 <script setup lang="ts">
-import type { MenuItem } from '~/generated/prisma/client'
-import type { MenuItemCreateInput } from '~/generated/prisma/models';
+import { type MenuCategory } from '~/generated/prisma/enums';
+import type { MenuItemCreateInput } from '~/generated/prisma/models'
 
-type MenuCategoryValue = MenuItemCreateInput['category']
+
 
 const props = defineProps<{
-  item: MenuItem
-  isSaving?: boolean
-  isDeleting?: boolean
+  isCreating?: boolean
 }>()
 
 const emit = defineEmits<{
   close: []
-  update: [payload: { id: string, form: MenuItemCreateInput }]
-  delete: [id: string]
+  create: [payload: MenuItemCreateInput]
 }>()
 
-const showDeleteConfirm = ref(false)
-
 const form = reactive<MenuItemCreateInput>({
-   
-  name: props.item.name,
-  description: props.item.description ?? '',
-  priceCents: props.item.priceCents,
-  category: props.item.category,
-  imageUrl: props.item.imageUrl ?? '',
-  isAvailable: props.item.isAvailable ?? true,
+  name: '',
+  description: '',
+  priceCents: 0,
+  category: 'MAIN_COURSE' as MenuCategory,
+  imageUrl: '',
+  isAvailable: true,
 })
-const {data:menu_category} = await useFetch<MenuCategoryValue[]>('/api/menu/category')
 
+const { data: menu_category } = await useFetch<MenuCategory[]>('/api/menu/category')
 
-const submitEditMenuItem = async () => {
-  if (props.isSaving || props.isDeleting) return
+const submitAddMenuItem = () => {
+  if (props.isCreating) return
 
-  emit('update', {
-    id: props.item.id,
-    form: {
-      name: form.name,
-      description: form.description || null,
-      priceCents: Number(form.priceCents),
-      category: form.category,
-      imageUrl: form.imageUrl || null,
-      isAvailable: form.isAvailable,
-    }
+  emit('create', {
+    name: form.name,
+    description: form.description || null,
+    priceCents: Number(form.priceCents),
+    category: form.category,
+    imageUrl: form.imageUrl || null,
+    isAvailable: form.isAvailable,
   })
-}
-
-const openDeleteConfirm = () => {
-  if (props.isSaving || props.isDeleting) return
-
-  showDeleteConfirm.value = true
-}
-
-const closeDeleteConfirm = () => {
-  if (props.isDeleting) return
-
-  showDeleteConfirm.value = false
-}
-
-const confirmDeleteMenuItem = () => {
-  if (props.isSaving || props.isDeleting) return
-
-  emit('delete', props.item.id)
 }
 </script>
 
 <template>
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" @click.self="!props.isSaving && !props.isDeleting && !showDeleteConfirm && emit('close')">
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4"
+    @click.self="!props.isCreating && emit('close')"
+  >
     <div class="w-full max-w-xl rounded-xl border border-border bg-card p-6 text-card-foreground shadow-lg">
       <div class="mb-6 flex items-start justify-between gap-4">
         <div>
-          <h2 class="text-lg font-semibold">Edit Menu Item</h2>
-          <p class="text-sm text-muted-foreground">Update menu information and availability.</p>
+          <h2 class="text-lg font-semibold">Add Menu Item</h2>
+          <p class="text-sm text-muted-foreground">Create a new menu item.</p>
         </div>
 
         <button
           type="button"
-          :disabled="props.isSaving || props.isDeleting"
+          :disabled="props.isCreating"
           class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input transition-colors hover:bg-accent hover:text-accent-foreground"
           @click="emit('close')"
         >
@@ -84,8 +60,8 @@ const confirmDeleteMenuItem = () => {
         </button>
       </div>
 
-      <form @submit.prevent="submitEditMenuItem" class="space-y-5">
-        <div class="space-y-4" :class="{ 'pointer-events-none opacity-50': props.isSaving || props.isDeleting }">
+      <form @submit.prevent="submitAddMenuItem" class="space-y-5">
+        <div class="space-y-4" :class="{ 'pointer-events-none opacity-50': props.isCreating }">
           <div class="space-y-2">
             <label class="text-sm font-medium">Item Name</label>
             <input
@@ -152,25 +128,8 @@ const confirmDeleteMenuItem = () => {
 
         <div class="flex flex-col-reverse gap-2 border-t border-border pt-5 sm:flex-row sm:justify-end">
           <button
-            v-if="!props.isDeleting"
             type="button"
-            :disabled="props.isSaving"
-            class="rounded-md border border-destructive/30 bg-destructive/10 px-4 py-2 text-destructive transition-colors hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-50"
-            @click="openDeleteConfirm"
-          >
-            Delete
-          </button>
-
-          <div
-            v-else
-            class="flex items-center justify-center rounded-md bg-destructive px-4 py-2 text-destructive-foreground"
-          >
-            <i class="pi pi-spinner animate-spin" />
-          </div>
-
-          <button
-            type="button"
-            :disabled="props.isSaving || props.isDeleting"
+            :disabled="props.isCreating"
             class="rounded-md border border-input bg-background px-4 py-2 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
             @click="emit('close')"
           >
@@ -178,12 +137,11 @@ const confirmDeleteMenuItem = () => {
           </button>
 
           <button
-            v-if="!props.isSaving"
+            v-if="!props.isCreating"
             type="submit"
-            :disabled="props.isDeleting"
             class="rounded-md bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Save Changes
+            Create Menu Item
           </button>
 
           <div v-else class="flex items-center justify-center rounded-md bg-primary px-4 py-2 text-primary-foreground">
@@ -192,13 +150,5 @@ const confirmDeleteMenuItem = () => {
         </div>
       </form>
     </div>
-
-    <MenuComponentsDeleteMenuItemConfirmModal
-      v-if="showDeleteConfirm"
-      :item-name="item.name"
-      :is-deleting="props.isDeleting"
-      @cancel="closeDeleteConfirm"
-      @confirm="confirmDeleteMenuItem"
-    />
   </div>
 </template>

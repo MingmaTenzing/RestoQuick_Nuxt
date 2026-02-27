@@ -2,6 +2,8 @@
 import { type MenuCategory, type MenuItem } from '~/generated/prisma/client'
 import type { MenuItemCreateInput } from '~/generated/prisma/models'
 
+
+
 definePageMeta({
     layout: 'dashboard-layout'
 })
@@ -38,6 +40,8 @@ const showEditModal = ref(false)
 const selectedMenuItem = ref<MenuItem | null>(null)
 const isUpdatingMenuItem = ref(false)
 const isDeletingMenuItem = ref(false)
+const showAddModal = ref(false)
+const isCreatingMenuItem = ref(false)
 
 
 
@@ -47,9 +51,43 @@ const openEditModal = (item: MenuItem) => {
     showEditModal.value = true
 }
 
+const openAddModal = () => {
+    showAddModal.value = true
+}
+
 const closeEditModal = () => {
     showEditModal.value = false
     selectedMenuItem.value = null
+}
+
+const closeAddModal = () => {
+    showAddModal.value = false
+}
+
+const createMenuItem = async (payload: MenuItemCreateInput) => {
+    isCreatingMenuItem.value = true
+
+    try {
+        await $fetch<MenuItem>('/api/menu', {
+            method: 'POST',
+            body: payload
+        })
+
+        await refresh()
+
+        toast.success({
+            title: 'Menu item created'
+        })
+
+        closeAddModal()
+    } catch (error) {
+        console.log(error)
+        toast.error({
+            title: 'Failed to create menu item'
+        })
+    } finally {
+        isCreatingMenuItem.value = false
+    }
 }
 
 const updateEditedMenuItem = async (payload: { id: string, form: MenuItemCreateInput }) => {
@@ -130,8 +168,15 @@ const update_availability = async (menu_item: MenuItem) => {
 <template>
     <main class=" space-y-6">
 
-        <div>
+        <div class=" flex justify-between items-center">
                     <h1 class="text-2xl md:text-6xl">Manage Menu</h1>
+
+                    <div @click="openAddModal" class="border border-border px-3 space-x-2 py-2 rounded-lg bg-secondary hover:scale-105 transition-all ease-linear  text-card-foreground hover:border-ring ">
+                        <i class="pi pi-file-plus"> </i>
+
+                        <button class=" ">Add Menu Item</button>
+                    </div>
+
 
         </div>
         <div class=" flex items-center justify-between">
@@ -194,6 +239,15 @@ const update_availability = async (menu_item: MenuItem) => {
                 @close="closeEditModal"
                 @update="updateEditedMenuItem"
                 @delete="deleteMenuItem"
+            />
+        </Transition>
+
+        <Transition>
+            <MenuComponentsAddMenuItemModal
+                v-if="showAddModal"
+                :is-creating="isCreatingMenuItem"
+                @close="closeAddModal"
+                @create="createMenuItem"
             />
         </Transition>
     </main>

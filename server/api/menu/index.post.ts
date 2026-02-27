@@ -11,13 +11,6 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  if (!Object.values(MenuCategory).includes(body.category)) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Invalid category",
-    });
-  }
-
   const menuItem = await prisma.menuItem.create({
     data: {
       name: body.name,
