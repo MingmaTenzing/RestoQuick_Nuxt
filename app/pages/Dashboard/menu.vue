@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { type MenuCategory, type MenuItem } from '~/generated/prisma/client'
+import type { MenuItemCreateInput } from '~/generated/prisma/models'
 
 definePageMeta({
     layout: 'dashboard-layout'
@@ -11,6 +12,7 @@ const { data: menuItems, refresh } = await useFetch<MenuItem[]>('/api/menu')
 
 const { data: menu_category } = await useFetch<MenuCategory[]>('/api/menu/category')
 
+const toast = useToast()
 const searchQuery = ref('')
 const selectedCategory = ref<MenuCategory | ''>('')
 
@@ -32,9 +34,13 @@ const filteredMenuItems = computed(() => {
     })
 })
 
-
 const showEditModal = ref(false)
 const selectedMenuItem = ref<MenuItem | null>(null)
+const isUpdatingMenuItem = ref(false)
+const isDeletingMenuItem = ref(false)
+
+
+
 
 const openEditModal = (item: MenuItem) => {
     selectedMenuItem.value = item
@@ -46,10 +52,61 @@ const closeEditModal = () => {
     selectedMenuItem.value = null
 }
 
-const updateEditedMenuItem = (updatedItem: MenuItem) => {
-    menuItems.value = menuItems.value?.map((item) =>
-        item.id === updatedItem.id ? updatedItem : item
-    )
+const updateEditedMenuItem = async (payload: { id: string, form: MenuItemCreateInput }) => {
+    isUpdatingMenuItem.value = true
+
+    try {
+        const updatedItem = await $fetch<MenuItem>(`/api/menu/${payload.id}`, {
+            method: 'PUT',
+            body: payload.form
+        })
+
+
+        if (updatedItem) {
+            await refresh()
+            
+                    toast.success({
+                        title: 'Menu item updated'
+                    })
+            
+                    closeEditModal()
+        }
+
+    } catch (error) {
+        console.log(error)
+        toast.error({
+            title: 'Failed to update menu item'
+        })
+    } finally {
+        isUpdatingMenuItem.value = false
+    }
+}
+
+const deleteMenuItem = async (menuItemId: string) => {
+    isDeletingMenuItem.value = true
+
+    try {
+        const deleteEndpoint: string = `/api/menu/${menuItemId}`
+
+        await $fetch(deleteEndpoint, {
+            method: 'DELETE'
+        })
+
+        await refresh()
+
+        toast.success({
+            title: 'Menu item deleted'
+        })
+
+        closeEditModal()
+    } catch (error) {
+        console.log(error)
+        toast.error({
+            title: 'Failed to delete menu item'
+        })
+    } finally {
+        isDeletingMenuItem.value = false
+    }
 }
 
 const update_availability = async (menu_item: MenuItem) => {
@@ -72,7 +129,12 @@ const update_availability = async (menu_item: MenuItem) => {
 
 <template>
     <main class=" space-y-6">
-        <div class=" flex justify-between">
+
+        <div>
+                    <h1 class="text-2xl md:text-6xl">Manage Menu</h1>
+
+        </div>
+        <div class=" flex items-center justify-between">
             <input
                 v-model="searchQuery"
                 type="text"
@@ -103,7 +165,7 @@ const update_availability = async (menu_item: MenuItem) => {
             </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 ">
             <div v-for="item in filteredMenuItems" :key="item.id" class="w-full max-w-85">
                 <MenuComponentsMenuItemCard
                     :item="item"
@@ -127,8 +189,11 @@ const update_availability = async (menu_item: MenuItem) => {
             <MenuComponentsEditMenuItemModal
                 v-if="showEditModal && selectedMenuItem"
                 :item="selectedMenuItem"
+                :is-saving="isUpdatingMenuItem"
+                :is-deleting="isDeletingMenuItem"
                 @close="closeEditModal"
-                @saved="updateEditedMenuItem"
+                @update="updateEditedMenuItem"
+                @delete="deleteMenuItem"
             />
         </Transition>
     </main>
