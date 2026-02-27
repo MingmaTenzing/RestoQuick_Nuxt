@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type MenuCategory } from '~/generated/prisma/enums';
 import type { MenuItemCreateInput } from '~/generated/prisma/models'
-
+import { cloudinary_image_upload} from "../../client_utils/cloudinary_upload_image"
 
 
 const props = defineProps<{
@@ -12,6 +12,11 @@ const emit = defineEmits<{
   close: []
   create: [payload: MenuItemCreateInput]
 }>()
+
+const runtimeConfig = useRuntimeConfig()
+const toast = useToast()
+const image_uploading = ref(false)
+const image_upload_success = ref(false)
 
 const form = reactive<MenuItemCreateInput>({
   name: '',
@@ -29,18 +34,40 @@ const submitAddMenuItem = () => {
 
   emit('create', {
     name: form.name,
-    description: form.description || null,
+    description: form.description ,
     priceCents: Number(form.priceCents),
     category: form.category,
-    imageUrl: form.imageUrl || null,
+    imageUrl: form.imageUrl,
     isAvailable: form.isAvailable,
   })
+}
+
+async function upload_menu_item_image(event: Event) {
+  image_upload_success.value = false
+  image_uploading.value = true
+
+  try {
+     const image_secure_url = await cloudinary_image_upload(event, {
+    cloudName: runtimeConfig.public.CLOUDINARY_CLOUD_NAME,
+    uploadPreset: runtimeConfig.public.CLOUDINARY_UPLOAD_PRESET_MENU_ITEMS,
+    maxSizeInKb: 300,
+  })
+
+    form.imageUrl = image_secure_url
+    image_upload_success.value = true
+  } catch (error) {
+    toast.error({
+      message: error instanceof Error ? error.message : 'Image upload failed'
+    })
+  } finally {
+    image_uploading.value = false
+  }
 }
 </script>
 
 <template>
   <div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4"
+    class="fixed inset-0  z-50 flex items-center overflow-hidden justify-center bg-background/80 p-4"
     @click.self="!props.isCreating && emit('close')"
   >
     <div class="w-full max-w-xl rounded-xl border border-border bg-card p-6 text-card-foreground shadow-lg">
@@ -109,12 +136,19 @@ const submitAddMenuItem = () => {
           </div>
 
           <div class="space-y-2">
-            <label class="text-sm font-medium">Image URL</label>
+            <div class="flex space-x-2">
+              <label class="text-sm font-medium">Menu Image (Max - 300KB)</label>
+              <i v-if="image_uploading" class="pi pi-spinner animate-spin"></i>
+              <i v-if="image_upload_success" class="pi pi-check-circle text-green-600"></i>
+            </div>
+
             <input
-              v-model="form.imageUrl"
-              type="url"
-              placeholder="https://..."
-              class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+              required
+              type="file"
+              accept="image/*"
+              @change="upload_menu_item_image($event)"
+              id="menu_item_image_input"
+              class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-ring"
             >
           </div>
 

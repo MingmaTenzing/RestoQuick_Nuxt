@@ -14,11 +14,11 @@ export default defineEventHandler(async (event) => {
   const menuItem = await prisma.menuItem.create({
     data: {
       name: body.name,
-      description: body.description ?? null,
+      description: body.description,
       priceCents: Number(body.priceCents),
       category: body.category,
-      imageUrl: body.imageUrl ?? null,
-      isAvailable: body.isAvailable ?? true,
+      imageUrl: body.imageUrl,
+      isAvailable: body.isAvailable,
     },
   });
 

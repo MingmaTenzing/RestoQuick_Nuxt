@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import type { MenuItem } from '~/generated/prisma/client'
+import { type MenuCategory, type MenuItem } from '~/generated/prisma/client'
 import type { MenuItemCreateInput } from '~/generated/prisma/models';
-
-type MenuCategoryValue = MenuItemCreateInput['category']
 
 const props = defineProps<{
   item: MenuItem
@@ -27,7 +25,7 @@ const form = reactive<MenuItemCreateInput>({
   imageUrl: props.item.imageUrl ?? '',
   isAvailable: props.item.isAvailable ?? true,
 })
-const {data:menu_category} = await useFetch<MenuCategoryValue[]>('/api/menu/category')
+const {data:menu_category} = await useFetch<MenuCategory[]>('/api/menu/category')
 
 
 const submitEditMenuItem = async () => {
@@ -37,10 +35,10 @@ const submitEditMenuItem = async () => {
     id: props.item.id,
     form: {
       name: form.name,
-      description: form.description || null,
+      description: form.description ,
       priceCents: Number(form.priceCents),
       category: form.category,
-      imageUrl: form.imageUrl || null,
+      imageUrl: form.imageUrl ,
       isAvailable: form.isAvailable,
     }
   })
