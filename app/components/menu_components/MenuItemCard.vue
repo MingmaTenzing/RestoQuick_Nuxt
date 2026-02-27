@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import type { MenuItem } from '~/generated/prisma/client';
 
-interface MenuCategory {
-	name: string
-	icon?: string
-}
+
 
 const props = defineProps<{
 	item: MenuItem
-	category?: MenuCategory
 }>()
 
 const emit = defineEmits<{
-	toggleAvailability: [id: string]
+	toggleAvailability: [item: MenuItem]
+	edit: [item: MenuItem]
 }>()
 
 const fallbackImage =
@@ -20,14 +17,10 @@ const fallbackImage =
 
 const isAvailable = computed(() => props.item.isAvailable ?? true)
 
-const categoryLabel = computed(() => {
-	if (props.category?.name) return props.category.name
-	return props.item.category.replaceAll('_', ' ')
-})
-
-const categoryIcon = computed(() => props.category?.icon ?? '🥗')
 
 const formattedPrice = computed(() => `$${(props.item.priceCents / 100).toFixed(2)}`)
+
+
 
 
 </script>
@@ -43,7 +36,7 @@ const formattedPrice = computed(() => `$${(props.item.priceCents / 100).toFixed(
 			>
 
 			<div class="absolute left-3 top-3 inline-flex items-center gap-1 rounded-md bg-card/90 px-2.5 py-1 text-xs font-medium text-card-foreground">
-				{{ categoryIcon }} {{ categoryLabel }}
+				 {{ props.item.category }}
 			</div>
 
 			<div v-if="!isAvailable" class="absolute inset-0 flex items-center justify-center bg-black/30">
@@ -69,23 +62,35 @@ const formattedPrice = computed(() => `$${(props.item.priceCents / 100).toFixed(
 			</p>
 
 			<div class="flex items-center justify-between border-t border-border pt-3">
-				<span class="text-sm" :class="isAvailable ? 'text-primary' : 'text-muted-foreground'">
-					{{ isAvailable ? 'Available' : 'Unavailable' }}
-				</span>
+				<div class=" flex items-center space-x-2">
 
-				<button
-					type="button"
-					class="inline-flex h-6 w-11 items-center rounded-full bg-muted p-0.5 transition-colors"
-					role="switch"
-					:aria-checked="isAvailable"
-					:class="isAvailable ? 'bg-primary' : 'bg-muted'"
-					@click="emit('toggleAvailability', item.id)"
-				>
-					<span
-						class="h-5 w-5 rounded-full bg-card shadow transition-transform"
-						:class="isAvailable ? 'translate-x-5' : 'translate-x-0'"
-					/>
-				</button>
+					 <button
+		 type="button"
+		 class="inline-flex h-6 w-11 items-center rounded-full  p-0.5 transition-colors"
+		 role="switch"
+		 :aria-checked="isAvailable"
+		 :class="isAvailable ? 'bg-green-600' : 'bg-muted'"
+		 @click="emit('toggleAvailability', item)"
+	 >
+		 <span
+			 class="h-5 w-5 rounded-full bg-card shadow transition-transform"
+			 :class="isAvailable ? 'translate-x-5' : 'translate-x-0'"
+		 />
+	 </button>
+					<span class="text-sm" :class="isAvailable ? 'text-primary' : 'text-muted-foreground'">
+						{{ isAvailable ? 'Available' : 'Unavailable' }}
+					</span>
+
+				</div>
+				<div class="space-x-4 flex items-center">
+					<button
+						type="button"
+						class="inline-flex h-8 w-8 items-center justify-center rounded-md border transition-colors hover:bg-accent hover:text-accent-foreground"
+						@click="emit('edit', item)"
+					>
+						<i class="pi pi-pencil"></i>
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
