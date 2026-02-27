@@ -71,19 +71,19 @@ const update_availability = async (menu_item: MenuItem) => {
 </script>
 
 <template>
-    <main class="">
+    <main class=" space-y-6">
         <div class=" flex justify-between">
             <input
                 v-model="searchQuery"
                 type="text"
                 placeholder="Search menu item"
-                class="w-1/3 rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+                class="w-1/3 rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:border-ring"
             >
 
             <div class="flex flex-wrap gap-2 ">
                 <button
                     type="button"
-                    class="rounded-md border uppercase px-3 py-1.5 text-sm transition-colors"
+                    class="rounded-md border uppercase px-3 py-1 text-sm transition-colors"
                     :class="selectedCategory === '' ? 'bg-primary text-primary-foreground border-primary' : 'border-input bg-background hover:bg-accent hover:text-accent-foreground'"
                     @click="selectedCategory = ''"
                 >
@@ -94,7 +94,7 @@ const update_availability = async (menu_item: MenuItem) => {
                     v-for="category in (menu_category ?? [])"
                     :key="category"
                     type="button"
-                    class="rounded-md border px-3 py-1.5 text-sm transition-colors"
+                    class="rounded-md border px-3 py-1 text-sm transition-colors"
                     :class="selectedCategory === category ? 'bg-primary text-primary-foreground border-primary' : 'border-input bg-background hover:bg-accent hover:text-accent-foreground'"
                     @click="selectedCategory = category"
                 >
