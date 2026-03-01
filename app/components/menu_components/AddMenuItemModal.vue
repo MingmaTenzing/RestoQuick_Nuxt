@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { type MenuCategory } from '~/generated/prisma/enums';
 import type { MenuItemCreateInput } from '~/generated/prisma/models'
 import { cloudinary_image_upload} from "../../client_utils/cloudinary_upload_image"
+import type { MenuCategory } from '~/generated/prisma/enums';
 
 
 const props = defineProps<{

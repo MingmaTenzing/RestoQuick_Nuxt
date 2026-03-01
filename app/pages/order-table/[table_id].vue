@@ -2,25 +2,27 @@
 
 import Cart_Item from '~/components/qr_order_components/Cart_Item.vue';
 import Menu_Item from '~/components/qr_order_components/Menu_Item.vue';
+import type { Table } from '~/generated/prisma/browser';
 import type { MenuItem } from '~/generated/prisma/client';
 import type Order_Cart_Item from '~~/types/order-cart';
 
 
 
-
-const { data: menu_items } = useFetch<MenuItem[]>('/api/menu-items')
-const { cart_items } = useOrderCart()
-const { set_table_id, table_id} = useTableId()
-
 // router param with table id 
 const route = useRoute();
 
-//the table_id is set to the composable when the qr code is scanned the redirected to this page with the table id; 
-set_table_id(route.params.table_id);
-
-
 const selectedCategory = ref("All")
 const show_cart = ref(false);
+const { set_table_id, table_id } = useTableId()
+
+const { cart_items } = useOrderCart()
+
+
+const { data: menu_items } = useFetch<MenuItem[]>('/api/menu/order-menu')
+const {data: table} = useFetch<Table>(`/api/tables/${route.params.table_id}`)
+
+//the table_id is set to the composable when the qr code is scanned the redirected to this page with the table id; 
+set_table_id(route.params.table_id);
 
 
 
@@ -70,7 +72,7 @@ const selectedCategory_menu_items = computed(() =>
         <img src="../../assets/images/RestroMate.png"  class="invert w-20 not-dark:invert-0"></img>
        <div class=" flex flex-col">
            <span class=" text-2xl font-semibold">Order Now</span>
-           <span class=" text-muted-foreground text-sm font-light">Table Unknown</span>
+           <span class=" text-muted-foreground text-sm font-light">Table {{table?.number}}</span>
        </div>
 
     </section>

@@ -43,7 +43,7 @@ function add_item_to_cart() {
 
 
      <div class=" border flex p-4 gap-2  rounded-lg">
-                <NuxtImg  src="https://www.foodandwine.com/thmb/jldKZBYIoXJWXodRE9ut87K8Mag=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/crispy-comte-cheesburgers-FT-RECIPE0921-6166c6552b7148e8a8561f7765ddf20b.jpg" width="200" height="200" class="rounded-lg w-[100px] h-[100px] object-cover"/>
+                <NuxtImg  :src="menu_item.imageUrl || 'https://collection.cloudinary.com/dnusuubi9/6821e38893c8cf0423a1335712bf518b'" width="200" height="200" class="rounded-lg w-[100px] h-[100px] object-cover"/>
 
                 <div class="space-y-2 w-full">
                     <div class=" flex justify-between items-center">
@@ -51,7 +51,7 @@ function add_item_to_cart() {
                         <span class="text-lg font-semibold ">{{ menu_item?.name }}</span>
                         <span class=" bg-accent p-2 rounded-lg font-semibold"> ${{ menu_item?.priceCents/100 }}</span>
                     </div>
-                    <p class=" text-muted-foreground font-light text-sm">{{ menu_item?.description }}</p>
+                    <p class="text-muted-foreground font-light text-sm line-clamp-2" :title="menu_item?.description || ''">{{ menu_item?.description }}</p>
 
 
                     <div>

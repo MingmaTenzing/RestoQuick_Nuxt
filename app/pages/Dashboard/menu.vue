@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type MenuCategory, type MenuItem } from '~/generated/prisma/client'
+import type { MenuCategory, MenuItem } from '~/generated/prisma/browser'
 import type { MenuItemCreateInput } from '~/generated/prisma/models'
 
 
