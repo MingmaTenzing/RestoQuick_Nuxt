@@ -25,12 +25,15 @@ async function markOrder_as_ready(order_id: string) {
 
               
     
-                    <div class=" w-75 p-4 bg-card border  rounded-lg space-y-4">
+                    <div class=" w-80 p-4 bg-card border  rounded-lg space-y-4">
         
                         <!-- table number and time ago order was placed -->
-                        <div class="flex justify-between">
-                            <p class=" text-xl font-semibold">{{order.table?.number}}</p>
-                            <div class=" flex gap-2 items-center text-muted-foreground font-light">
+                        <div class="flex justify-between items-center">
+                          <div class=" space-y-1">
+                            <p class=" text-xl font-semibold">Order No: {{order.orderNo}}</p>
+                            <p class="text-muted-foreground">Table {{ order.table?.number }}</p>
+                          </div>
+                            <div class=" flex gap-2 items-center text-sm text-muted-foreground font-light">
                                 <i class=" pi pi-clock"></i>
 <NuxtTime
   data-testid="relative"

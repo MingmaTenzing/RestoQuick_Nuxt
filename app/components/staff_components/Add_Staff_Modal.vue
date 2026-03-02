@@ -3,7 +3,7 @@
 // import  { Role, WeekDay } from '~/generated/prisma/enums';
 
 import { type Role, type WeekDay } from "~/generated/prisma/enums";
-import type { CloudinaryUploadResponse } from "../../../types/cloudinary"
+import { cloudinary_image_upload as uploadImageHelper } from "~/client_utils/cloudinary_upload_image"
 import { RoleandWeekDay_Constant } from "~/client_utils/constants";
 
 
@@ -69,64 +69,22 @@ const add_availability_day = (available_day: WeekDay) => {
 async function image_upload(event: Event) {
   image_upload_success.value = false;
   image_uploading.value = true;
-  const input = event.target as HTMLInputElement;
-
-
-  const image = input.files?.[0];
-
-
-  if (!image) {
-    return toast.error({
-      message:'No image provided'
-    })
-   }
-
-  // size guard (300KB)
-  if (image.size > 300 * 1024) {
-    toast.error({
-      message: "Image upload only supports upto 300kb"
-    })
-    input.value = ''
-    return
-  }
-
-  // type guard
-  if (!image.type.startsWith("image/")) {
-    toast.error({
-      message: "Only images allowed"
-    })
-    input.value = ''
-    return
-  }
-
-  // creating form data for sending the image file in post request.
-  const formData = new FormData();
-  formData.append("file", image)
-  formData.append('upload_preset', runtimeConfig.public.CLOUDINARY_UPLOAD_PRESET)
-
 
  try {
-   const upload_image = await $fetch<CloudinaryUploadResponse>(`https://api.cloudinary.com/v1_1/${runtimeConfig.public.CLOUDINARY_CLOUD_NAME}/image/upload`, {
-     method: 'POST',
-     body: 
-      formData
-   })
+  const secure_url = await uploadImageHelper(event, {
+    cloudName: runtimeConfig.public.CLOUDINARY_CLOUD_NAME,
+    uploadPreset: runtimeConfig.public.CLOUDINARY_UPLOAD_PRESET_STAFF,
+    maxSizeInKb: 300,
+  })
 
-  //setting photourl value once image is uploaded later used for adding staff request
-   staff_form.profile_photo_url = upload_image.secure_url;
+   staff_form.profile_photo_url = secure_url;
    image_upload_success.value = true;
 
-   console.log(staff_form)
-
-  
  } catch (error) {
-
-   console.error(error)
-  alert(error)
-   
-  
- }
- finally {
+  toast.error({
+    message: error instanceof Error ? error.message : 'Image upload failed'
+  })
+ } finally {
    image_uploading.value = false;
  }
 

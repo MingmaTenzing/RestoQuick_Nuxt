@@ -31,17 +31,29 @@ async function recall_to_kitchen(order_id: string) {
                     <div class=" w-75 p-4 border border-border rounded-lg space-y-4">
         
                         <!-- table number and time ago order was placed -->
-                        <div class="flex justify-between">
-                            <p class=" text-xl font-semibold">{{order.table?.number}}</p>
-                            <div class=" flex gap-2 items-center text-muted-foreground font-light">
-                                <i class=" pi pi-clock"></i>
+                        <div class=" flex justify-between">
+                          <div class=" space-y-1 ">
+                            <p class=" text-xl font-semibold">Order No: {{order.orderNo}}</p>
+                            
+
+                         
+                              <p class="text-muted-foreground">Table {{ order.table?.number }}</p>
+
+                      
+
+                          </div>
+                          <div class=" flex gap-2 items-center text-muted-foreground font-light">
+                              <i class=" pi pi-clock"></i>
 <NuxtTime
-  data-testid="relative"
-  :datetime="new Date(order.createdAt).getTime() - (1*30*1000)" relative
+data-testid="relative"
+:datetime="new Date(order.createdAt).getTime() - (1*30*1000)" relative
 />
-                        
+                      
+                  
+
                         </div>
-        
+      
+                
                         </div>
         
         
