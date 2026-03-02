@@ -10,16 +10,9 @@ definePageMeta({
 const route = useRoute()
 const toast = useToast()
 
-const order_id = Array.isArray(route.params.order_id) ? route.params.order_id[0] : route.params.order_id
+const order_id = route.params.order_id
 
 const { data: order_details, status, refresh } = await useFetch<OrderDetailsWithInclude>(`/api/orders/${order_id}`)
-
-const formatCurrency = (amount: number) => {
-	return new Intl.NumberFormat('en-US', {
-		style: 'currency',
-		currency: 'USD',
-	}).format(amount)
-}
 
 const formatStatusLabel = (statusValue: string) => {
 	return statusValue.charAt(0) + statusValue.slice(1).toLowerCase()
@@ -60,13 +53,10 @@ const itemCount = computed(() => {
 	return order_details.value.items.reduce((sum, item) => sum + item.quantity, 0)
 })
 
-const subtotalCents = computed(() => {
+const orderTotal = computed(() => {
 	if (!order_details.value) return 0
-	return order_details.value.items.reduce((sum, item) => sum + (item.unitPriceCents * item.quantity), 0)
+	return order_details.value.totalAmountCents / 100
 })
-
-const gstCents = computed(() => Math.round(subtotalCents.value * 0.1))
-const orderTotalCents = computed(() => subtotalCents.value + gstCents.value)
 
 const isUpdatingStatus = ref(false)
 
@@ -211,7 +201,11 @@ const canCancel = computed(() => {
 								<p class="col-span-2 text-right">Total</p>
 							</div>
 
-							<div v-for="item in order_details.items" :key="item.id" class="grid grid-cols-12 items-start py-1">
+							<div
+								v-for="item in order_details.items"
+								:key="item.id"
+								class="grid grid-cols-12 items-start py-2 border-b border-dashed border-border last:border-b-0"
+							>
 								<div class="col-span-6 pr-3">
 									<p class="font-semibold">{{ item.itemName }}</p>
 									<p v-if="item.specialInstructions" class="text-xs italic text-destructive mt-0.5">
@@ -219,22 +213,14 @@ const canCancel = computed(() => {
 									</p>
 								</div>
 								<p class="col-span-2 text-center font-semibold">x{{ item.quantity }}</p>
-								<p class="col-span-2 text-right">{{ formatCurrency(item.unitPriceCents / 100) }}</p>
-								<p class="col-span-2 text-right font-semibold">{{ formatCurrency((item.unitPriceCents * item.quantity) / 100) }}</p>
+								<p class="col-span-2 text-right">${{ item.unitPriceCents / 100 }}</p>
+								<p class="col-span-2 text-right font-semibold">${{ (item.unitPriceCents * item.quantity) / 100 }}</p>
 							</div>
 
-							<div class="border-t border-dashed border-border pt-4 space-y-2">
-								<div class="flex justify-between text-muted-foreground">
-									<span>Subtotal</span>
-									<span>{{ formatCurrency(subtotalCents / 100) }}</span>
-								</div>
-								<div class="flex justify-between text-muted-foreground">
-									<span>GST (10%)</span>
-									<span>{{ formatCurrency(gstCents / 100) }}</span>
-								</div>
-								<div class="flex justify-between pt-2 border-t border-dashed border-border text-lg font-semibold">
+							<div class="border-t border-dashed border-border pt-4">
+								<div class="flex justify-between text-lg font-semibold">
 									<span>Total</span>
-									<span class="text-primary">{{ formatCurrency(orderTotalCents / 100) }}</span>
+									<span class="text-primary">${{ orderTotal }}</span>
 								</div>
 							</div>
 						</div>
@@ -288,7 +274,7 @@ const canCancel = computed(() => {
 
 					<div class="rounded-2xl bg-primary text-primary-foreground p-5">
 						<p class="text-sm opacity-90">Order Total</p>
-						<p class="text-5xl font-semibold leading-tight mt-1">{{ formatCurrency(orderTotalCents / 100) }}</p>
+						<p class="text-5xl font-semibold leading-tight mt-1">${{ orderTotal }}</p>
 						<p class="text-sm opacity-90 mt-1">incl. GST • {{ itemCount }} items</p>
 					</div>
 				</div>
