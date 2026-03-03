@@ -11,7 +11,7 @@ async function markOrder_as_ready(order_id: string) {
   try {
     const updatedOrder = await $fetch("/api/orders", {
       method: "PUT",
-      body: { order_id: order_id, status: OrderStatus.READY  },
+      body: { order_id: order_id, status: OrderStatus.COMPLETED  },
     });
     console.log(updatedOrder)
     
@@ -94,10 +94,10 @@ async function markOrder_as_ready(order_id: string) {
                         <div class=" w-full h-[0.1px] bg-foreground/20 mt-4 mb-4" />
         
         
-                        <!-- ready button -->
+                        <!-- complete button -->
         
                         <div >
-                            <button @click="markOrder_as_ready(order.id)" class="w-full py-2 rounded-lg font-bold  bg-amber-600 text-white ">Mark as Ready</button>
+                            <button @click="markOrder_as_ready(order.id)" class="w-full py-2 rounded-lg font-bold  bg-amber-600 text-white ">Mark as Completed</button>
                         </div>
         
         

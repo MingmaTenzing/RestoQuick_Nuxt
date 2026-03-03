@@ -19,7 +19,7 @@ return (orders.value?.reduce((sum, order) => sum + order.totalAmountCents, 0) ??
 
 const active_orders = computed(() => {
   return orders.value?.filter(order => 
-    ['PENDING', 'CONFIRMED', 'PREPARING', 'READY', 'SERVED'].includes(order.status)
+    ['PENDING'].includes(order.status)
   ) || [];
 });
 

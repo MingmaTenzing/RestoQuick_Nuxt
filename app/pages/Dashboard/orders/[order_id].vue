@@ -130,10 +130,6 @@ const canCancel = computed(() => {
 					</span>
 					<span class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium"
 						:class="order_details.status === 'PENDING' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
-						order_details.status === 'CONFIRMED' ? 'bg-green-500/10 text-green-500 border-green-500/20' :
-						order_details.status === 'PREPARING' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
-						order_details.status === 'READY' ? 'bg-cyan-500/10 text-cyan-500 border-cyan-500/20' :
-						order_details.status === 'SERVED' ? 'bg-purple-500/10 text-purple-500 border-purple-500/20' :
 						order_details.status === 'COMPLETED' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
 						'bg-red-500/10 text-red-500 border-red-500/20'"
 					>
@@ -170,10 +166,10 @@ const canCancel = computed(() => {
 							<button
 								type="button"
 								:disabled="!canConfirm || isUpdatingStatus"
-								@click="updateOrderStatus(OrderStatus.CONFIRMED)"
+								@click="updateOrderStatus(OrderStatus.COMPLETED)"
 								class="flex-1 min-w-52 rounded-md bg-primary px-4 py-2.5 text-primary-foreground font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90"
 							>
-								Mark as Confirmed
+								Mark as Completed
 							</button>
 
 							<button

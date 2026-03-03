@@ -5,14 +5,6 @@ defineProps<{ order_details: OrderDetailsWithInclude }>();
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'CONFIRMED':
-      return 'bg-green-500/10 text-green-500 border-green-500/20'
-    case 'PREPARING':
-      return 'bg-blue-500/10 text-blue-500 border-blue-500/20'
-    case 'READY':
-      return 'bg-cyan-500/10 text-cyan-500 border-cyan-500/20'
-    case 'SERVED':
-      return 'bg-purple-500/10 text-purple-500 border-purple-500/20'
     case 'COMPLETED':
       return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
     case 'CANCELLED':
@@ -98,7 +90,7 @@ const formatCurrency = (amount: number) => {
 
         <div class="flex items-center gap-2 shrink-0">
           <button type="button" class="inline-flex h-7 items-center justify-center rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground hover:bg-primary/90">
-            → Confirmed
+            → Completed
           </button>
           <button type="button" class="inline-flex h-7 items-center justify-center rounded-md border border-input bg-transparent px-2.5 text-xs font-medium text-destructive hover:bg-accent">
             Cancel

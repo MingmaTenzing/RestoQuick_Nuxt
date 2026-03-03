@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   //  sends all the completed orders only
   const all_orders = await prisma.order.findMany({
     where: {
-      status: "READY",
+      status: "COMPLETED",
     },
     include: {
       table: true,

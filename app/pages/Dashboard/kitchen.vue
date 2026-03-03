@@ -64,11 +64,11 @@ watch(data, (newValue: string) => {
            
     }
 
-    if (parsed_data.type == 'ORDER_MARKED_READY') {
+    if (parsed_data.type == 'ORDER_MARKED_COMPLETED') {
 
        all_orders.value =  all_orders.value.filter((item) => item.id !== parsed_data.payload.id)
         toast.success({
-            title:"Order Marked as Ready"
+            title:"Order Marked as Completed"
         })
 
     }
