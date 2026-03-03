@@ -24,7 +24,7 @@ onMounted(async () => {
     loading.value = true;
 
     try {
-        completed_orders.value = await $fetch<OrderDetailsWithInclude[]>("/api/orders/ready")
+        completed_orders.value = await $fetch<OrderDetailsWithInclude[]>("/api/orders/completed")
         
     } catch (error: unknown) {
         if (isNuxtError(error)) {
