@@ -1,10 +1,21 @@
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
 
-  //  sends all the completed orders only
+  const now = new Date();
+  const startOfDay = new Date(now);
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const startOfNextDay = new Date(startOfDay);
+  startOfNextDay.setDate(startOfNextDay.getDate() + 1);
+
+  // sends today's completed orders only
   const all_orders = await prisma.order.findMany({
     where: {
       status: "COMPLETED",
+      createdAt: {
+        gte: startOfDay,
+        lt: startOfNextDay,
+      },
     },
     include: {
       table: true,

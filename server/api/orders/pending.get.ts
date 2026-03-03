@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
 
-  //  sends all the pending orders only
+  // sends all pending orders
   const all_orders = await prisma.order.findMany({
     where: {
       status: "PENDING",

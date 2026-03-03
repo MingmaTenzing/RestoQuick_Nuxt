@@ -41,6 +41,10 @@ export default defineEventHandler(async (event) => {
       broadCast({ type: "ORDER_MARKED_COMPLETED", payload: updatedOrder });
     }
 
+    if (updatedOrder.status == "CANCELLED") {
+      broadCast({ type: "ORDER_CANCELLED", payload: updatedOrder });
+    }
+
     //
     if (updatedOrder.status == "PENDING") {
       //here if frontend calls recall to kitchen

@@ -40,14 +40,6 @@ const updatedAt = computed(() => {
 	})
 })
 
-const progressStatuses = Object.values(OrderStatus).filter((statusItem) => statusItem !== OrderStatus.CANCELLED) as OrderStatus[]
-
-const currentStatusIndex = computed(() => {
-	const currentStatus = order_details.value?.status
-	if (!currentStatus) return -1
-	return progressStatuses.indexOf(currentStatus as OrderStatus)
-})
-
 const itemCount = computed(() => {
 	if (!order_details.value) return 0
 	return order_details.value.items.reduce((sum, item) => sum + item.quantity, 0)
@@ -59,6 +51,7 @@ const orderTotal = computed(() => {
 })
 
 const isUpdatingStatus = ref(false)
+const availableStatuses = Object.values(OrderStatus) as OrderStatus[]
 
 async function updateOrderStatus(nextStatus: OrderStatus) {
 	if (!order_details.value || isUpdatingStatus.value) return
@@ -87,12 +80,6 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 		isUpdatingStatus.value = false
 	}
 }
-
-const canConfirm = computed(() => order_details.value?.status === OrderStatus.PENDING)
-const canCancel = computed(() => {
-	if (!order_details.value) return false
-	return !([OrderStatus.COMPLETED, OrderStatus.CANCELLED] as OrderStatus[]).includes(order_details.value.status)
-})
 </script>
 
 <template>
@@ -117,7 +104,7 @@ const canCancel = computed(() => {
 		<section v-else-if="order_details" class="space-y-5">
 			<div class="flex flex-wrap items-start justify-between gap-3">
 				<div>
-					<h1 class="text-3xl font-semibold">Order Details</h1>
+					<h1 class="text-3xl font-semibold">Details of Order No: {{ order_details.orderNo }}</h1>
 					<p class="text-muted-foreground text-sm mt-1">
 						<i class="pi pi-clock text-xs"></i>
 						Placed <NuxtTime :datetime="new Date(order_details.createdAt).getTime()" relative /> • {{ placedAt }}
@@ -141,48 +128,6 @@ const canCancel = computed(() => {
 
 			<div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
 				<div class="xl:col-span-2 space-y-4">
-					<div class="rounded-2xl border border-border bg-card p-5 space-y-4">
-						<h2 class="text-xl font-semibold text-primary">Order Progress</h2>
-
-						<div class="flex items-center justify-between gap-2 overflow-x-auto pb-1">
-							<template v-for="(statusItem, index) in progressStatuses" :key="statusItem">
-								<div class="min-w-20 text-center">
-									<div class="mx-auto h-5 w-5 rounded-full border-2"
-										:class="index <= currentStatusIndex ? 'border-primary bg-primary/10' : 'border-muted-foreground/40 bg-background'">
-										<div v-if="index <= currentStatusIndex" class="mx-auto mt-1 h-1.5 w-1.5 rounded-full bg-primary"></div>
-									</div>
-									<p class="mt-1 text-xs"
-										:class="index <= currentStatusIndex ? 'text-primary font-medium' : 'text-muted-foreground'">
-										{{ formatStatusLabel(statusItem) }}
-									</p>
-								</div>
-								<div v-if="index < progressStatuses.length - 1" class="h-px flex-1 min-w-8"
-									:class="index < currentStatusIndex ? 'bg-primary/50' : 'bg-border'">
-								</div>
-							</template>
-						</div>
-
-						<div class="flex flex-wrap gap-3 pt-1">
-							<button
-								type="button"
-								:disabled="!canConfirm || isUpdatingStatus"
-								@click="updateOrderStatus(OrderStatus.COMPLETED)"
-								class="flex-1 min-w-52 rounded-md bg-primary px-4 py-2.5 text-primary-foreground font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90"
-							>
-								Mark as Completed
-							</button>
-
-							<button
-								type="button"
-								:disabled="!canCancel || isUpdatingStatus"
-								@click="updateOrderStatus(OrderStatus.CANCELLED)"
-								class="rounded-md border border-destructive/40 px-4 py-2.5 text-destructive font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-destructive/10"
-							>
-								Cancel Order
-							</button>
-						</div>
-					</div>
-
 					<div class="rounded-2xl border border-border bg-card overflow-hidden">
 						<div class="p-5 border-b border-border flex items-center justify-between">
 							<h2 class="text-xl font-semibold text-primary">Order Items</h2>
@@ -219,6 +164,25 @@ const canCancel = computed(() => {
 									<span class="text-primary">${{ orderTotal }}</span>
 								</div>
 							</div>
+						</div>
+					</div>
+
+					<div class="rounded-2xl border border-border bg-card p-5 space-y-4">
+						<h3 class="text-xl font-semibold text-primary">Update Status</h3>
+						<p class="text-sm text-muted-foreground">Current: {{ formatStatusLabel(order_details.status) }}</p>
+
+						<div class="flex flex-wrap gap-2">
+							<button
+								v-for="statusOption in availableStatuses"
+								:key="statusOption"
+								type="button"
+								:disabled="isUpdatingStatus"
+								@click="updateOrderStatus(statusOption)"
+								class="rounded-md border border-border px-4 py-2.5 text-sm font-semibold text-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent"
+								:class="order_details.status === statusOption ? 'bg-primary text-primary-foreground border-primary hover:bg-primary' : ''"
+							>
+								{{ formatStatusLabel(statusOption) }}
+							</button>
 						</div>
 					</div>
 				</div>
