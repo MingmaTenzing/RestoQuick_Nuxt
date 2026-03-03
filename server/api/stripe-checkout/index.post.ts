@@ -25,18 +25,21 @@ export default defineEventHandler(async (event) => {
         //however for this we need to make make a separate api call... so its just here for reference
         // the line_item itself includes metada object below for easily accessing the itemname,menuid, and special instructions
         metadata: {
+          name: item.itemName,
           menuItemId: item.menuItemId,
           specialInstruction: item.specialInstructions || " ",
         },
         // images: ["https://example.com/katsu-curry.png"],
       },
     },
-    //here metadata is set to line_item cause its easier to access it without calling for another price/product object api..
+    //***** IMPORTANT
+    // here metadata is set to line_item cause its easier to access it without calling for another price/product object api..
     metadata: {
       name: item.itemName,
       menuItemId: item.menuItemId,
       specialInstructions: item.specialInstructions || "",
     },
+
     quantity: item.quantity,
   }));
 
