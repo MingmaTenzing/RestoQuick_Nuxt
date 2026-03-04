@@ -10,6 +10,12 @@ definePageMeta({
 type OrderRange = 'all' | 'day' | 'week' | 'month'
 
 const selected_range = ref<OrderRange>('all')
+const customer_search = ref('')
+const customer_search_input = ref('')
+
+function submitCustomerSearch() {
+  customer_search.value = customer_search_input.value.trim()
+}
 
 const selected_range_label = computed(() => {
   if (selected_range.value === 'all') return 'All'
@@ -20,9 +26,10 @@ const selected_range_label = computed(() => {
 
 const { data: orders, status: orders_loading } = await useFetch<OrderDetailsWithInclude[]>('/api/orders', {
   query: computed(() => ({
-    range: selected_range.value
+    range: selected_range.value,
+    ...(customer_search.value.trim() ? { customer: customer_search.value.trim() } : {})
   })),
-  watch: [selected_range],
+  watch: [selected_range, customer_search],
   lazy: true
 })
 
@@ -130,6 +137,20 @@ const formatCurrency = (amount: number) => {
     <!-- Orders List -->
     <div class="space-y-4">
       <div class="flex justify-end flex-wrap items-center gap-3">
+        <form @submit.prevent="submitCustomerSearch" class="flex items-center gap-2">
+          <input
+            v-model="customer_search_input"
+            type="text"
+            placeholder="Search by customer"
+            class="rounded-md border border-border outline-none  px-3 py-1.5 text-sm text-foreground placeholder:text-muted-foreground  focus:ring focus:ring-ring"
+          />
+          <button
+            type="submit"
+            class="rounded-md border border-border px-3 py-1.5 text-sm text-foreground hover:bg-accent transition-colors"
+          >
+            Search
+          </button>
+        </form>
         <span class="text-sm font-medium text-muted-foreground">Filter by:</span>
         <button
           @click="selected_range = 'all'"

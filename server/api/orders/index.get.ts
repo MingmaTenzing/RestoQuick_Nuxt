@@ -1,6 +1,12 @@
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
   const query = getQuery(event);
+  const customerQuery =
+    typeof query.customer === "string"
+      ? query.customer.trim()
+      : typeof query.customerName === "string"
+        ? query.customerName.trim()
+        : "";
 
   const range =
     query.range === "all" ||
@@ -44,13 +50,21 @@ export default defineEventHandler(async (event) => {
     createdAtFilter = { gte: startOfMonth, lt: startOfNextMonth };
   }
 
+  const whereClause = {
+    ...(createdAtFilter ? { createdAt: createdAtFilter } : {}),
+    ...(customerQuery
+      ? {
+          customerName: {
+            contains: customerQuery,
+            mode: "insensitive" as const,
+          },
+        }
+      : {}),
+  };
+
   //  sends all the orders
   const all_orders = await prisma.order.findMany({
-    where: createdAtFilter
-      ? {
-          createdAt: createdAtFilter,
-        }
-      : undefined,
+    where: Object.keys(whereClause).length ? whereClause : undefined,
     include: {
       table: true,
       items: {
