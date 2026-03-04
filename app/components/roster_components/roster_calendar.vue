@@ -19,7 +19,7 @@ const {
 
 
 const { addShiftModal, open_add_shiftModal, close_add_shiftModal } = useAddShiftModal()
-const {isOpen, ai_conversation} = useAiRosterModal()
+const { ai_conversation, open, isOpen } = useAiRosterModal()
 const { editshiftModal } = useeditShiftModal()
 
 const { editDraftShiftModal} = useDraftShift()
@@ -160,6 +160,13 @@ async function saveDraftShift(shift: Shift_With_Staff_Payload) {
             Schedule</span>
 
             <div class=" flex gap-4 items-center">
+                <button
+                    class="border-border border px-4 py-2 flex justify-center items-center space-x-2 hover:scale-105 rounded-lg transition-all ease-linear hover:border-ring"
+                    @click="open"
+                >
+                    <i class="pi pi-sparkles"></i>
+                    <span>AI Suggestions</span>
+                </button>
                 <button v-on:click="previousWeek()" class=" border px-4 py-2 bg-card hover:border-ring  rounded-lg"><</button>
                 <span class=" font-medium text-lg">
                     
@@ -267,12 +274,7 @@ async function saveDraftShift(shift: Shift_With_Staff_Payload) {
 
 <edit_draft_shift v-if="editDraftShiftModal.isOpen"  ></edit_draft_shift>
 
-
-
- <!-- ai roster modal -->
- <div v-if="isOpen">
-    <roster_ai_sidebar_modal />
-  </div>
+<Roster_ai_sidebar_modal v-if="isOpen" />
 
 </div>
 
