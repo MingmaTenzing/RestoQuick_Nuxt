@@ -55,6 +55,9 @@ export default defineNuxtConfig({
   routeRules: {
     "/dashboard": { ssr: false },
     "/vapi": { ssr: false },
+    "/dashboard/roster": {
+      redirect: "/dashboard/roster/weekly",
+    },
   },
 
   router: {
