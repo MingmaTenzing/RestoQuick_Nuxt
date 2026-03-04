@@ -24,12 +24,15 @@ const runtime = useRuntimeConfig();
 
 const { modal_state, open_completed_orders_modal} = useCompleted_Order_Modal()
 
-// connection to websocket
+// Realtime channel for kitchen updates (new order, completed, recall, cancelled).
 const { status, data, send, close } = useWebSocket(`${runtime.public.WEBSOCKET_HOST}/api/websocket`)
 
 
 
-//initial data fetch from the database
+// Initial fetch for Kitchen Display:
+// - Endpoint: /api/orders/pending
+// - Returns pending orders (not completed/cancelled)
+// - This is the base list shown before websocket updates arrive.
 
 onMounted(async () => {
     loading_orders.value = true
@@ -42,6 +45,7 @@ onMounted(async () => {
 
 watch(data, (newValue: string) => {
 
+    // Each websocket message is parsed into a typed kitchen payload.
     console.log('new data')
 
     
@@ -49,8 +53,9 @@ watch(data, (newValue: string) => {
 
 
     if (parsed_data.type == 'ORDER_CREATED') {
-        
-        
+
+            // New pending order: add to active kitchen queue.
+
             all_orders.value.push(parsed_data.payload)
              toast.info({
             
@@ -64,20 +69,33 @@ watch(data, (newValue: string) => {
            
     }
 
-    if (parsed_data.type == 'ORDER_MARKED_READY') {
+    if (parsed_data.type == 'ORDER_MARKED_COMPLETED') {
+
+         // Completed orders should leave active kitchen queue.
 
        all_orders.value =  all_orders.value.filter((item) => item.id !== parsed_data.payload.id)
         toast.success({
-            title:"Order Marked as Ready"
+            title:"Order Marked as Completed"
         })
 
     }
     if (parsed_data.type == "ORDER_RECALL") {
+
+        // Recalled order is put back into active queue.
         all_orders.value.push(parsed_data.payload)
         toast.question({
           
             title: 'Order Recalled'
 
+        })
+    }
+
+    if (parsed_data.type == 'ORDER_CANCELLED') {
+
+        // Cancelled orders are removed from active queue.
+        all_orders.value = all_orders.value.filter((item) => item.id !== parsed_data.payload.id)
+        toast.warning({
+            title: 'Order Cancelled'
         })
     }
 
@@ -164,7 +182,7 @@ watch(data, (newValue: string) => {
 
        
 
-        <!-- once order's loaded -->
+        <!-- Active kitchen list loaded from /api/orders/pending, then kept in sync by websocket events -->
         <section v-else class=" ">
 
           <div v-if="all_orders.length === 0">
@@ -183,7 +201,7 @@ watch(data, (newValue: string) => {
         </section>
 
 
-        <!-- popup for completed orders to callback -->
+    <!-- Opens completed-orders modal (which separately fetches /api/orders/completed) -->
 
         <Transition>
             <div v-if="modal_state == true" class="fixed z-50 inset-0 flex items-center justify-center bg-background/80">

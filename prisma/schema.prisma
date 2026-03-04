@@ -142,10 +142,6 @@ model MenuItem {
 // Order
 enum OrderStatus {
   PENDING
-  CONFIRMED
-  PREPARING
-  READY
-  SERVED
   COMPLETED
   CANCELLED
 }

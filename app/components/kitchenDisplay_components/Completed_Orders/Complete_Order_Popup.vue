@@ -12,10 +12,18 @@ const { close_completed_orders_modal } = useCompleted_Order_Modal()
 
 const toast = useToast();
 
-const completed_orders = ref<OrderDetailsWithInclude[]>();
+// Source list for completed orders shown in this popup.
+const completed_orders = ref<OrderDetailsWithInclude[]>([]);
+
+// UI rule: this popup should only show today's completed orders.
+const isTodayOrder = (createdAt: string | Date) => {
+    const orderDate = new Date(createdAt)
+    const today = new Date()
+    return orderDate.toDateString() === today.toDateString()
+}
 
 const loading = ref(false)
-// connection to websocket
+// Realtime channel for keeping completed list synced while popup is open.
 const { status, data, send, close } = useWebSocket(`${runtime.public.WEBSOCKET_HOST}/api/websocket`)
 
 
@@ -24,7 +32,10 @@ onMounted(async () => {
     loading.value = true;
 
     try {
-        completed_orders.value = await $fetch<OrderDetailsWithInclude[]>("/api/orders/ready")
+        // Initial fetch for Completed Orders popup:
+        // - Endpoint: /api/orders/completed
+        // - Backend already restricts this list to today's completed orders.
+        completed_orders.value = await $fetch<OrderDetailsWithInclude[]>("/api/orders/completed")
         
     } catch (error: unknown) {
         if (isNuxtError(error)) {
@@ -44,11 +55,29 @@ onMounted(async () => {
 })
 
 watch(data, (newValue) => {
+    // Keep local list in sync with kitchen/order status changes.
     let parsed_data: websocket_payload = JSON.parse(newValue);
 
+    if (parsed_data.type == "ORDER_MARKED_COMPLETED") {
+        // Only add completed orders from today.
+        if (!isTodayOrder(parsed_data.payload.createdAt)) {
+            return
+        }
+        const exists = completed_orders.value.some((order) => order.id === parsed_data.payload.id)
+        if (!exists) {
+            completed_orders.value.unshift(parsed_data.payload)
+        }
+    }
+
     if (parsed_data.type == "ORDER_RECALL") {
-        completed_orders.value = completed_orders.value?.filter((order) => order.id !== parsed_data.payload.id)
+        // Recalled order is no longer completed.
+        completed_orders.value = completed_orders.value.filter((order) => order.id !== parsed_data.payload.id)
        
+    }
+
+    if (parsed_data.type == "ORDER_CANCELLED") {
+        // Cancelled order should never appear in completed list.
+        completed_orders.value = completed_orders.value.filter((order) => order.id !== parsed_data.payload.id)
     }
 
 })
@@ -118,10 +147,10 @@ watch(data, (newValue) => {
    </section>
 
     
-        <!-- completed_orders -->
+          <!-- Completed list from /api/orders/completed + realtime websocket updates -->
   <section v-else class="flex flex-wrap gap-2">
 
-            <div v-for="order in completed_orders" :key="order.id">
+                        <div v-for="order in completed_orders" :key="order.id">
                 <Completed_Order_Item  :order="order"></Completed_Order_Item>
             </div>
             

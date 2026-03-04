@@ -4,7 +4,7 @@ import { broadCast } from "../../utils/kitchenSocket";
 //this end point updates the status of order
 
 // at the momemnt its only handling two status updates
-// if order is ready or pending..
+// if order is completed or pending..
 
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
@@ -36,9 +36,13 @@ export default defineEventHandler(async (event) => {
     // once the order is updates here its being broadCast to the websocket clients
     // the
 
-    if (updatedOrder.status == "READY") {
-      //when orders is marked as reaady
-      broadCast({ type: "ORDER_MARKED_READY", payload: updatedOrder });
+    if (updatedOrder.status == "COMPLETED") {
+      //when orders is marked as completed
+      broadCast({ type: "ORDER_MARKED_COMPLETED", payload: updatedOrder });
+    }
+
+    if (updatedOrder.status == "CANCELLED") {
+      broadCast({ type: "ORDER_CANCELLED", payload: updatedOrder });
     }
 
     //

@@ -1,10 +1,21 @@
 //this end point retrieves the checkout session status and details
 //and if checkout is successfull then make a another request for line_items
 //and then use that items for adding it to database;
+import Stripe from "stripe";
 
 import { useServerStripe } from "#stripe/server";
 import { OrderItemCreateManyOrderInput } from "~/generated/prisma/models";
 import { broadCast } from "../../../utils/kitchenSocket";
+
+// ** Stripe LineItem.metadata doesn't exist in the library
+// so created my own version here
+type Stripe_LineItem_with_Metadata = Stripe.LineItem & {
+  metadata: {
+    name: string;
+    menuItemId: string;
+    specialInstructions: string;
+  };
+};
 
 export default defineEventHandler(async (event) => {
   const stripe = await useServerStripe(event);
@@ -55,15 +66,18 @@ export default defineEventHandler(async (event) => {
       statusMessage: "Cannot get the line_items using the session id",
     });
   }
-
   const mapped_order_data: OrderItemCreateManyOrderInput[] = lineItems.data.map(
-    (item) => ({
-      itemName: item.metadata!.name,
-      quantity: item.quantity!,
-      unitPriceCents: item.price!.unit_amount!,
-      specialInstructions: item.metadata!.specialInstructions,
-      menuItemId: item.metadata!.menuItemId,
-    })
+    (item) => {
+      const typedItem = item as Stripe_LineItem_with_Metadata;
+
+      return {
+        itemName: typedItem.metadata.name,
+        quantity: typedItem.quantity!,
+        unitPriceCents: typedItem.price!.unit_amount!,
+        specialInstructions: typedItem.metadata.specialInstructions,
+        menuItemId: typedItem.metadata.menuItemId,
+      };
+    },
   );
 
   try {

@@ -7,11 +7,31 @@ definePageMeta({
   layout: 'dashboard-layout'
 })
 
-const { data: orders, status: orders_loading } = await useFetch<OrderDetailsWithInclude[]>('/api/orders', {
-  lazy: true
+type OrderRange = 'all' | 'day' | 'week' | 'month'
+
+const selected_range = ref<OrderRange>('all')
+const customer_search = ref('')
+const customer_search_input = ref('')
+
+function submitCustomerSearch() {
+  customer_search.value = customer_search_input.value.trim()
+}
+
+const selected_range_label = computed(() => {
+  if (selected_range.value === 'all') return 'All'
+  if (selected_range.value === 'day') return 'Today'
+  if (selected_range.value === 'week') return 'This Week'
+  return 'This Month'
 })
 
-console.log(orders)
+const { data: orders, status: orders_loading } = await useFetch<OrderDetailsWithInclude[]>('/api/orders', {
+  query: computed(() => ({
+    range: selected_range.value,
+    ...(customer_search.value.trim() ? { customer: customer_search.value.trim() } : {})
+  })),
+  watch: [selected_range, customer_search],
+  lazy: true
+})
 
 // Stats for all orders
 const totalRevenue = computed(() => {
@@ -19,7 +39,7 @@ return (orders.value?.reduce((sum, order) => sum + order.totalAmountCents, 0) ??
 
 const active_orders = computed(() => {
   return orders.value?.filter(order => 
-    ['PENDING', 'CONFIRMED', 'PREPARING', 'READY', 'SERVED'].includes(order.status)
+    ['PENDING'].includes(order.status)
   ) || [];
 });
 
@@ -60,7 +80,7 @@ const formatCurrency = (amount: number) => {
           <div class="flex flex-col">
             <span v-if="orders_loading == 'pending'" class="w-[100px] h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
             <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium">{{ orders?.length || 0 }}</span>
-            <span class="text-muted-foreground font-light text-sm">All orders</span>
+            <span class="text-muted-foreground font-light text-sm">{{ selected_range_label }}</span>
           </div>
         </div>
         <div>
@@ -75,7 +95,7 @@ const formatCurrency = (amount: number) => {
           <div class="flex flex-col">
             <span v-if="orders_loading == 'pending'" class="w-24 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
             <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium text-green-600">{{ formatCurrency(totalRevenue) }}</span>
-            <span class="text-muted-foreground font-light text-sm">Total revenue</span>
+              <span class="text-muted-foreground font-light text-sm">{{ selected_range === 'all' ? 'Total revenue' : `${selected_range_label} revenue` }}</span>
           </div>
         </div>
         <div>
@@ -116,13 +136,59 @@ const formatCurrency = (amount: number) => {
 
     <!-- Orders List -->
     <div class="space-y-4">
+      <div class="flex justify-end flex-wrap items-center gap-3">
+        <form @submit.prevent="submitCustomerSearch" class="flex items-center gap-2">
+          <input
+            v-model="customer_search_input"
+            type="text"
+            placeholder="Search by customer"
+            class="rounded-md border border-border outline-none  px-3 py-1.5 text-sm text-foreground placeholder:text-muted-foreground  focus:ring focus:ring-ring"
+          />
+          <button
+            type="submit"
+            class="rounded-md border border-border px-3 py-1.5 text-sm text-foreground hover:bg-accent transition-colors"
+          >
+            Search
+          </button>
+        </form>
+        <span class="text-sm font-medium text-muted-foreground">Filter by:</span>
+        <button
+          @click="selected_range = 'all'"
+          :class="selected_range === 'all' ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent text-muted-foreground border-border hover:bg-accent'"
+          class="rounded-md border px-3 py-1.5 text-sm transition-colors"
+        >
+          All
+        </button>
+        <button
+          @click="selected_range = 'day'"
+          :class="selected_range === 'day' ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent text-muted-foreground border-border hover:bg-accent'"
+          class="rounded-md border px-3 py-1.5 text-sm transition-colors"
+        >
+          Day
+        </button>
+        <button
+          @click="selected_range = 'week'"
+          :class="selected_range === 'week' ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent text-muted-foreground border-border hover:bg-accent'"
+          class="rounded-md border px-3 py-1.5 text-sm transition-colors"
+        >
+          Week
+        </button>
+        <button
+          @click="selected_range = 'month'"
+          :class="selected_range === 'month' ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent text-muted-foreground border-border hover:bg-accent'"
+          class="rounded-md border px-3 py-1.5 text-sm transition-colors"
+        >
+          Month
+        </button>
+      </div>
+
       <div v-if="orders?.length === 0" class="border border-border rounded-lg bg-card p-12 text-center">
         <i class="pi pi-inbox text-4xl text-muted-foreground mb-4 block"></i>
-        <p class="text-muted-foreground">No orders yet</p>
+        <p class="text-muted-foreground">{{ selected_range === 'all' ? 'No orders yet' : `No orders for ${selected_range_label.toLowerCase()}` }}</p>
       </div>
 
       <section v-if="orders_loading == 'pending'">
-        <order-components-loading-order></order-components-loading-order>
+        <OrderDashboardComponentsLoadingOrder></OrderDashboardComponentsLoadingOrder>
       </section>
 
       <section v-if="orders_loading == 'success'" v-for="order in orders" :key="order.id">
