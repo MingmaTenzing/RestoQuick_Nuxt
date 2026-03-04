@@ -152,13 +152,24 @@ const handleDelete = async (item: StockItem) => {
           <p class="text-muted-foreground text-lg ">Track inventory levels and manage supplies</p>
         </div>
    
-      <button
-        @click="isAddDialogOpen = true"
-        class="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:shadow-lg flex items-center gap-2"
-      >
-        <i class="pi pi-plus" />
-        Add Item
-      </button>
+      <div class="flex items-center gap-2">
+        <NuxtLink to="/dashboard/stock/qr-labels">
+          <button
+            class="px-4 py-2 rounded-md border border-border bg-background text-foreground hover:bg-accent transition-all flex items-center gap-2"
+          >
+            <i class="pi pi-qrcode" />
+            QR Labels
+          </button>
+        </NuxtLink>
+
+        <button
+          @click="isAddDialogOpen = true"
+          class="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:shadow-lg flex items-center gap-2"
+        >
+          <i class="pi pi-plus" />
+          Add Item
+        </button>
+      </div>
     </div>
 
     <!-- Stats Cards -->
