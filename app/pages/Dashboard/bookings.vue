@@ -50,6 +50,7 @@ console.log(upcoming_bookings.value)
 console.log(today_booking.value)
 
 
+
 function openAddBookingDialog() {
   // opens the modal and stops the background body scroll
   isAddBooking_dialog_open.value = true;
@@ -120,11 +121,10 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
     <!-- Header Section -->
     <div class="flex justify-between">
       <div>
-        <div class="flex items-center gap-4">
+        <div class="">
           
           <h1 class="text-2xl md:text-6xl ">Reservations</h1>
           
-          <i class=" pi-bookmark-fill pi text-2xl  text-amber-400"></i>
 
         </div>
         <span class="text-accent-foreground/60">Manage table bookings and customer reservations</span>
