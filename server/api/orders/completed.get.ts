@@ -1,3 +1,5 @@
+import { usePrisma } from "~~/server/utils/prisma";
+
 export default defineEventHandler(async (event) => {
   // only returns the completed order within 24 hours | TODAY
   const prisma = usePrisma();
