@@ -68,11 +68,11 @@ function close_qr_modal() {
 </script>
 
 <template>
-  <div class="p-6 space-y-6">
+  <div class=" space-y-6">
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       <div class="space-y-1">
-        <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Manage Tables</h1>
+                    <h1 class="text-2xl md:text-6xl">Table Management</h1>
         <p class="text-muted-foreground flex items-center gap-2">
           <i class="pi pi-table text-amber-400" />
           Organize seating and manage table layouts

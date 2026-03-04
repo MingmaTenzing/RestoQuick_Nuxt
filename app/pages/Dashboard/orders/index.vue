@@ -63,9 +63,8 @@ const formatCurrency = (amount: number) => {
     <!-- Header Section -->
     <div class="flex justify-between">
       <div>
-        <div class="flex items-center gap-4">
+        <div class="">
           <h1 class="text-2xl md:text-6xl">Orders</h1>
-          <i class="pi pi-shopping-cart text-2xl text-amber-400"></i>
         </div>
         <span class="text-accent-foreground/60">View and manage all customer orders</span>
       </div>
