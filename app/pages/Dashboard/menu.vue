@@ -210,7 +210,7 @@ const update_availability = async (menu_item: MenuItem) => {
             </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 ">
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4  xl:grid-cols-5">
             <div v-for="item in filteredMenuItems" :key="item.id" class="w-full max-w-85">
                 <MenuComponentsMenuItemCard
                     :item="item"
