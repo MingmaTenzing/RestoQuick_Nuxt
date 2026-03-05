@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Shift_With_Staff_Payload } from '~~/types/shift_include_staff';
+import { getStaffInitials } from '~/client_utils/staff_avatar';
 
 
 const { open_edit_draft_shiftModal, remove_draft_shift } = useDraftShift()
@@ -40,9 +41,13 @@ function delete_shift(shift: Shift_With_Staff_Payload) {
     <div class="flex justify-between items-end mt-1">
       <div class="space-y-2">
         <NuxtImg
-          :src="shift.staff?.profile_photo_url ?? undefined"
+          v-if="shift.staff?.profile_photo_url"
+          :src="shift.staff?.profile_photo_url"
           class="w-10 h-10 object-cover rounded-full"
         ></NuxtImg>
+        <div v-else class="w-10 h-10 rounded-full bg-card text-muted-foreground flex items-center justify-center text-xs font-semibold">
+          {{ getStaffInitials(shift.staff) }}
+        </div>
 
         <div class="flex flex-col">
           <span class="text-xs xl:text-base font-medium">

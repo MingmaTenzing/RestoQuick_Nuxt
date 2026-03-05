@@ -4,6 +4,7 @@
 import { ref } from 'vue'
 import { RoleandWeekDay_Constant } from '~/client_utils/constants';
 import { cloudinary_image_upload as uploadImageHelper } from "~/client_utils/cloudinary_upload_image"
+import { getStaffInitials } from '~/client_utils/staff_avatar';
 import type { Staff, WeekDay } from '~/generated/prisma/client';
 
 const { ROLES, WEEKDAYS } = RoleandWeekDay_Constant()
@@ -41,7 +42,6 @@ const edit_staff_form = reactive({
   employmentType: props.edit_staff.employmentType,
     perHourRate: props.edit_staff.perHourRate
 })
-
 
 const isDaySelected = (day: WeekDay): boolean => {
   return edit_staff_form.availability.includes(day);
@@ -89,10 +89,15 @@ const add_availability_day = (available_day: WeekDay) => {
 async function submit_edit_staff() {
   isLoading.value = true;
 
+  const payload = {
+    ...edit_staff_form,
+    profile_photo_url: edit_staff_form.profile_photo_url || undefined,
+  }
+
   try {
     const response = await $fetch(`/api/staff/${props.edit_staff.id}`, {
       method: 'PATCH', 
-      body: edit_staff_form
+      body: payload
     })
 
     if (response) {
@@ -134,13 +139,16 @@ async function submit_edit_staff() {
 <div>
 
   <!-- profile image -->
-  <NuxtImg :src="edit_staff_form.profile_photo_url"  class=" w-18 h-18 object-cover object-top rounded-full"/>
+  <NuxtImg v-if="edit_staff_form.profile_photo_url" :src="edit_staff_form.profile_photo_url"  class=" w-18 h-18 object-cover object-top rounded-full"/>
+  <div v-else class="w-18 h-18 rounded-full bg-muted text-muted-foreground flex items-center justify-center text-base font-semibold">
+    {{ getStaffInitials(edit_staff)  }}
+  </div>
 </div>
 </div>
 
 
 <form v-on:submit.prevent="submit_edit_staff">
-  <!-- edit_staff_form -->
+  <!--  -->
   <div class="space-y-6" :class="{ 'opacity-50 pointer-events-none': isLoading }">
     <!-- First & Last Name -->
     <div class="grid grid-cols-2 gap-4">
@@ -167,7 +175,7 @@ async function submit_edit_staff() {
     <!-- profile picture -->
     <div class="space-y-2">
       <div class=" flex space-x-2">
-        <label class="text-sm font-medium">Profile Picture (Max - 300KB)</label>
+        <label class="text-sm font-medium">Profile Picture (Optional, Max - 300KB)</label>
         <i v-if="image_uploading" class="pi pi-spinner animate-spin"></i>
         <i v-if="image_upload_success" class="pi pi-check-circle text-green-600 "></i>
       </div>
