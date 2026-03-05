@@ -35,7 +35,7 @@ const { isSidebar_open, isTabletOrLarger } = useSideBar()
 
 
       <!-- the height is set to screen-4rem and overflow-y-scroll to give immersive experience -->
-<div class=" p-4 w-full h-[calc(100vh-4rem)] overflow-y-scroll  hide-scrollbar">
+<div class=" p-4 lg:p-8 w-full h-[calc(100vh-4rem)] overflow-y-scroll  hide-scrollbar">
 
   <slot></slot>
 </div>
