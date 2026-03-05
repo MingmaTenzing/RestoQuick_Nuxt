@@ -3,6 +3,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { RoleandWeekDay_Constant } from '~/client_utils/constants';
+import { cloudinary_image_upload as uploadImageHelper } from "~/client_utils/cloudinary_upload_image"
 import type { Staff, WeekDay } from '~/generated/prisma/client';
 
 const { ROLES, WEEKDAYS } = RoleandWeekDay_Constant()
@@ -16,7 +17,10 @@ console.log(props.edit_staff)
 const emit = defineEmits(['close_modal'])
 
 const toast = useToast();
+const runtimeConfig = useRuntimeConfig();
 const isLoading = ref(false);
+const image_uploading = ref(false)
+const image_upload_success = ref(false)
 
 
 const employmentTypes = ['PartTime',
@@ -41,6 +45,28 @@ const edit_staff_form = reactive({
 
 const isDaySelected = (day: WeekDay): boolean => {
   return edit_staff_form.availability.includes(day);
+}
+
+async function image_upload(event: Event) {
+  image_upload_success.value = false;
+  image_uploading.value = true;
+
+  try {
+    const secure_url = await uploadImageHelper(event, {
+      cloudName: runtimeConfig.public.CLOUDINARY_CLOUD_NAME,
+      uploadPreset: runtimeConfig.public.CLOUDINARY_UPLOAD_PRESET_STAFF,
+      maxSizeInKb: 300,
+    })
+
+    edit_staff_form.profile_photo_url = secure_url;
+    image_upload_success.value = true;
+  } catch (error) {
+    toast.error({
+      message: error instanceof Error ? error.message : 'Image upload failed'
+    })
+  } finally {
+    image_uploading.value = false;
+  }
 }
 
 
@@ -108,7 +134,7 @@ async function submit_edit_staff() {
 <div>
 
   <!-- profile image -->
-  <NuxtImg :src="props.edit_staff.profile_photo_url"  class=" w-18 h-18 object-cover object-top rounded-full"/>
+  <NuxtImg :src="edit_staff_form.profile_photo_url"  class=" w-18 h-18 object-cover object-top rounded-full"/>
 </div>
 </div>
 
@@ -136,6 +162,23 @@ async function submit_edit_staff() {
           class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         />
       </div>
+    </div>
+
+    <!-- profile picture -->
+    <div class="space-y-2">
+      <div class=" flex space-x-2">
+        <label class="text-sm font-medium">Profile Picture (Max - 300KB)</label>
+        <i v-if="image_uploading" class="pi pi-spinner animate-spin"></i>
+        <i v-if="image_upload_success" class="pi pi-check-circle text-green-600 "></i>
+      </div>
+
+      <input
+        type="file"
+        accept="image/*"
+        @change="image_upload($event)"
+        id="edit_profile_picture_input"
+        class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-ring"
+      />
     </div>
 
     <!-- Email -->
