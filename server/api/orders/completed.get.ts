@@ -1,23 +1,18 @@
 import { usePrisma } from "~~/server/utils/prisma";
 
 export default defineEventHandler(async (event) => {
-  // only returns the completed order within 24 hours | TODAY
+  // only returns the completed order within the last 24 hours to cap the results
+  // and more relative to real world kitchen scenario.
   const prisma = usePrisma();
 
-  const now = new Date();
-  const startOfDay = new Date(now);
-  startOfDay.setHours(0, 0, 0, 0);
-
-  const startOfNextDay = new Date(startOfDay);
-  startOfNextDay.setDate(startOfNextDay.getDate() + 1);
+  const cuttoff_for_24_hours = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
   // sends today's completed orders only
   const all_orders = await prisma.order.findMany({
     where: {
       status: "COMPLETED",
       createdAt: {
-        gte: startOfDay,
-        lt: startOfNextDay,
+        gte: cuttoff_for_24_hours,
       },
     },
     include: {
