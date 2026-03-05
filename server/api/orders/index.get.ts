@@ -1,27 +1,29 @@
 import { usePrisma } from "~~/server/utils/prisma";
 
+enum OrderRange {
+  ALL = "all",
+  DAY = "day",
+  WEEK = "week",
+  MONTH = "month",
+}
+
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
   const query = getQuery(event);
-  const customerQuery =
-    typeof query.customer === "string"
-      ? query.customer.trim()
-      : typeof query.customerName === "string"
-        ? query.customerName.trim()
-        : "";
+  const customerQuery = String(
+    query.customer ?? query.customerName ?? "",
+  ).trim();
 
-  const range =
-    query.range === "all" ||
-    query.range === "day" ||
-    query.range === "week" ||
-    query.range === "month"
-      ? query.range
-      : undefined;
+  const range = Object.values(OrderRange).includes(
+    String(query.range) as OrderRange,
+  )
+    ? (String(query.range) as OrderRange)
+    : undefined;
 
   const now = new Date();
   let createdAtFilter: { gte: Date; lt: Date } | undefined;
 
-  if (range === "day") {
+  if (range === OrderRange.DAY) {
     const startOfDay = new Date(now);
     startOfDay.setHours(0, 0, 0, 0);
 
@@ -31,7 +33,7 @@ export default defineEventHandler(async (event) => {
     createdAtFilter = { gte: startOfDay, lt: startOfNextDay };
   }
 
-  if (range === "week") {
+  if (range === OrderRange.WEEK) {
     const startOfWeek = new Date(now);
     const day = startOfWeek.getDay();
     const diffToMonday = (day + 6) % 7;
@@ -45,7 +47,7 @@ export default defineEventHandler(async (event) => {
     createdAtFilter = { gte: startOfWeek, lt: startOfNextWeek };
   }
 
-  if (range === "month") {
+  if (range === OrderRange.MONTH) {
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
