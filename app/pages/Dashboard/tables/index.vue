@@ -96,38 +96,50 @@ function close_qr_modal() {
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="flex flex-col gap-4 md:flex-row md:justify-around w-full md:flex-wrap lg:flex-nowrap">
       <!-- Total Tables -->
-      <div class="rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-sm font-medium text-muted-foreground">Total Tables</span>
-          <i class="pi pi-table text-primary text-lg" />
+      <div class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-42.5 flex items-center justify-between">
+        <div class="flex flex-col justify-between h-full">
+          <span class="font-light text-muted-foreground">Total Tables</span>
+          <div class="flex flex-col">
+            <span v-if="pending" class="w-25 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium">{{ tables?.length || 0 }}</span>
+            <span class="text-muted-foreground font-light text-sm">Active seating</span>
+          </div>
         </div>
-        <span v-if="pending" class="w-20 h-8 bg-muted animate-pulse rounded inline-block"></span>
-        <span v-else class="text-4xl font-bold block">{{ tables?.length || 0 }}</span>
-        <p class="text-xs text-muted-foreground">Active seating</p>
+        <div>
+          <i class="pi pi-table text-[120px] text-primary opacity-5"></i>
+        </div>
       </div>
 
       <!-- Total Capacity -->
-      <div class="rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-sm font-medium text-muted-foreground">Total Capacity</span>
-          <i class="pi pi-users text-green-600 text-lg" />
+      <div class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-42.5 flex items-center justify-between">
+        <div class="flex flex-col justify-between h-full">
+          <span class="font-light text-muted-foreground">Total Capacity</span>
+          <div class="flex flex-col">
+            <span v-if="pending" class="w-25 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium text-green-600">{{ tables?.reduce((sum, t) => sum + (t.capacity || 0), 0) || 0 }}</span>
+            <span class="text-muted-foreground font-light text-sm">Total guests</span>
+          </div>
         </div>
-        <span v-if="pending" class="w-20 h-8 bg-muted animate-pulse rounded inline-block"></span>
-        <span v-else class="text-4xl font-bold block">{{ tables?.reduce((sum, t) => sum + (t.capacity || 0), 0) || 0 }}</span>
-        <p class="text-xs text-muted-foreground">Total guests</p>
+        <div>
+          <i class="pi pi-users text-[120px] text-green-500 opacity-5"></i>
+        </div>
       </div>
 
       <!-- Average Capacity -->
-      <div class="rounded-lg border bg-card p-6 hover:shadow-lg transition-shadow space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-sm font-medium text-muted-foreground">Avg. Per Table</span>
-          <i class="pi pi-chart-bar text-blue-600 text-lg" />
+      <div class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-42.5 flex items-center justify-between">
+        <div class="flex flex-col justify-between h-full">
+          <span class="font-light text-muted-foreground">Avg. Per Table</span>
+          <div class="flex flex-col">
+            <span v-if="pending" class="w-25 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium text-blue-600">{{ tables && tables.length > 0 ? Math.round(tables.reduce((sum, t) => sum + (t.capacity || 0), 0) / tables.length) : 0 }}</span>
+            <span class="text-muted-foreground font-light text-sm">Seats per table</span>
+          </div>
         </div>
-        <span v-if="pending" class="w-20 h-8 bg-muted animate-pulse rounded inline-block"></span>
-        <span v-else class="text-4xl font-bold block">{{ tables && tables.length > 0 ? Math.round(tables.reduce((sum, t) => sum + (t.capacity || 0), 0) / tables.length) : 0 }}</span>
-        <p class="text-xs text-muted-foreground">Seats per table</p>
+        <div>
+          <i class="pi pi-chart-bar text-[120px] text-blue-500 opacity-5"></i>
+        </div>
       </div>
     </div>
 
