@@ -127,7 +127,7 @@ async function submit_edit_staff() {
 </script>
 <template>
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80">
-    <div class="bg-background rounded-lg border p-6 shadow-lg w-full max-w-lg">
+    <div class="bg-background rounded-lg border p-6 shadow-lg w-full max-w-lg h-[80vh] overflow-y-scroll">
       <!-- Header -->
 
       <div class=" flex  justify-between items-center">
