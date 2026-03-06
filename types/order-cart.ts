@@ -3,6 +3,6 @@ export default interface Order_Cart_Item {
   quantity: number;
   unitPrice: number;
   specialInstructions?: string;
-
+  image_url: string | null;
   menuItemId: string;
 }
