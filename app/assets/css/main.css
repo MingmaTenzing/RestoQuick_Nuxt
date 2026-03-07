@@ -3,6 +3,7 @@
 
 
 
+
 @custom-variant dark (&:is(.dark-mode *));
 
 
@@ -60,6 +61,17 @@
     --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
     --tracking-normal: 0em;
     --spacing: 0.25rem;
+
+    /* Nuxt Charts Theming */
+    --vis-color0: oklch(0.5220 0.1760 260.5);
+    --vis-color1: oklch(0.6510 0.1670 149.3);
+    --vis-color2: oklch(0.7370 0.1550 86.3);
+    --vis-color3: oklch(0.8220 0.1000 28.5);
+    --vis-color4: oklch(0.6920 0.1400 305.5);
+    --vis-axis-grid-color: rgba(0, 0, 0, 0.08);
+    --vis-axis-tick-label-color: #333;
+    --vis-legend-label-color: #333;
+    --vis-axis-label-color: #333;
 }
 
 .dark-mode {
@@ -114,6 +126,17 @@
     --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
     --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
     --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+
+    /* Nuxt Charts Theming for Dark Mode */
+    --vis-color0: oklch(0.7220 0.1760 260.5);
+    --vis-color1: oklch(0.7510 0.1670 149.3);
+    --vis-color2: oklch(0.8370 0.1550 86.3);
+    --vis-color3: oklch(0.9220 0.1000 28.5);
+    --vis-color4: oklch(0.7922 0.1400 305.5);
+    --vis-axis-grid-color: rgba(255, 255, 255, 0.1);
+    --vis-axis-tick-label-color: #e5e7eb;
+    --vis-legend-label-color: #e5e7eb;
+    --vis-axis-label-color: #e5e7eb;
 }
 
 @theme inline {

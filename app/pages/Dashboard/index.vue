@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import SingleLine from "~/components/Dashboard_components/SingleLine.vue";
 import type { Booking, Staff, Table } from "~/generated/prisma/client";
 import type { OrderDetailsWithInclude } from "~~/types/orderwithInclude";
 
@@ -365,6 +366,7 @@ function formatDateTime(date: Date | string) {
                     </div>
                 </div>
             </section>
+
         </div>
     </div>
 </template>

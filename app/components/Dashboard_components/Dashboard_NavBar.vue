@@ -1,7 +1,6 @@
 
 <script setup lang="ts" >
-import { useWindowSize } from '@vueuse/core';
-import { Transition } from 'vue';
+
 
 const { isSidebar_open, open_side_bar, close_side_bar, isTabletOrLarger } = useSideBar();
 
@@ -9,8 +8,8 @@ const { isSidebar_open, open_side_bar, close_side_bar, isTabletOrLarger } = useS
 </script>
 <template>
    <!-- nav bar dashboard -->
-<div class=" flex justify-between p-4  ">
-    <div class=" flex items-center space-x-6">
+<div class=" flex justify-between items-center  ">
+
 
     <div v-if="!isTabletOrLarger">
 
@@ -19,8 +18,7 @@ const { isSidebar_open, open_side_bar, close_side_bar, isTabletOrLarger } = useS
         
     </div>
 
-        <img src="../../assets/images/RestoQuick.png" width="100" class="dark:invert w-12 md:w-[100px]"/>
-    </div> 
+     
  <div class=" flex items-center space-x-6">
     <div>
         <i v-on:click="$colorMode.preference = 'dark'"  v-if="$colorMode.value === 'light'" class=" pi pi-moon"></i>

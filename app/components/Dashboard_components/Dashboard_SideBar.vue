@@ -1,49 +1,54 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 const route = useRoute();
 
-console.log(route.path)
+const navItems = [
+    { to: '/dashboard/roster', icon: 'pi pi-calendar', label: 'Roster' },
+    { to: '/dashboard/bookings', icon: 'pi pi-calendar-clock', label: 'Bookings' },
+    { to: '/dashboard/orders', icon: 'pi pi-shopping-cart', label: 'Orders' },
+    { to: '/dashboard/kitchen', icon: 'pi pi-building-columns', label: 'Kitchen' },
+    { to: '/dashboard/menu', icon: 'pi pi-file-check', label: 'Menu' },
+    { to: '/dashboard/staff', icon: 'pi pi-users', label: 'Staff' },
+    { to: '/dashboard/stock', icon: 'pi pi-box', label: 'Stock' },
+    { to: '/dashboard/tables', icon: 'pi pi-qrcode', label: 'Tables' }
+];
 
+const isActive = (path: string) => {
+    return route.path === path || route.path.startsWith(path + '/') || route.path.startsWith(path + '?');
+}
 </script>
 
-<template> 
-<aside class=" w-[220px] h-[calc(100vh-4rem)] bg-sidebar p-4 space-y-2 ">
+<template>
+    <aside class="h-screen min-w-46 bg-sidebar p-4 flex flex-col justify-between">
+        <div class=" space-y-8">
+            <div class="flex justify-center">
+                        <img src="../../assets/images/RestoQuick.png" width="100" class="dark:invert w-12 md:w-20"/>
     
+            </div>
+            <nav aria-label="Sidebar" class="space-y-4">
+                <ul class="space-y-2">
+                    <li v-for="item in navItems" :key="item.to">
+                        <NuxtLink
+                            :to="item.to"
+                            :class="[
+                                'flex items-center space-x-4 text-sm xl:text-base text-muted-foreground p-2 rounded-xl',
+                                isActive(item.to) ? 'bg-primary text-primary-foreground' : 'hover:bg-sidebar-accent hover:border-sidebar-border hover:text-accent-foreground'
+                            ]"
+                        >
+                            <i :class="item.icon"></i>
+                            <span>{{ item.label }}</span>
+                        </NuxtLink>
+                    </li>
+                </ul>
+            </nav>
 
-    <NuxtLink to="/dashboard/roster" :class="[ 'cursor-pointer flex space-x-4 items-center   text-sm xl:text-base text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/roster' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border ']">
-        <i class=" pi pi-calendar "></i>
-        <span class=" ">Roster</span>
-    </NuxtLink>
-    <NuxtLink to="/dashboard/bookings" :class="[ 'cursor-pointer flex space-x-4 items-center   text-sm xl:text-base text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/bookings' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
-        <i class=" pi pi-calendar-clock"></i>
-        <span>Bookings</span>
-    </NuxtLink>
-    
-    <NuxtLink to="/dashboard/orders" :class="[ 'cursor-pointer flex space-x-4 items-center   text-sm xl:text-base text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/orders' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
-        <i class=" pi pi-shopping-cart"></i>
-        <span>Orders</span>
-    </NuxtLink>
-    <NuxtLink to="/dashboard/kitchen" :class="[ 'cursor-pointer flex space-x-4 items-center   text-sm xl:text-base text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/kitchen' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
-        <i class=" pi pi-building-columns"></i>
-        <span>Kitchen</span>
-    </NuxtLink>
-    <NuxtLink to="/dashboard/menu" :class="[ 'cursor-pointer flex space-x-4 items-center   text-sm xl:text-base text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/menu' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
-        <i class=" pi pi-file-check"></i>
-        <span>Menu</span>
-    </NuxtLink>
-    <NuxtLink to="/dashboard/staff" :class="[ 'cursor-pointer flex space-x-4 items-center   text-sm xl:text-base text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/staff&integration' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
-        <i class=" pi pi-users"></i>
-        <span>Staff</span>  
-    </NuxtLink>
-    <NuxtLink to="/dashboard/stock" :class="[ 'cursor-pointer flex space-x-4 items-center   text-sm xl:text-base text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/stock' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
-        <i class=" pi pi-box"></i>
-        <span>Stock</span>
-    </NuxtLink>
-    <NuxtLink to="/dashboard/tables" :class="[ 'cursor-pointer flex space-x-4 items-center   text-sm xl:text-base text-muted-foreground  p-2 rounded-lg ' , route.path == '/dashboard/tables' ? 'bg-primary text-primary-foreground ': 'hover:bg-sidebar-accent  outline-none hover:border-sidebar-border hover:text-accent-foreground']">
-        <i class=" pi pi-qrcode"></i>
-        <span>Tables</span>
-    </NuxtLink>
+        </div>
 
-
-
-</aside>
+        <div class="mt-4">
+            <NuxtLink to="/dashboard/settings" class="flex items-center space-x-4 text-sm text-muted-foreground p-2 rounded-lg hover:bg-sidebar-accent">
+                <i class="pi pi-cog"></i>
+                <span>Settings</span>
+            </NuxtLink>
+        </div>
+    </aside>
 </template>
