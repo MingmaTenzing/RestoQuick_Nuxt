@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     "@unlok-co/nuxt-stripe",
     "nuxt-time",
     "@vite-pwa/nuxt",
+    "nuxt-charts",
   ],
 
   pwa: {
