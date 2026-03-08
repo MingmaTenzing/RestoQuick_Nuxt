@@ -2,16 +2,16 @@
 <script setup lang="ts" >
 
 
-const { isSidebar_open, open_side_bar, close_side_bar, isTabletOrLarger } = useSideBar();
+const { isSidebar_open, open_side_bar, close_side_bar } = useSideBar();
 
 
 </script>
 <template>
    <!-- nav bar dashboard -->
-<div class=" flex justify-between items-center  ">
+<div class=" flex justify-between items-center min-w-full  ">
 
 
-    <div v-if="!isTabletOrLarger">
+    <div >
 
         <i v-if="!isSidebar_open " v-on:click="open_side_bar" class="pi pi-bars"></i>
         <i v-else v-on:click="close_side_bar" class="pi pi-times"></i>

@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { useWindowSize } from '@vueuse/core';
 import Dashboard_NavBar from '~/components/Dashboard_components/Dashboard_NavBar.vue';
 import Dashboard_SideBar from '~/components/Dashboard_components/Dashboard_SideBar.vue';
 
-const { isSidebar_open, isTabletOrLarger } = useSideBar()
+const { isSidebar_open } = useSideBar()
 
 
 </script>
@@ -19,7 +18,7 @@ const { isSidebar_open, isTabletOrLarger } = useSideBar()
     <Transition name="slide"> 
   
   <!-- the heeight of the sidebar is the same as the slot below to match with each other -->
-  <Dashboard_SideBar v-if="isSidebar_open" class=""  ></Dashboard_SideBar>
+  <Dashboard_SideBar v-if="isSidebar_open " class=""  ></Dashboard_SideBar>
   </Transition>
   
   

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 const route = useRoute();
 
 const navItems = [
-    { to: '/dashboard/roster', icon: 'pi pi-calendar', label: 'Roster' },
+    { to: '/dashboard', icon: 'pi pi-chart-line', label: 'Overview' },
+    { to: '/dashboard/roster/weekly', icon: 'pi pi-calendar', label: 'Roster' },
     { to: '/dashboard/bookings', icon: 'pi pi-calendar-clock', label: 'Bookings' },
     { to: '/dashboard/orders', icon: 'pi pi-shopping-cart', label: 'Orders' },
     { to: '/dashboard/kitchen', icon: 'pi pi-building-columns', label: 'Kitchen' },
@@ -14,7 +14,7 @@ const navItems = [
 ];
 
 const isActive = (path: string) => {
-    return route.path === path || route.path.startsWith(path + '/') || route.path.startsWith(path + '?');
+    return route.path === path
 }
 </script>
 

@@ -34,7 +34,7 @@ A restaurant order & staff management system with real-time kitchen updates, Str
 - Prisma client auto-generated on `npm install` via postinstall script (`nuxt prepare && prisma generate`)
 - Schema changes require explicit migration; Nuxt doesn't auto-run migrations
 
-**Environment variables:** DATABASE*URL, STRIPE_SECRET_KEY, STRIPE_PUBLIC_KEY, VAPI*_, CLOUDINARY\__, WEBSOCKET_HOST via runtimeConfig (nuxt.config.ts).
+**Environment variables:** DATABASE*URL, STRIPE_SECRET_KEY, STRIPE_PUBLIC_KEY, VAPI*\_, CLOUDINARY\_\_, WEBSOCKET_HOST via runtimeConfig (nuxt.config.ts).
 
 ## Project conventions & patterns
 
@@ -57,6 +57,34 @@ A restaurant order & staff management system with real-time kitchen updates, Str
 - Tailwind CSS v4 via @tailwindcss/vite plugin; global imports in nuxt.config.ts + app/assets/css/main.css
 - PWA enabled (@vite-pwa/nuxt); icons in public/icons/; manifest in nuxt.config.ts (name: "RestoQuick")
 - Color mode support (@nuxtjs/color-mode)
+
+## Frontend design skill
+
+When working on any frontend UI in this project, act like an elite product UI engineer and prioritize polished, production-quality design.
+
+**Design standards:**
+
+- Build interfaces that feel intentional, refined, and premium — not generic scaffolds
+- Prefer strong visual hierarchy, excellent spacing, balanced typography, and clear grouping of content
+- Use modern dashboard/page patterns: large rounded surfaces, subtle borders, soft shadows, layered backgrounds, and clean card composition
+- Keep layouts responsive by default across mobile, tablet, laptop, and wide desktop screens
+- Design for both light and dark mode when touching dashboard or shared UI
+
+**Execution rules:**
+
+- Reuse the existing Tailwind utility style and project tokens instead of inventing a separate styling system
+- Favor consistent spacing scales, predictable grid behavior, and deliberate empty space over crowded UIs
+- Add tasteful interaction states: hover, active, focus, disabled, loading, and empty states
+- Prefer concise, elegant copy in headings, labels, and helper text
+- When introducing tables, forms, dashboards, or cards, make them visually polished enough to look like they were crafted by a highly skilled UI engineer
+- Avoid plain default-looking sections if a clearer, more premium composition can be achieved with the existing stack
+
+**Component mindset:**
+
+- Create reusable visual patterns when repeating sections or cards
+- Keep components simple to read in code, but sophisticated in presentation
+- Preserve accessibility: sufficient contrast, keyboard focus visibility, semantic markup, and readable font sizing
+- If a screen can be made significantly better with layout refinement alone, improve the composition before adding more complexity
 
 **Integration points:**
 
