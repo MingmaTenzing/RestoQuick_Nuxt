@@ -44,7 +44,7 @@ const xFormatter = (tick: number, _i?: number, _ticks?: number[]): string => {
   
   
   <div
-    class="mx-auto max-w-3xl space-y-6 rounded-lg"
+    class="min-w-0 w-full space-y-6 rounded-lg bg-card p-6 border"
     :class="showTitle ? 'p-6' : ''"
   >
     <div class="flex items-center justify-between">
@@ -62,7 +62,7 @@ const xFormatter = (tick: number, _i?: number, _ticks?: number[]): string => {
     </div>
     <LineChart
       :data="dataForChart"
-      :height="300"
+      :height="360"
       
       x-label="Time"
       y-label="Revenue"

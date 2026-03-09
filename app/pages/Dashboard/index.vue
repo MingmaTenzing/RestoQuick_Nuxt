@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Monthly_Revenue from '~/components/Dashboard_components/Monthly_Revenue.vue'
+import TopSelling_Items from '~/components/Dashboard_components/TopSelling_Items.vue'
 import DummyStatsCard from '~/components/ui/DummyStatsCard.vue'
 
 definePageMeta({
@@ -38,7 +39,7 @@ const stats = [
 </script>
 
 <template>
-	<div class="space-y-6 pb-8">
+	<div class="space-y-6 pb-8 w-full">
 
 	<!-- <DashboardComponentsDashboardHeader></DashboardComponentsDashboardHeader> -->
 		<section class="grid gap-4 lg:grid-cols-3">
@@ -53,9 +54,9 @@ const stats = [
 			/>
 		</section>
 
-		<section>
-
-		<Monthly_Revenue></Monthly_Revenue>
+		<section class="grid grid-cols-1 gap-6 xl:grid-cols-2 xl:items-stretch">
+			<TopSelling_Items class="min-w-0 w-full" />
+			<Monthly_Revenue class="min-w-0 w-full" />
 		</section>
 
 	</div>
