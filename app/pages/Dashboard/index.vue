@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import Monthly_Revenue from '~/components/Dashboard_components/Monthly_Revenue.vue'
 import DummyStatsCard from '~/components/ui/DummyStatsCard.vue'
 
 definePageMeta({
 	layout: 'dashboard-layout',
 })
 
+
+const { data } = await useFetch('/api/orders?range=week')
+
+console.log(data.value)
 
 const stats = [
 	{
@@ -35,7 +40,7 @@ const stats = [
 <template>
 	<div class="space-y-6 pb-8">
 
-	<DashboardComponentsDashboardHeader></DashboardComponentsDashboardHeader>
+	<!-- <DashboardComponentsDashboardHeader></DashboardComponentsDashboardHeader> -->
 		<section class="grid gap-4 lg:grid-cols-3">
 			<DummyStatsCard
 				v-for="stat in stats"
@@ -47,5 +52,11 @@ const stats = [
 				:description="stat.description"
 			/>
 		</section>
+
+		<section>
+
+		<Monthly_Revenue></Monthly_Revenue>
+		</section>
+
 	</div>
 </template>

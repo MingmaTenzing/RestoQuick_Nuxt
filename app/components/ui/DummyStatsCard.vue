@@ -9,7 +9,7 @@ defineProps<{
 </script>
 
 <template>
-	<div class="rounded-3xl border border-border/70 bg-card text-card-foreground shadow-sm">
+	<div class="rounded-lg border border-border/70 bg-card text-card-foreground shadow-sm">
 		<div class="p-4 sm:p-6">
 			<div class="space-y-2">
 				<div>

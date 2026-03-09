@@ -96,6 +96,7 @@ When working on any frontend UI in this project, act like an elite product UI en
 **Data conventions:**
 
 - Prices stored as integers (cents) in Order.totalAmountCents, OrderItem.unitPriceCents, MenuItem.priceCents
+- Do not introduce currency formatting helpers such as `formatCurrency` unless explicitly requested; keep monetary values as-is and let the user add the currency symbol manually if they want it displayed
 - Enums (Role, OrderStatus, etc.) in Prisma schema; use Prisma-generated enums in components
 - Timestamps: created/updated via Prisma @default(now()) and @updatedAt
 - Nullable fields: tableId (Booking, Order) allows operations without table assignment upfront

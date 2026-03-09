@@ -26,12 +26,12 @@ const quickActions = [
 		icon: 'pi-calendar',
 	},
 	{
-		label: 'Open kitchen board',
+		label: 'Kitchen board',
 		to: '/dashboard/kitchen',
 		icon: 'pi-objects-column',
 	},
 	{
-		label: 'Manage menu',
+		label: 'Menu',
 		to: '/dashboard/menu',
 		icon: 'pi-book',
 	},
@@ -39,8 +39,7 @@ const quickActions = [
 </script>
 
 <template>
-    	<section class="relative overflow-hidden rounded-[2rem] border border-border/70 bg-gradient-to-br from-card via-card to-primary/10 text-card-foreground shadow-sm">
-			<div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.18),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.14),transparent_24%)]" />
+	    	<section class="relative overflow-hidden rounded-4xl border border-border/70 bg-card text-card-foreground shadow-sm">
 
 			<div class="relative flex flex-col gap-8 p-6 sm:p-8 xl:flex-row xl:items-end xl:justify-between xl:p-10">
 				<div class="max-w-3xl space-y-5">
@@ -54,10 +53,10 @@ const quickActions = [
 							{{ greeting }}, Mingma
 						</p>
 						<h1 class="max-w-2xl text-3xl font-semibold tracking-tight text-foreground sm:text-4xl xl:text-5xl">
-							Keep service smooth with a clear view of bookings, staff, and kitchen activity.
+							Everything you need for today’s service.
 						</h1>
-						<p class="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-							Monitor today’s performance, jump into the busiest workflows, and keep the whole restaurant aligned from one place.
+						<p class="max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">
+							Bookings, kitchen, and menu in one place.
 						</p>
 					</div>
 
@@ -68,12 +67,12 @@ const quickActions = [
 						</div>
 						<div class="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/80 px-4 py-2 shadow-sm backdrop-blur">
 							<i class="pi pi-bolt text-xs text-amber-500" />
-							<span>Peak prep window starts in 45 minutes</span>
+							<span>Peak window in 45 min</span>
 						</div>
 					</div>
 				</div>
 
-				<div class="grid gap-3 sm:grid-cols-3 xl:w-[420px] xl:grid-cols-1">
+				<div class="grid gap-3 sm:grid-cols-3 xl:w-105 xl:grid-cols-1">
 					<NuxtLink
 						v-for="action in quickActions"
 						:key="action.to"

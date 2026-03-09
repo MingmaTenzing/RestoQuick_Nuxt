@@ -1,3 +1,4 @@
+import { useDateRange } from "~~/server/utils/dateRange";
 import { usePrisma } from "~~/server/utils/prisma";
 
 enum OrderRange {
@@ -8,6 +9,7 @@ enum OrderRange {
 }
 
 export default defineEventHandler(async (event) => {
+  const { getDayRange, getWeekRange, getMonthRange } = useDateRange();
   const prisma = usePrisma();
   const query = getQuery(event);
   const customerQuery = String(
@@ -20,38 +22,21 @@ export default defineEventHandler(async (event) => {
     ? (String(query.range) as OrderRange)
     : undefined;
 
-  const now = new Date();
   let createdAtFilter: { gte: Date; lt: Date } | undefined;
 
   if (range === OrderRange.DAY) {
-    const startOfDay = new Date(now);
-    startOfDay.setHours(0, 0, 0, 0);
-
-    const startOfNextDay = new Date(startOfDay);
-    startOfNextDay.setDate(startOfNextDay.getDate() + 1);
-
-    createdAtFilter = { gte: startOfDay, lt: startOfNextDay };
+    const { start, end } = getDayRange();
+    createdAtFilter = { gte: start, lt: end };
   }
 
   if (range === OrderRange.WEEK) {
-    const startOfWeek = new Date(now);
-    const day = startOfWeek.getDay();
-    const diffToMonday = (day + 6) % 7;
-
-    startOfWeek.setHours(0, 0, 0, 0);
-    startOfWeek.setDate(startOfWeek.getDate() - diffToMonday);
-
-    const startOfNextWeek = new Date(startOfWeek);
-    startOfNextWeek.setDate(startOfNextWeek.getDate() + 7);
-
-    createdAtFilter = { gte: startOfWeek, lt: startOfNextWeek };
+    const { start, end } = getWeekRange();
+    createdAtFilter = { gte: start, lt: end };
   }
 
   if (range === OrderRange.MONTH) {
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-
-    createdAtFilter = { gte: startOfMonth, lt: startOfNextMonth };
+    const { start, end } = getMonthRange();
+    createdAtFilter = { gte: start, lt: end };
   }
 
   const whereClause = {
