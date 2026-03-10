@@ -15,11 +15,12 @@ const toast = useToast();
 // Source list for completed orders shown in this popup.
 const completed_orders = ref<OrderDetailsWithInclude[]>([]);
 
-// UI rule: this popup should only show today's completed orders.
-const isTodayOrder = (createdAt: string | Date) => {
-    const orderDate = new Date(createdAt)
-    const today = new Date()
-    return orderDate.toDateString() === today.toDateString()
+// UI rule: this popup should only show completed orders from the last 24 hours.
+const isOrderWithinLast24Hours = (createdAt: string | Date) => {
+    const orderTime = new Date(createdAt).getTime()
+    const now = Date.now()
+    const twentyFourHoursInMs = 24 * 60 * 60 * 1000
+    return now - orderTime <= twentyFourHoursInMs
 }
 
 const loading = ref(false)
@@ -34,7 +35,7 @@ onMounted(async () => {
     try {
         // Initial fetch for Completed Orders popup:
         // - Endpoint: /api/orders/completed
-        // - Backend already restricts this list to today's completed orders.
+        // - Backend already restricts this list to orders made within the last 24 hours
         completed_orders.value = await $fetch<OrderDetailsWithInclude[]>("/api/orders/completed")
         
     } catch (error: unknown) {
@@ -59,8 +60,8 @@ watch(data, (newValue) => {
     let parsed_data: websocket_payload = JSON.parse(newValue);
 
     if (parsed_data.type == "ORDER_MARKED_COMPLETED") {
-        // Only add completed orders from today.
-        if (!isTodayOrder(parsed_data.payload.createdAt)) {
+        // Only add completed orders from the last 24 hours.
+        if (!isOrderWithinLast24Hours(parsed_data.payload.createdAt)) {
             return
         }
         const exists = completed_orders.value.some((order) => order.id === parsed_data.payload.id)
@@ -96,7 +97,7 @@ watch(data, (newValue) => {
     <div class=" space-y-2">
 
         <h2 class="text-3xl ">Completed Orders</h2>
-        <p class=" font-light text-sm text-accbg-accent-foreground">View all completed orders and recall if needed </p>
+        <p class=" font-light text-sm text-accbg-accent-foreground">View Orders Made Within the last 24 hours and recall if needed</p>
     </div>
 
     <div class=" flex space-x-2 items-center ">
@@ -148,13 +149,17 @@ watch(data, (newValue) => {
 
     
           <!-- Completed list from /api/orders/completed + realtime websocket updates -->
-  <section v-else class="flex flex-wrap gap-2">
+      <section v-else-if="completed_orders.length" class="flex flex-wrap gap-2">
 
                         <div v-for="order in completed_orders" :key="order.id">
                 <Completed_Order_Item  :order="order"></Completed_Order_Item>
             </div>
             
          </section>
+
+      <section v-else class="flex justify-center items-center h-full">
+        <p class="text-sm text-muted-foreground">No orders within last 24 hours.</p>
+      </section>
 
 
   </div>

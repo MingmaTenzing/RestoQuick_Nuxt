@@ -1,17 +1,9 @@
 <script setup  lang="ts">
-import Roster_ai_sidebar_modal from '~/components/roster_components/roster_ai_sidebar_modal.vue';
-
-
-
-
 definePageMeta({
     layout: 'dashboard-layout'
 })
 
 const route = useRoute();
-const { open, isOpen } = useAiRosterModal()
-
-
 </script>
 
 <template>
@@ -25,16 +17,6 @@ const { open, isOpen } = useAiRosterModal()
         </div>
 
         <div class=" flex gap-3">
-  
-
-            <button
-                class="border-border border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-lg"
-                @click="open"
-            >
-                <i class="pi pi-sparkles text-muted-foreground"></i>
-                <span>AI Suggestions</span>
-            </button>
-
             <NuxtLink to="/print-roster" class=" border-border  border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-lg">
                 <i class=" pi text-muted-foreground pi-print"></i>
                 <span>Print Roster</span>

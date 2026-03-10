@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import type { Prisma, Staff , Shift} from '~/generated/prisma/client';
+import { getStaffInitials } from '~/client_utils/staff_avatar';
 
 const toast = useToast();
 
@@ -74,8 +75,6 @@ function onSelectStaff(staff: Staff) {
     shift_form.value.staffId = staff.id;
 }
 
-
-
 </script>
 
 
@@ -124,7 +123,10 @@ function onSelectStaff(staff: Staff) {
                         <div v-on:click="() => onSelectStaff(staff)" class="hover:bg-accent" v-for="staff in staffs" :key="staff.id" >
                             <div class="flex  items-center justify-between p-2 ">
                                 <div class=" flex space-x-2 items-center">
-                                    <NuxtImg :src="staff.profile_photo_url" class=" w-8 h-8 rounded-full object-cover" ></NuxtImg>
+                                    <NuxtImg v-if="staff.profile_photo_url" :src="staff.profile_photo_url" class=" w-8 h-8 rounded-full object-cover" ></NuxtImg>
+                                    <div v-else class="w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center text-[10px] font-semibold">
+                                        {{ getStaffInitials(staff) }}
+                                    </div>
                                     <span>{{ staff.firstname }} {{ staff.lastName[0] }}.</span>
                                 </div>
                             

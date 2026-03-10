@@ -3,6 +3,7 @@
 import { inject } from 'vue';
 import type { Shift, Staff } from '~/generated/prisma/client';
 import type { Shift_With_Staff_Payload } from '~~/types/shift_include_staff';
+import { getStaffInitials } from '~/client_utils/staff_avatar';
 
 const props = defineProps<{ shift: Shift_With_Staff_Payload}>()
 
@@ -45,7 +46,10 @@ function deleteShift() {
         <div class="flex justify-between items-end ">
 <div :class="['flex', isPrintRosterPage ? 'flex-row items-center gap-2' : 'flex-col space-y-2']">
 
-    <NuxtImg :src="shift.staff?.profile_photo_url"  class=" w-8 h-8 object-cover rounded-full" ></NuxtImg>
+    <NuxtImg v-if="shift.staff?.profile_photo_url" :src="shift.staff?.profile_photo_url"  class=" w-8 h-8 object-cover rounded-full" ></NuxtImg>
+    <div v-else class="w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center text-[10px] font-semibold">
+      {{ getStaffInitials(shift.staff) }}
+    </div>
   <div class="flex flex-col">
       <span class=" text-xs xl:text-base font-medium">{{ shift.staff?.firstname }} {{ shift.staff?.lastName[0] }}.</span>
   

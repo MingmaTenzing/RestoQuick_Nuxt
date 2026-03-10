@@ -5,7 +5,7 @@ export const useSideBar = () => {
   const { width } = useWindowSize();
   const open_side_bar = () => (isSidebar_open.value = true);
   const close_side_bar = () => (isSidebar_open.value = false);
-  const isTabletOrLarger = computed(() => width.value >= 1536);
+  // const isTabletOrLarger = computed(() => width.value >= 1024);
 
-  return { isSidebar_open, isTabletOrLarger, open_side_bar, close_side_bar };
+  return { isSidebar_open, open_side_bar, close_side_bar };
 };

@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     "@unlok-co/nuxt-stripe",
     "nuxt-time",
     "@vite-pwa/nuxt",
+    "nuxt-charts",
   ],
 
   pwa: {
@@ -55,6 +56,9 @@ export default defineNuxtConfig({
   routeRules: {
     "/dashboard": { ssr: false },
     "/vapi": { ssr: false },
+    "/dashboard/roster": {
+      redirect: "/dashboard/roster/weekly",
+    },
   },
 
   router: {

@@ -103,12 +103,17 @@ const isDaySelected = (day: WeekDay): boolean => {
 async function add_new_staff() {
   staff_add_loading.value = true;
 
+  const staffPayload = {
+    ...staff_form,
+    profile_photo_url: staff_form.profile_photo_url || undefined,
+  }
+
  try {
    const response = await $fetch("/api/staff", 
      {
        method: 'POST',
        body: {
-        staff: staff_form
+        staff: staffPayload
       }
     }
    )
@@ -232,12 +237,12 @@ async function add_new_staff() {
         <!-- profile picture -->
         <div class="space-y-2">
           <div class=" flex space-x-2">
-            <label class="text-sm font-medium">Profile Picture (Max - 300KB)</label>
+            <label class="text-sm font-medium">Profile Picture (Optional, Max - 300KB)</label>
             <i v-if="image_uploading" class="pi pi-spinner animate-spin"></i>
             <i v-if="image_upload_success" class="pi pi-check-circle text-green-600 "></i>
 
           </div>
-          <input required
+          <input
             type="file"
             accept="image/*"
             @change="image_upload($event)"

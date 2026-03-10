@@ -24,6 +24,7 @@ function add_item_to_cart() {
         unitPrice: props.menu_item.priceCents,
         menuItemId: props.menu_item.id,
         specialInstructions: special_instruction.value,
+        image_url: props.menu_item.imageUrl
         
     }
 
@@ -43,7 +44,7 @@ function add_item_to_cart() {
 
 
      <div class=" border flex p-4 gap-2  rounded-lg">
-                <NuxtImg  :src="menu_item.imageUrl || 'https://collection.cloudinary.com/dnusuubi9/6821e38893c8cf0423a1335712bf518b'" width="200" height="200" class="rounded-lg w-[100px] h-[100px] object-cover"/>
+                <NuxtImg  :src="menu_item?.imageUrl!" width="200" height="200" class="rounded-lg w-[100px] h-[100px] object-cover"/>
 
                 <div class="space-y-2 w-full">
                     <div class=" flex justify-between items-center">

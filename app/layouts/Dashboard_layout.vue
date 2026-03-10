@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { useWindowSize } from '@vueuse/core';
 import Dashboard_NavBar from '~/components/Dashboard_components/Dashboard_NavBar.vue';
 import Dashboard_SideBar from '~/components/Dashboard_components/Dashboard_SideBar.vue';
 
-const { isSidebar_open, isTabletOrLarger } = useSideBar()
+const { isSidebar_open } = useSideBar()
 
 
 </script>
@@ -14,28 +13,23 @@ const { isSidebar_open, isTabletOrLarger } = useSideBar()
 <template>
 
     
-<div class=" relative  z-0 ">
+<div class=" flex  ">
 
-       <!-- nav bar dashboard -->
-<Dashboard_NavBar></Dashboard_NavBar>
-
-
-<div class=" md:flex ">
-
-
-
-<div class="absolute left-0 top-20 lg:static z-0">
-  <Transition name="slide"> 
+    <Transition name="slide"> 
   
   <!-- the heeight of the sidebar is the same as the slot below to match with each other -->
-  <Dashboard_SideBar v-if="isSidebar_open || isTabletOrLarger" class=""  ></Dashboard_SideBar>
+  <Dashboard_SideBar v-if="isSidebar_open " class=""  ></Dashboard_SideBar>
   </Transition>
-
-</div>
+  
+  
+  <div class="  w-full space-y-8  p-4 lg:p-8 ">
+  
+         <!-- nav bar dashboard -->
+  <Dashboard_NavBar class=""></Dashboard_NavBar>
 
 
       <!-- the height is set to screen-4rem and overflow-y-scroll to give immersive experience -->
-<div class=" p-4 w-full h-[calc(100vh-4rem)] overflow-y-scroll  hide-scrollbar">
+<div class="  h-[90vh] overflow-y-scroll  hide-scrollbar bg-">
 
   <slot></slot>
 </div>
