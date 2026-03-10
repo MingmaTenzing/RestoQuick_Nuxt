@@ -188,8 +188,34 @@ const signatureNotes = [
   <div class="bg-background text-foreground transition-colors duration-300">
     <main class="bg-background">
       <NavBar />
-      <section id="main" class="px-6 pb-20 pt-10 sm:pb-24 sm:pt-16">
-        <div class="mx-auto grid max-w-7xl items-start gap-16 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-24">
+      <section id="main" class="relative overflow-hidden px-6 pb-20 pt-10 sm:pb-24 sm:pt-16">
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute left-1/2 top-[42%] hidden -translate-x-1/2 -translate-y-1/2 rounded-full dark:block"
+          style="
+            width: 54rem;
+            height: 54rem;
+            background: radial-gradient(circle at center, color-mix(in oklab, var(--color-green-700, #15803d) 28%, transparent) 0%, color-mix(in oklab, var(--color-green-600, #16a34a) 16%, transparent) 34%, transparent 72%);
+            opacity: 0.95;
+            -webkit-mask-image: radial-gradient(circle at center, black 0%, black 40%, transparent 76%);
+            mask-image: radial-gradient(circle at center, black 0%, black 40%, transparent 76%);
+          "
+        />
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute left-1/2 top-[42%] hidden -translate-x-1/2 -translate-y-1/2 rounded-full dark:block"
+          style="
+            width: 48rem;
+            height: 48rem;
+            background-image: radial-gradient(circle, color-mix(in oklab, var(--color-green-500, #22c55e) 52%, transparent) 0.75px, transparent 1.4px);
+            background-size: 14px 14px;
+            opacity: 0.7;
+            -webkit-mask-image: radial-gradient(circle at center, black 0%, black 32%, transparent 72%);
+            mask-image: radial-gradient(circle at center, black 0%, black 32%, transparent 72%);
+          "
+        />
+
+        <div class="relative z-10 mx-auto grid max-w-7xl items-start gap-16 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-24">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.26em] text-green-700 dark:text-green-400">
               AI-powered restaurant management system
