@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import Vapi from '@vapi-ai/web'
 
 const runtimeConfig = useRuntimeConfig()
-const public_key = runtimeConfig.public.VAPI_PUBLIC_KEY
-const assistant_id = runtimeConfig.public.VAPI_ASSISTANT_KEY
+const publicKey = runtimeConfig.public.VAPI_PUBLIC_KEY
+const assistantId = runtimeConfig.public.VAPI_ASSISTANT_KEY
 
 const isCalling = ref(false)
 const isLoading = ref(false)
@@ -12,161 +12,116 @@ let vapi: Vapi | null = null
 
 onMounted(() => {
   try {
-    vapi = new Vapi(public_key)
-    
+    vapi = new Vapi(publicKey)
+
     vapi.on('call-start', () => {
       isCalling.value = true
-      console.log('call started')
     })
-    
+
     vapi.on('call-end', () => {
       isCalling.value = false
-      console.log('call ended')
+      isLoading.value = false
     })
 
-    vapi.on('speech-start', () => {
-      console.log('speech started')
+    vapi.on('message', (message: unknown) => {
+      console.log('vapi message', message)
     })
-    
-    vapi.on('speech-end', () => {
-      console.log('speech end')
-    })
+  } catch (error) {
+    console.error('Vapi init error:', error)
+  }
+})
 
-    vapi.on('message', (message: string) => {
-      console.log('message:', message)
-    })
-  } catch (e) {
-    console.error('Vapi init error:', e)
+onBeforeUnmount(async () => {
+  if (!vapi || !isCalling.value) return
+
+  try {
+    await vapi.stop()
+  } catch (error) {
+    console.error('cleanup stop error', error)
   }
 })
 
 async function startCall() {
-  if (!vapi || isCalling.value) return
+  if (!vapi || isCalling.value || isLoading.value) return
+
   isLoading.value = true
+
   try {
-    await vapi.start(assistant_id)
-  } catch (e) {
-    console.error('startCall error', e)
-  } finally {
+    await vapi.start(assistantId)
+  } catch (error) {
+    console.error('startCall error', error)
     isLoading.value = false
   }
 }
 
 async function endCall() {
   if (!vapi || !isCalling.value) return
+
   try {
     await vapi.stop()
-  } catch (e) {
-    console.error('endCall error', e)
+  } catch (error) {
+    console.error('endCall error', error)
   }
 }
 </script>
 
-
 <template>
+  <div class="overflow-hidden rounded-4xl border border-border bg-card shadow-sm">
+    <div class="relative border-b border-border px-6 py-10 sm:px-8 sm:py-12">
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-[radial-gradient(circle,rgba(24,24,27,0.14)_1.2px,transparent_1.2px)] bg-size-[18px_18px] opacity-80 dark:bg-[radial-gradient(circle,rgba(255,255,255,0.16)_1.2px,transparent_1.2px)]"
+      ></div>
 
+      <div class="relative flex flex-col items-center text-center">
+        <div class="flex h-28 w-28 items-center justify-center rounded-full border border-green-500/30 bg-background/90 shadow-[0_0_0_14px_rgba(34,197,94,0.08)] backdrop-blur">
+          <div class="flex h-20 w-20 items-center justify-center rounded-full bg-green-600 text-white shadow-lg shadow-green-600/30">
+            <i class="pi pi-microphone text-3xl"></i>
+          </div>
+        </div>
 
-
-
-
-  
-<div class="relative p-[1.5px] rounded-2xl bg-[#0d0d10] text-white overflow-hidden">
-    <!-- Animated border -->
-    <div
-      class="absolute inset-0 rounded-2xl p-[3px]
-             bg-[linear-gradient(120deg,#b06cff,#c77dff,#7b5cff,#5b3cff,#b06cff)]
-             bg-size-[300%_300%]
-             animate-borderMove
-             opacity-90
-             [mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)]
-             mask-exclude"
-    ></div>
-
-    <div class="relative z-10">
-        <div class="  p-6 flex flex-col md:flex-row   gap-6 justify-between w-[800px] items-center     bg-background border border-border rounded-xl ">
-
-    <div class=" w-1/2">
-         <div class=" text-2xl font-sme flex items-center gap-2 text-primary">
-            <i class=" pi pi-microchip-ai"></i>
-            <h2>Voice Assistant</h2>
-           </div>
-      <p class=" text-muted-foreground text-justify text-sm">
-This voice assistant is powered by Vapi AI and helps customers easily book tables using natural voice commands. It streamlines the reservation process by guiding users through availability, guest details, and confirmation. In future updates, the assistant will also support placing takeaway orders, making the entire dining experience faster and more convenient.      </p>
-      
+        <p class="mt-6 text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">
+          Voice booking
+        </p>
+        <h3 class="mt-3 text-2xl font-semibold tracking-[-0.04em] text-card-foreground sm:text-3xl">
+          Call Maya and book a table by voice.
+        </h3>
+        <p class="mt-3 max-w-md text-sm leading-7 text-muted-foreground sm:text-base">
+          Start a live conversation, let Maya collect the reservation details, and see the call status update in real time.
+        </p>
+      </div>
     </div>
-    <div class=" space-y-4">
-      
-          <!-- Header -->
-         <div class=" flex flex-col items-start gap-2">
 
-          
-           <div class=" text-2xl font-sme flex items-center gap-2 ">
-            <i class=" pi pi-user"></i>
-            <h2>Maya</h2>
-           </div>
-      
-           <div class=" text-muted-foreground">
-            <span>Book your Table 24/7</span>
-           </div>
-         </div>
-      
-          <!-- Status -->
-          <div class="flex items-center space-x-2">
-            <div :class="['w-2 h-2 rounded-full', isCalling ? 'bg-green-500 animate-pulse' : 'bg-gray-300']"></div>
-            <span class="text-sm text-muted-foreground">{{ isCalling ? 'Call Active' : 'Ready' }}</span>
-          </div>
-      
-          <!-- Buttons -->
-          <div class="flex gap-2 w-full">
-          
-      
+    <div class="bg-background/95 p-6 sm:p-8">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-semibold text-card-foreground">Maya</p>
+          <p class="mt-1 text-sm text-muted-foreground">Call the AI host and make a sample reservation.</p>
+        </div>
+        <div class="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-foreground">
+          <span :class="['h-2.5 w-2.5 rounded-full', isCalling ? 'bg-green-500 animate-pulse' : 'bg-muted-foreground/40']"></span>
+          {{ isCalling ? 'Live now' : isLoading ? 'Connecting' : 'Ready' }}
+        </div>
+      </div>
 
-
-      <div class="flex max-w-sm rounded-xl bg-linear-to-tr from-pink-300 to-blue-300 p-0.5 shadow-lg">
-    <button 
-    
-     @click="startCall"
-              :disabled="isCalling || isLoading" class="flex-1 l bg-background px-6 py-3 rounded-xl">   <i class=" pi pi-phone mr-2"></i>
-        <span>
-
-          {{ isCalling ? 'In Call' : isLoading ? 'Starting...' : 'Start Call' }}
-        </span> </button>
-</div>
-            <button
-              @click="endCall"
-              :disabled="!isCalling"
-              class="px-4 py-2 rounded-lg w-[120px] bg-destructive/10 text-destructive hover:bg-destructive/20 disabled:opacity-40 transition-all"
-            >
-              End
-            </button>
-          </div>
-          
-
+      <div class="mt-5 flex flex-col gap-3 sm:flex-row">
+        <button
+          @click="startCall"
+          :disabled="isCalling || isLoading"
+          class="inline-flex flex-1 items-center justify-center rounded-2xl bg-green-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          <i class="pi pi-phone mr-2"></i>
+          {{ isCalling ? 'In Call' : isLoading ? 'Starting...' : 'Call Maya' }}
+        </button>
+        <button
+          @click="endCall"
+          :disabled="!isCalling"
+          class="inline-flex items-center justify-center rounded-2xl border border-border bg-muted px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          End Call
+        </button>
+      </div>
     </div>
   </div>
 
-    </div>
-  </div>
 </template>
-
-
-
-
-<style scoped>
-@keyframes borderMove {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Animation class */
-.animate-borderMove {
-  animation: borderMove 6s ease-in-out infinite;
-}
-</style>

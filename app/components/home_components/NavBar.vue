@@ -68,8 +68,7 @@ onUnmounted(() => {
           to="/dashboard"
           class="inline-flex items-center rounded-2xl bg-green-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-green-700"
         >
-          <span class="hidden sm:inline">Get Started</span>
-          <span class="sm:hidden">Start</span>
+          <span class="hidden sm:inline">View Dashboard</span>
         </NuxtLink>
       </div>
     </nav>

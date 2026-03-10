@@ -12,8 +12,7 @@ const { isSidebar_open } = useSideBar()
 
 <template>
 
-    
-<div class=" flex  ">
+<div class="flex h-dvh overflow-hidden">
 
     <Transition name="slide"> 
   
@@ -22,14 +21,14 @@ const { isSidebar_open } = useSideBar()
   </Transition>
   
   
-  <div class="  w-full space-y-8  p-4 lg:p-8 ">
+  <div class="flex min-h-0 w-full flex-1 flex-col gap-6 p-4 lg:p-8">
   
          <!-- nav bar dashboard -->
-  <Dashboard_NavBar class=""></Dashboard_NavBar>
+  <Dashboard_NavBar class="shrink-0"></Dashboard_NavBar>
 
 
       <!-- the height is set to screen-4rem and overflow-y-scroll to give immersive experience -->
-<div class="  h-[90vh] overflow-y-scroll  hide-scrollbar bg-">
+<div class="min-h-0 flex-1 overflow-y-auto hide-scrollbar">
 
   <slot></slot>
 </div>

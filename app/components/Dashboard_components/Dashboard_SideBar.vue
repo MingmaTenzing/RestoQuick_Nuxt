@@ -19,7 +19,7 @@ const isActive = (path: string) => {
 </script>
 
 <template>
-    <aside class="h-screen min-w-46 bg-sidebar p-4 flex flex-col justify-between">
+    <aside class="h-full min-w-46 shrink-0 bg-sidebar p-4 flex flex-col justify-between">
         <div class=" space-y-8">
             <div class="flex justify-center">
                         <img src="../../assets/images/RestoQuick.png" width="100" class="dark:invert w-12 md:w-20"/>
