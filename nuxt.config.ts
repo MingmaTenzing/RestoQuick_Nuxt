@@ -20,6 +20,7 @@ export default defineNuxtConfig({
     "nuxt-time",
     "@vite-pwa/nuxt",
     "nuxt-charts",
+    "@clerk/nuxt",
   ],
 
   pwa: {
