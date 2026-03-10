@@ -3,9 +3,7 @@ import FeatureStorySection from '~/components/home_components/FeatureStorySectio
 import HomeFooter from '~/components/home_components/HomeFooter.vue';
 import NavBar from '~/components/home_components/NavBar.vue';
 import ScrollReveal from '~/components/home_components/ScrollReveal.vue';
-import logoUrl from '~/assets/images/RestoQuick.png';
 import heroShot from '~/assets/images/app_screenshots/Dashboard.webp';
-import mayaShot from '~/assets/images/app_screenshots/Bookings.webp';
 import rosterShot from '~/assets/images/app_screenshots/AI Roster Suggestion.png';
 import kitchenShot from '~/assets/images/app_screenshots/Kitchen Display.webp';
 import analyticsShot from '~/assets/images/app_screenshots/Dashboard.webp';
@@ -13,6 +11,7 @@ import inventoryShot from '~/assets/images/app_screenshots/Stock Management.webp
 import tableShot from '~/assets/images/app_screenshots/Table Managment.webp';
 import bookingsOverviewShot from '~/assets/images/app_screenshots/Bookings.webp';
 import orderShot from '~/assets/images/app_screenshots/Order Details.webp';
+import Vapi_call_button from '~/components/vapi/vapi_call_button.vue';
 
 const overviewCards = [
   {
@@ -315,56 +314,41 @@ const signatureNotes = [
           <div class="mx-auto max-w-7xl rounded-[40px] border border-border bg-card px-7 py-8 shadow-lg sm:px-10 sm:py-12 lg:px-14">
           <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-20">
             <div>
-              <p class="text-xs font-semibold uppercase tracking-[0.26em] text-green-700 dark:text-green-400">AI assistant</p>
+              <p class="text-xs font-semibold uppercase tracking-[0.26em] text-green-700 dark:text-green-400">AI voice agent for booking</p>
               <h2 class="mt-4 max-w-xl text-4xl font-semibold tracking-[-0.05em] text-card-foreground sm:text-5xl lg:text-[3.6rem] lg:leading-[1.02]">
-                Meet Maya. Your AI voice host.
+                Let Maya handle booking calls.
               </h2>
               <p class="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
-                Maya answers customer calls, books tables, and handles reservations automatically so
-                your team can stay focused on hospitality instead of chasing the phone.
+                Maya answers incoming calls, guides guests through the reservation flow, and confirms
+                bookings without pulling your team away from service.
               </p>
 
               <ul class="mt-8 space-y-4">
                 <li class="flex items-start gap-3 text-sm leading-7 text-muted-foreground sm:text-base">
                   <span class="mt-2 h-2 w-2 shrink-0 rounded-full bg-green-600 dark:bg-green-400"></span>
-                  Answers incoming restaurant calls automatically
+                  Picks up booking calls automatically during busy service windows
                 </li>
                 <li class="flex items-start gap-3 text-sm leading-7 text-muted-foreground sm:text-base">
                   <span class="mt-2 h-2 w-2 shrink-0 rounded-full bg-green-600 dark:bg-green-400"></span>
-                  Books tables through natural AI voice conversation
+                  Collects date, time, party size, and guest details by voice
                 </li>
                 <li class="flex items-start gap-3 text-sm leading-7 text-muted-foreground sm:text-base">
                   <span class="mt-2 h-2 w-2 shrink-0 rounded-full bg-green-600 dark:bg-green-400"></span>
-                  Handles peak-hour booking volume without missing a call
+                  Handles multiple reservation requests without missed calls or rushed staff handoffs
                 </li>
                 <li class="flex items-start gap-3 text-sm leading-7 text-muted-foreground sm:text-base">
                   <span class="mt-2 h-2 w-2 shrink-0 rounded-full bg-green-600 dark:bg-green-400"></span>
-                  Works 24/7 and syncs directly with table management
+                  Syncs directly with your booking workflow so confirmed details stay organized
                 </li>
               </ul>
 
-              <div class="mt-9 inline-flex items-center gap-3 rounded-full border border-border bg-muted px-4 py-3 text-sm font-medium text-foreground">
-                <i class="pi pi-microphone text-green-600 dark:text-green-400"></i>
-                Always on. Always consistent. Always ready to answer.
-              </div>
+           
             </div>
 
             <div>
-              <div class="overflow-hidden rounded-[34px] border border-border bg-card shadow-md">
-                <div class="flex items-center justify-between border-b border-border px-5 py-4">
-                  <div class="flex items-center gap-3">
-                    <img :src="logoUrl" alt="RestoQuick logo" class="h-7 w-auto dark:invert dark:brightness-0">
-                    <div>
-                      <p class="text-sm font-semibold text-card-foreground">Maya AI assistant</p>
-                      <p class="text-xs text-muted-foreground">Voice bookings with live reservation sync</p>
-                    </div>
-                  </div>
-                  <div class="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700 dark:bg-green-500/10 dark:text-green-300">
-                    Live
-                  </div>
-                </div>
-                <img :src="mayaShot" alt="Maya AI booking interface screenshot" class="w-full object-cover">
-              </div>
+              <ClientOnly>
+                <Vapi_call_button />
+              </ClientOnly>
             </div>
           </div>
           </div>
