@@ -2,6 +2,7 @@
 import FeatureStorySection from '~/components/home_components/FeatureStorySection.vue';
 import HomeFooter from '~/components/home_components/HomeFooter.vue';
 import NavBar from '~/components/home_components/NavBar.vue';
+import ScrollReveal from '~/components/home_components/ScrollReveal.vue';
 import logoUrl from '~/assets/images/RestoQuick.png';
 import heroShot from '~/assets/images/app_screenshots/Dashboard.webp';
 import mayaShot from '~/assets/images/app_screenshots/Bookings.webp';
@@ -279,7 +280,8 @@ const signatureNotes = [
       </section>
 
       <section id="overview" class="border-y border-border px-6 py-20 sm:py-28">
-        <div class="mx-auto max-w-7xl">
+        <ScrollReveal>
+          <div class="mx-auto max-w-7xl">
           <div class="max-w-3xl">
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Product overview</p>
             <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
@@ -304,11 +306,13 @@ const signatureNotes = [
               <p class="mt-3 text-sm leading-7 text-muted-foreground sm:text-base">{{ card.description }}</p>
             </article>
           </div>
-        </div>
+          </div>
+        </ScrollReveal>
       </section>
 
       <section id="maya" class="px-6 py-20 sm:py-28">
-        <div class="mx-auto max-w-7xl rounded-[40px] border border-border bg-card px-7 py-8 shadow-lg sm:px-10 sm:py-12 lg:px-14">
+        <ScrollReveal>
+          <div class="mx-auto max-w-7xl rounded-[40px] border border-border bg-card px-7 py-8 shadow-lg sm:px-10 sm:py-12 lg:px-14">
           <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-20">
             <div>
               <p class="text-xs font-semibold uppercase tracking-[0.26em] text-green-700 dark:text-green-400">AI assistant</p>
@@ -363,18 +367,21 @@ const signatureNotes = [
               </div>
             </div>
           </div>
-        </div>
+          </div>
+        </ScrollReveal>
       </section>
 
       <section class="px-6 pb-8 pt-4">
-        <div class="mx-auto max-w-7xl">
-          <div class="max-w-2xl">
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Features</p>
-            <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
-              Each part of the operation, designed to work together.
-            </h2>
+        <ScrollReveal>
+          <div class="mx-auto max-w-7xl">
+            <div class="max-w-2xl">
+              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Features</p>
+              <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
+                Each part of the operation, designed to work together.
+              </h2>
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       <div class="px-6">
@@ -396,7 +403,8 @@ const signatureNotes = [
       />
 
       <section class="border-y border-border px-6 py-20 sm:py-28">
-        <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
+        <ScrollReveal>
+          <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Benefits</p>
             <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
@@ -414,11 +422,13 @@ const signatureNotes = [
               <p class="mt-5 text-base leading-7 text-muted-foreground">{{ note }}</p>
             </article>
           </div>
-        </div>
+          </div>
+        </ScrollReveal>
       </section>
 
       <section id="testimonials" class="px-6 py-20 sm:py-24">
-        <div class="mx-auto max-w-7xl">
+        <ScrollReveal>
+          <div class="mx-auto max-w-7xl">
           <div class="max-w-2xl">
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Testimonials</p>
             <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
@@ -439,11 +449,13 @@ const signatureNotes = [
               </div>
             </article>
           </div>
-        </div>
+          </div>
+        </ScrollReveal>
       </section>
 
       <section id="pricing" class="border-t border-border px-6 py-20 sm:py-28">
-        <div class="mx-auto max-w-7xl">
+        <ScrollReveal>
+          <div class="mx-auto max-w-7xl">
           <div class="max-w-2xl">
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Pricing</p>
             <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
@@ -481,11 +493,13 @@ const signatureNotes = [
               </NuxtLink>
             </article>
           </div>
-        </div>
+          </div>
+        </ScrollReveal>
       </section>
 
       <section class="px-6 pb-24 pt-8">
-        <div class="mx-auto max-w-7xl rounded-[40px] border border-border bg-card px-8 py-12 text-card-foreground shadow-lg sm:px-12 sm:py-16">
+        <ScrollReveal>
+          <div class="mx-auto max-w-7xl rounded-[40px] border border-border bg-card px-8 py-12 text-card-foreground shadow-lg sm:px-12 sm:py-16">
           <div class="max-w-3xl">
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Get started</p>
             <h2 class="mt-4 text-4xl font-semibold tracking-[-0.05em] text-card-foreground sm:text-5xl sm:leading-[1.02]">
@@ -510,7 +524,8 @@ const signatureNotes = [
               Explore Maya
             </a>
           </div>
-        </div>
+          </div>
+        </ScrollReveal>
       </section>
     </main>
 
