@@ -24,7 +24,6 @@ defineProps<{
 						</div>
 
 						<span class="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-foreground ring-1 ring-inset ring-border">
-							<i class="pi pi-arrow-up-right text-[10px]" />
 							{{ change ?? '+18.2%' }}
 						</span>
 					</div>
