@@ -87,10 +87,9 @@ enum BookingStatus {
 
 // 2. Model to manage Restaurant Tables
 model Table {
-  id       String @id @default(uuid())
-  number   String @unique // e.g. "A1", "12", "Bar-1"
+  id       String    @id @default(uuid())
+  number   String    @unique // e.g. "A1", "12", "Bar-1"
   capacity Int // How many people fit at this table
-
   bookings Booking[]
   orders   Order[]
 }

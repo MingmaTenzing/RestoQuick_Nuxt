@@ -73,6 +73,8 @@ When working on any frontend UI in this project, act like an elite product UI en
 **Execution rules:**
 
 - Reuse the existing Tailwind utility style and project tokens instead of inventing a separate styling system
+- Always follow the existing theme tokens first: prefer classes such as `bg-card`, `bg-background`, `bg-accent`, `text-foreground`, `text-muted-foreground`, `border-border`, and `text-primary`
+- Do not introduce custom CSS looks through arbitrary color values, custom gradients, or one-off visual treatments unless the file already uses them or the user explicitly asks for them
 - Favor consistent spacing scales, predictable grid behavior, and deliberate empty space over crowded UIs
 - Add tasteful interaction states: hover, active, focus, disabled, loading, and empty states
 - Prefer concise, elegant copy in headings, labels, and helper text

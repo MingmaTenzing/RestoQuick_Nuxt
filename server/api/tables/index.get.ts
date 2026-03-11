@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
 
   const tables = await prisma.table.findMany({
     orderBy: {
-      capacity: "asc",
+      number: "asc",
     },
   });
 
