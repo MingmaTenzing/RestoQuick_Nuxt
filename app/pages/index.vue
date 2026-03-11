@@ -186,6 +186,16 @@ const signatureNotes = [
 
 <template>
   <div class="bg-background text-foreground transition-colors duration-300">
+
+      <header>
+    <Show when="signed-out">
+      <SignInButton />
+      <SignUpButton />
+    </Show>
+    <Show when="signed-in">
+      <UserButton />
+    </Show>
+  </header>
     <main class="bg-background">
       <NavBar />
       <section id="main" class="relative overflow-hidden px-6 pb-20 pt-10 sm:pb-24 sm:pt-16">
