@@ -24,6 +24,7 @@ const copyLink = async () => {
   }
 };
 
+
 const close = () => {
   emit('update:show', false);
   emit('close');
