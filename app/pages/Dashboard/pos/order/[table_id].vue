@@ -8,55 +8,20 @@ import Pos_Order_Sidebar from '~/components/pos_components/Pos_Order_Sidebar.vue
 
 
 const route = useRoute()
-const routeTableId = computed(() => {
-    const param = route.params.table_id
-    return Array.isArray(param) ? param[0] ?? '' : param ?? ''
-})
+const routeTableId = route.params.table_id
 
 const searchQuery = ref('')
 const selectedCategory = ref<MenuCategory | ''>('')
 const isSubmittingOrder = ref(false)
+const cart_items = ref<Order_Cart_Item[]>([])
 const toast = useToast()
 
 const { data: menuItems, pending: menuPending } = await useFetch<MenuItem[]>('/api/menu/order-menu')
 const { data: menuCategories } = await useFetch<MenuCategory[]>('/api/menu/category')
-const { data: table } = await useFetch<Table>(() => `/api/tables/${routeTableId.value}`)
+const { data: table } = await useFetch<Table>(() => `/api/tables/${routeTableId}`)
 
-const {
-    cart_items,
-    add_to_cart,
-    increase_quantity,
-    decrease_quantity,
-    remove_from_cart,
-    empty_cart,
-} = useOrderCart()
-
-const { table_id, set_table_id } = useTableId()
-
-watch(
-    routeTableId,
-    (nextTableId) => {
-        if (!nextTableId) {
-            return
-        }
-
-        const activeTableId = Array.isArray(table_id.value) ? table_id.value[0] : table_id.value
-
-        if (activeTableId && activeTableId !== nextTableId && cart_items.value.length > 0) {
-            empty_cart()
-        }
-
-        set_table_id(nextTableId)
-    },
-    { immediate: true }
-)
-
-const availableCategories = computed(() => {
-    if (menuCategories.value?.length) {
-        return menuCategories.value
-    }
-
-    return [...new Set((menuItems.value ?? []).map((item) => item.category))] as MenuCategory[]
+watch(route.params, () => {
+    cart_items.value = []
 })
 
 const filteredMenuItems = computed(() => {
@@ -72,11 +37,54 @@ const filteredMenuItems = computed(() => {
     })
 })
 
-const totalItems = computed(() => cart_items.value.reduce((sum, item) => sum + item.quantity, 0))
 const subtotalCents = computed(() => cart_items.value.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0))
 
 const findCartItem = (menuItemId: string) => {
     return cart_items.value.find((item) => item.menuItemId === menuItemId)
+}
+
+const add_to_cart = (cartItem: Order_Cart_Item) => {
+    const existingItem = findCartItem(cartItem.menuItemId)
+
+    if (existingItem) {
+       return existingItem.quantity += cartItem.quantity
+        
+    }
+
+    cart_items.value.push({ ...cartItem })
+}
+
+const increase_quantity = (item: Order_Cart_Item) => {
+    const existingItem = findCartItem(item.menuItemId)
+
+    if (!existingItem) {
+        return
+    }
+
+    existingItem.quantity += 1
+}
+
+const decrease_quantity = (item: Order_Cart_Item) => {
+    const existingItem = findCartItem(item.menuItemId)
+
+    if (!existingItem) {
+        return
+    }
+
+    if (existingItem.quantity <= 1) {
+        remove_from_cart(existingItem)
+        return
+    }
+
+    existingItem.quantity -= 1
+}
+
+const remove_from_cart = (item: Order_Cart_Item) => {
+    cart_items.value = cart_items.value.filter((cartItem) => cartItem.menuItemId !== item.menuItemId)
+}
+
+const empty_cart = () => {
+    cart_items.value = []
 }
 
 const addMenuItem = (menuItem: MenuItem) => {
@@ -120,7 +128,7 @@ const decreaseMenuItem = (item: Order_Cart_Item | MenuItem) => {
 }
 
 const submitOrder = async () => {
-    if (!routeTableId.value || cart_items.value.length === 0) {
+    if (!routeTableId || cart_items.value.length === 0) {
         return
     }
 
@@ -131,7 +139,7 @@ const submitOrder = async () => {
             method: 'POST',
             body: {
                 cart_items: cart_items.value,
-                table_id: routeTableId.value,
+                table_id: routeTableId,
                 customer_name: 'Walk-in',
             },
         })
@@ -159,11 +167,11 @@ const submitOrder = async () => {
                 <div class="space-y-6 pb-2">
                     <Pos_Order_Header
                         :table="table"
-                        :total-items="totalItems"
+                        :total-items="cart_items.length"
                         :subtotal-cents="subtotalCents"
                     />
                 <Pos_Filter_Bar
-                    :categories="availableCategories"
+                    :categories="menuCategories!"
                     :search-query="searchQuery"
                     :selected-category="selectedCategory"
                     @search-change="searchQuery = $event"
@@ -213,7 +221,7 @@ const submitOrder = async () => {
                 <Pos_Order_Sidebar
                     :table="table"
                     :cart-items="cart_items"
-                    :total-items="totalItems"
+                    :total-items="cart_items.length"
                     :subtotal-cents="subtotalCents"
                     :is-submitting="isSubmittingOrder"
                     @increase="increase_quantity"
