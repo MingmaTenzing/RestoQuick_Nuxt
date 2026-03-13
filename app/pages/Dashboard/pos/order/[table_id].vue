@@ -135,12 +135,25 @@ const submitOrder = async () => {
     isSubmittingOrder.value = true
 
     try {
-        await $fetch('/api/orders', {
+        const mappedOrderItems = cart_items.value.map((item) => ({
+            itemName: item.itemName,
+            quantity: item.quantity,
+            unitPriceCents: item.unitPrice,
+            specialInstructions: item.specialInstructions || '',
+            menuItemId: item.menuItemId,
+        }))
+
+        await $fetch('/api/orders/pos', {
             method: 'POST',
             body: {
-                cart_items: cart_items.value,
-                table_id: routeTableId,
-                customer_name: 'Walk-in',
+                data: {
+                    customerName: 'Walk_in',
+                    totalAmountCents: subtotalCents.value,
+                    tableId: routeTableId,
+                    items: {
+                        create: mappedOrderItems,
+                    },
+                },
             },
         })
 
