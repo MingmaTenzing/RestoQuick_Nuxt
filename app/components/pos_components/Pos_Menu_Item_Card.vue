@@ -35,45 +35,23 @@ const formatCategory = (category: string) => category.replaceAll('_', ' ')
         </div>
 
         <div class="space-y-4 p-4">
-            <div class="flex items-start justify-between gap-3">
-                <div class="space-y-1.5">
+            <div class="flex items-center justify-between ">
+                <div class="">
                     <h3 class="text-lg font-semibold leading-tight text-foreground">{{ item.name }}</h3>
-                    <p class="line-clamp-2 min-h-10 text-sm leading-5 text-muted-foreground">
-                        {{ item.description || 'Chef-ready item with no extra notes added yet.' }}
-                    </p>
+             
                 </div>
 
-                <div class="shrink-0 rounded-2xl border border-border bg-background px-3 py-2 text-right">
-                    <p class="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Price</p>
-                    <p class="mt-1 text-base font-semibold text-foreground">${{ (item.priceCents / 100).toFixed(2) }}</p>
+                <div class="shrink-0 rounded-2xl border border-border bg-accent px-3 py-2 text-right">
+                    <p class=" text-base font-semibold text-foreground">${{ (item.priceCents / 100).toFixed(2) }}</p>
                 </div>
             </div>
 
-            <div class="flex items-center justify-between gap-3">
-                <p class="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                    {{ quantityInCart }} in current order
-                </p>
+            <div class="">
+             
 
-                <div v-if="quantityInCart > 0" class="flex items-center gap-2 rounded-full border border-border bg-background p-1">
-                    <button
-                        type="button"
-                        class="flex h-9 w-9 items-center justify-center rounded-full text-foreground"
-                        @click="emit('decrease')"
-                    >
-                        <i class="pi pi-minus text-xs"></i>
-                    </button>
-                    <span class="min-w-6 text-center text-sm font-semibold text-foreground">{{ quantityInCart }}</span>
-                    <button
-                        type="button"
-                        class="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground"
-                        @click="emit('increase')"
-                    >
-                        <i class="pi pi-plus text-xs"></i>
-                    </button>
-                </div>
 
                 <button
-                    v-else
+                  
                     type="button"
                     class="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
                     @click="emit('add')"
