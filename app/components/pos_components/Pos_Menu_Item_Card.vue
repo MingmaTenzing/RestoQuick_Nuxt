@@ -16,14 +16,14 @@ const formatCategory = (category: string) => category.replaceAll('_', ' ')
 </script>
 
 <template>
-    <article class="group overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all duration-300 hover:border-ring hover:shadow-md">
-        <div class="relative aspect-[4/3] overflow-hidden bg-accent/40">
+    <article class="overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
+        <div class="relative aspect-4/3 overflow-hidden bg-accent/40">
             <NuxtImg
                 v-if="item.imageUrl"
                 :src="item.imageUrl"
                 width="640"
                 height="400"
-                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                class="h-full w-full object-cover"
             />
             <div v-else class="flex h-full items-center justify-center text-sm text-muted-foreground">
                 No image available
@@ -57,7 +57,7 @@ const formatCategory = (category: string) => category.replaceAll('_', ' ')
                 <div v-if="quantityInCart > 0" class="flex items-center gap-2 rounded-full border border-border bg-background p-1">
                     <button
                         type="button"
-                        class="flex h-9 w-9 items-center justify-center rounded-full text-foreground transition-colors hover:bg-accent"
+                        class="flex h-9 w-9 items-center justify-center rounded-full text-foreground"
                         @click="emit('decrease')"
                     >
                         <i class="pi pi-minus text-xs"></i>
@@ -65,7 +65,7 @@ const formatCategory = (category: string) => category.replaceAll('_', ' ')
                     <span class="min-w-6 text-center text-sm font-semibold text-foreground">{{ quantityInCart }}</span>
                     <button
                         type="button"
-                        class="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground transition-opacity hover:opacity-90"
+                        class="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground"
                         @click="emit('increase')"
                     >
                         <i class="pi pi-plus text-xs"></i>
@@ -75,7 +75,7 @@ const formatCategory = (category: string) => category.replaceAll('_', ' ')
                 <button
                     v-else
                     type="button"
-                    class="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                    class="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
                     @click="emit('add')"
                 >
                     <i class="pi pi-plus text-xs"></i>

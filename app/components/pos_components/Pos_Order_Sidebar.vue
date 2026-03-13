@@ -20,7 +20,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <aside class="h-[calc(100vh-5.5rem)] min-w-[400px]">
+    <aside class=" w-90 h-full ">
         <section class="flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
             <div class="border-b border-border px-5 py-5 md:px-6">
                 <div class="flex items-start justify-between gap-4">
@@ -36,7 +36,7 @@ const emit = defineEmits<{
                 </div>
             </div>
 
-            <div v-if="cartItems.length" class="flex-1 space-y-3 overflow-y-auto px-4 py-4 md:px-5">
+            <div v-if="cartItems.length" class="flex-1 space-y-3 overflow-y-auto no-scrollbar px-4 py-4 md:px-5">
                 <article
                     v-for="item in cartItems"
                     :key="item.menuItemId"

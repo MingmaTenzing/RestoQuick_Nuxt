@@ -6,9 +6,6 @@ import Pos_Menu_Item_Card from '~/components/pos_components/Pos_Menu_Item_Card.v
 import Pos_Order_Header from '~/components/pos_components/Pos_Order_Header.vue'
 import Pos_Order_Sidebar from '~/components/pos_components/Pos_Order_Sidebar.vue'
 
-definePageMeta({
-    layout: 'dashboard-layout'
-})
 
 const route = useRoute()
 const routeTableId = computed(() => {
@@ -156,16 +153,15 @@ const submitOrder = async () => {
 </script>
 
 <template>
-    <main class="">
-      
 
-        <section class="flex w-full items-start gap-6">
-            <div class="space-y-6">
-                  <Pos_Order_Header
-            :table="table"
-            :total-items="totalItems"
-            :subtotal-cents="subtotalCents"
-        />
+        <section class=" flex p-6 gap-6 ">
+            <div class="h-[95vh] overflow-y-scroll no-scrollbar">
+                <div class="space-y-6 pb-2">
+                    <Pos_Order_Header
+                        :table="table"
+                        :total-items="totalItems"
+                        :subtotal-cents="subtotalCents"
+                    />
                 <Pos_Filter_Bar
                     :categories="availableCategories"
                     :search-query="searchQuery"
@@ -191,7 +187,7 @@ const submitOrder = async () => {
                         ></div>
                     </div>
 
-                    <div v-else-if="filteredMenuItems.length" class="grid gap-3 md:grid-cols-2 2xl:grid-cols-3">
+                    <div v-else-if="filteredMenuItems.length" class="grid gap-3 md:grid-cols-3 2xl:grid-cols-3">
                         <Pos_Menu_Item_Card
                             v-for="item in filteredMenuItems"
                             :key="item.id"
@@ -210,21 +206,22 @@ const submitOrder = async () => {
                         </p>
                     </div>
                 </section>
+                </div>
             </div>
 
-
-            <Pos_Order_Sidebar
-                :table="table"
-                :cart-items="cart_items"
-                :total-items="totalItems"
-                :subtotal-cents="subtotalCents"
-                :is-submitting="isSubmittingOrder"
-                @increase="increase_quantity"
-                @decrease="decreaseMenuItem"
-                @remove="remove_from_cart"
-                @clear="empty_cart"
-                @submit="submitOrder"
-            />
+            <div class=" ">
+                <Pos_Order_Sidebar
+                    :table="table"
+                    :cart-items="cart_items"
+                    :total-items="totalItems"
+                    :subtotal-cents="subtotalCents"
+                    :is-submitting="isSubmittingOrder"
+                    @increase="increase_quantity"
+                    @decrease="decreaseMenuItem"
+                    @remove="remove_from_cart"
+                    @clear="empty_cart"
+                    @submit="submitOrder"
+                />
+            </div>
         </section>
-    </main>
 </template>
