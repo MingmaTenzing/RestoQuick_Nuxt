@@ -136,6 +136,21 @@ model MenuItem {
 
   // Relations
   orderItems OrderItem[]
+
+  //one menuitem can have many options like extra chicken, large, or anything
+  options MenuOption[]
+}
+
+model MenuOption {
+  id String @id @default(uuid())
+
+  name       String
+  priceCents Int    @default(0)
+
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  orderItemOptions OrderItemOption[]
 }
 
 // Order
@@ -197,8 +212,22 @@ model OrderItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  menuItem   MenuItem? @relation(fields: [menuItemId], references: [id])
-  menuItemId String?
+  menuItem         MenuItem?         @relation(fields: [menuItemId], references: [id])
+  menuItemId       String?
+  orderItemOptions OrderItemOption[]
+}
+
+model OrderItemOption {
+  id String @id @default(uuid())
+
+  name       String
+  priceCents Int
+
+  orderItemId String
+  orderItem   OrderItem @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
+
+  menuOptionId String?
+  menuOption   MenuOption? @relation(fields: [menuOptionId], references: [id])
 }
 
 // Stock Management

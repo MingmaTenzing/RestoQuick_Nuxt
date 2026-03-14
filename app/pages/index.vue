@@ -3,7 +3,7 @@ import FeatureStorySection from '~/components/home_components/FeatureStorySectio
 import HomeFooter from '~/components/home_components/HomeFooter.vue';
 import NavBar from '~/components/home_components/NavBar.vue';
 import ScrollReveal from '~/components/home_components/ScrollReveal.vue';
-import heroShot from '~/assets/images/app_screenshots/Dashboard.webp';
+import heroShot from '~/assets/images/usecase/menu_scene.avif';
 import rosterShot from '~/assets/images/app_screenshots/AI Roster Suggestion.png';
 import kitchenShot from '~/assets/images/app_screenshots/Kitchen Display.webp';
 import analyticsShot from '~/assets/images/app_screenshots/Dashboard.webp';
@@ -15,20 +15,20 @@ import Vapi_call_button from '~/components/vapi/vapi_call_button.vue';
 
 const overviewCards = [
   {
-    title: 'Operations in one place',
-    description: 'Bookings, kitchen flow, staffing, and reporting stay connected instead of living across separate tools.',
-    image: analyticsShot,
-    alt: 'RestoQuick dashboard overview',
+    title: 'Built for owner-operators and managers',
+    description: 'A single system for the day-to-day realities of small to mid-sized restaurants and cafes, from floor flow to team visibility.',
+    image: heroShot,
+    alt: 'Chef and manager using RestoQuick in service',
   },
   {
-    title: 'Built for service teams',
-    description: 'Front-of-house and back-of-house teams work from the same source of truth with less noise and fewer handoffs.',
+    title: 'One source of truth for the whole team',
+    description: 'Front-of-house, kitchen, and management work from the same operational picture with fewer handoffs and less guesswork.',
     image: orderShot,
     alt: 'RestoQuick order management interface',
   },
   {
-    title: 'Ready during peak hours',
-    description: 'From calls and reservations to tickets and turn times, the system is designed for high-pressure service windows.',
+    title: 'Designed for the rush and the reset',
+    description: 'From bookings and tickets to staffing and stock, RestoQuick keeps service moving and gives leadership a clearer read on the business.',
     image: bookingsOverviewShot,
     alt: 'RestoQuick booking management interface',
   },
@@ -39,9 +39,9 @@ const featureSections = [
     id: 'features',
     index: '01',
     eyebrow: 'AI Staff Rostering',
-    title: 'Build stronger schedules in minutes, not hours.',
+    title: 'Build stronger schedules for lean teams in minutes, not hours.',
     description:
-      'RestoQuick turns roster planning into a calmer, more deliberate workflow with AI suggestions that account for staffing demand and shift coverage.',
+      'RestoQuick turns roster planning into a calmer workflow for growing cafes and restaurants with AI suggestions that account for demand, availability, and shift coverage.',
     bullets: [
       'Auto-generate staff schedules around expected demand',
       'Reduce labor costs without sacrificing coverage',
@@ -73,7 +73,7 @@ const featureSections = [
     eyebrow: 'Smart Analytics Dashboard',
     title: 'See what is happening across the business at a glance.',
     description:
-      'From revenue patterns to peak-hour behavior, the dashboard gives operators a sharper view of how the restaurant is performing every day.',
+      'From revenue patterns to peak-hour behavior, the dashboard gives operators a sharper view of how the venue is performing every day.',
     bullets: [
       'Track revenue and order performance in one view',
       'Spot peak hours and service patterns quickly',
@@ -87,9 +87,9 @@ const featureSections = [
     id: 'operations',
     index: '04',
     eyebrow: 'Staff & Inventory Management',
-    title: 'Stay ahead of staffing issues and stock shortages.',
+    title: 'Stay ahead of staffing issues and stock shortages before they hit service.',
     description:
-      'Manage hours, team visibility, and inventory status with cleaner operational controls that reduce surprises during service.',
+      'Manage hours, team visibility, and inventory status with cleaner operational controls that reduce surprises during service across busy cafes and dining rooms.',
     bullets: [
       'Track staff hours and day-to-day team activity',
       'Monitor inventory in real time as stock moves',
@@ -120,21 +120,21 @@ const featureSections = [
 const testimonials = [
   {
     quote:
-      'RestoQuick gave us the first operating view that actually feels calm during service. Maya alone changed how we handle bookings.',
+      'RestoQuick gave us the first operating view that actually feels calm during service. Maya alone changed how we handle bookings and front desk pressure.',
     name: 'Amelia Hart',
-    title: 'Owner, Hart House Dining',
+    title: 'Owner, Hart House Cafe',
   },
   {
     quote:
-      'The kitchen display and analytics changed the pace of the restaurant. We make faster calls, and the team trusts the system.',
+      'The kitchen display and analytics changed the pace of the business. We make faster calls, and the team trusts the system.',
     name: 'Noah Patel',
-    title: 'Operations Lead, Ember Table',
+    title: 'Operations Lead, Ember Table Group',
   },
   {
     quote:
-      'Scheduling used to be a weekly drain. Now our managers spend less time building rosters and more time improving service.',
+      'Scheduling used to be a weekly drain. Now our managers spend less time building rosters and more time improving service and sales.',
     name: 'Sofia Nguyen',
-    title: 'General Manager, Juniper & Co.',
+    title: 'General Manager, Juniper & Co. Cafe',
   },
 ];
 
@@ -142,14 +142,14 @@ const pricingPlans = [
   {
     name: 'Starter',
     price: '$79',
-    note: 'For smaller venues getting organized.',
+    note: 'For cafes and smaller venues getting organized.',
     features: ['Core operations', 'Bookings', 'Table management'],
     featured: false,
   },
   {
     name: 'Growth',
     price: '$149',
-    note: 'For busy restaurants that need better flow.',
+    note: 'For busy restaurants and cafes that need better flow.',
     features: ['Maya AI assistant', 'Kitchen display', 'Analytics'],
     featured: true,
   },
@@ -165,21 +165,21 @@ const pricingPlans = [
 const operatorNotes = [
   'Fewer missed calls and fewer booking bottlenecks',
   'Faster kitchen coordination and clearer service flow',
-  'Better visibility across staffing, tables, and revenue',
+  'Better visibility across staffing, tables, stock, and revenue',
 ];
 
 const signatureNotes = [
   {
     label: 'Signal',
-    value: 'A cleaner operational read on what matters right now.',
+    value: 'A clearer read on what matters right now across service and operations.',
   },
   {
     label: 'Flow',
-    value: 'One connected system from phone call to completed service.',
+    value: 'One connected system from phone call to completed order and close.',
   },
   {
     label: 'Control',
-    value: 'Sharper decisions without adding visual noise to the team.',
+    value: 'Sharper business decisions without adding visual noise to the team.',
   },
 ];
 </script>
@@ -188,13 +188,16 @@ const signatureNotes = [
   <div class="bg-background text-foreground transition-colors duration-300">
 
       <header>
-    <Show when="signed-out">
-      <SignInButton />
-      <SignUpButton />
-    </Show>
-    <Show when="signed-in">
-      <UserButton />
-    </Show>
+        <ClientOnly>
+          <Show when="signed-out">
+            <SignInButton />
+            <SignUpButton />
+          </Show>
+          <Show when="signed-in">
+            <UserButton />
+          </Show>
+
+        </ClientOnly>
   </header>
     <main class="bg-background">
       <NavBar />
@@ -228,21 +231,21 @@ const signatureNotes = [
         <div class="relative z-10 mx-auto grid max-w-7xl items-start gap-16 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-24">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.26em] text-green-700 dark:text-green-400">
-              AI-powered restaurant management system
+              AI-powered operations platform for restaurants and cafes
             </p>
             <h1 class="mt-5 max-w-3xl text-5xl font-semibold tracking-[-0.07em] text-foreground sm:text-6xl lg:text-[5.7rem] lg:leading-[0.92]">
-              Run your restaurant smarter.
+              Everything you need to run your cafe or restaurant in one place.
             </h1>
             <p class="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
-              RestoQuick brings bookings, service, staffing, and performance into one refined
-              platform so your team can move faster without feeling rushed.
+              More than a POS. RestoQuick brings bookings, kitchen flow, staffing, inventory, and reporting into one connected system.
             </p>
 
             <div class="mt-8 flex flex-wrap gap-3">
               <span class="rounded-2xl border border-border bg-muted px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Bookings</span>
               <span class="rounded-2xl border border-border bg-muted px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Kitchen</span>
-              <span class="rounded-2xl border border-border bg-muted px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Staffing</span>
-              <span class="rounded-2xl border border-border bg-muted px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Analytics</span>
+              <span class="rounded-2xl border border-border bg-muted px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Team</span>
+              <span class="rounded-2xl border border-border bg-muted px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Inventory</span>
+              <span class="rounded-2xl border border-border bg-muted px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Reporting</span>
             </div>
 
             <div class="mt-10 flex flex-col gap-4 sm:flex-row">
@@ -269,19 +272,19 @@ const signatureNotes = [
           </div>
 
           <div id="demo" class="lg:pt-6">
-            <img :src="heroShot" alt="RestoQuick product preview" class="w-full object-cover">
+            <img :src="heroShot" alt="Chef and manager using RestoQuick during service" class="w-full rounded-4xl border border-border object-cover shadow-lg">
 
             <div class="mt-5 grid gap-4 sm:grid-cols-[1.1fr_0.9fr]">
               <div class="rounded-[28px] border border-border bg-muted px-5 py-5">
-                <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">Why it feels different</p>
+                <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">Why it fits growing venues</p>
                 <p class="mt-3 text-sm leading-7 text-muted-foreground">
-                  Designed more like a control surface than a dashboard, so every screen feels quiet,
-                  fast, and deliberate during service.
+                  Designed for operators who need one calm, usable system across bookings, service,
+                  staffing, stock, and day-to-day decision-making.
                 </p>
               </div>
               <div class="rounded-[28px] border border-border bg-muted px-5 py-5">
                 <p class="text-3xl font-semibold tracking-[-0.05em] text-foreground">24/7</p>
-                <p class="mt-2 text-sm leading-7 text-muted-foreground">Maya covers calls and reservations around the clock.</p>
+                <p class="mt-2 text-sm leading-7 text-muted-foreground">Maya covers calls and reservations around the clock while your team stays focused on service.</p>
               </div>
             </div>
           </div>
@@ -294,11 +297,11 @@ const signatureNotes = [
           <div class="max-w-3xl">
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Product overview</p>
             <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
-              A restaurant platform that tells one coherent story.
+              A business operations platform for hospitality teams that have outgrown basic tools.
             </h2>
             <p class="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-              Most tools solve one part of the restaurant. RestoQuick connects the entire operation
-              so bookings, service, staffing, and decision-making feel like one system.
+              Most tools solve one slice of the venue. RestoQuick connects bookings, service, staffing,
+              stock, and decision-making so the business runs like one system.
             </p>
           </div>
 
@@ -326,11 +329,11 @@ const signatureNotes = [
             <div>
               <p class="text-xs font-semibold uppercase tracking-[0.26em] text-green-700 dark:text-green-400">AI voice agent for booking</p>
               <h2 class="mt-4 max-w-xl text-4xl font-semibold tracking-[-0.05em] text-card-foreground sm:text-5xl lg:text-[3.6rem] lg:leading-[1.02]">
-                Let Maya handle booking calls.
+                Let Maya handle booking calls without slowing the team down.
               </h2>
               <p class="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
                 Maya answers incoming calls, guides guests through the reservation flow, and confirms
-                bookings without pulling your team away from service.
+                bookings without pulling your team away from service or the counter.
               </p>
 
               <ul class="mt-8 space-y-4">
@@ -371,7 +374,7 @@ const signatureNotes = [
             <div class="max-w-2xl">
               <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Features</p>
               <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
-                Each part of the operation, designed to work together.
+                Every core part of the venue, designed to work together.
               </h2>
             </div>
           </div>
@@ -402,7 +405,7 @@ const signatureNotes = [
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Benefits</p>
             <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
-              The result is a restaurant that runs with more clarity.
+              The result is a business that runs with more clarity.
             </h2>
           </div>
 
@@ -426,7 +429,7 @@ const signatureNotes = [
           <div class="max-w-2xl">
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Testimonials</p>
             <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
-              Operators switch because the product feels lighter in practice.
+              Operators switch because the whole business feels lighter in practice.
             </h2>
           </div>
 
@@ -453,7 +456,7 @@ const signatureNotes = [
           <div class="max-w-2xl">
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Pricing</p>
             <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
-              Start simple, then scale with the operation.
+              Start with the essentials, then scale with the business.
             </h2>
           </div>
 
@@ -497,10 +500,10 @@ const signatureNotes = [
           <div class="max-w-3xl">
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Get started</p>
             <h2 class="mt-4 text-4xl font-semibold tracking-[-0.05em] text-card-foreground sm:text-5xl sm:leading-[1.02]">
-              Replace operational noise with a system your team actually wants to use.
+              Replace scattered tools with one system your team can actually run the business on.
             </h2>
             <p class="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-              Launch RestoQuick with real bookings, smarter scheduling, faster kitchen flow, and clearer decision-making from day one.
+              Launch RestoQuick with real bookings, smarter scheduling, faster kitchen flow, and clearer business visibility from day one.
             </p>
           </div>
 
