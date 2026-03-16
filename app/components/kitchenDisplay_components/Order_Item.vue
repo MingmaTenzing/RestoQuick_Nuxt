@@ -6,6 +6,10 @@ const props = defineProps<{
   order: OrderDetailsWithInclude
 }>()
 
+const serviceLabel = computed(() => props.order.orderType === 'TAKEAWAY'
+  ? 'Takeaway'
+  : `Table ${props.order.table?.number ?? '--'}`)
+
 
 async function markOrder_as_ready(order_id: string) {
   try {
@@ -31,7 +35,7 @@ async function markOrder_as_ready(order_id: string) {
                         <div class="flex justify-between items-center">
                           <div class=" space-y-1">
                             <p class=" text-xl font-semibold">Order No: {{order.orderNo}}</p>
-                            <p class="text-muted-foreground">Table {{ order.table?.number }}</p>
+                            <p class="text-muted-foreground">{{ serviceLabel }}</p>
                           </div>
                             <div class=" flex gap-2 items-center text-sm text-muted-foreground font-light">
                                 <i class=" pi pi-clock"></i>

@@ -2,12 +2,13 @@
 import type { Table } from '~/generated/prisma/browser'
 import type Order_Cart_Item from '~~/types/order-cart'
 
-defineProps<{
+const props = defineProps<{
     table: Table | null | undefined
     cartItems: Order_Cart_Item[]
     totalItems: number
     subtotalCents: number
     isSubmitting: boolean
+    serviceLabel?: string
 }>()
 
 const emit = defineEmits<{
@@ -17,6 +18,12 @@ const emit = defineEmits<{
     (e: 'clear'): void
     (e: 'submit'): void
 }>()
+
+const orderHeading = computed(() => props.serviceLabel ?? `Table ${props.table?.number ?? '--'}`)
+
+const emptyStateCopy = computed(() => props.serviceLabel
+    ? 'Add dishes from the menu to build the current takeaway order.'
+    : 'Add dishes from the menu to build the current table order.')
 </script>
 
 <template>
@@ -26,7 +33,7 @@ const emit = defineEmits<{
                 <div class="flex items-start justify-between gap-4">
                     <div>
                         <p class="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">Order cart</p>
-                        <h2 class="mt-1 text-xl font-semibold text-foreground">Table {{ table?.number ?? '--' }}</h2>
+                        <h2 class="mt-1 text-xl font-semibold text-foreground">{{ orderHeading }}</h2>
                         <p class="mt-1 text-sm text-muted-foreground">Live order for the current service.</p>
                     </div>
 
@@ -107,7 +114,7 @@ const emit = defineEmits<{
                 <div>
                     <h3 class="text-lg font-semibold text-foreground">No items in the order yet</h3>
                     <p class="mt-2 text-sm leading-6 text-muted-foreground">
-                        Add dishes from the menu to build the current table order.
+                        {{ emptyStateCopy }}
                     </p>
                 </div>
             </div>

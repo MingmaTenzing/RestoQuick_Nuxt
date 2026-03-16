@@ -1,22 +1,27 @@
 <script setup lang="ts">
 import type { Table } from '~/generated/prisma/browser'
 
-defineProps<{
+const props = defineProps<{
     table: Table | null | undefined
     totalItems: number
     subtotalCents: number
+    serviceLabel?: string
+    backTo?: string
+    backLabel?: string
 }>()
+
+const orderHeading = computed(() => props.serviceLabel ?? `Table ${props.table?.number ?? '--'}`)
 </script>
 
 <template>
     <section class="rounded-3xl border border-border bg-card px-4 py-3 shadow-sm md:px-5">
         <div class=" space-y-4">
             <NuxtLink
-                to="/dashboard/pos"
+                :to="props.backTo ?? '/dashboard/pos'"
                 class="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-2 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
             >
                 <i class="pi pi-arrow-left text-xs"></i>
-                <span>Back to tables</span>
+                <span>{{ props.backLabel ?? 'Back to tables' }}</span>
             </NuxtLink>
 
             <div class="flex flex-1 flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
@@ -26,7 +31,7 @@ defineProps<{
                     </div>
                     <div>
                         <p class="text-[11px] font-medium uppercase tracking-[0.24em] text-muted-foreground">POS screen</p>
-                        <h1 class="text-xl font-semibold tracking-tight text-foreground md:text-2xl">Table {{ table?.number ?? '--' }}</h1>
+                        <h1 class="text-xl font-semibold tracking-tight text-foreground md:text-2xl">{{ orderHeading }}</h1>
                     </div>
                 </div>
 

@@ -7,8 +7,14 @@ import Pos_Order_Header from '~/components/pos_components/Pos_Order_Header.vue'
 import Pos_Order_Sidebar from '~/components/pos_components/Pos_Order_Sidebar.vue'
 
 
+
 const route = useRoute()
-const routeTableId = route.params.table_id
+const routeTableId = computed(() => String(route.params.table_id ?? ''))
+const isTakeawayOrder = computed(() => routeTableId.value === 'takeaway')
+const table = ref<Table | null>(null)
+const serviceLabel = computed(() => isTakeawayOrder.value ? 'Takeaway' : undefined)
+const backTo = computed(() => isTakeawayOrder.value ? '/dashboard/pos' : '/dashboard/pos/tables')
+const backLabel = computed(() => isTakeawayOrder.value ? 'Back to POS' : 'Back to tables')
 
 const searchQuery = ref('')
 const selectedCategory = ref<MenuCategory | ''>('')
@@ -16,13 +22,23 @@ const isSubmittingOrder = ref(false)
 const cart_items = ref<Order_Cart_Item[]>([])
 const toast = useToast()
 
+
+
+
+
 const { data: menuItems, pending: menuPending } = await useFetch<MenuItem[]>('/api/menu/order-menu')
 const { data: menuCategories } = await useFetch<MenuCategory[]>('/api/menu/category')
-const { data: table } = await useFetch<Table>(() => `/api/tables/${routeTableId}`)
 
-watch(route.params, () => {
-    cart_items.value = []
-})
+const loadTable = async () => {
+    if (isTakeawayOrder.value) {
+        table.value = null
+        return
+    }
+
+    table.value = await $fetch<Table>(`/api/tables/${routeTableId.value}`)
+}
+
+
 
 const filteredMenuItems = computed(() => {
     const normalizedSearch = searchQuery.value.trim().toLowerCase()
@@ -128,7 +144,7 @@ const decreaseMenuItem = (item: Order_Cart_Item | MenuItem) => {
 }
 
 const submitOrder = async () => {
-    if (!routeTableId || cart_items.value.length === 0) {
+    if (!routeTableId.value || cart_items.value.length === 0) {
         return
     }
 
@@ -143,13 +159,15 @@ const submitOrder = async () => {
             menuItemId: item.menuItemId,
         }))
 
-        await $fetch('/api/orders/pos', {
+        const endpoint = isTakeawayOrder.value ? '/api/orders/pos/takeaway' : '/api/orders/pos/dining'
+
+        await $fetch(endpoint, {
             method: 'POST',
             body: {
                 data: {
-                    customerName: 'Walk_in',
+                    customerName: isTakeawayOrder.value ? 'Takeaway' : 'Walk_in',
                     totalAmountCents: subtotalCents.value,
-                    tableId: routeTableId,
+                    ...(!isTakeawayOrder.value ? { tableId: routeTableId.value } : {}),
                     items: {
                         create: mappedOrderItems,
                     },
@@ -160,7 +178,7 @@ const submitOrder = async () => {
         empty_cart()
 
         toast.success({
-            title: 'Order sent to kitchen',
+            title: isTakeawayOrder.value ? 'Takeaway order sent to kitchen' : 'Order sent to kitchen',
         })
     } catch (error) {
         console.log(error)
@@ -171,6 +189,13 @@ const submitOrder = async () => {
         isSubmittingOrder.value = false
     }
 }
+
+
+watch(routeTableId, async () => {
+    cart_items.value = []
+
+    await loadTable()
+}, { immediate: true })
 </script>
 
 <template>
@@ -178,10 +203,14 @@ const submitOrder = async () => {
         <section class=" flex p-6 gap-6 ">
             <div class="h-[95vh] overflow-y-scroll no-scrollbar">
                 <div class="space-y-6 pb-2">
+
                     <Pos_Order_Header
                         :table="table"
                         :total-items="cart_items.length"
                         :subtotal-cents="subtotalCents"
+                        :service-label="serviceLabel"
+                        :back-to="backTo"
+                        :back-label="backLabel"
                     />
                 <Pos_Filter_Bar
                     :categories="menuCategories!"
@@ -237,6 +266,7 @@ const submitOrder = async () => {
                     :total-items="cart_items.length"
                     :subtotal-cents="subtotalCents"
                     :is-submitting="isSubmittingOrder"
+                    :service-label="serviceLabel"
                     @increase="increase_quantity"
                     @decrease="decreaseMenuItem"
                     @remove="remove_from_cart"

@@ -1,4 +1,4 @@
-import { broadCast } from "../../utils/kitchenSocket";
+import { broadCast } from "../../../utils/kitchenSocket";
 
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
@@ -15,6 +15,7 @@ export default defineEventHandler(async (event) => {
   const order = await prisma.order.create({
     data: {
       ...data,
+      orderType: "DINING",
 
       // as checkoutSeessionId doesn't exist on POS
       // here just a random uuid is created to fill the field

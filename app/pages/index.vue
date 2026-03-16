@@ -234,7 +234,7 @@ const signatureNotes = [
               AI-powered operations platform for restaurants and cafes
             </p>
             <h1 class="mt-5 max-w-3xl text-5xl font-semibold tracking-[-0.07em] text-foreground sm:text-6xl lg:text-[5.7rem] lg:leading-[0.92]">
-              Everything you need to run your cafe or restaurant in one place.
+              More than just a POS.
             </h1>
             <p class="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
               More than a POS. RestoQuick brings bookings, kitchen flow, staffing, inventory, and reporting into one connected system.
