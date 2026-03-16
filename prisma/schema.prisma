@@ -137,7 +137,7 @@ model MenuItem {
   // Relations
   orderItems OrderItem[]
 
-  //one menuitem can have many options like extra chicken, large, or anything
+  //one menu item can have many options like extra chicken, large, or anything
   options MenuOption[]
 }
 
