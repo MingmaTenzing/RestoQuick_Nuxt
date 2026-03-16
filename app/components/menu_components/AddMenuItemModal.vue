@@ -18,9 +18,11 @@ const toast = useToast()
 const image_uploading = ref(false)
 const image_upload_success = ref(false)
 const menu_options = ref<MenuOptionCreateWithoutMenuItemInput[]>([])
-
-const show_add_menu_options = ref(false)
-const menu_option_input = ref<MenuOptionCreateWithoutMenuItemInput>();
+const isAddingMenuOption = ref(false)
+const draft_menu_option = reactive<MenuOptionCreateWithoutMenuItemInput>({
+  name: '',
+  priceCents: 0,
+})
 
 const form = reactive<MenuItemCreateInput>({
   name: '',
@@ -38,12 +40,26 @@ const form = reactive<MenuItemCreateInput>({
 const { data: menu_category } = await useFetch<MenuCategory[]>('/api/menu/category')
 
 const addMenuOption = () => {
+  isAddingMenuOption.value = true
+  draft_menu_option.name = ''
+  draft_menu_option.priceCents = 0
+}
 
-  
+const saveMenuOption = () => {
+  if (!draft_menu_option.name.trim()) return
   menu_options.value.push({
-    name: '',
-    priceCents: 0,
+    name: draft_menu_option.name.trim(),
+    priceCents: Number(draft_menu_option.priceCents),
   })
+  isAddingMenuOption.value = false
+  draft_menu_option.name = ''
+  draft_menu_option.priceCents = 0
+}
+
+const removeDraftMenuOption = () => {
+  isAddingMenuOption.value = false
+  draft_menu_option.name = ''
+  draft_menu_option.priceCents = 0
 }
 
 const removeMenuOption = (index: number) => {
@@ -164,38 +180,65 @@ async function upload_menu_item_image(event: Event) {
               </div>
 
               <button
+                v-if="!isAddingMenuOption"
                 type="button"
                 class="rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-                @click="show_add_menu_options = true"
+                @click="addMenuOption"
               >
                 Add Option
               </button>
             </div>
 
-            <div v-if="show_add_menu_options" class="space-y-3">
+            <div
+              v-if="isAddingMenuOption"
+              class="grid grid-cols-1 gap-3 rounded-md border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto_auto]"
+            >
+              <input
+                v-model="draft_menu_option.name"
+                type="text"
+                placeholder="e.g. Extra cheese"
+                class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+              >
+
+              <input
+                v-model.number="draft_menu_option.priceCents"
+                type="number"
+                min="0"
+                placeholder="Price in cents"
+                class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
+              >
+
+              <button
+                type="button"
+                class="rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
+                @click="saveMenuOption"
+              >
+                Save
+              </button>
+
+              <button
+                type="button"
+                class="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/20"
+                @click="removeDraftMenuOption"
+              >
+                Remove
+              </button>
+            </div>
+
+            <div v-if="menu_options.length" class="space-y-3">
               <div
                 v-for="(option, index) in menu_options"
                 :key="index"
                 class="grid grid-cols-1 gap-3 rounded-md border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto]"
               >
-                <input
-                  v-model="option.name"
-                  type="text"
-                  placeholder="e.g. Extra cheese"
-                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
-                >
+                <div class="rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground">
+                  {{ option.name }}
+                </div>
 
-                <input
-                  v-model.number="option.priceCents"
-                  type="number"
-                  min="0"
-                  placeholder="Price in cents"
-                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
-                >
-                
-                <button @click="addMenuOption">
-                  Add
-                </button>
+                <div class="rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground">
+                  {{ option.priceCents }} cents
+                </div>
+
                 <button
                   type="button"
                   class="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/20"
@@ -206,7 +249,7 @@ async function upload_menu_item_image(event: Event) {
               </div>
             </div>
 
-            <p v-else class="text-sm text-muted-foreground">
+            <p v-else-if="!isAddingMenuOption" class="text-sm text-muted-foreground">
               No menu options added yet.
             </p>
           </div>
