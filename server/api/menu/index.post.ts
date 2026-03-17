@@ -19,8 +19,12 @@ export default defineEventHandler(async (event) => {
       category: body.category,
       imageUrl: body.imageUrl,
       isAvailable: body.isAvailable,
+      options: body.options,
+    },
+    select: {
+      options: true,
     },
   });
-
+  console.log(menuItem);
   return menuItem;
 });

@@ -3,6 +3,8 @@ import type { MenuItemCreateInput, MenuOptionCreateWithoutMenuItemInput } from '
 import { cloudinary_image_upload} from "../../client_utils/cloudinary_upload_image"
 import type { MenuCategory } from '~/generated/prisma/enums';
 
+import type { MenuOptionDraft, MenuItemFormState } from "../../../types/menu"
+
 
 const props = defineProps<{
   isCreating?: boolean
@@ -17,23 +19,27 @@ const runtimeConfig = useRuntimeConfig()
 const toast = useToast()
 const image_uploading = ref(false)
 const image_upload_success = ref(false)
-const menu_options = ref<MenuOptionCreateWithoutMenuItemInput[]>([])
+
+
+const menu_options = ref<MenuOptionDraft[]>([])
 const isAddingMenuOption = ref(false)
-const draft_menu_option = reactive<MenuOptionCreateWithoutMenuItemInput>({
+
+
+const draft_menu_option = reactive<MenuOptionDraft>({
   name: '',
-  priceCents: 0,
+  price: 0,
 })
 
-const form = reactive<MenuItemCreateInput>({
+
+
+
+const form = reactive<MenuItemFormState>({
   name: '',
   description: '',
-  priceCents: 0,
+  price: 0,
   category: 'MAIN_COURSE' as MenuCategory,
   imageUrl: '',
   isAvailable: true,
-  options: {
-    create: menu_options.value
-  }
 })
 
 
@@ -42,24 +48,26 @@ const { data: menu_category } = await useFetch<MenuCategory[]>('/api/menu/catego
 const addMenuOption = () => {
   isAddingMenuOption.value = true
   draft_menu_option.name = ''
-  draft_menu_option.priceCents = 0
+  draft_menu_option.price = 0
 }
+
+const toCents = (value: number) => Math.round((Number(value) || 0) * 100)
 
 const saveMenuOption = () => {
   if (!draft_menu_option.name.trim()) return
   menu_options.value.push({
     name: draft_menu_option.name.trim(),
-    priceCents: Number(draft_menu_option.priceCents),
+    price: Number(draft_menu_option.price),
   })
   isAddingMenuOption.value = false
   draft_menu_option.name = ''
-  draft_menu_option.priceCents = 0
+  draft_menu_option.price = 0
 }
 
 const removeDraftMenuOption = () => {
   isAddingMenuOption.value = false
   draft_menu_option.name = ''
-  draft_menu_option.priceCents = 0
+  draft_menu_option.price = 0
 }
 
 const removeMenuOption = (index: number) => {
@@ -69,13 +77,21 @@ const removeMenuOption = (index: number) => {
 const submitAddMenuItem = () => {
   if (props.isCreating) return
 
+  const menuOptionsCreateInput: MenuOptionCreateWithoutMenuItemInput[] = menu_options.value.map(option => ({
+    name: option.name,
+    priceCents: toCents(option.price),
+  }))
+
   emit('create', {
     name: form.name,
     description: form.description ,
-    priceCents: Number(form.priceCents),
+    priceCents: toCents(form.price),
     category: form.category,
     imageUrl: form.imageUrl,
     isAvailable: form.isAvailable,
+    options: {
+      create: menuOptionsCreateInput,
+    },
   })
 }
 
@@ -149,11 +165,12 @@ async function upload_menu_item_image(event: Event) {
 
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div class="space-y-2">
-              <label class="text-sm font-medium">Price (cents)</label>
+              <label class="text-sm font-medium">Price</label>
               <input
-                v-model.number="form.priceCents"
+                v-model.number="form.price"
                 type="number"
                 min="0"
+                step="0.01"
                 required
                 class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
               >
@@ -201,10 +218,11 @@ async function upload_menu_item_image(event: Event) {
               >
 
               <input
-                v-model.number="draft_menu_option.priceCents"
+                v-model.number="draft_menu_option.price"
                 type="number"
                 min="0"
-                placeholder="Price in cents"
+                step="0.01"
+                placeholder="e.g. 1.50"
                 class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
               >
 
@@ -236,7 +254,7 @@ async function upload_menu_item_image(event: Event) {
                 </div>
 
                 <div class="rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground">
-                  {{ option.priceCents }} cents
+                  {{ option.price.toFixed(2) }}
                 </div>
 
                 <button
