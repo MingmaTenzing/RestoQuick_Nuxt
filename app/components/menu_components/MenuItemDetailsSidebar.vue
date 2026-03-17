@@ -25,7 +25,7 @@ const formattedCategory = computed(() => props.item.category.replaceAll('_', ' '
     <div class="absolute inset-0 bg-black/40" @click="emit('close')" />
 
     <aside
-      class="absolute right-0 top-0 flex h-full w-full max-w-xl flex-col overflow-y-auto border-l border-sidebar-border bg-sidebar text-sidebar-foreground shadow-2xl"
+      class="absolute right-0 top-0 flex h-full w-full max-w-xl animate-[menu-sidebar-slide-in_280ms_ease-out] flex-col overflow-y-auto border-l border-sidebar-border bg-sidebar text-sidebar-foreground shadow-2xl"
     >
       <div class="space-y-6 p-6">
         <div class="flex items-start justify-between gap-4">
@@ -129,3 +129,17 @@ const formattedCategory = computed(() => props.item.category.replaceAll('_', ' '
     </aside>
   </div>
 </template>
+
+<style scoped>
+@keyframes menu-sidebar-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+</style>

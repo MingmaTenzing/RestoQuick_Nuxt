@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import type { MenuCategory, MenuItem, MenuOption } from '~/generated/prisma/browser'
 import type { MenuItemCreateInput } from '~/generated/prisma/models'
+import type { MenuItemUpdateInput, MenuItemWithOptions } from '~~/types/menu'
 
-type MenuItemWithOptions = MenuItem & {
-    options: MenuOption[]
-}
 
 
 
@@ -113,7 +111,7 @@ const createMenuItem = async (payload: MenuItemCreateInput) => {
     }
 }
 
-const updateEditedMenuItem = async (payload: { id: string, form: MenuItemCreateInput }) => {
+const updateEditedMenuItem = async (payload: { id: string, form: MenuItemUpdateInput }) => {
     isUpdatingMenuItem.value = true
 
     try {

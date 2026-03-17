@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import type { MenuItem } from '~/generated/prisma/client';
+import type { MenuItemWithOptions } from '~~/types/menu';
 
 
 
 const props = defineProps<{
-	item: MenuItem
+	item: MenuItemWithOptions
 }>()
 
 const emit = defineEmits<{
-	toggleAvailability: [item: MenuItem]
-	edit: [item: MenuItem]
-	view: [item: MenuItem]
+	toggleAvailability: [item: MenuItemWithOptions]
+	edit: [item: MenuItemWithOptions]
+	view: [item: MenuItemWithOptions]
 }>()
 
 const fallbackImage =

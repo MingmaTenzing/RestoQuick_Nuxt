@@ -1,25 +1,103 @@
 <script setup lang="ts">
-import type { MenuItemCreateInput } from "~/generated/prisma/models";
+import {  type MenuItemCreateInput, type MenuItemUpdateInput, type MenuOptionUncheckedCreateInput } from "~/generated/prisma/models";
 import { cloudinary_image_upload} from "../../client_utils/cloudinary_upload_image"
-import type { MenuCategory, MenuItem } from '~/generated/prisma/browser';
+import type { MenuCategory, MenuOption } from '~/generated/prisma/browser';
+import type { MenuItemWithOptions } from "~~/types/menu";
 
 const props = defineProps<{
-  item: MenuItem
+  item: MenuItemWithOptions
   isSaving?: boolean
   isDeleting?: boolean
 }>()
 
 const emit = defineEmits<{
   close: []
-  update: [payload: { id: string, form: MenuItemCreateInput }]
+  update: [payload: { id: string, form: MenuItemUpdateInput }]
   delete: [id: string]
 }>()
+
+
+const { data: menu_category } = await useFetch<MenuCategory[]>('/api/menu/category')
+
 
 const showDeleteConfirm = ref(false)
 const runtimeConfig = useRuntimeConfig()
 const toast = useToast()
 const image_uploading = ref(false)
 const image_upload_success = ref(false)
+const isAddingMenuOption = ref(false)
+
+
+const draft_menu_option = reactive<MenuOptionUncheckedCreateInput>({
+  name: '',
+  priceCents: 0,
+  menuItemId: props.item.id
+})
+
+const open_add_option = () => {
+  isAddingMenuOption.value = true
+  draft_menu_option.name = ''
+  draft_menu_option.priceCents = 0
+}
+
+const save_new_menu_option = async() => {
+  if (!draft_menu_option.name.trim()) return
+
+  try {
+    const add_menu_option = await $fetch<MenuOption>("/api/menu/menu_item_options", {
+      method: 'POST',
+      body: {
+        create_menu_option: {
+          name: draft_menu_option.name.trim(),
+          priceCents: Number(draft_menu_option.priceCents),
+          menuItemId: props.item.id,
+        },
+      },
+    })
+
+    props.item.options.push(add_menu_option)
+
+    isAddingMenuOption.value = false
+    draft_menu_option.name = ''
+    draft_menu_option.priceCents = 0
+
+    toast.success({
+      message: 'Added new option'
+    })
+  } catch (error) {
+    toast.error({
+      message: error instanceof Error ? error.message : 'Failed to add menu option'
+    })
+  }
+}
+
+const update_menu_option = async (option: MenuOption) => {
+  try {
+    const updated_option = await $fetch<MenuOption>(`/api/menu/menu_item_options/${option.id}`, {
+      method: 'PUT',
+      body: {
+        update_menu_option: {
+          name: option.name.trim(),
+          priceCents: Number(option.priceCents),
+        },
+      },
+    })
+
+    option.name = updated_option.name
+    option.priceCents = updated_option.priceCents
+
+    toast.success({
+      message: 'Updated menu option'
+    })
+  } catch (error) {
+    toast.error({
+      message: error instanceof Error ? error.message : 'Failed to update menu option'
+    })
+  }
+}
+
+const removeMenuOption =  () => {
+}
 
 const form = reactive<MenuItemCreateInput>({
    
@@ -30,7 +108,7 @@ const form = reactive<MenuItemCreateInput>({
   imageUrl: props.item.imageUrl ?? '',
   isAvailable: props.item.isAvailable ?? true,
 })
-const {data:menu_category} = await useFetch<MenuCategory[]>('/api/menu/category')
+
 
 async function upload_menu_item_image(event: Event) {
   image_upload_success.value = false
@@ -92,7 +170,7 @@ const confirmDeleteMenuItem = () => {
 
 <template>
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" @click.self="!props.isSaving && !props.isDeleting && !showDeleteConfirm && emit('close')">
-    <div class="w-full max-w-xl rounded-xl border border-border bg-card p-6 text-card-foreground shadow-lg">
+    <div class="w-full h-[90vh] overflow-y-scroll max-w-xl rounded-xl border border-border bg-card p-6 text-card-foreground shadow-lg">
       <div class="mb-6 flex items-start justify-between gap-4">
         <div>
           <h2 class="text-lg font-semibold">Edit Menu Item</h2>
@@ -155,6 +233,95 @@ const confirmDeleteMenuItem = () => {
                 </option>
               </select>
             </div>
+          </div>
+
+          <div class="space-y-3 rounded-md border border-border p-4">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <label class="text-sm font-medium">Menu Options</label>
+                <p class="text-xs text-muted-foreground">Edit optional extras or upgrades for this menu item.</p>
+              </div>
+
+              <button
+                v-if="!isAddingMenuOption"
+                type="button"
+                class="rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                @click="open_add_option"
+              >
+                Add Option
+              </button>
+            </div>
+
+            <div
+              v-if="isAddingMenuOption"
+              class="grid grid-cols-1 gap-3 rounded-md border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto_auto]"
+            >
+              <input
+                v-model="draft_menu_option.name"
+                type="text"
+                placeholder="e.g. Extra cheese"
+                class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+              >
+
+              <input
+                v-model.number="draft_menu_option.priceCents"
+                type="number"
+                min="0"
+                placeholder="Price in cents"
+                class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
+              >
+
+              <button
+                type="button"
+                class="rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
+                @click="save_new_menu_option"
+              >
+                Save
+              </button>
+
+          
+            </div>
+
+            <div v-if="props.item.options.length" class="space-y-3">
+              <div
+                v-for="option in props.item.options"
+                :key="option.id"
+                class="grid grid-cols-1 gap-3 rounded-md border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto_auto]"
+              >
+                <input
+                  v-model="option.name"
+                  type="text"
+                  class="w-full rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
+                >
+
+                <input
+                  v-model.number="option.priceCents"
+                  type="number"
+                  min="0"
+                  class="w-full rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
+                >
+
+                <button
+                  type="button"
+                  class="rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
+                  @click="update_menu_option(option)"
+                  >
+                  Update
+                </button>
+
+                <button
+                  type="button"
+                  class="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/20"
+                  @click="removeMenuOption"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+
+            <p v-else-if="!isAddingMenuOption" class="text-sm text-muted-foreground">
+              No menu options added yet.
+            </p>
           </div>
 
           <div class="space-y-2">
