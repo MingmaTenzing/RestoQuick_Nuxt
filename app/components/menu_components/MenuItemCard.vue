@@ -10,6 +10,7 @@ const props = defineProps<{
 const emit = defineEmits<{
 	toggleAvailability: [item: MenuItem]
 	edit: [item: MenuItem]
+	view: [item: MenuItem]
 }>()
 
 const fallbackImage =
@@ -82,7 +83,14 @@ const formattedPrice = computed(() => `$${(props.item.priceCents / 100).toFixed(
 					</span>
 
 				</div>
-				<div class="space-x-4 flex items-center">
+				<div class="flex items-center space-x-2">
+					<button
+						type="button"
+						class="inline-flex h-8 w-8 items-center justify-center rounded-md border transition-colors hover:bg-accent hover:text-accent-foreground"
+						@click="emit('view', item)"
+					>
+						<i class="pi pi-eye"></i>
+					</button>
 					<button
 						type="button"
 						class="inline-flex h-8 w-8 items-center justify-center rounded-md border transition-colors hover:bg-accent hover:text-accent-foreground"
