@@ -36,12 +36,12 @@ const { data: tables, pending } = await useFetch<Table[]>('/api/tables')
 			></div>
 		</section>
 
-		<section v-else-if="tables?.length" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+		<section v-else-if="tables?.length" class="grid gap-6 md:grid-cols-4 xl:grid-cols-4">
 			<NuxtLink
 				v-for="table in tables"
 				:key="table.id"
 				:to="`/dashboard/pos/order/${table.id}`"
-				class="block transition-transform hover:-translate-y-1"
+				class=""
 			>
 				<Table_Card :table="table" />
 			</NuxtLink>

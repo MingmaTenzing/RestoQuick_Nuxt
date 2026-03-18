@@ -27,12 +27,23 @@ const image_uploading = ref(false)
 const image_upload_success = ref(false)
 const isAddingMenuOption = ref(false)
 
+const toCents = (value: number) => Math.round(Number(value || 0) * 100)
+const toDollars = (value: number) => Number((Number(value || 0) / 100).toFixed(2))
+
 
 const draft_menu_option = reactive<MenuOptionUncheckedCreateInput>({
   name: '',
   priceCents: 0,
   menuItemId: props.item.id
 })
+
+// Keep a local editable copy in dollars so we don't mutate parent props (which are stored in cents).
+const editable_options = ref<MenuOption[]>(
+  props.item.options.map((option) => ({
+    ...option,
+    priceCents: toDollars(option.priceCents),
+  }))
+)
 
 const open_add_option = () => {
   isAddingMenuOption.value = true
@@ -49,13 +60,16 @@ const save_new_menu_option = async() => {
       body: {
         create_menu_option: {
           name: draft_menu_option.name.trim(),
-          priceCents: Number(draft_menu_option.priceCents),
+          priceCents: toCents(Number(draft_menu_option.priceCents)),
           menuItemId: props.item.id,
         },
       },
     })
 
-    props.item.options.push(add_menu_option)
+    editable_options.value.push({
+      ...add_menu_option,
+      priceCents: toDollars(add_menu_option.priceCents),
+    })
 
     isAddingMenuOption.value = false
     draft_menu_option.name = ''
@@ -78,13 +92,13 @@ const update_menu_option = async (option: MenuOption) => {
       body: {
         update_menu_option: {
           name: option.name.trim(),
-          priceCents: Number(option.priceCents),
+          priceCents: toCents(Number(option.priceCents)),
         },
       },
     })
 
     option.name = updated_option.name
-    option.priceCents = updated_option.priceCents
+    option.priceCents = toDollars(updated_option.priceCents)
 
     toast.success({
       message: 'Updated menu option'
@@ -103,7 +117,7 @@ const form = reactive<MenuItemCreateInput>({
    
   name: props.item.name,
   description: props.item.description ?? '',
-  priceCents: props.item.priceCents,
+  priceCents: toDollars(props.item.priceCents),
   category: props.item.category,
   imageUrl: props.item.imageUrl ?? '',
   isAvailable: props.item.isAvailable ?? true,
@@ -141,7 +155,7 @@ const submitEditMenuItem = async () => {
     form: {
       name: form.name,
       description: form.description ,
-      priceCents: Number(form.priceCents),
+      priceCents: toCents(Number(form.priceCents)),
       category: form.category,
       imageUrl: form.imageUrl ,
       isAvailable: form.isAvailable,
@@ -212,11 +226,12 @@ const confirmDeleteMenuItem = () => {
 
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div class="space-y-2">
-              <label class="text-sm font-medium">Price (cents)</label>
+              <label class="text-sm font-medium">Price (dollars)</label>
               <input
                 v-model.number="form.priceCents"
                 type="number"
                 min="0"
+                step="0.01"
                 required
                 class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
               >
@@ -256,24 +271,31 @@ const confirmDeleteMenuItem = () => {
               v-if="isAddingMenuOption"
               class="grid grid-cols-1 gap-3 rounded-md border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto_auto]"
             >
-              <input
-                v-model="draft_menu_option.name"
-                type="text"
-                placeholder="e.g. Extra cheese"
-                class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
-              >
+              <div class="space-y-1">
+                <label class="text-xs font-medium text-muted-foreground">Option</label>
+                <input
+                  v-model="draft_menu_option.name"
+                  type="text"
+                  placeholder="e.g. Extra cheese"
+                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+                >
+              </div>
 
-              <input
-                v-model.number="draft_menu_option.priceCents"
-                type="number"
-                min="0"
-                placeholder="Price in cents"
-                class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
-              >
+              <div class="space-y-1">
+                <label class="text-xs font-medium text-muted-foreground">Price ($)</label>
+                <input
+                  v-model.number="draft_menu_option.priceCents"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="Price in dollars"
+                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
+                >
+              </div>
 
               <button
                 type="button"
-                class="rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
+                class="self-end rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
                 @click="save_new_menu_option"
               >
                 Save
@@ -282,28 +304,35 @@ const confirmDeleteMenuItem = () => {
           
             </div>
 
-            <div v-if="props.item.options.length" class="space-y-3">
+            <div v-if="editable_options.length" class="space-y-3">
               <div
-                v-for="option in props.item.options"
+                v-for="option in editable_options"
                 :key="option.id"
                 class="grid grid-cols-1 gap-3 rounded-md border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto_auto]"
               >
-                <input
-                  v-model="option.name"
-                  type="text"
-                  class="w-full rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
-                >
+                <div class="space-y-1">
+                  <label class="text-xs font-medium text-muted-foreground">Option</label>
+                  <input
+                    v-model="option.name"
+                    type="text"
+                    class="w-full rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
+                  >
+                </div>
 
-                <input
-                  v-model.number="option.priceCents"
-                  type="number"
-                  min="0"
-                  class="w-full rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
-                >
+                <div class="space-y-1">
+                  <label class="text-xs font-medium text-muted-foreground">Price ($)</label>
+                  <input
+                    v-model.number="option.priceCents"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    class="w-full rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
+                  >
+                </div>
 
                 <button
                   type="button"
-                  class="rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
+                  class="self-end rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
                   @click="update_menu_option(option)"
                   >
                   Update
@@ -311,7 +340,7 @@ const confirmDeleteMenuItem = () => {
 
                 <button
                   type="button"
-                  class="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/20"
+                  class="self-end rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/20"
                   @click="removeMenuOption"
                 >
                   Remove

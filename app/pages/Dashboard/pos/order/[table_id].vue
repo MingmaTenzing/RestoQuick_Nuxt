@@ -8,6 +8,10 @@ import Pos_Order_Sidebar from '~/components/pos_components/Pos_Order_Sidebar.vue
 
 
 
+// here the table_id can be an actual table_id or can be takeaway.. 
+
+
+
 const route = useRoute()
 const routeTableId = computed(() => String(route.params.table_id ?? ''))
 const isTakeawayOrder = computed(() => routeTableId.value === 'takeaway')
