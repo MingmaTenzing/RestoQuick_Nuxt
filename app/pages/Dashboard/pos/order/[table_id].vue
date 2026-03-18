@@ -8,8 +8,7 @@ import Pos_Order_Sidebar from '~/components/pos_components/Pos_Order_Sidebar.vue
 
 
 
-// here the table_id can be an actual table_id or can be takeaway.. 
-
+// here the table_id from the route param can be an actual table_id or can be takeaway.. 
 
 
 const route = useRoute()
