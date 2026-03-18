@@ -82,12 +82,15 @@ export default defineEventHandler(async (event) => {
 
   try {
     // Create order with items from cart
-    const order = await prisma.order.create({
+    const order: any = await prisma.order.create({
       data: {
         checkoutSessionId: session.id,
         customerName: session.customer_details!.name!,
         totalAmountCents: session.amount_total!,
         tableId: session.metadata!.table_id!,
+        paymentStatus: "PAID",
+        paymentMethod: "STRIPE_QR",
+        paidAt: new Date(),
         items: {
           create: mapped_order_data,
         },
@@ -100,7 +103,7 @@ export default defineEventHandler(async (event) => {
         },
         table: true,
       },
-    });
+    } as any);
     console.log(order);
 
     // Notify kitchen clients that a new order was created

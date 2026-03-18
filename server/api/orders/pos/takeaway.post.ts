@@ -17,6 +17,9 @@ export default defineEventHandler(async (event) => {
       ...data,
       orderType: "TAKEAWAY",
       tableId: null,
+      paymentStatus: "UNPAID",
+      paymentMethod: null,
+      paidAt: null,
 
       // POS orders do not come from Stripe checkout, so generate a unique session id.
       checkoutSessionId: `pos_${crypto.randomUUID()}`,

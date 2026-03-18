@@ -16,6 +16,9 @@ export default defineEventHandler(async (event) => {
     data: {
       ...data,
       orderType: "DINING",
+      paymentStatus: "UNPAID",
+      paymentMethod: null,
+      paidAt: null,
 
       // as checkoutSeessionId doesn't exist on POS
       // here just a random uuid is created to fill the field
