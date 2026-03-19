@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { MenuCategory, MenuItem, Table } from '~/generated/prisma/browser'
+import type { MenuItemWithOptions } from '~~/types/menu'
 import type Order_Cart_Item from '~~/types/order-cart'
 import Pos_Filter_Bar from '~/components/pos_components/Pos_Filter_Bar.vue'
 import Pos_Menu_Item_Card from '~/components/pos_components/Pos_Menu_Item_Card.vue'
@@ -29,7 +30,7 @@ const toast = useToast()
 
 
 
-const { data: menuItems, pending: menuPending } = await useFetch<MenuItem[]>('/api/menu/order-menu')
+const { data: menuItems, pending: menuPending } = await useFetch<MenuItemWithOptions[]>('/api/menu/order-menu')
 const { data: menuCategories } = await useFetch<MenuCategory[]>('/api/menu/category')
 
 const loadTable = async () => {
@@ -57,9 +58,16 @@ const filteredMenuItems = computed(() => {
 })
 
 const subtotalCents = computed(() => cart_items.value.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0))
+const totalItemCount = computed(() => cart_items.value.reduce((sum, item) => sum + item.quantity, 0))
 
 const findCartItem = (menuItemId: string) => {
     return cart_items.value.find((item) => item.menuItemId === menuItemId)
+}
+
+const quantityForMenuItem = (menuItemId: string) => {
+    return cart_items.value
+        .filter((item) => item.menuItemId === menuItemId)
+        .reduce((sum, item) => sum + item.quantity, 0)
 }
 
 const add_to_cart = (cartItem: Order_Cart_Item) => {
@@ -119,33 +127,6 @@ const addMenuItem = (menuItem: MenuItem) => {
     add_to_cart(cartItem)
 }
 
-const increaseMenuItem = (menuItem: MenuItem) => {
-    const cartItem = findCartItem(menuItem.id)
-
-    if (!cartItem) {
-        addMenuItem(menuItem)
-        return
-    }
-
-    increase_quantity(cartItem)
-}
-
-const decreaseMenuItem = (item: Order_Cart_Item | MenuItem) => {
-    const menuItemId = 'menuItemId' in item ? item.menuItemId : item.id
-    const cartItem = findCartItem(menuItemId)
-
-    if (!cartItem) {
-        return
-    }
-
-    if (cartItem.quantity <= 1) {
-        remove_from_cart(cartItem)
-        return
-    }
-
-    decrease_quantity(cartItem)
-}
-
 const submitOrder = async () => {
     if (!routeTableId.value || cart_items.value.length === 0) {
         return
@@ -203,13 +184,13 @@ watch(routeTableId, async () => {
 
 <template>
 
-        <section class=" flex p-6 gap-6 ">
+        <section class=" flex p-4 gap-4 ">
             <div class="h-[95vh] overflow-y-scroll no-scrollbar">
                 <div class="space-y-6 pb-2">
 
                     <Pos_Order_Header
                         :table="table"
-                        :total-items="cart_items.length"
+                        :total-items="totalItemCount"
                         :subtotal-cents="subtotalCents"
                         :service-label="serviceLabel"
                         :back-to="backTo"
@@ -245,10 +226,8 @@ watch(routeTableId, async () => {
                             v-for="item in filteredMenuItems"
                             :key="item.id"
                             :item="item"
-                            :quantity-in-cart="findCartItem(item.id)?.quantity ?? 0"
+                            :quantity-in-cart="quantityForMenuItem(item.id)"
                             @add="addMenuItem(item)"
-                            @increase="increaseMenuItem(item)"
-                            @decrease="decreaseMenuItem(item)"
                         />
                     </div>
 
@@ -262,20 +241,23 @@ watch(routeTableId, async () => {
                 </div>
             </div>
 
-            <div class=" ">
-                <Pos_Order_Sidebar
-                    :table="table"
-                    :cart-items="cart_items"
-                    :total-items="cart_items.length"
-                    :subtotal-cents="subtotalCents"
-                    :is-submitting="isSubmittingOrder"
-                    :service-label="serviceLabel"
-                    @increase="increase_quantity"
-                    @decrease="decreaseMenuItem"
-                    @remove="remove_from_cart"
-                    @clear="empty_cart"
-                    @submit="submitOrder"
-                />
-            </div>
+    <div class=" h-full">
+        <Pos_Order_Sidebar
+            :table="table"
+            :cart-items="cart_items"
+            :total-items="totalItemCount"
+            :subtotal-cents="subtotalCents"
+            :is-submitting="isSubmittingOrder"
+            :service-label="serviceLabel"
+            @increase="increase_quantity"
+            @decrease="decrease_quantity"
+            @remove="remove_from_cart"
+            @clear="empty_cart"
+            @submit="submitOrder"
+        />
+   
+
+    </div>
+
         </section>
 </template>

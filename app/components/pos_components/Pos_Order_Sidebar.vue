@@ -27,9 +27,9 @@ const emptyStateCopy = computed(() => props.serviceLabel
 </script>
 
 <template>
-    <aside class=" w-90 h-full ">
-        <section class="flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
-            <div class="border-b border-border px-5 py-5 md:px-6">
+    <aside class="w-90 h-[95vh]">
+        <section class="flex h-full min-h-0 flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
+            <div class="border-b border-border p-4">
                 <div class="flex items-start justify-between gap-4">
                     <div>
                         <p class="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">Order cart</p>
@@ -43,71 +43,73 @@ const emptyStateCopy = computed(() => props.serviceLabel
                 </div>
             </div>
 
-            <div v-if="cartItems.length" class="flex-1 space-y-3 overflow-y-auto no-scrollbar px-4 py-4 md:px-5">
-                <article
-                    v-for="item in cartItems"
-                    :key="item.menuItemId"
-                    class="rounded-2xl border border-border bg-background p-4"
-                >
-                    <div class="flex items-start gap-3">
-                        <NuxtImg
-                            v-if="item.image_url"
-                            :src="item.image_url"
-                            width="96"
-                            height="96"
-                            class="h-20 w-20 rounded-2xl object-cover"
-                        />
-                        <div v-else class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-accent text-xs text-muted-foreground">
-                            No image
-                        </div>
-
-                        <div class="min-w-0 flex-1 space-y-3">
-                            <div class="flex items-start justify-between gap-3">
-                                <div>
-                                    <h3 class="text-sm font-semibold text-foreground md:text-base">{{ item.itemName }}</h3>
-                                    <p class="text-sm text-muted-foreground">${{ (item.unitPrice / 100).toFixed(2) }} each</p>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    class="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-destructive"
-                                    @click="emit('remove', item)"
-                                >
-                                    <i class="pi pi-trash text-sm"></i>
-                                </button>
+            <div v-if="cartItems.length" class="flex-1 min-h-0 overflow-y-auto  px-4 py-4 md:px-5">
+                <div class="space-y-3">
+                    <article
+                        v-for="item in cartItems"
+                        :key="item.menuItemId"
+                        class="rounded-2xl border border-border bg-background p-3"
+                    >
+                        <div class="flex items-start gap-2.5">
+                            <NuxtImg
+                                v-if="item.image_url"
+                                :src="item.image_url"
+                                width="96"
+                                height="96"
+                                class="h-16 w-16 rounded-xl object-cover"
+                            />
+                            <div v-else class="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-accent text-[11px] text-muted-foreground">
+                                No image
                             </div>
-
-                            <p v-if="item.specialInstructions" class="text-sm leading-6 text-muted-foreground">
-                                {{ item.specialInstructions }}
-                            </p>
-
-                            <div class="flex items-center justify-between gap-3">
-                                <div class="flex items-center gap-2 rounded-full border border-border bg-card p-1">
+    
+                            <div class="min-w-0 flex-1 space-y-2">
+                                <div class="flex items-start justify-between gap-2">
+                                    <div>
+                                        <h3 class="text-sm font-semibold leading-tight text-foreground">{{ item.itemName }}</h3>
+                                        <p class="text-xs text-muted-foreground">${{ (item.unitPrice / 100).toFixed(2) }} each</p>
+                                    </div>
+    
                                     <button
                                         type="button"
-                                        class="flex h-9 w-9 items-center justify-center rounded-full text-foreground transition-colors hover:bg-accent"
-                                        @click="emit('decrease', item)"
+                                        class="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-destructive"
+                                        @click="emit('remove', item)"
                                     >
-                                        <i class="pi pi-minus text-xs"></i>
-                                    </button>
-                                    <span class="min-w-6 text-center text-sm font-semibold text-foreground">{{ item.quantity }}</span>
-                                    <button
-                                        type="button"
-                                        class="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground transition-opacity hover:opacity-90"
-                                        @click="emit('increase', item)"
-                                    >
-                                        <i class="pi pi-plus text-xs"></i>
+                                        <i class="pi pi-trash text-xs"></i>
                                     </button>
                                 </div>
-
-                                <p class="text-base font-semibold text-foreground">${{ ((item.unitPrice * item.quantity) / 100).toFixed(2) }}</p>
+    
+                                <p v-if="item.specialInstructions" class="text-xs leading-5 text-muted-foreground">
+                                    {{ item.specialInstructions }}
+                                </p>
+    
+                                <div class="flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-1.5 rounded-full border border-border bg-card p-0.5">
+                                        <button
+                                            type="button"
+                                            class="flex h-8 w-8 items-center justify-center rounded-full text-foreground transition-colors hover:bg-accent"
+                                            @click="emit('decrease', item)"
+                                        >
+                                            <i class="pi pi-minus text-xs"></i>
+                                        </button>
+                                        <span class="min-w-5 text-center text-xs font-semibold text-foreground">{{ item.quantity }}</span>
+                                        <button
+                                            type="button"
+                                            class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground transition-opacity hover:opacity-90"
+                                            @click="emit('increase', item)"
+                                        >
+                                            <i class="pi pi-plus text-xs"></i>
+                                        </button>
+                                    </div>
+    
+                                    <p class="text-sm font-semibold text-foreground">${{ ((item.unitPrice * item.quantity) / 100).toFixed(2) }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </article>
+                    </article>
+                </div>
             </div>
 
-            <div v-else class="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-12 text-center">
+            <div v-else class="flex flex-1 min-h-0 flex-col items-center justify-center gap-3 px-6 py-12 text-center">
                 <div class="flex h-16 w-16 items-center justify-center rounded-full bg-accent text-foreground">
                     <i class="pi pi-shopping-cart text-xl"></i>
                 </div>
@@ -119,8 +121,9 @@ const emptyStateCopy = computed(() => props.serviceLabel
                 </div>
             </div>
 
-            <div class="border-t border-border px-5 py-5 md:px-6">
-                <div class="space-y-3 rounded-2xl bg-background p-4">
+
+            <div class="border-t border-border p-4">
+                <div class="space-y-2 rounded-2xl bg-background p-3">
                     <div class="flex items-center justify-between text-sm text-muted-foreground">
                         <span>Items</span>
                         <span>{{ totalItems }}</span>
@@ -135,7 +138,7 @@ const emptyStateCopy = computed(() => props.serviceLabel
                     </div>
                 </div>
 
-                <div class="mt-4 grid gap-3">
+                <div class="mt-3 grid gap-2">
                     <button
                         type="button"
                         class="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
