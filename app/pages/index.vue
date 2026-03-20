@@ -3,7 +3,7 @@ import FeatureStorySection from '~/components/home_components/FeatureStorySectio
 import HomeFooter from '~/components/home_components/HomeFooter.vue';
 import NavBar from '~/components/home_components/NavBar.vue';
 import ScrollReveal from '~/components/home_components/ScrollReveal.vue';
-import heroShot from '~/assets/images/usecase/menu_scene.avif';
+import heroShot from '~/assets/images/usecase/Cafe.webp';
 import rosterShot from '~/assets/images/app_screenshots/AI Roster Suggestion.png';
 import kitchenShot from '~/assets/images/app_screenshots/Kitchen Display.webp';
 import analyticsShot from '~/assets/images/app_screenshots/Dashboard.webp';
@@ -141,23 +141,39 @@ const testimonials = [
 const pricingPlans = [
   {
     name: 'Starter',
-    price: '$79',
-    note: 'For cafes and smaller venues getting organized.',
-    features: ['Core operations', 'Bookings', 'Table management'],
+    price: '$39',
+    note: 'For smaller venues that want better day-to-day control.',
+    features: [
+      'Bookings and table management',
+      'Core dashboard insights',
+      'Daily operations tracking',
+    ],
     featured: false,
   },
   {
-    name: 'Growth',
-    price: '$149',
-    note: 'For busy restaurants and cafes that need better flow.',
-    features: ['Maya AI assistant', 'Kitchen display', 'Analytics'],
+    name: 'All Features',
+    oldPrice: '$79',
+    price: '$25',
+    note: 'One simple monthly plan with every RestoQuick feature included.',
+    features: [
+      'AI voice booking assistant (Maya)',
+      'Real-time kitchen display',
+      'Bookings and table management',
+      'Staff rostering and team visibility',
+      'Inventory and stock management',
+      'Analytics and performance dashboard',
+    ],
     featured: true,
   },
   {
     name: 'Scale',
-    price: 'Custom',
-    note: 'For groups and multi-location operations.',
-    features: ['Advanced controls', 'Team support', 'Custom rollout'],
+    price: '$59',
+    note: 'For multi-shift teams that want extra rollout support.',
+    features: [
+      'Multi-team setup support',
+      'Priority onboarding guidance',
+      'Advanced operations oversight',
+    ],
     featured: false,
   },
 ];
@@ -204,25 +220,13 @@ const signatureNotes = [
       <section id="main" class="relative overflow-hidden px-6 pb-20 pt-10 sm:pb-24 sm:pt-16">
         <div
           aria-hidden="true"
-          class="pointer-events-none absolute left-1/2 top-[42%] hidden -translate-x-1/2 -translate-y-1/2 rounded-full dark:block"
-          style="
-            width: 54rem;
-            height: 54rem;
-            background: radial-gradient(circle at center, color-mix(in oklab, var(--color-green-700, #15803d) 28%, transparent) 0%, color-mix(in oklab, var(--color-green-600, #16a34a) 16%, transparent) 34%, transparent 72%);
-            opacity: 0.95;
-            -webkit-mask-image: radial-gradient(circle at center, black 0%, black 40%, transparent 76%);
-            mask-image: radial-gradient(circle at center, black 0%, black 40%, transparent 76%);
-          "
-        />
-        <div
-          aria-hidden="true"
-          class="pointer-events-none absolute left-1/2 top-[42%] hidden -translate-x-1/2 -translate-y-1/2 rounded-full dark:block"
+          class="pointer-events-none absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2 rounded-full"
           style="
             width: 48rem;
             height: 48rem;
             background-image: radial-gradient(circle, color-mix(in oklab, var(--color-green-500, #22c55e) 52%, transparent) 0.75px, transparent 1.4px);
             background-size: 14px 14px;
-            opacity: 0.7;
+            opacity: 0.28;
             -webkit-mask-image: radial-gradient(circle at center, black 0%, black 32%, transparent 72%);
             mask-image: radial-gradient(circle at center, black 0%, black 32%, transparent 72%);
           "
@@ -272,7 +276,7 @@ const signatureNotes = [
           </div>
 
           <div id="demo" class="lg:pt-6">
-            <img :src="heroShot" alt="Chef and manager using RestoQuick during service" class="w-full rounded-4xl border border-border object-cover shadow-lg">
+            <img :src="heroShot" alt="Chef and manager using RestoQuick during service" class="w-full rounded-4xl border border-border object-cover shadow-lg" />
 
             <div class="mt-5 grid gap-4 sm:grid-cols-[1.1fr_0.9fr]">
               <div class="rounded-[28px] border border-border bg-muted px-5 py-5">
@@ -456,7 +460,7 @@ const signatureNotes = [
           <div class="max-w-2xl">
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Pricing</p>
             <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
-              Start with the essentials, then scale with the business.
+              Every feature. One fixed price: $25 per month.
             </h2>
           </div>
 
@@ -469,7 +473,8 @@ const signatureNotes = [
             >
               <p class="text-sm font-semibold uppercase tracking-[0.22em] text-muted-foreground">{{ plan.name }}</p>
               <div class="mt-6 flex items-end gap-2">
-                <p class="text-4xl font-semibold tracking-[-0.05em] text-card-foreground">{{ plan.price }}</p>
+                <p v-if="plan.oldPrice" class="pb-1 text-sm text-muted-foreground line-through">{{ plan.oldPrice }}</p>
+                <p class="text-4xl font-semibold tracking-[-0.05em]" :class="plan.featured ? 'text-card-foreground' : 'text-muted-foreground line-through'">{{ plan.price }}</p>
                 <p v-if="plan.price !== 'Custom'" class="pb-1 text-sm text-muted-foreground">/ month</p>
               </div>
               <p class="mt-4 text-sm leading-7 text-muted-foreground">{{ plan.note }}</p>
