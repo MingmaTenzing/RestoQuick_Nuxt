@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { Select } from '@prisma/client/runtime/client';
 import type { MenuOption } from '~/generated/prisma/client';
 import type { MenuOptionCreateWithoutMenuItemInput, MenuOptionCreateWithoutOrderItemOptionsInput, MenuOptionUncheckedCreateInput, MenuOptionUncheckedCreateWithoutMenuItemInput } from '~/generated/prisma/models';
 import type { MenuItemWithOptions } from '~~/types/menu';
+import type { Selected_Options } from '~~/types/order-cart';
 
 const props = defineProps<{
     item: MenuItemWithOptions
@@ -17,21 +19,58 @@ const emit = defineEmits<{
 const formatCategory = (category: string) => category.replaceAll('_', ' ')
 
 console.log(props.item.options)
+const show_menu_options = ref(false)
 
-const selected_menu_options = ref<MenuOption[]>([])
 
+const selected_menu_options = ref<Selected_Options[]>([])
 
-const add_option = (option: MenuOption) => {
-    const existing_option_index = selected_menu_options.value.findIndex((item) => item.id === option.id)
+const is_option_selected = (option_id: string) => {
+    return selected_menu_options.value.some((option) => option.id === option_id)
+}
 
-    if (existing_option_index === -1) {
-        selected_menu_options.value.push(option)
+const selected_option_quantity = (option_id: string) => {
+    const selected_option = selected_menu_options.value.find((option) => option.id === option_id)
+    return selected_option?.quantity ?? 0
+}
+
+const toggle_option_selection = (provided_option: MenuOption, is_checked: boolean) => {
+    if (is_checked && !is_option_selected(provided_option.id)) {
+        selected_menu_options.value.push({
+            ...provided_option,
+            quantity: 1,
+        })
         return
     }
 
-    selected_menu_options.value.splice(existing_option_index, 1)
+    if (!is_checked) {
+        selected_menu_options.value = selected_menu_options.value.filter((option) => option.id !== provided_option.id)
+    }
 }
-const show_menu_options = ref(false)
+
+const increase_option_quantity = (option_id: string) => {
+    const selected_option = selected_menu_options.value.find((option) => option.id === option_id)
+
+    if (!selected_option) {
+        return
+    }
+
+    selected_option.quantity++
+}
+
+const decrease_option_quantity = (option_id: string) => {
+    const selected_option = selected_menu_options.value.find((option) => option.id === option_id)
+
+    if (!selected_option) {
+        return
+    }
+
+    if (selected_option.quantity <= 1) {
+        selected_menu_options.value = selected_menu_options.value.filter((option) => option.id !== option_id)
+        return
+    }
+
+    selected_option.quantity--
+}
 </script>
 
 <template>
@@ -102,22 +141,45 @@ const show_menu_options = ref(false)
             <div class="mt-5 space-y-3">
                 <p class="text-sm font-medium text-foreground">Select options</p>
                 <div v-if="item.options?.length" class="max-h-80 space-y-2 overflow-y-auto pr-1">
-                    <label
+                    <div
                         v-for="option in item.options"
                         :key="option.id"
-                        class="flex cursor-pointer items-center justify-between rounded-2xl border border-border bg-accent/40 px-3 py-2.5 transition-colors hover:bg-accent/70"
+                        class="flex items-center justify-between rounded-2xl border px-3 py-2.5 transition-colors"
+                        :class="is_option_selected(option.id) ? 'border-primary bg-accent' : 'border-border bg-accent/40 hover:bg-accent/70'"
+                        @click="toggle_option_selection(option, !is_option_selected(option.id))"
                     >
                         <span class="flex items-center gap-2 text-sm text-foreground">
                             <input
                                 type="checkbox"
                                 class="h-4 w-4 accent-primary"
-                                :checked="selected_menu_options.some((selected_option) => selected_option.id === option.id)"
-                                @change="add_option(option)"
+                                :checked="is_option_selected(option.id)"
+                                @click.stop
+                                @change="toggle_option_selection(option, ($event.target as HTMLInputElement).checked)"
                             />
                             <span>{{ option.name }}</span>
                         </span>
-                        <p class="text-sm font-medium text-muted-foreground">${{ (option.priceCents / 100).toFixed(2) }}</p>
-                    </label>
+
+                        <div v-if="is_option_selected(option.id)" class="flex items-center gap-2" @click.stop>
+                            <button
+                                type="button"
+                                class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border text-foreground hover:bg-accent"
+                                @click="decrease_option_quantity(option.id)"
+                            >
+                                <i class="pi pi-minus text-[10px]"></i>
+                            </button>
+                            <span class="min-w-5 text-center text-sm font-medium text-foreground">{{ selected_option_quantity(option.id) }}</span>
+                            <button
+                                type="button"
+                                class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground hover:opacity-90"
+                                @click="increase_option_quantity(option.id)"
+                            >
+                                <i class="pi pi-plus text-[10px]"></i>
+                            </button>
+                            <p class="ml-1 text-sm font-medium text-muted-foreground">${{ (option.priceCents / 100).toFixed(2) }}</p>
+                        </div>
+
+                        <p v-else class="text-sm font-medium text-muted-foreground">${{ (option.priceCents / 100).toFixed(2) }}</p>
+                    </div>
                 </div>
                 <div v-else class="rounded-2xl border border-dashed border-border px-3 py-5 text-center text-sm text-muted-foreground">
                     No options added yet.

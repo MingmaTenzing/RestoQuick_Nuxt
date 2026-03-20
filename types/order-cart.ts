@@ -2,9 +2,9 @@
 // Kept separate from Prisma OrderItem because this shape is shared by POS
 // and order-table page flows, and it only contains the UI/order-building data
 
-import type { MenuItem } from "~/generated/prisma/client";
+import type { MenuItem, MenuOption } from "~/generated/prisma/browser";
 
-export default interface Selected_Options extends MenuItem {
+export interface Selected_Options extends MenuOption {
   //added the quantity cause the selected option can be multiple quanity of same like
   //2x extra mayo
   //3x extra noodle

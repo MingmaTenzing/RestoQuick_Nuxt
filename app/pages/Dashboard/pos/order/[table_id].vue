@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { MenuCategory, MenuItem, Table } from '~/generated/prisma/browser'
 import type { MenuItemWithOptions } from '~~/types/menu'
-import type Order_Cart_Item from '~~/types/order-cart'
 import Pos_Filter_Bar from '~/components/pos_components/Pos_Filter_Bar.vue'
 import Pos_Menu_Item_Card from '~/components/pos_components/Pos_Menu_Item_Card.vue'
 import Pos_Order_Header from '~/components/pos_components/Pos_Order_Header.vue'
@@ -23,8 +22,18 @@ const backLabel = computed(() => isTakeawayOrder.value ? 'Back to POS' : 'Back t
 const searchQuery = ref('')
 const selectedCategory = ref<MenuCategory | ''>('')
 const isSubmittingOrder = ref(false)
-const cart_items = ref<Order_Cart_Item[]>([])
 const toast = useToast()
+const {
+    cart_items,
+    quantity_for_menu_item,
+    subtotal_cents,
+    total_item_count,
+    add_to_cart,
+    remove_from_cart,
+    increase_quantity,
+    decrease_quantity,
+    empty_cart,
+} = useOrderCart()
 
 
 
@@ -57,71 +66,15 @@ const filteredMenuItems = computed(() => {
     })
 })
 
-const subtotalCents = computed(() => cart_items.value.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0))
-const totalItemCount = computed(() => cart_items.value.reduce((sum, item) => sum + item.quantity, 0))
-
-const findCartItem = (menuItemId: string) => {
-    return cart_items.value.find((item) => item.menuItemId === menuItemId)
-}
-
-const quantityForMenuItem = (menuItemId: string) => {
-    return cart_items.value
-        .filter((item) => item.menuItemId === menuItemId)
-        .reduce((sum, item) => sum + item.quantity, 0)
-}
-
-const add_to_cart = (cartItem: Order_Cart_Item) => {
-    const existingItem = findCartItem(cartItem.menuItemId)
-
-    if (existingItem) {
-       return existingItem.quantity += cartItem.quantity
-        
-    }
-
-    cart_items.value.push({ ...cartItem })
-}
-
-const increase_quantity = (item: Order_Cart_Item) => {
-    const existingItem = findCartItem(item.menuItemId)
-
-    if (!existingItem) {
-        return
-    }
-
-    existingItem.quantity += 1
-}
-
-const decrease_quantity = (item: Order_Cart_Item) => {
-    const existingItem = findCartItem(item.menuItemId)
-
-    if (!existingItem) {
-        return
-    }
-
-    if (existingItem.quantity <= 1) {
-        remove_from_cart(existingItem)
-        return
-    }
-
-    existingItem.quantity -= 1
-}
-
-const remove_from_cart = (item: Order_Cart_Item) => {
-    cart_items.value = cart_items.value.filter((cartItem) => cartItem.menuItemId !== item.menuItemId)
-}
-
-const empty_cart = () => {
-    cart_items.value = []
-}
-
 const addMenuItem = (menuItem: MenuItem) => {
-    const cartItem: Order_Cart_Item = {
+    const cartItem = {
         itemName: menuItem.name,
         quantity: 1,
         unitPrice: menuItem.priceCents,
         specialInstructions: '',
         image_url: menuItem.imageUrl,
         menuItemId: menuItem.id,
+        selected_options: [],
     }
 
     add_to_cart(cartItem)
@@ -150,7 +103,7 @@ const submitOrder = async () => {
             body: {
                 data: {
                     customerName: isTakeawayOrder.value ? 'Takeaway' : 'Walk_in',
-                    totalAmountCents: subtotalCents.value,
+                    totalAmountCents: subtotal_cents.value,
                     ...(!isTakeawayOrder.value ? { tableId: routeTableId.value } : {}),
                     items: {
                         create: mappedOrderItems,
@@ -190,8 +143,8 @@ watch(routeTableId, async () => {
 
                     <Pos_Order_Header
                         :table="table"
-                        :total-items="totalItemCount"
-                        :subtotal-cents="subtotalCents"
+                        :total-items="total_item_count"
+                        :subtotal-cents="subtotal_cents"
                         :service-label="serviceLabel"
                         :back-to="backTo"
                         :back-label="backLabel"
@@ -226,7 +179,7 @@ watch(routeTableId, async () => {
                             v-for="item in filteredMenuItems"
                             :key="item.id"
                             :item="item"
-                            :quantity-in-cart="quantityForMenuItem(item.id)"
+                            :quantity-in-cart="quantity_for_menu_item(item.id)"
                             @add="addMenuItem(item)"
                         />
                     </div>
@@ -245,8 +198,8 @@ watch(routeTableId, async () => {
         <Pos_Order_Sidebar
             :table="table"
             :cart-items="cart_items"
-            :total-items="totalItemCount"
-            :subtotal-cents="subtotalCents"
+            :total-items="total_item_count"
+            :subtotal-cents="subtotal_cents"
             :is-submitting="isSubmittingOrder"
             :service-label="serviceLabel"
             @increase="increase_quantity"
