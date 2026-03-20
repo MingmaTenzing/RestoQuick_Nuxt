@@ -81,6 +81,16 @@ const emptyStateCopy = computed(() => props.serviceLabel
                                 <p v-if="item.specialInstructions" class="text-xs leading-5 text-muted-foreground">
                                     {{ item.specialInstructions }}
                                 </p>
+
+                                <div v-if="item.selected_options.length" class="space-y-1">
+                                    <p
+                                        v-for="option in item.selected_options"
+                                        :key="option.id"
+                                        class="text-xs text-muted-foreground"
+                                    >
+                                        {{ option.quantity }}x {{ option.name }}
+                                    </p>
+                                </div>
     
                                 <div class="flex items-center justify-between gap-2">
                                     <div class="flex items-center gap-1.5 rounded-full border border-border bg-card p-0.5">

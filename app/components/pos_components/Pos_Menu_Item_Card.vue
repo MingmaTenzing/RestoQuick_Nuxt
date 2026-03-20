@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type { Select } from '@prisma/client/runtime/client';
 import type { MenuOption } from '~/generated/prisma/client';
-import type { MenuOptionCreateWithoutMenuItemInput, MenuOptionCreateWithoutOrderItemOptionsInput, MenuOptionUncheckedCreateInput, MenuOptionUncheckedCreateWithoutMenuItemInput } from '~/generated/prisma/models';
 import type { MenuItemWithOptions } from '~~/types/menu';
+import type Order_Cart_Item from '~~/types/order-cart';
 import type { Selected_Options } from '~~/types/order-cart';
 
 const props = defineProps<{
@@ -10,16 +9,17 @@ const props = defineProps<{
     quantityInCart: number
 }>()
 
+
+
 const emit = defineEmits<{
-    (e: 'add'): void
-    (e: 'increase'): void
-    (e: 'decrease'): void
+    (e: 'add', item: Order_Cart_Item): void
 }>()
 
 const formatCategory = (category: string) => category.replaceAll('_', ' ')
 
 console.log(props.item.options)
 const show_menu_options = ref(false)
+const special_instruction = ref('')
 
 
 const selected_menu_options = ref<Selected_Options[]>([])
@@ -70,6 +70,23 @@ const decrease_option_quantity = (option_id: string) => {
     }
 
     selected_option.quantity--
+}
+
+const add_item_with_options = () => {
+    const order_cart_item: Order_Cart_Item = {
+        itemName: props.item.name,
+        quantity: 1,
+        unitPrice: props.item.priceCents,
+        specialInstructions: special_instruction.value.trim(),
+        image_url: props.item.imageUrl,
+        menuItemId: props.item.id,
+        selected_options: [...selected_menu_options.value],
+    }
+
+    emit('add', order_cart_item)
+    show_menu_options.value = false
+    selected_menu_options.value = []
+    special_instruction.value = ''
 }
 </script>
 
@@ -184,6 +201,16 @@ const decrease_option_quantity = (option_id: string) => {
                 <div v-else class="rounded-2xl border border-dashed border-border px-3 py-5 text-center text-sm text-muted-foreground">
                     No options added yet.
                 </div>
+
+                <div class="space-y-1 pt-2">
+                    <label class="text-sm font-medium text-foreground">Special instruction</label>
+                    <textarea
+                        v-model="special_instruction"
+                        rows="3"
+                        class="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/25"
+                        placeholder="E.g. No onions, extra spicy"
+                    ></textarea>
+                </div>
             </div>
 
             <div class="mt-6 space-y-3 border-t border-border pt-5">
@@ -193,7 +220,7 @@ const decrease_option_quantity = (option_id: string) => {
                     <button type="button" class="inline-flex h-10 items-center justify-center rounded-full border border-border bg-secondary px-4 text-sm font-medium text-secondary-foreground hover:bg-accent hover:text-accent-foreground" @click="show_menu_options = false">
                         Cancel
                     </button>
-                    <button type="button" class="inline-flex h-10 items-center justify-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground">
+                    <button type="button" class="inline-flex h-10 items-center justify-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground" @click="add_item_with_options">
                         Add Item
                     </button>
                 </div>

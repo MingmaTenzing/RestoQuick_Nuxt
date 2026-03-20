@@ -27,13 +27,15 @@ export const useOrderCart = () => {
     // checks if the item already exists
     const find_item = find_cart_item(item.menuItemId);
 
-    if (find_item) {
+    if (find_item == item) {
       //quantity increases by 1 if item already exists
       find_item.quantity++;
     } else {
       //if no item is found... in cart it adds to cart
       cart_items.value.push(item);
     }
+
+    console.log(item);
   };
 
   const remove_from_cart = (item: Order_Cart_Item) => {

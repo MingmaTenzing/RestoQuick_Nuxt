@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import type { MenuCategory, MenuItem, Table } from '~/generated/prisma/browser'
+import type { MenuCategory, Table } from '~/generated/prisma/browser'
 import type { MenuItemWithOptions } from '~~/types/menu'
+import type Order_Cart_Item from '~~/types/order-cart'
 import Pos_Filter_Bar from '~/components/pos_components/Pos_Filter_Bar.vue'
 import Pos_Menu_Item_Card from '~/components/pos_components/Pos_Menu_Item_Card.vue'
 import Pos_Order_Header from '~/components/pos_components/Pos_Order_Header.vue'
@@ -66,19 +67,6 @@ const filteredMenuItems = computed(() => {
     })
 })
 
-const addMenuItem = (menuItem: MenuItem) => {
-    const cartItem = {
-        itemName: menuItem.name,
-        quantity: 1,
-        unitPrice: menuItem.priceCents,
-        specialInstructions: '',
-        image_url: menuItem.imageUrl,
-        menuItemId: menuItem.id,
-        selected_options: [],
-    }
-
-    add_to_cart(cartItem)
-}
 
 const submitOrder = async () => {
     if (!routeTableId.value || cart_items.value.length === 0) {
@@ -180,7 +168,7 @@ watch(routeTableId, async () => {
                             :key="item.id"
                             :item="item"
                             :quantity-in-cart="quantity_for_menu_item(item.id)"
-                            @add="addMenuItem(item)"
+                            @add="add_to_cart"
                         />
                     </div>
 
