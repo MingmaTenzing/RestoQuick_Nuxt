@@ -4,6 +4,7 @@ import Cart_Item from '~/components/qr_order_components/Cart_Item.vue';
 import Menu_Item from '~/components/qr_order_components/Menu_Item.vue';
 import type { Table } from '~/generated/prisma/browser';
 import type { MenuItem } from '~/generated/prisma/client';
+import type { MenuItemWithOptions } from '~~/types/menu';
 import type Order_Cart_Item from '~~/types/order-cart';
 
 
@@ -18,7 +19,7 @@ const { set_table_id, table_id } = useTableId()
 const { cart_items } = useOrderCart()
 
 
-const { data: menu_items } = useFetch<MenuItem[]>('/api/menu/order-menu')
+const { data: menu_items } = useFetch<MenuItemWithOptions[]>('/api/menu')
 const {data: table} = useFetch<Table>(`/api/tables/${route.params.table_id}`)
 
 //the table_id is set to the composable when the qr code is scanned the redirected to this page with the table id; 

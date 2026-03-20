@@ -232,7 +232,8 @@ model OrderItem {
 }
 
 model OrderItemOption {
-  id String @id @default(uuid())
+  id       String @id @default(uuid())
+  quantity Int    @default(1)
 
   name       String
   priceCents Int

@@ -30,7 +30,7 @@ const toast = useToast()
 
 
 
-const { data: menuItems, pending: menuPending } = await useFetch<MenuItemWithOptions[]>('/api/menu/order-menu')
+const { data: menuItems, pending: menuPending } = await useFetch<MenuItemWithOptions[]>('/api/menu')
 const { data: menuCategories } = await useFetch<MenuCategory[]>('/api/menu/category')
 
 const loadTable = async () => {

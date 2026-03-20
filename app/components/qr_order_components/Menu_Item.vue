@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type { MenuItem } from '~/generated/prisma/client';
+import type { MenuItemWithOptions } from '~~/types/menu';
 import type Order_Cart_Item from '~~/types/order-cart';
 
 
 
 
 const props = defineProps<{
- menu_item: MenuItem
+ menu_item: MenuItemWithOptions
 }>()
 
 
@@ -24,8 +25,8 @@ function add_item_to_cart() {
         unitPrice: props.menu_item.priceCents,
         menuItemId: props.menu_item.id,
         specialInstructions: special_instruction.value,
-        image_url: props.menu_item.imageUrl
-        
+        image_url: props.menu_item.imageUrl,
+        // selected_options: props.menu_item.options        
     }
 
     add_to_cart(order_cart_item)

@@ -1,13 +1,12 @@
 import type Order_Cart_Item from "../../types/order-cart";
 export const useOrderCart = () => {
-  //useOrderCart has two states (cart_items and table_id)
-
   const cart_items = useState<Order_Cart_Item[]>("order-cart-items", () => []);
 
   const add_to_cart = (item: Order_Cart_Item) => {
+    console.log(cart_items.value);
     //   checks if the item already exists
     const find_item = cart_items.value.find(
-      (cart_item) => item.menuItemId == cart_item.menuItemId
+      (cart_item) => item.menuItemId == cart_item.menuItemId,
     );
 
     if (find_item) {
@@ -22,7 +21,7 @@ export const useOrderCart = () => {
   const remove_from_cart = (item: Order_Cart_Item) => {
     // filters the cart without the item to be removed
     const filtered_items = cart_items.value.filter(
-      (cart_item) => item.menuItemId !== cart_item.menuItemId
+      (cart_item) => item.menuItemId !== cart_item.menuItemId,
     );
 
     cart_items.value = filtered_items;
@@ -30,7 +29,7 @@ export const useOrderCart = () => {
 
   const increase_quantity = (item_in_cart: Order_Cart_Item) => {
     const find_item = cart_items.value.find(
-      (item) => item.menuItemId == item_in_cart.menuItemId
+      (item) => item.menuItemId == item_in_cart.menuItemId,
     );
 
     find_item!.quantity++;
@@ -38,7 +37,7 @@ export const useOrderCart = () => {
 
   const decrease_quantity = (item_in_cart: Order_Cart_Item) => {
     const find_item = cart_items.value.find(
-      (item) => item.menuItemId == item_in_cart.menuItemId
+      (item) => item.menuItemId == item_in_cart.menuItemId,
     );
 
     if (find_item!.quantity > 0) {
