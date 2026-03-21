@@ -19,6 +19,17 @@ const emit = defineEmits<{
     (e: 'submit'): void
 }>()
 
+
+const { optionsSignature, options_total_cents, row_total_cents } = useOrderCart()
+
+// Format cents to dollar string, e.g. 250 -> "$2.50"
+const formatCents = (cents: number) => `$${(cents / 100).toFixed(2)}`
+
+// Local subtotal computed from `props.cartItems` using the composable's row helper
+const subtotalCentsLocal = computed(() =>
+    props.cartItems.reduce((sum, item) => sum + row_total_cents(item), 0),
+)
+
 const orderHeading = computed(() => props.serviceLabel ?? `Table ${props.table?.number ?? '--'}`)
 
 const emptyStateCopy = computed(() => props.serviceLabel
@@ -47,7 +58,7 @@ const emptyStateCopy = computed(() => props.serviceLabel
                 <div class="space-y-3">
                     <article
                         v-for="item in cartItems"
-                        :key="item.menuItemId"
+                        :key="item.menuItemId + optionsSignature(item) + (item.specialInstructions || '')"
                         class="rounded-2xl border border-border bg-background p-3"
                     >
                         <div class="flex items-start gap-2.5">
@@ -66,7 +77,10 @@ const emptyStateCopy = computed(() => props.serviceLabel
                                 <div class="flex items-start justify-between gap-2">
                                     <div>
                                         <h3 class="text-sm font-semibold leading-tight text-foreground">{{ item.itemName }}</h3>
-                                        <p class="text-xs text-muted-foreground">${{ (item.unitPrice / 100).toFixed(2) }} each</p>
+                                        <!-- Show base price -->
+                                        <p class="text-xs text-muted-foreground">
+                                            {{ formatCents(item.unitPrice) }}
+                                        </p>
                                     </div>
     
                                     <button
@@ -81,14 +95,18 @@ const emptyStateCopy = computed(() => props.serviceLabel
                                 <p v-if="item.specialInstructions" class="text-xs leading-5 text-muted-foreground">
                                     {{ item.specialInstructions }}
                                 </p>
-
+    
+                                <!-- Show selected options and their prices -->
                                 <div v-if="item.selected_options.length" class="space-y-1">
                                     <p
                                         v-for="option in item.selected_options"
                                         :key="option.id"
-                                        class="text-xs text-muted-foreground"
+                                        class="text-xs text-muted-foreground flex justify-between"
                                     >
-                                        {{ option.quantity }}x {{ option.name }}
+                                        <span>{{ option.quantity }}x {{ option.name }}</span>
+                                        <span v-if="option.priceCents && option.priceCents > 0">
+                                            +${{ ((option.priceCents * option.quantity) / 100).toFixed(2) }}
+                                        </span>
                                     </p>
                                 </div>
     
@@ -111,7 +129,10 @@ const emptyStateCopy = computed(() => props.serviceLabel
                                         </button>
                                     </div>
     
-                                    <p class="text-sm font-semibold text-foreground">${{ ((item.unitPrice * item.quantity) / 100).toFixed(2) }}</p>
+                                        <!-- Show total for this row (base + options) * quantity -->
+                                    <p class="text-sm font-semibold text-foreground">
+                                        {{ formatCents(row_total_cents(item)) }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -144,7 +165,7 @@ const emptyStateCopy = computed(() => props.serviceLabel
                     </div>
                     <div class="flex items-center justify-between border-t border-border pt-3 text-base font-semibold text-foreground">
                         <span>Total</span>
-                        <span>${{ (subtotalCents / 100).toFixed(2) }}</span>
+                        <span>{{ formatCents(subtotalCentsLocal) }}</span>
                     </div>
                 </div>
 
@@ -172,3 +193,4 @@ const emptyStateCopy = computed(() => props.serviceLabel
         </section>
     </aside>
 </template>
+

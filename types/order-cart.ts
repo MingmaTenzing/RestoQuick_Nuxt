@@ -14,7 +14,7 @@ export interface Selected_Options extends MenuOption {
 export default interface Order_Cart_Item {
   itemName: string;
   quantity: number;
-  unitPrice: number;
+  unitPrice: number; //unit price always should be cents
   specialInstructions?: string;
   image_url: string | null;
   menuItemId: string;
