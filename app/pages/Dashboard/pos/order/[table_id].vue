@@ -80,6 +80,14 @@ const submitOrder = async () => {
             unitPriceCents: item.unitPrice,
             specialInstructions: item.specialInstructions || '',
             menuItemId: item.menuItemId,
+            orderItemOptions: item.selected_options && item.selected_options.length ? {
+                create: item.selected_options.map((opt) => ({
+                    name: opt.name,
+                    priceCents: opt.priceCents,
+                    quantity: opt.quantity,
+                    menuOptionId: opt.id,
+                })),
+            } : undefined,
         }))
 
         const endpoint = isTakeawayOrder.value ? '/api/orders/pos/takeaway' : '/api/orders/pos/dining'

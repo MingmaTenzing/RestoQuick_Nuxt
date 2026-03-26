@@ -52,33 +52,30 @@ async function markOrder_as_ready(order_id: string) {
                         <!-- order items -->
 
                         <div v-for="item in order.items" :key="item.id">
+                          <div>
+                            <div class=" flex space-x-2">
+                              <p>{{item.quantity}}x</p>
+                              <p>{{item.itemName}}</p>
+                            </div>
 
-                            
-                                      
-                                                <div class=" ">
-                                                    <div class=" flex space-x-2">
-                                                        <p>{{item.quantity}}x</p>
-                                                        <p>{{item.itemName}}</p>
-                                                    </div>
-                                                 
-                                                </div>
+                            <!-- options (orderItemOptions snapshot) -->
+                            <div v-if="item.orderItemOptions && item.orderItemOptions.length" class="mt-2 ml-4 space-y-1 text-sm">
+                              <p class="text-xs font-medium text-muted-foreground">Options</p>
+                              <div v-for="opt in item.orderItemOptions" :key="opt.id" class="flex justify-between">
+                                <div class="flex gap-2">
+                                  <p class="font-medium">{{opt.quantity}}x</p>
+                                  <p>{{opt.name}}</p>
+                                </div>
+                                <div class="text-muted-foreground">{{ (opt.priceCents/100).toFixed(2) }}</div>
+                              </div>
+                            </div>
 
-                                                <!--  special instructions -->
-                                            <div v-if="item.specialInstructions !== ''" class="  border bg-accent p-2 rounded-lg text-sm">
-                            
-                            
-                                                <p class=" font-light text-muted-foreground text-xs">Special Instructions</p>
-                                                <p class=" font-light">{{item.specialInstructions}}</p>
-                            
-                            
-                                            </div>
-                                                
-                                            
-                            
-                            
-                                  
-                            
-                            
+                            <!--  special instructions -->
+                            <div v-if="item.specialInstructions !== ''" class=" border bg-accent p-2 rounded-lg text-sm mt-2">
+                              <p class=" font-light text-muted-foreground text-xs">Special Instructions</p>
+                              <p class=" font-light">{{item.specialInstructions}}</p>
+                            </div>
+                          </div>
                         </div>
         
 
