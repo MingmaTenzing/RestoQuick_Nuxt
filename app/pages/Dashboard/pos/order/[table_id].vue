@@ -38,8 +38,6 @@ const {
 
 
 
-
-
 const { data: menuItems, pending: menuPending } = await useFetch<MenuItemWithOptions[]>('/api/menu')
 const { data: menuCategories } = await useFetch<MenuCategory[]>('/api/menu/category')
 
