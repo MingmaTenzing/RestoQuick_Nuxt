@@ -124,7 +124,7 @@ watch(routeTableId, async () => {
 <template>
 
         <section class=" flex p-4 gap-4 ">
-            <div class="h-[95vh] overflow-y-scroll no-scrollbar">
+            <div class="flex-1 h-[95vh] overflow-y-scroll no-scrollbar">
                 <div class="space-y-6 pb-2">
 
                     <Pos_Order_Header
@@ -152,7 +152,7 @@ watch(routeTableId, async () => {
                         <p class="text-sm text-muted-foreground">{{ filteredMenuItems.length }} results</p>
                     </div>
 
-                    <div v-if="menuPending" class="grid gap-3 md:grid-cols-2 2xl:grid-cols-3">
+                    <div v-if="menuPending" class="grid gap-3 md:grid-cols-3 2xl:grid-cols-3">
                         <div
                             v-for="index in 6"
                             :key="index"

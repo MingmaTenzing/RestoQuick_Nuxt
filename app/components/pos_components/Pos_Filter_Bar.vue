@@ -43,7 +43,7 @@ const formatCategory = (category: string) => category.replaceAll('_', ' ')
             <div class="flex flex-wrap gap-2">
                 <button
                     type="button"
-                    class="rounded-full border px-3 py-2 text-sm font-medium transition-colors"
+                    class="rounded-full border px-3 py-2 text-sm font-medium uppercase tracking-[0.1em] whitespace-nowrap transition-colors"
                     :class="selectedCategory === '' ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-background text-muted-foreground hover:bg-accent hover:text-foreground'"
                     @click="emit('category-change', '')"
                 >
@@ -54,7 +54,7 @@ const formatCategory = (category: string) => category.replaceAll('_', ' ')
                     v-for="category in categories"
                     :key="category"
                     type="button"
-                    class="rounded-full border px-3 py-2 text-sm font-medium uppercase tracking-[0.1em] transition-colors"
+                    class="rounded-full border px-3 py-2 text-sm font-medium uppercase tracking-[0.1em] whitespace-nowrap transition-colors"
                     :class="selectedCategory === category ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-background text-muted-foreground hover:bg-accent hover:text-foreground'"
                     @click="emit('category-change', category)"
                 >
