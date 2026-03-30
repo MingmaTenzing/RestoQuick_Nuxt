@@ -1,0 +1,222 @@
+"filename", "language", "TypeScript", "Vue", "XML", "PostCSS", "JSON", "JSON with Comments", "YAML", "Prisma", "Markdown", "MS SQL", "comment", "blank", "total"
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/README.md", "Markdown", 0, 0, 0, 0, 0, 0, 0, 0, 193, 0, 0, 82, 275
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/app.vue", "Vue", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 17
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/assets/css/main.css", "PostCSS", 0, 0, 0, 220, 0, 0, 0, 0, 0, 0, 6, 28, 254
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/assets/images/logo.svg", "XML", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/client_utils/cloudinary_upload_image.ts", "TypeScript", 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 46
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/client_utils/constants.ts", "TypeScript", 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 17
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/client_utils/enum.ts", "TypeScript", 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 7
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/client_utils/staff_avatar.ts", "TypeScript", 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/Dashboard_components/DashboardTopSellingTable.vue", "Vue", 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 92
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/Dashboard_components/Dashboard_Header.vue", "Vue", 0, 67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 79
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/Dashboard_components/Dashboard_KPI.vue", "Vue", 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 45
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/Dashboard_components/Dashboard_NavBar.vue", "Vue", 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 1, 14, 39
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/Dashboard_components/Dashboard_SideBar.vue", "Vue", 0, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 54
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/Dashboard_components/Monthly_Revenue.vue", "Vue", 0, 67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 81
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/Dashboard_components/Recent_Orders.vue", "Vue", 0, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 141
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/Dashboard_components/SoldbyCategory_Piechart.vue", "Vue", 0, 86, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 99
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/Dashboard_components/TopSelling_Items.vue", "Vue", 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 71
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/booking_components/AddBooking_Modal.vue", "Vue", 0, 126, 0, 0, 0, 0, 0, 0, 0, 0, 2, 34, 162
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/booking_components/Booking_DetailsCard.vue", "Vue", 0, 87, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 105
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/booking_components/Loading_booking.vue", "Vue", 0, 211, 0, 0, 0, 0, 0, 0, 0, 0, 35, 44, 290
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/home_components/About_Section.vue", "Vue", 0, 87, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 103
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/home_components/FeatureStorySection.vue", "Vue", 0, 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 78
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/home_components/Features.vue", "Vue", 0, 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 60
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/home_components/HomeFooter.vue", "Vue", 0, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 63
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/home_components/NavBar.vue", "Vue", 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 76
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/home_components/ScrollReveal.vue", "Vue", 0, 89, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 102
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/home_components/TitleSection.vue", "Vue", 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 31
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/home_components/Trusted_By.vue", "Vue", 0, 78, 0, 0, 0, 0, 0, 0, 0, 0, 5, 21, 104
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/kitchenDisplay_components/Completed_Orders/Complete_Order_Popup.vue", "Vue", 0, 109, 0, 0, 0, 0, 0, 0, 0, 0, 4, 53, 166
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/kitchenDisplay_components/Completed_Orders/Completed_Order_Item.vue", "Vue", 0, 57, 0, 0, 0, 0, 0, 0, 0, 0, 6, 60, 123
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/kitchenDisplay_components/Loading_Order_Item.vue", "Vue", 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 7, 10, 49
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/kitchenDisplay_components/Order_Item.vue", "Vue", 0, 55, 0, 0, 0, 0, 0, 0, 0, 0, 6, 50, 111
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/manage_table_components/Add_Table_Modal_Component.vue", "Vue", 0, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46, 116
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/manage_table_components/Edit_Table_Modal_Component.vue", "Vue", 0, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 102
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/manage_table_components/Table_Loading_Skeleton.vue", "Vue", 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 30
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/manage_table_components/Table_QR_Code.vue", "Vue", 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 50
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/menu_components/AddMenuItemModal.vue", "Vue", 0, 165, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 189
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/menu_components/DeleteMenuItemConfirmModal.vue", "Vue", 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 55
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/menu_components/EditMenuItemModal.vue", "Vue", 0, 203, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 235
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/menu_components/MenuItemCard.vue", "Vue", 0, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 98
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/order_dashboard_components/Loading_order.vue", "Vue", 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 51
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/order_dashboard_components/Order_DetailsCard.vue", "Vue", 0, 82, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 105
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/pos_components/Table_Card.vue", "Vue", 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 38
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/qr_order_components/Cart_Item.vue", "Vue", 0, 55, 0, 0, 0, 0, 0, 0, 0, 0, 2, 10, 67
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/qr_order_components/Menu_Item.vue", "Vue", 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 17, 31, 97
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/roster_components/addShift.vue", "Vue", 0, 139, 0, 0, 0, 0, 0, 0, 0, 0, 6, 82, 227
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/roster_components/draft_shift.vue", "Vue", 0, 61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 80
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/roster_components/editShift.vue", "Vue", 0, 124, 0, 0, 0, 0, 0, 0, 0, 0, 6, 71, 201
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/roster_components/edit_draft_shift.vue", "Vue", 0, 79, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 97
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/roster_components/roster_ai_sidebar_modal.vue", "Vue", 0, 108, 0, 0, 0, 0, 0, 0, 0, 0, 22, 24, 154
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/roster_components/roster_calendar.vue", "Vue", 0, 175, 0, 0, 0, 0, 0, 0, 0, 0, 29, 79, 283
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/roster_components/shift_loading.vue", "Vue", 0, 43, 0, 0, 0, 0, 0, 0, 0, 0, 18, 31, 92
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/roster_components/staff_shift.vue", "Vue", 0, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 78
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/roster_components/staffs.vue", "Vue", 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 60
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/staff_components/Add_Staff_Modal.vue", "Vue", 0, 225, 0, 0, 0, 0, 0, 0, 0, 0, 10, 77, 312
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/staff_components/Edit_Staff_Modal.vue", "Vue", 0, 233, 0, 0, 0, 0, 0, 0, 0, 0, 11, 56, 300
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/staff_components/Staff_Card.vue", "Vue", 0, 117, 0, 0, 0, 0, 0, 0, 0, 0, 11, 18, 146
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/staff_components/Staff_Card_Loading.vue", "Vue", 0, 55, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 65
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/staff_components/Staff_Delete.vue", "Vue", 0, 81, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 87
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/stock_components/AddStockDialog.vue", "Vue", 0, 144, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 163
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/stock_components/DeleteStockDialog.vue", "Vue", 0, 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 66
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/stock_components/RestockDialog.vue", "Vue", 0, 104, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 118
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/stock_components/StockEmptyState.vue", "Vue", 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 20
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/stock_components/StockFilterBar.vue", "Vue", 0, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 58
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/stock_components/StockItemCard.vue", "Vue", 0, 89, 0, 0, 0, 0, 0, 0, 0, 0, 4, 15, 108
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/stock_components/StockItemCardSkeleton.vue", "Vue", 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7, 43
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/stock_components/StockStatsCard.vue", "Vue", 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 38
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/stock_components/StockStatsCardSkeleton.vue", "Vue", 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 20
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/ui/About_Section_Accordion.vue", "Vue", 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 53
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/ui/AddShift_Popover.vue", "Vue", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 16
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/ui/BackgroundGrid.vue", "Vue", 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 13
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/ui/DummyStatsCard.vue", "Vue", 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 46
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/components/vapi/vapi_call_button.vue", "Vue", 0, 108, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 128
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useAddLeaveRequestModal.ts", "TypeScript", 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 26
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useAddShiftModal.ts", "TypeScript", 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 34
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useAiRosterModal.ts", "TypeScript", 82, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 15, 99
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useCompleted_Order_Modal.ts", "TypeScript", 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 20
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useDraftShift.ts", "TypeScript", 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 16, 87
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useEditShift.ts", "TypeScript", 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 31
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useEdit_Staff.ts", "TypeScript", 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 28
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useManage_Table_Modal.ts", "TypeScript", 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 35
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useOrderCart.ts", "TypeScript", 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 11, 61
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useRoster.ts", "TypeScript", 114, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 122
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useShiftMutation.ts", "TypeScript", 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 11
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useSideBar.ts", "TypeScript", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 12
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useStaffDrag.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 18
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useTableId.ts", "TypeScript", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 17
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/composables/useWeekNavigation.ts", "TypeScript", 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 10, 85
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/layouts/Dashboard_layout.vue", "Vue", 0, 54, 0, 0, 0, 0, 0, 0, 0, 0, 3, 31, 88
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/lib/menu-data.ts", "TypeScript", 260, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 7, 273
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/lib/roster-mockdata.ts", "TypeScript", 362, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 11, 381
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/apply-leave.vue", "Vue", 0, 89, 0, 0, 0, 0, 0, 0, 0, 0, 0, 49, 138
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/bookings.vue", "Vue", 0, 218, 0, 0, 0, 0, 0, 0, 0, 0, 10, 96, 324
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/index.vue", "Vue", 0, 81, 0, 0, 0, 0, 0, 0, 0, 0, 1, 17, 99
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/kitchen.vue", "Vue", 0, 121, 0, 0, 0, 0, 0, 0, 0, 0, 6, 88, 215
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/menu.vue", "Vue", 0, 196, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58, 254
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/orders/[order_id].vue", "Vue", 0, 213, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 245
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/orders/index.vue", "Vue", 0, 170, 0, 0, 0, 0, 0, 0, 0, 0, 7, 24, 201
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/pos.vue", "Vue", 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 28
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/qr-codes.vue", "Vue", 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 3, 25, 58
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/roster.vue", "Vue", 0, 76, 0, 0, 0, 0, 0, 0, 0, 0, 13, 73, 162
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/roster/leave-requests.vue", "Vue", 0, 161, 0, 0, 0, 0, 0, 0, 0, 0, 9, 25, 195
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/roster/staff-availability.vue", "Vue", 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 39
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/roster/suggestion.vue", "Vue", 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 9
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/roster/weekly.vue", "Vue", 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 23
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/staff.vue", "Vue", 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 12
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/staff/index.vue", "Vue", 0, 283, 0, 0, 0, 0, 0, 0, 0, 0, 14, 36, 333
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/stock/index.vue", "Vue", 0, 214, 0, 0, 0, 0, 0, 0, 0, 0, 8, 39, 261
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/stock/print-qr-labels.vue", "Vue", 0, 26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 32
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/stock/qr-labels.vue", "Vue", 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 52
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/stock/update/[stock_id].vue", "Vue", 0, 125, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26, 151
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/tables/index.vue", "Vue", 0, 224, 0, 0, 0, 0, 0, 0, 0, 0, 9, 48, 281
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/dashboard/tables/print-qr-codes.vue", "Vue", 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 1, 16, 35
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/index.vue", "Vue", 0, 493, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 528
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/order-table/[table_id].vue", "Vue", 0, 129, 0, 0, 0, 0, 0, 0, 0, 0, 22, 98, 249
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/order-table/checkout/index.vue", "Vue", 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 76
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/order-table/checkout/return.vue", "Vue", 0, 75, 0, 0, 0, 0, 0, 0, 0, 0, 1, 37, 113
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/app/pages/print-roster.vue", "Vue", 0, 72, 0, 0, 0, 0, 0, 0, 0, 0, 3, 53, 128
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/docker-compose.yml", "YAML", 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 3, 17
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/nuxt.config.ts", "TypeScript", 96, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 14, 112
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/package-lock.json", "JSON", 0, 0, 0, 0, 22914, 0, 0, 0, 0, 0, 0, 1, 22915
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/package.json", "JSON", 0, 0, 0, 0, 58, 0, 0, 0, 0, 0, 0, 1, 59
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma.config.ts", "TypeScript", 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 14
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251110061727_init/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 4, 6, 26
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251110064400_init/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 1, 9
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251110143245/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 37, 18, 14, 69
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251120035811_added_booking_schema/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 5, 7, 35
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251120040402_removed_table_location_from_booking/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 1, 9
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251205013948_added_orders_schema/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 6, 8, 39
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251205053810_added_menuitme/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 4, 5, 22
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251209073346_added_ordertype_to_order_table/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 6
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251216020406/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 2, 12
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251216021232_made_order_number_nullable/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251220075747_all_the_prices_are_changed_to_integer_and_changed_the_price_to_cents_from_dollar/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 13, 3, 22
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251225071737_added_checkout_session_id_in_order_model/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 2, 13
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251226050459_removed_the_order_number_cause_no_need_for_it/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 2, 12
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251230031205_added_customer_name_in_order/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20251230031325_removed_the_default_value_for_customername_in_orderschema/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20260116034846_added_profile_photo_url_in_staff/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20260116035250_added_availablility_weekday_enum/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 8, 2, 13
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20260116035819_set_default_availablity_for_testing_purpose/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20260116041231_added_joined_date_in_staff/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 4
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20260130043403_added_employment_type_and_perhourate_with_default_values_intially/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 2, 7
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20260130043557_the_default_emplymenttype_and_per_hour_rate_is_removed_as_filling_data_in_the_tables_have_been_done_already/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 4
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20260202164013_added_the_stock_table/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 2, 3, 20
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20260303064727_post_reset_check/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 6
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20260303065146/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 10, 3, 24
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/migrations/20260305172748_maked_the_staff_profile_photo_optional/migration.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 4
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/prisma/schema.prisma", "Prisma", 0, 0, 0, 0, 0, 0, 0, 170, 0, 0, 17, 38, 225
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/railpack.json", "JSON", 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 2, 10
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/response.ts", "TypeScript", 320, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 321
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/bookings/[booking-id].put.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 17
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/bookings/index.get.ts", "TypeScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/bookings/index.post.ts", "TypeScript", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 12
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/dashboard/stats/popular-items.get.ts", "TypeScript", 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 38
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/dashboard/stats/recent-order.get.ts", "TypeScript", 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 27
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/dashboard/stats/revenue-trend.get.ts", "TypeScript", 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 21
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/dashboard/stats/soldbycategory.get.ts", "TypeScript", 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7, 46
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/dashboard/stats/weekly-kpi.get.ts", "TypeScript", 73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 81
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/leave-requests/[request_id].delete.ts", "TypeScript", 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 11
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/leave-requests/[request_id].put.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 17
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/leave-requests/index.get.ts", "TypeScript", 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 13
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/leave-requests/index.post.ts", "TypeScript", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 9
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/menu/[menu_id].delete.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 18
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/menu/[menu_id].put.ts", "TypeScript", 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 34
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/menu/category.get.ts", "TypeScript", 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/menu/index.get.ts", "TypeScript", 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 10
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/menu/index.post.ts", "TypeScript", 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 27
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/menu/order-menu.get.ts", "TypeScript", 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 13
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/menu/update_availability/[menu_item_id].patch.ts", "TypeScript", 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 29
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/orders/[order_id].get.ts", "TypeScript", 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 35
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/orders/completed.get.ts", "TypeScript", 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 33
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/orders/index.get.ts", "TypeScript", 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 11, 72
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/orders/index.post.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 91, 9, 100
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/orders/index.put.ts", "TypeScript", 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 11, 67
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/orders/pending.get.ts", "TypeScript", 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 24
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/roster-agent/index.post.ts", "TypeScript", 93, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 103
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/shift/[shiftId].delete.ts", "TypeScript", 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 11
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/shift/[shiftId].get.ts", "TypeScript", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 16
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/shift/[shiftId].put.ts", "TypeScript", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 17
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/shift/createmany.post.ts", "TypeScript", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 16
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/shift/index.get.ts", "TypeScript", 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 45
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/shift/index.post.ts", "TypeScript", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 16
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/staff/[staffId].delete.ts", "TypeScript", 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 21
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/staff/[staffId].patch.ts", "TypeScript", 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 24
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/staff/[staffId].ts", "TypeScript", 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 14
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/staff/index.delete.ts", "TypeScript", 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 21
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/staff/index.get.ts", "TypeScript", 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 21
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/staff/index.post.ts", "TypeScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/staff/upload-profile-picture.post.ts", "TypeScript", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 1, 9
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/stock/[id].delete.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 18
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/stock/[id].get.ts", "TypeScript", 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 25
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/stock/[id].put.ts", "TypeScript", 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 22
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/stock/index.get.ts", "TypeScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/stock/index.post.ts", "TypeScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/stripe-checkout/index.post.ts", "TypeScript", 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 10, 63
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/stripe-checkout/session-status/index.get.ts", "TypeScript", 103, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 15, 135
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/stripe-checkout/session-status/test.ts", "TypeScript", 130, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 131
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/tables/[table_id].delete.ts", "TypeScript", 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 14
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/tables/[table_id].get.ts", "TypeScript", 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 27
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/tables/index.get.ts", "TypeScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/tables/index.post.ts", "TypeScript", 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 31
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/tables/index.put.ts", "TypeScript", 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 46
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/vapi-booking-tool/index.get.ts", "TypeScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/vapi-booking-tool/index.post.ts", "TypeScript", 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 47
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/api/websocket.ts", "TypeScript", 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 24
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/utils/dateRange.ts", "TypeScript", 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 45
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/utils/kitchenSocket.ts", "TypeScript", 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 19
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/utils/prisma.ts", "TypeScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/server/utils/toMinutes.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 21
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 0, 17, 0, 0, 0, 0, 1, 1, 19
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/types/accordionItems.ts", "TypeScript", 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/types/cloudinary.ts", "TypeScript", 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 22
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/types/dashboard-analytics.ts", "TypeScript", 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 48
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/types/order-cart.ts", "TypeScript", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 9
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/types/orderwithInclude.ts", "TypeScript", 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 13
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/types/revenuetrend.ts", "TypeScript", 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/types/shift_include_staff.ts", "TypeScript", 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/types/websocket_payload.ts", "TypeScript", 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 14
+"/Users/mingmatenzingsherpa/Documents/programming/RestoQuick_Nuxt/zod_schema/roster_agent_schema.ts", "TypeScript", 54, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 11, 79
+"Total", "-", 3270, 8257, 1, 220, 22980, 17, 14, 170, 193, 175, 676, 3065, 39038

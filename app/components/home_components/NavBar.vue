@@ -33,10 +33,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header class="sticky top-0 z-50 px-4 pt-4 sm:px-6">
+  <header class="sticky top-0 z-50">
     <nav
-      class="mx-auto flex max-w-7xl items-center justify-between rounded-[28px] border border-border bg-background/75 px-3 py-3 backdrop-blur-xl transition duration-300 sm:px-4"
-      :class="scrolled ? 'shadow-md' : 'shadow-sm'"
+      class="flex w-full items-center justify-between border-b border-border bg-background px-4 py-3 transition duration-300 sm:px-6"
+      :class="scrolled ? 'shadow-md' : 'shadow-none'"
       aria-label="Primary"
     >
       <NuxtLink to="/" class="flex items-center px-2 py-1.5">
@@ -57,7 +57,7 @@ onUnmounted(() => {
       <div class="flex items-center gap-2 sm:gap-3">
         <button
           type="button"
-          class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-card text-muted-foreground transition hover:bg-accent hover:text-accent-foreground"
+          class="inline-flex items-center justify-center p-2 text-muted-foreground transition duration-200 hover:text-primary"
           :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
           @click="toggleColorMode"
         >

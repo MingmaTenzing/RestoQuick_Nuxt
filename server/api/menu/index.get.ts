@@ -3,6 +3,9 @@ export default defineEventHandler(async (event) => {
 
   const menuItems = await prisma.menuItem.findMany({
     orderBy: [{ category: "asc" }, { name: "asc" }],
+    include: {
+      options: true,
+    },
   });
 
   return menuItems;

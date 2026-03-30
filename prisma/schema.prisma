@@ -87,10 +87,9 @@ enum BookingStatus {
 
 // 2. Model to manage Restaurant Tables
 model Table {
-  id       String @id @default(uuid())
-  number   String @unique // e.g. "A1", "12", "Bar-1"
+  id       String    @id @default(uuid())
+  number   String    @unique // e.g. "A1", "12", "Bar-1"
   capacity Int // How many people fit at this table
-
   bookings Booking[]
   orders   Order[]
 }
@@ -137,6 +136,21 @@ model MenuItem {
 
   // Relations
   orderItems OrderItem[]
+
+  //one menu item can have many options like extra chicken, large, or anything
+  options MenuOption[]
+}
+
+model MenuOption {
+  id String @id @default(uuid())
+
+  name       String
+  priceCents Int    @default(0)
+
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  orderItemOptions OrderItemOption[]
 }
 
 // Order
@@ -152,6 +166,17 @@ enum OrderType {
   UBER
 }
 
+enum PaymentStatus {
+  UNPAID
+  PAID
+}
+
+enum PaymentMethod {
+  CASH
+  CARD_TERMINAL
+  STRIPE_QR
+}
+
 model Order {
   id String @id @default(uuid())
 
@@ -162,8 +187,11 @@ model Order {
 
   checkoutSessionId String @unique // 🔒 prevents duplicates orders by checking if order's been made already using the checkout ssession id.
 
-  status           OrderStatus @default(PENDING)
-  totalAmountCents Int         @default(0) // Total price of the order
+  status           OrderStatus    @default(PENDING)
+  totalAmountCents Int            @default(0) // Total price of the order
+  paymentStatus    PaymentStatus  @default(UNPAID)
+  paymentMethod    PaymentMethod?
+  paidAt           DateTime?
 
   orderType OrderType @default(DINING)
 
@@ -198,8 +226,23 @@ model OrderItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  menuItem   MenuItem? @relation(fields: [menuItemId], references: [id])
-  menuItemId String?
+  menuItem         MenuItem?         @relation(fields: [menuItemId], references: [id])
+  menuItemId       String?
+  orderItemOptions OrderItemOption[]
+}
+
+model OrderItemOption {
+  id       String @id @default(uuid())
+  quantity Int    @default(1)
+
+  name       String
+  priceCents Int
+
+  orderItemId String
+  orderItem   OrderItem @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
+
+  menuOptionId String?
+  menuOption   MenuOption? @relation(fields: [menuOptionId], references: [id])
 }
 
 // Stock Management

@@ -88,6 +88,9 @@ export default defineEventHandler(async (event) => {
         customerName: session.customer_details!.name!,
         totalAmountCents: session.amount_total!,
         tableId: session.metadata!.table_id!,
+        paymentStatus: "PAID",
+        paymentMethod: "STRIPE_QR",
+        paidAt: new Date(),
         items: {
           create: mapped_order_data,
         },
@@ -100,7 +103,7 @@ export default defineEventHandler(async (event) => {
         },
         table: true,
       },
-    });
+    } );
     console.log(order);
 
     // Notify kitchen clients that a new order was created

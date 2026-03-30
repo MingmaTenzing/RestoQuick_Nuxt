@@ -6,6 +6,10 @@ const props = defineProps<{
   order: OrderDetailsWithInclude
 }>()
 
+const serviceLabel = computed(() => props.order.orderType === 'TAKEAWAY'
+  ? 'Takeaway'
+  : `Table ${props.order.table?.number ?? '--'}`)
+
 
 async function markOrder_as_ready(order_id: string) {
   try {
@@ -31,7 +35,7 @@ async function markOrder_as_ready(order_id: string) {
                         <div class="flex justify-between items-center">
                           <div class=" space-y-1">
                             <p class=" text-xl font-semibold">Order No: {{order.orderNo}}</p>
-                            <p class="text-muted-foreground">Table {{ order.table?.number }}</p>
+                            <p class="text-muted-foreground">{{ serviceLabel }}</p>
                           </div>
                             <div class=" flex gap-2 items-center text-sm text-muted-foreground font-light">
                                 <i class=" pi pi-clock"></i>
@@ -48,33 +52,29 @@ async function markOrder_as_ready(order_id: string) {
                         <!-- order items -->
 
                         <div v-for="item in order.items" :key="item.id">
+                          <div>
+                            <div class=" flex space-x-2">
+                              <p>{{item.quantity}}x</p>
+                              <p>{{item.itemName}}</p>
+                            </div>
 
-                            
-                                      
-                                                <div class=" ">
-                                                    <div class=" flex space-x-2">
-                                                        <p>{{item.quantity}}x</p>
-                                                        <p>{{item.itemName}}</p>
-                                                    </div>
-                                                 
-                                                </div>
+                            <!-- options (orderItemOptions snapshot) -->
+                            <div v-if="item.orderItemOptions && item.orderItemOptions.length" class="mt-2 ml-4 space-y-1 text-sm">
+                              <p class="text-xs font-medium text-muted-foreground">Options</p>
+                              <div v-for="opt in item.orderItemOptions" :key="opt.id" class="flex gap-2 items-center">
+                                <div class="flex gap-2 items-center">
+                                  <p class="font-medium">{{opt.quantity}}x</p>
+                                  <p>{{opt.name}}</p>
+                                </div>
+                              </div>
+                            </div>
 
-                                                <!--  special instructions -->
-                                            <div v-if="item.specialInstructions !== ''" class="  border bg-accent p-2 rounded-lg text-sm">
-                            
-                            
-                                                <p class=" font-light text-muted-foreground text-xs">Special Instructions</p>
-                                                <p class=" font-light">{{item.specialInstructions}}</p>
-                            
-                            
-                                            </div>
-                                                
-                                            
-                            
-                            
-                                  
-                            
-                            
+                            <!--  special instructions -->
+                            <div v-if="item.specialInstructions !== ''" class=" border bg-accent p-2 rounded-lg text-sm mt-2">
+                              <p class=" font-light text-muted-foreground text-xs">Special Instructions</p>
+                              <p class=" font-light">{{item.specialInstructions}}</p>
+                            </div>
+                          </div>
                         </div>
         
 

@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type { MenuCategory, MenuItem } from '~/generated/prisma/browser'
-import type { MenuItemCreateInput } from '~/generated/prisma/models'
+import type { MenuCategory, MenuItem, MenuOption } from '~/generated/prisma/browser'
+import type { MenuItemCreateInput, MenuItemUpdateInput } from '~/generated/prisma/models'
+import type {  MenuItemWithOptions } from '~~/types/menu'
+
 
 
 
@@ -9,8 +11,7 @@ definePageMeta({
 })
 
 
-
-const { data: menuItems, refresh } = await useFetch<MenuItem[]>('/api/menu')
+const { data: menuItems, refresh } = await useFetch<MenuItemWithOptions[]>('/api/menu')
 
 const { data: menu_category } = await useFetch<MenuCategory[]>('/api/menu/category')
 
@@ -37,7 +38,9 @@ const filteredMenuItems = computed(() => {
 })
 
 const showEditModal = ref(false)
-const selectedMenuItem = ref<MenuItem | null>(null)
+const selectedMenuItem = ref<MenuItemWithOptions | null>(null)
+const showViewSidebar = ref(false)
+const selectedViewMenuItem = ref<MenuItemWithOptions | null>(null)
 const isUpdatingMenuItem = ref(false)
 const isDeletingMenuItem = ref(false)
 const showAddModal = ref(false)
@@ -47,8 +50,21 @@ const isCreatingMenuItem = ref(false)
 
 
 const openEditModal = (item: MenuItem) => {
-    selectedMenuItem.value = item
+    selectedMenuItem.value = menuItems.value?.find(menuItem => menuItem.id === item.id) ?? {
+        ...item,
+        options: [],
+    }
+
     showEditModal.value = true
+}
+
+const openViewSidebar = (item: MenuItem) => {
+    selectedViewMenuItem.value = menuItems.value?.find(menuItem => menuItem.id === item.id) ?? {
+        ...item,
+        options: [],
+    }
+
+    showViewSidebar.value = true
 }
 
 const openAddModal = () => {
@@ -60,6 +76,11 @@ const closeEditModal = () => {
     selectedMenuItem.value = null
 }
 
+const closeViewSidebar = () => {
+    showViewSidebar.value = false
+    selectedViewMenuItem.value = null
+}
+
 const closeAddModal = () => {
     showAddModal.value = false
 }
@@ -68,7 +89,7 @@ const createMenuItem = async (payload: MenuItemCreateInput) => {
     isCreatingMenuItem.value = true
 
     try {
-        await $fetch<MenuItem>('/api/menu', {
+        await $fetch<MenuItemWithOptions>('/api/menu', {
             method: 'POST',
             body: payload
         })
@@ -90,11 +111,11 @@ const createMenuItem = async (payload: MenuItemCreateInput) => {
     }
 }
 
-const updateEditedMenuItem = async (payload: { id: string, form: MenuItemCreateInput }) => {
+const updateEditedMenuItem = async (payload: { id: string, form: MenuItemUpdateInput }) => {
     isUpdatingMenuItem.value = true
 
     try {
-        const updatedItem = await $fetch<MenuItem>(`/api/menu/${payload.id}`, {
+        const updatedItem = await $fetch<MenuItemWithOptions>(`/api/menu/${payload.id}`, {
             method: 'PUT',
             body: payload.form
         })
@@ -215,6 +236,7 @@ const update_availability = async (menu_item: MenuItem) => {
                 <MenuComponentsMenuItemCard
                     :item="item"
                     @edit="openEditModal"
+                    @view="openViewSidebar"
                     @toggle-availability="update_availability"
                 />
             </div>
@@ -239,6 +261,21 @@ const update_availability = async (menu_item: MenuItem) => {
                 @close="closeEditModal"
                 @update="updateEditedMenuItem"
                 @delete="deleteMenuItem"
+            />
+        </Transition>
+
+        <Transition
+            enter-active-class="transition duration-300 ease-out"
+            enter-from-class="opacity-0"
+            enter-to-class="opacity-100"
+            leave-active-class="transition duration-200 ease-in"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+        >
+            <MenuComponentsMenuItemDetailsSidebar
+                v-if="showViewSidebar && selectedViewMenuItem"
+                :item="selectedViewMenuItem"
+                @close="closeViewSidebar"
             />
         </Transition>
 

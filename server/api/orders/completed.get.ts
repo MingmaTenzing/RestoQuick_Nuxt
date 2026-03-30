@@ -20,6 +20,7 @@ export default defineEventHandler(async (event) => {
       items: {
         include: {
           menuItem: true,
+          orderItemOptions: true,
         },
       },
     },

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { de } from 'zod/v4/locales'
 import { OrderStatus } from '~/generated/prisma/enums'
 import type { OrderDetailsWithInclude } from '~~/types/orderwithInclude'
 
@@ -14,6 +15,8 @@ const order_id = route.params.order_id
 
 const { data: order_details, status, refresh } = await useFetch<OrderDetailsWithInclude>(`/api/orders/${order_id}`)
 
+
+console.log(order_details)
 const formatStatusLabel = (statusValue: string) => {
 	return statusValue.charAt(0) + statusValue.slice(1).toLowerCase()
 }

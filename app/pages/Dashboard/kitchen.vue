@@ -38,6 +38,7 @@ onMounted(async () => {
     loading_orders.value = true
     all_orders.value = await $fetch<OrderDetailsWithInclude[]>('/api/orders/pending');
     loading_orders.value = false
+    console.log(all_orders.value)
 
 })
 

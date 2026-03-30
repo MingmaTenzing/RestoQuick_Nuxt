@@ -6,6 +6,7 @@ const navItems = [
     { to: '/dashboard/roster/weekly', icon: 'pi pi-calendar', label: 'Roster' },
     { to: '/dashboard/bookings', icon: 'pi pi-calendar-clock', label: 'Bookings' },
     { to: '/dashboard/orders', icon: 'pi pi-shopping-cart', label: 'Orders' },
+    { to: '/dashboard/pos', icon: 'pi pi-desktop', label: 'POS' },
     { to: '/dashboard/kitchen', icon: 'pi pi-building-columns', label: 'Kitchen' },
     { to: '/dashboard/menu', icon: 'pi pi-file-check', label: 'Menu' },
     { to: '/dashboard/staff', icon: 'pi pi-users', label: 'Staff' },
@@ -14,7 +15,12 @@ const navItems = [
 ];
 
 const isActive = (path: string) => {
-    return route.path === path
+    if (path === '/dashboard') {
+        return route.path === path;
+    }
+
+    const sectionPath = path.endsWith('/') ? path : `${path}/`;
+    return route.path === path || route.path.startsWith(sectionPath);
 }
 </script>
 

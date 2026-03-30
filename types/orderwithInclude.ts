@@ -6,6 +6,7 @@ export type OrderDetailsWithInclude = OrderGetPayload<{
     items: {
       include: {
         menuItem: true;
+        orderItemOptions: true;
       };
     };
   };

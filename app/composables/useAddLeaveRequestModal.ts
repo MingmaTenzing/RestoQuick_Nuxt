@@ -1,5 +1,3 @@
-import { ref } from "vue";
-
 export function useAddLeaveRequestModal() {
   const isOpen = useState("leaveisopen", () => false);
   const selectedStaffId = useState<string | null>("selected", () => null);
