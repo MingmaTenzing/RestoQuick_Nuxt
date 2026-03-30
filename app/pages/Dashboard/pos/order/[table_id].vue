@@ -66,7 +66,7 @@ const filteredMenuItems = computed(() => {
 })
 
 
-const submitOrder = async () => {
+const submitOrder = async (payload?: { customerName?: string }) => {
     if (!routeTableId.value || cart_items.value.length === 0) {
         return
     }
@@ -92,11 +92,15 @@ const submitOrder = async () => {
 
         const endpoint = isTakeawayOrder.value ? '/api/orders/pos/takeaway' : '/api/orders/pos/dining'
 
+        const customerNameToSend = isTakeawayOrder.value
+            ? (payload?.customerName && payload.customerName.trim() !== '' ? payload.customerName.trim() : 'Takeaway')
+            : 'Walk_in'
+
         await $fetch(endpoint, {
             method: 'POST',
             body: {
                 data: {
-                    customerName: isTakeawayOrder.value ? 'Takeaway' : 'Walk_in',
+                    customerName: customerNameToSend,
                     totalAmountCents: subtotal_cents.value,
                     ...(!isTakeawayOrder.value ? { tableId: routeTableId.value } : {}),
                     items: {

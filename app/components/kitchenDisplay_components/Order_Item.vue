@@ -61,12 +61,11 @@ async function markOrder_as_ready(order_id: string) {
                             <!-- options (orderItemOptions snapshot) -->
                             <div v-if="item.orderItemOptions && item.orderItemOptions.length" class="mt-2 ml-4 space-y-1 text-sm">
                               <p class="text-xs font-medium text-muted-foreground">Options</p>
-                              <div v-for="opt in item.orderItemOptions" :key="opt.id" class="flex justify-between">
-                                <div class="flex gap-2">
+                              <div v-for="opt in item.orderItemOptions" :key="opt.id" class="flex gap-2 items-center">
+                                <div class="flex gap-2 items-center">
                                   <p class="font-medium">{{opt.quantity}}x</p>
                                   <p>{{opt.name}}</p>
                                 </div>
-                                <div class="text-muted-foreground">{{ (opt.priceCents/100).toFixed(2) }}</div>
                               </div>
                             </div>
 

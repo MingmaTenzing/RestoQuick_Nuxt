@@ -16,8 +16,19 @@ const emit = defineEmits<{
     (e: 'decrease', item: Order_Cart_Item): void
     (e: 'remove', item: Order_Cart_Item): void
     (e: 'clear'): void
-    (e: 'submit'): void
+    (e: 'submit', payload?: { customerName?: string }): void
 }>()
+
+const customerName = ref<string>('')
+
+function handleSubmit() {
+    if (props.serviceLabel) {
+        emit('submit', { customerName: customerName.value })
+        customerName.value = ''
+    } else {
+        emit('submit')
+    }
+}
 
 
 const { optionsSignature, options_total_cents, row_total_cents } = useOrderCart()
@@ -46,6 +57,16 @@ const emptyStateCopy = computed(() => props.serviceLabel
                         <p class="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">Order cart</p>
                         <h2 class="mt-1 text-xl font-semibold text-foreground">{{ orderHeading }}</h2>
                         <p class="mt-1 text-sm text-muted-foreground">Live order for the current service.</p>
+
+                        <div v-if="props.serviceLabel" class="mt-2">
+                            <label class="text-xs text-muted-foreground">Customer name</label>
+                            <input
+                                v-model="customerName"
+                                type="text"
+                                placeholder="Customer name"
+                                class="w-full mt-1 rounded-lg border border-border bg-card p-2 text-sm"
+                            />
+                        </div>
                     </div>
 
                     <span class="rounded-full bg-accent px-3 py-1 text-sm font-medium text-foreground">
@@ -174,7 +195,7 @@ const emptyStateCopy = computed(() => props.serviceLabel
                         type="button"
                         class="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                         :disabled="cartItems.length === 0 || isSubmitting"
-                        @click="emit('submit')"
+                        @click="handleSubmit"
                     >
                         <i v-if="isSubmitting" class="pi pi-spin pi-spinner text-sm"></i>
                         <span>{{ isSubmitting ? 'Sending order...' : 'Send order to kitchen' }}</span>
