@@ -90,8 +90,6 @@ model Table {
   id       String    @id @default(uuid())
   number   String    @unique // e.g. "A1", "12", "Bar-1"
   capacity Int // How many people fit at this table
-  layoutX  Int? // the layout x and y is for table layout later on
-  layoutY  Int? //reason its optional is cause we don't need it when creating a table 
   bookings Booking[]
   orders   Order[]
 }
