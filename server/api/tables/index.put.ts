@@ -7,18 +7,35 @@ export default defineEventHandler(async (event) => {
 
   const capacity = body.capacity;
   const table_id = body.table_id;
+  const layoutX = body.layoutX;
+  const layoutY = body.layoutY;
 
   if (!table_id) {
     throw createError({
-      status: 400,
+      statusCode: 400,
       message: "Please provie the table_id",
     });
   }
-  if (!capacity) {
+
+  if (capacity == null && layoutX == null && layoutY == null) {
     throw createError({
       statusCode: 400,
-      message: "Please provide the field - capacity to update",
+      message: "Please provide at least one field to update",
     });
+  }
+
+  const updateData: { capacity?: number; layoutX?: number; layoutY?: number } = {};
+
+  if (capacity != null) {
+    updateData.capacity = Number(capacity);
+  }
+
+  if (layoutX != null) {
+    updateData.layoutX = Math.round(Number(layoutX));
+  }
+
+  if (layoutY != null) {
+    updateData.layoutY = Math.round(Number(layoutY));
   }
 
   try {
@@ -26,9 +43,7 @@ export default defineEventHandler(async (event) => {
       where: {
         id: table_id,
       },
-      data: {
-        capacity: capacity,
-      },
+      data: updateData,
     });
     return update_table;
   } catch (error) {
