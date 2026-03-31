@@ -1,9 +1,7 @@
 
-
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import type { Table } from '~/generated/prisma/browser';
-
+import { ref, watch } from 'vue'
+import type { Table } from '~/generated/prisma/browser'
 
 type TableBox = {
   id: string
@@ -19,21 +17,32 @@ type TableBox = {
   capacity: number
 }
 
+type TableWithLayout = Table & {
+  layoutX?: number | null
+  layoutY?: number | null
+}
+
+type CanvasEvent = {
+  target: {
+    id: () => string
+    x: () => number
+    y: () => number
+  }
+}
+
 definePageMeta({
   layout: 'dashboard-layout',
 })
 
-const colorMode = useColorMode();
+const colorMode = useColorMode()
 const toast = useToast()
 
-const stageConfig = {
-  width: window.innerWidth,
-  height: window.innerHeight,
-}
+const TABLET_WIDTH = 1024
+const TABLET_HEIGHT = 768
 
-type TableWithLayout = Table & {
-  layoutX?: number | null
-  layoutY?: number | null
+const stageConfig = {
+  width: TABLET_WIDTH,
+  height: TABLET_HEIGHT,
 }
 
 const { data: tables } = useFetch<TableWithLayout[]>('/api/tables')
@@ -56,8 +65,6 @@ const getThemeColors = () => {
   }
 }
 
-
-
 const boxes = ref<TableBox[]>([])
 
 const rebuildBoxes = (value?: TableWithLayout[] | null) => {
@@ -70,10 +77,10 @@ const rebuildBoxes = (value?: TableWithLayout[] | null) => {
 
   boxes.value = value.map((table, index) => ({
     id: table.id,
-    x: table.layoutX ?? (index % 5) * 156 + 20,
-    y: table.layoutY ?? Math.floor(index / 5) * 96 + 20,
-    width: 136,
-    height: 64,
+    x: table.layoutX ?? (index % 6) * 120 + 20,
+    y: table.layoutY ?? Math.floor(index / 6) * 120 + 20,
+    width: 72,
+    height: 72,
     fill: themeColors.card,
     stroke: themeColors.border,
     strokeWidth: 1,
@@ -91,49 +98,41 @@ watch(
   { immediate: true },
 )
 
-type CanvasEvent = {
-  target: {
-    id: () => string
-    x: () => number
-    y: () => number
+const handleDragStart = (e: CanvasEvent) => {
+  const id = e.target.id()
+  const box = boxes.value.find((entry) => entry.id === id)
+  const filteredBoxes = boxes.value.filter((entry) => entry.id !== id)
+
+  if (box) {
+    boxes.value = [...filteredBoxes, box]
   }
 }
 
-const handleDragStart = (e: CanvasEvent) => {
-  const id = e.target.id();
-  
-  // Move the dragged box to the end of the array to simulate moveToTop
-  const box = boxes.value.find(b => b.id === id);
-  const filteredBoxes = boxes.value.filter(b => b.id !== id);
-  if (box) {
-    boxes.value = [...filteredBoxes, box];
-  }
-};
-
 const handleDragMove = (e: CanvasEvent) => {
-  const id = e.target.id();
-  const index = boxes.value.findIndex(b => b.id === id);
-  
-  if (index !== -1) {
-    const currentBox = boxes.value[index]
-    if (!currentBox) {
-      return
-    }
+  const id = e.target.id()
+  const index = boxes.value.findIndex((entry) => entry.id === id)
 
-    const updatedBox: TableBox = {
-      ...currentBox,
-      x: e.target.x(),
-      y: e.target.y(),
-    }
-    
-    // Replace the box in the array
-    const newBoxes = [...boxes.value];
-    newBoxes[index] = updatedBox;
-    boxes.value = newBoxes;
+  if (index === -1) {
+    return
   }
-  
-  document.body.style.cursor = 'pointer';
-};
+
+  const currentBox = boxes.value[index]
+  if (!currentBox) {
+    return
+  }
+
+  const updatedBox: TableBox = {
+    ...currentBox,
+    x: e.target.x(),
+    y: e.target.y(),
+  }
+
+  const newBoxes = [...boxes.value]
+  newBoxes[index] = updatedBox
+  boxes.value = newBoxes
+
+  document.body.style.cursor = 'pointer'
+}
 
 const saveTableLayout = async (tableId: string, x: number, y: number) => {
   try {
@@ -157,22 +156,21 @@ const handleDragEnd = (e: CanvasEvent) => {
 }
 
 const handleMouseOver = () => {
-  document.body.style.cursor = 'pointer';
-};
+  document.body.style.cursor = 'pointer'
+}
 
 const handleMouseOut = () => {
-  document.body.style.cursor = 'default';
-};
+  document.body.style.cursor = 'default'
+}
 
 const handleDoubleClick = (e: CanvasEvent) => {
-  const id = e.target.id();
-  // Remove the box
-  boxes.value = boxes.value.filter(box => box.id !== id);
-};
+  const id = e.target.id()
+  boxes.value = boxes.value.filter((box) => box.id !== id)
+}
 </script>
 
-
 <template>
+  <div class="inline-block overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-sm">
     <v-stage :config="stageConfig">
       <v-layer>
         <v-group
@@ -188,12 +186,12 @@ const handleDoubleClick = (e: CanvasEvent) => {
           @dbltap="handleDoubleClick"
         >
           <v-rect
-            :config="{ x: 0, y: 0, width: box.width, height: box.height, fill: box.fill, stroke: box.stroke, strokeWidth: box.strokeWidth, cornerRadius: 8 }"
+            :config="{ x: 0, y: 0, width: box.width, height: box.height, fill: box.fill, stroke: box.stroke, strokeWidth: box.strokeWidth, cornerRadius: 6 }"
           />
-          <v-text :config="{ x: 0, y: 8, width: box.width, align: 'center', text: box.tableNumber, fontSize: 24, fontStyle: 'bold', fill: getThemeColors().foreground }" />
-          <v-text :config="{ x: 0, y: 38, width: box.width, align: 'center', text: `${box.capacity} seats`, fontSize: 11, fill: getThemeColors().muted }" />
+          <v-text :config="{ x: 0, y: 14, width: box.width, align: 'center', text: box.tableNumber, fontSize: 18, fontStyle: 'bold', fill: getThemeColors().foreground }" />
+          <v-text :config="{ x: 0, y: 40, width: box.width, align: 'center', text: `${box.capacity} seats`, fontSize: 9, fill: getThemeColors().muted }" />
         </v-group>
       </v-layer>
     </v-stage>
-
+  </div>
 </template>
