@@ -201,74 +201,56 @@ const signatureNotes = [
 </script>
 
 <template>
-  <div class="bg-background text-foreground transition-colors duration-300">
+  <div class="bg-background text-foreground">
 
-      <header>
-        <ClientOnly>
-          <Show when="signed-out">
-            <SignInButton />
-            <SignUpButton />
-          </Show>
-          <Show when="signed-in">
-            <UserButton />
-          </Show>
+    <header>
+      <ClientOnly>
+        <Show when="signed-out">
+          <SignInButton />
+          <SignUpButton />
+        </Show>
+        <Show when="signed-in">
+          <UserButton />
+        </Show>
+      </ClientOnly>
+    </header>
 
-        </ClientOnly>
-  </header>
-    <main class="bg-background">
+    <main>
       <NavBar />
-      <section id="main" class="relative overflow-hidden px-6 pb-20 pt-10 sm:pb-24 sm:pt-16">
-        <div
-          aria-hidden="true"
-          class="pointer-events-none absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style="
-            width: 48rem;
-            height: 48rem;
-            background-image: radial-gradient(circle, color-mix(in oklab, var(--color-green-500, #22c55e) 52%, transparent) 0.75px, transparent 1.4px);
-            background-size: 14px 14px;
-            opacity: 0.28;
-            -webkit-mask-image: radial-gradient(circle at center, black 0%, black 32%, transparent 72%);
-            mask-image: radial-gradient(circle at center, black 0%, black 32%, transparent 72%);
-          "
-        />
-
-        <div class="relative z-10 mx-auto grid max-w-7xl items-start gap-16 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-24">
+      <section id="main" class="relative px-6 pb-24 pt-12 sm:pb-32 sm:pt-20">
+        <div class="mx-auto grid max-w-7xl items-start gap-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-24">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.26em] text-green-700 dark:text-green-400">
-              AI-powered operations platform for restaurants and cafes
+              AI-powered operations platform
             </p>
             <h1 class="mt-5 max-w-3xl text-5xl font-semibold tracking-[-0.07em] text-foreground sm:text-6xl lg:text-[5.7rem] lg:leading-[0.92]">
-              More than just a POS.
+              Does more than a normal POS.
             </h1>
             <p class="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
               More than a POS. RestoQuick brings bookings, kitchen flow, staffing, inventory, and reporting into one connected system.
             </p>
 
-            <div class="mt-8 flex flex-wrap gap-3">
-              <span class="rounded-2xl border border-border bg-muted px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Bookings</span>
-              <span class="rounded-2xl border border-border bg-muted px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Kitchen</span>
-              <span class="rounded-2xl border border-border bg-muted px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Team</span>
-              <span class="rounded-2xl border border-border bg-muted px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Inventory</span>
-              <span class="rounded-2xl border border-border bg-muted px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Reporting</span>
-            </div>
+            <p class="mt-8 text-xs tracking-[0.2em] text-muted-foreground">
+              BOOKINGS / KITCHEN / TEAM / INVENTORY / REPORTING
+            </p>
 
-            <div class="mt-10 flex flex-col gap-4 sm:flex-row">
+            <div class="mt-10 flex items-center gap-8">
               <NuxtLink
                 to="/dashboard"
-                class="inline-flex items-center justify-center rounded-full bg-green-600 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-green-700"
+                class="inline-flex items-center justify-center bg-green-600 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-green-700"
               >
                 Get Started
               </NuxtLink>
               <a
                 href="#demo"
-                class="inline-flex items-center justify-center rounded-full border border-border bg-secondary px-7 py-3.5 text-sm font-semibold text-secondary-foreground transition hover:bg-accent hover:text-accent-foreground"
+                class="text-sm font-medium text-muted-foreground underline underline-offset-4 transition hover:text-foreground"
               >
                 Watch Demo
               </a>
             </div>
 
-            <div class="mt-14 grid gap-5 border-t border-border pt-8 sm:grid-cols-3">
-              <div v-for="item in signatureNotes" :key="item.label" class="space-y-3">
+            <div class="mt-16 grid gap-8 sm:grid-cols-3">
+              <div v-for="item in signatureNotes" :key="item.label">
                 <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">{{ item.label }}</p>
                 <p class="text-sm leading-7 text-muted-foreground">{{ item.value }}</p>
               </div>
@@ -276,17 +258,17 @@ const signatureNotes = [
           </div>
 
           <div id="demo" class="lg:pt-6">
-            <img :src="heroShot" alt="Chef and manager using RestoQuick during service" class="w-full rounded-4xl border border-border object-cover shadow-lg" />
+            <img :src="heroShot" alt="Chef and manager using RestoQuick during service" class="w-full object-cover shadow-2xl" />
 
-            <div class="mt-5 grid gap-4 sm:grid-cols-[1.1fr_0.9fr]">
-              <div class="rounded-[28px] border border-border bg-muted px-5 py-5">
+            <div class="mt-8 grid gap-8 sm:grid-cols-2">
+              <div>
                 <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">Why it fits growing venues</p>
                 <p class="mt-3 text-sm leading-7 text-muted-foreground">
                   Designed for operators who need one calm, usable system across bookings, service,
                   staffing, stock, and day-to-day decision-making.
                 </p>
               </div>
-              <div class="rounded-[28px] border border-border bg-muted px-5 py-5">
+              <div>
                 <p class="text-3xl font-semibold tracking-[-0.05em] text-foreground">24/7</p>
                 <p class="mt-2 text-sm leading-7 text-muted-foreground">Maya covers calls and reservations around the clock while your team stays focused on service.</p>
               </div>
@@ -295,7 +277,9 @@ const signatureNotes = [
         </div>
       </section>
 
-      <section id="overview" class="border-y border-border px-6 py-20 sm:py-28">
+      <div class="px-6"><div class="mx-auto max-w-7xl border-t border-border"></div></div>
+
+      <section id="overview" class="px-6 py-20 sm:py-28">
         <ScrollReveal>
           <div class="mx-auto max-w-7xl">
           <div class="max-w-3xl">
@@ -309,16 +293,15 @@ const signatureNotes = [
             </p>
           </div>
 
-          <div class="mt-14 grid gap-6 lg:grid-cols-3">
+          <div class="mt-16 grid gap-14 lg:grid-cols-3">
             <article
               v-for="card in overviewCards"
               :key="card.title"
-              class="rounded-[30px] border border-border bg-card p-5 transition hover:-translate-y-1"
             >
-              <div class="overflow-hidden rounded-[22px] border border-border">
-                <img :src="card.image" :alt="card.alt" class="h-56 w-full object-cover">
+              <div class="overflow-hidden">
+                <img :src="card.image" :alt="card.alt" class="h-56 w-full object-cover transition duration-500 hover:scale-[1.03]">
               </div>
-              <h3 class="mt-6 text-xl font-semibold tracking-[-0.03em] text-card-foreground">{{ card.title }}</h3>
+              <h3 class="mt-6 text-xl font-semibold tracking-[-0.03em] text-foreground">{{ card.title }}</h3>
               <p class="mt-3 text-sm leading-7 text-muted-foreground sm:text-base">{{ card.description }}</p>
             </article>
           </div>
@@ -326,13 +309,15 @@ const signatureNotes = [
         </ScrollReveal>
       </section>
 
+      <div class="px-6"><div class="mx-auto max-w-7xl border-t border-border"></div></div>
+
       <section id="maya" class="px-6 py-20 sm:py-28">
         <ScrollReveal>
-          <div class="mx-auto max-w-7xl rounded-[40px] border border-border bg-card px-7 py-8 shadow-lg sm:px-10 sm:py-12 lg:px-14">
-          <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-20">
+          <div class="mx-auto max-w-7xl">
+          <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">
             <div>
               <p class="text-xs font-semibold uppercase tracking-[0.26em] text-green-700 dark:text-green-400">AI voice agent for booking</p>
-              <h2 class="mt-4 max-w-xl text-4xl font-semibold tracking-[-0.05em] text-card-foreground sm:text-5xl lg:text-[3.6rem] lg:leading-[1.02]">
+              <h2 class="mt-4 max-w-xl text-4xl font-semibold tracking-[-0.05em] text-foreground sm:text-5xl lg:text-[3.6rem] lg:leading-[1.02]">
                 Let Maya handle booking calls without slowing the team down.
               </h2>
               <p class="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
@@ -372,7 +357,9 @@ const signatureNotes = [
         </ScrollReveal>
       </section>
 
-      <section class="px-6 pb-8 pt-4">
+      <div class="px-6"><div class="mx-auto max-w-7xl border-t border-border"></div></div>
+
+      <section class="px-6 pb-8 pt-20 sm:pt-28">
         <ScrollReveal>
           <div class="mx-auto max-w-7xl">
             <div class="max-w-2xl">
@@ -384,10 +371,6 @@ const signatureNotes = [
           </div>
         </ScrollReveal>
       </section>
-
-      <div class="px-6">
-        <div class="mx-auto max-w-7xl border-t border-border"></div>
-      </div>
 
       <FeatureStorySection
         v-for="section in featureSections"
@@ -403,26 +386,27 @@ const signatureNotes = [
         :reverse="section.reverse"
       />
 
-      <section class="border-y border-border px-6 py-20 sm:py-28">
+      <div class="px-6"><div class="mx-auto max-w-7xl border-t border-border"></div></div>
+
+      <section class="px-6 py-20 sm:py-28">
         <ScrollReveal>
           <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Benefits</p>
-            <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
-              The result is a business that runs with more clarity.
-            </h2>
-          </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Benefits</p>
+              <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
+                The result is a business that runs with more clarity.
+              </h2>
+            </div>
 
-          <div class="grid gap-4 sm:grid-cols-3">
-            <article
-              v-for="note in operatorNotes"
-              :key="note"
-              class="rounded-[28px] border border-border bg-card p-6"
-            >
-              <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">Outcome</p>
-              <p class="mt-5 text-base leading-7 text-muted-foreground">{{ note }}</p>
-            </article>
-          </div>
+            <div class="space-y-10">
+              <div v-for="(note, i) in operatorNotes" :key="note" class="flex items-start gap-6">
+                <span class="text-4xl font-semibold tracking-tight text-muted-foreground/40">{{ String(i + 1).padStart(2, '0') }}</span>
+                <div class="pt-2">
+                  <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">Outcome</p>
+                  <p class="mt-2 text-base leading-7 text-foreground">{{ note }}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </ScrollReveal>
       </section>
@@ -454,78 +438,85 @@ const signatureNotes = [
         </ScrollReveal>
       </section>
 
-      <section id="pricing" class="border-t border-border px-6 py-20 sm:py-28">
+      <div class="px-6"><div class="mx-auto max-w-7xl border-t border-border"></div></div>
+
+      <section id="pricing" class="px-6 py-20 sm:py-28">
         <ScrollReveal>
           <div class="mx-auto max-w-7xl">
-          <div class="max-w-2xl">
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Pricing</p>
-            <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
-              Every feature. One fixed price: $25 per month.
-            </h2>
-          </div>
+            <div class="max-w-2xl">
+              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Pricing</p>
+              <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl sm:leading-[1.02]">
+                Every feature. One fixed price: $25 per month.
+              </h2>
+            </div>
 
-          <div class="mt-14 grid gap-6 lg:grid-cols-3">
-            <article
-              v-for="plan in pricingPlans"
-              :key="plan.name"
-              class="rounded-[30px] border p-8 transition duration-300"
-              :class="plan.featured ? 'border-green-600 bg-card shadow-lg' : 'border-border bg-card'"
-            >
-              <p class="text-sm font-semibold uppercase tracking-[0.22em] text-muted-foreground">{{ plan.name }}</p>
-              <div class="mt-6 flex items-end gap-2">
-                <p v-if="plan.oldPrice" class="pb-1 text-sm text-muted-foreground line-through">{{ plan.oldPrice }}</p>
-                <p class="text-4xl font-semibold tracking-[-0.05em]" :class="plan.featured ? 'text-card-foreground' : 'text-muted-foreground line-through'">{{ plan.price }}</p>
-                <p v-if="plan.price !== 'Custom'" class="pb-1 text-sm text-muted-foreground">/ month</p>
-              </div>
-              <p class="mt-4 text-sm leading-7 text-muted-foreground">{{ plan.note }}</p>
-
-              <ul class="mt-8 space-y-3">
-                <li v-for="feature in plan.features" :key="feature" class="flex items-start gap-3 text-sm leading-7 text-muted-foreground">
-                  <span class="mt-2 h-2 w-2 shrink-0 rounded-full bg-green-600 dark:bg-green-400"></span>
-                  <span>{{ feature }}</span>
-                </li>
-              </ul>
-
-              <NuxtLink
-                to="/dashboard"
-                class="mt-8 inline-flex items-center rounded-full px-5 py-2.5 text-sm font-semibold transition"
-                :class="plan.featured ? 'bg-green-600 text-white hover:bg-green-700' : 'border border-border bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground'"
+            <div class="mt-16 grid lg:grid-cols-3">
+              <article
+                v-for="plan in pricingPlans"
+                :key="plan.name"
+                class="relative py-8 lg:px-8 lg:first:pl-0 lg:last:pr-0"
+                :class="{ 'lg:border-x lg:border-border': plan.featured }"
               >
-                Get Started
-              </NuxtLink>
-            </article>
-          </div>
+                <div v-if="plan.featured" class="mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-green-600 dark:text-green-400">
+                  Recommended
+                </div>
+                <p class="text-sm font-semibold uppercase tracking-[0.22em] text-muted-foreground">{{ plan.name }}</p>
+                <div class="mt-6 flex items-end gap-2">
+                  <p v-if="plan.oldPrice" class="pb-1 text-sm text-muted-foreground line-through">{{ plan.oldPrice }}</p>
+                  <p class="text-4xl font-semibold tracking-[-0.05em]" :class="plan.featured ? 'text-foreground' : 'text-muted-foreground line-through'">{{ plan.price }}</p>
+                  <p v-if="plan.price !== 'Custom'" class="pb-1 text-sm text-muted-foreground">/ month</p>
+                </div>
+                <p class="mt-4 text-sm leading-7 text-muted-foreground">{{ plan.note }}</p>
+
+                <ul class="mt-8 space-y-3">
+                  <li v-for="feature in plan.features" :key="feature" class="flex items-start gap-3 text-sm leading-7 text-muted-foreground">
+                    <span class="mt-2 h-2 w-2 shrink-0 rounded-full bg-green-600 dark:bg-green-400"></span>
+                    <span>{{ feature }}</span>
+                  </li>
+                </ul>
+
+                <NuxtLink
+                  to="/dashboard"
+                  class="mt-8 inline-flex items-center text-sm font-semibold transition"
+                  :class="plan.featured ? 'bg-green-600 px-5 py-2.5 text-white hover:bg-green-700' : 'text-muted-foreground underline underline-offset-4 hover:text-foreground'"
+                >
+                  Get Started
+                </NuxtLink>
+              </article>
+            </div>
           </div>
         </ScrollReveal>
       </section>
 
-      <section class="px-6 pb-24 pt-8">
-        <ScrollReveal>
-          <div class="mx-auto max-w-7xl rounded-[40px] border border-border bg-card px-8 py-12 text-card-foreground shadow-lg sm:px-12 sm:py-16">
-          <div class="max-w-3xl">
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Get started</p>
-            <h2 class="mt-4 text-4xl font-semibold tracking-[-0.05em] text-card-foreground sm:text-5xl sm:leading-[1.02]">
-              Replace scattered tools with one system your team can actually run the business on.
-            </h2>
-            <p class="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-              Launch RestoQuick with real bookings, smarter scheduling, faster kitchen flow, and clearer business visibility from day one.
-            </p>
-          </div>
+      <div class="px-6"><div class="mx-auto max-w-7xl border-t border-border"></div></div>
 
-          <div class="mt-10 flex flex-col gap-4 sm:flex-row">
-            <NuxtLink
-              to="/dashboard"
-              class="inline-flex items-center justify-center rounded-full bg-green-600 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-green-500"
-            >
-              Get Started
-            </NuxtLink>
-            <a
-              href="#maya"
-              class="inline-flex items-center justify-center rounded-full border border-border bg-secondary px-7 py-3.5 text-sm font-semibold text-secondary-foreground transition hover:bg-accent hover:text-accent-foreground"
-            >
-              Explore Maya
-            </a>
-          </div>
+      <section class="px-6 py-20 sm:py-28">
+        <ScrollReveal>
+          <div class="mx-auto max-w-7xl">
+            <div class="max-w-3xl">
+              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-green-700 dark:text-green-400">Get started</p>
+              <h2 class="mt-4 text-4xl font-semibold tracking-[-0.05em] text-foreground sm:text-5xl sm:leading-[1.02]">
+                Replace scattered tools with one system your team can actually run the business on.
+              </h2>
+              <p class="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
+                Launch RestoQuick with real bookings, smarter scheduling, faster kitchen flow, and clearer business visibility from day one.
+              </p>
+            </div>
+
+            <div class="mt-10 flex items-center gap-8">
+              <NuxtLink
+                to="/dashboard"
+                class="inline-flex items-center justify-center bg-green-600 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-green-700"
+              >
+                Get Started
+              </NuxtLink>
+              <a
+                href="#maya"
+                class="text-sm font-medium text-muted-foreground underline underline-offset-4 transition hover:text-foreground"
+              >
+                Explore Maya
+              </a>
+            </div>
           </div>
         </ScrollReveal>
       </section>
