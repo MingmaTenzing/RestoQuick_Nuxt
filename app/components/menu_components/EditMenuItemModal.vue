@@ -184,7 +184,7 @@ const confirmDeleteMenuItem = () => {
 
 <template>
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" @click.self="!props.isSaving && !props.isDeleting && !showDeleteConfirm && emit('close')">
-    <div class="w-full h-[90vh] overflow-y-scroll max-w-xl rounded-xl border border-border bg-card p-6 text-card-foreground shadow-lg">
+    <div class="w-full h-[90vh] overflow-y-scroll max-w-xl rounded-3xl border border-border bg-card p-6 text-card-foreground shadow-lg">
       <div class="mb-6 flex items-start justify-between gap-4">
         <div>
           <h2 class="text-lg font-semibold">Edit Menu Item</h2>
@@ -194,7 +194,7 @@ const confirmDeleteMenuItem = () => {
         <button
           type="button"
           :disabled="props.isSaving || props.isDeleting"
-          class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input transition-colors hover:bg-accent hover:text-accent-foreground"
+          class="inline-flex h-8 w-8 items-center justify-center rounded-2xl border border-input transition-colors hover:bg-accent hover:text-accent-foreground"
           @click="emit('close')"
         >
           <i class="pi pi-times" />
@@ -210,7 +210,7 @@ const confirmDeleteMenuItem = () => {
               type="text"
               required
               placeholder="e.g. Chicken Burger"
-              class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+              class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
             >
           </div>
 
@@ -220,7 +220,7 @@ const confirmDeleteMenuItem = () => {
               v-model="form.description"
               rows="3"
               placeholder="Short description for customers"
-              class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+              class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
 
@@ -233,7 +233,7 @@ const confirmDeleteMenuItem = () => {
                 min="0"
                 step="0.01"
                 required
-                class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
+                class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
               >
             </div>
 
@@ -241,7 +241,7 @@ const confirmDeleteMenuItem = () => {
               <label class="text-sm font-medium">Category</label>
               <select
                 v-model="form.category"
-                class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
+                class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
               >
                 <option v-for="category in menu_category" :key="category" :value="category">
                   {{ category.replaceAll('_', ' ') }}
@@ -250,7 +250,7 @@ const confirmDeleteMenuItem = () => {
             </div>
           </div>
 
-          <div class="space-y-3 rounded-md border border-border p-4">
+          <div class="space-y-3 rounded-2xl border border-border p-4">
             <div class="flex items-center justify-between gap-3">
               <div>
                 <label class="text-sm font-medium">Menu Options</label>
@@ -260,7 +260,7 @@ const confirmDeleteMenuItem = () => {
               <button
                 v-if="!isAddingMenuOption"
                 type="button"
-                class="rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                class="rounded-2xl border border-input bg-background px-3 py-2 text-sm text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                 @click="open_add_option"
               >
                 Add Option
@@ -269,7 +269,7 @@ const confirmDeleteMenuItem = () => {
 
             <div
               v-if="isAddingMenuOption"
-              class="grid grid-cols-1 gap-3 rounded-md border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto_auto]"
+              class="grid grid-cols-1 gap-3 rounded-2xl border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto_auto]"
             >
               <div class="space-y-1">
                 <label class="text-xs font-medium text-muted-foreground">Option</label>
@@ -277,7 +277,7 @@ const confirmDeleteMenuItem = () => {
                   v-model="draft_menu_option.name"
                   type="text"
                   placeholder="e.g. Extra cheese"
-                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+                  class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
                 >
               </div>
 
@@ -289,13 +289,13 @@ const confirmDeleteMenuItem = () => {
                   min="0"
                   step="0.01"
                   placeholder="Price in dollars"
-                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
+                  class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
                 >
               </div>
 
               <button
                 type="button"
-                class="self-end rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
+                class="self-end rounded-2xl bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
                 @click="save_new_menu_option"
               >
                 Save
@@ -308,14 +308,14 @@ const confirmDeleteMenuItem = () => {
               <div
                 v-for="option in editable_options"
                 :key="option.id"
-                class="grid grid-cols-1 gap-3 rounded-md border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto_auto]"
+                class="grid grid-cols-1 gap-3 rounded-2xl border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto_auto]"
               >
                 <div class="space-y-1">
                   <label class="text-xs font-medium text-muted-foreground">Option</label>
                   <input
                     v-model="option.name"
                     type="text"
-                    class="w-full rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
+                    class="w-full rounded-2xl border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
                   >
                 </div>
 
@@ -326,13 +326,13 @@ const confirmDeleteMenuItem = () => {
                     type="number"
                     min="0"
                     step="0.01"
-                    class="w-full rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
+                    class="w-full rounded-2xl border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
                   >
                 </div>
 
                 <button
                   type="button"
-                  class="self-end rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
+                  class="self-end rounded-2xl bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
                   @click="update_menu_option(option)"
                   >
                   Update
@@ -340,7 +340,7 @@ const confirmDeleteMenuItem = () => {
 
                 <button
                   type="button"
-                  class="self-end rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/20"
+                  class="self-end rounded-2xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/20"
                   @click="removeMenuOption"
                 >
                   Remove
@@ -365,11 +365,11 @@ const confirmDeleteMenuItem = () => {
               accept="image/*"
               @change="upload_menu_item_image($event)"
               id="edit_menu_item_image_input"
-              class="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-ring"
+              class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-ring"
             >
           </div>
 
-          <div class="rounded-md border border-border p-3">
+          <div class="rounded-2xl border border-border p-3">
             <label class="inline-flex items-center gap-2 text-sm font-medium">
               <input v-model="form.isAvailable" type="checkbox" class="h-4 w-4">
               Available for ordering
@@ -382,7 +382,7 @@ const confirmDeleteMenuItem = () => {
             v-if="!props.isDeleting"
             type="button"
             :disabled="props.isSaving"
-            class="rounded-md border border-destructive/30 bg-destructive/10 px-4 py-2 text-destructive transition-colors hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-50"
+            class="rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-2 text-destructive transition-colors hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-50"
             @click="openDeleteConfirm"
           >
             Delete
@@ -390,7 +390,7 @@ const confirmDeleteMenuItem = () => {
 
           <div
             v-else
-            class="flex items-center justify-center rounded-md bg-destructive px-4 py-2 text-destructive-foreground"
+            class="flex items-center justify-center rounded-2xl bg-destructive px-4 py-2 text-destructive-foreground"
           >
             <i class="pi pi-spinner animate-spin" />
           </div>
@@ -398,7 +398,7 @@ const confirmDeleteMenuItem = () => {
           <button
             type="button"
             :disabled="props.isSaving || props.isDeleting"
-            class="rounded-md border border-input bg-background px-4 py-2 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
+            class="rounded-2xl border border-input bg-background px-4 py-2 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
             @click="emit('close')"
           >
             Cancel
@@ -408,12 +408,12 @@ const confirmDeleteMenuItem = () => {
             v-if="!props.isSaving"
             type="submit"
             :disabled="props.isDeleting"
-            class="rounded-md bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
+            class="rounded-2xl bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Save Changes
           </button>
 
-          <div v-else class="flex items-center justify-center rounded-md bg-primary px-4 py-2 text-primary-foreground">
+          <div v-else class="flex items-center justify-center rounded-2xl bg-primary px-4 py-2 text-primary-foreground">
             <i class="pi pi-spinner animate-spin" />
           </div>
         </div>

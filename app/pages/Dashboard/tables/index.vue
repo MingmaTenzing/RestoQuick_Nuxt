@@ -80,14 +80,14 @@ function close_qr_modal() {
       <div class="flex flex-col sm:flex-row gap-2">
         <button 
           @click="open_add_table_modal" 
-          class="px-5 py-2.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:shadow-lg flex items-center gap-2 font-medium"
+          class="px-5 py-2.5 rounded-3xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:shadow-lg flex items-center gap-2 font-medium"
         >
           <i class="pi pi-plus"></i>
           <span>New Table</span>
         </button>
         <NuxtLink 
           to="/dashboard/tables/print-qr-codes" 
-          class="px-5 py-2.5 rounded-lg border border-border hover:bg-muted transition-all flex items-center gap-2 font-medium text-foreground"
+          class="px-5 py-2.5 rounded-3xl border border-border hover:bg-muted transition-all flex items-center gap-2 font-medium text-foreground"
         >
           <i class="pi pi-print"></i>
           <span>Print QR Codes</span>
@@ -98,11 +98,11 @@ function close_qr_modal() {
     <!-- Stats Cards -->
     <div class="flex flex-col gap-4 md:flex-row md:justify-around w-full md:flex-wrap lg:flex-nowrap">
       <!-- Total Tables -->
-      <div class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-42.5 flex items-center justify-between">
+      <div class="border rounded-3xl shadow p-6 border-border w-full bg-card text-card-foreground h-42.5 flex items-center justify-between">
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Total Tables</span>
           <div class="flex flex-col">
-            <span v-if="pending" class="w-25 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+            <span v-if="pending" class="w-25 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
             <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium">{{ tables?.length || 0 }}</span>
             <span class="text-muted-foreground font-light text-sm">Active seating</span>
           </div>
@@ -113,11 +113,11 @@ function close_qr_modal() {
       </div>
 
       <!-- Total Capacity -->
-      <div class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-42.5 flex items-center justify-between">
+      <div class="border rounded-3xl shadow p-6 border-border w-full bg-card text-card-foreground h-42.5 flex items-center justify-between">
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Total Capacity</span>
           <div class="flex flex-col">
-            <span v-if="pending" class="w-25 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+            <span v-if="pending" class="w-25 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
             <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium text-green-600">{{ tables?.reduce((sum, t) => sum + (t.capacity || 0), 0) || 0 }}</span>
             <span class="text-muted-foreground font-light text-sm">Total guests</span>
           </div>
@@ -128,11 +128,11 @@ function close_qr_modal() {
       </div>
 
       <!-- Average Capacity -->
-      <div class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-42.5 flex items-center justify-between">
+      <div class="border rounded-3xl shadow p-6 border-border w-full bg-card text-card-foreground h-42.5 flex items-center justify-between">
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Avg. Per Table</span>
           <div class="flex flex-col">
-            <span v-if="pending" class="w-25 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+            <span v-if="pending" class="w-25 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
             <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium text-blue-600">{{ tables && tables.length > 0 ? Math.round(tables.reduce((sum, t) => sum + (t.capacity || 0), 0) / tables.length) : 0 }}</span>
             <span class="text-muted-foreground font-light text-sm">Seats per table</span>
           </div>
@@ -151,7 +151,7 @@ function close_qr_modal() {
       </div>
 
       <div v-if="pending" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-        <div v-for="i in 6" :key="i" class="rounded-xl border bg-card p-5 space-y-4">
+        <div v-for="i in 6" :key="i" class="rounded-3xl border bg-card p-5 space-y-4">
           <div class="h-8 w-24 rounded bg-muted animate-pulse"></div>
           <div class="h-5 w-28 rounded bg-muted animate-pulse"></div>
           <div class="h-4 w-full rounded bg-muted animate-pulse"></div>
@@ -163,12 +163,12 @@ function close_qr_modal() {
         </div>
       </div>
 
-      <div v-else-if="tables && tables.length === 0" class="rounded-lg border bg-card px-6 py-12 text-center">
+      <div v-else-if="tables && tables.length === 0" class="rounded-3xl border bg-card px-6 py-12 text-center">
         <i class="pi pi-inbox text-4xl text-muted-foreground mb-3 block opacity-50"></i>
         <p class="text-muted-foreground mb-4">No tables yet. Create your first table to get started.</p>
         <button
           @click="open_add_table_modal"
-          class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-3xl bg-primary text-primary-foreground hover:bg-primary/90"
         >
           <i class="pi pi-plus"></i>
           <span>Add Table</span>
@@ -179,14 +179,14 @@ function close_qr_modal() {
         <div
           v-for="table in tables"
           :key="table.id"
-          class="rounded-xl border bg-card p-5 hover:shadow-lg transition-shadow"
+          class="rounded-3xl border bg-card p-5 hover:shadow-lg transition-shadow"
         >
           <div class="flex items-start justify-between">
             <div>
               <p class="text-xs uppercase tracking-wide text-muted-foreground">Table</p>
               <h3 class="text-4xl font-bold leading-none tracking-tight mt-1">{{ table.number }}</h3>
             </div>
-            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <div class="w-10 h-10 rounded-3xl bg-primary/10 flex items-center justify-center">
               <i class="pi pi-table text-primary"></i>
             </div>
           </div>
@@ -203,20 +203,20 @@ function close_qr_modal() {
           <div class="mt-4 flex gap-2 justify-end">
             <button
               @click="open_qr_modal(table)"
-              class="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-colors flex items-center gap-1.5 text-sm"
+              class="px-3 py-1.5 rounded-3xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-colors flex items-center gap-1.5 text-sm"
             >
               <i class="pi pi-qrcode"></i>
               QR
             </button>
             <button
               @click="open_edit_table_modal(table.id)"
-              class="px-3 py-1.5 rounded-lg border border-border hover:bg-muted transition-colors font-medium text-sm"
+              class="px-3 py-1.5 rounded-3xl border border-border hover:bg-muted transition-colors font-medium text-sm"
             >
               <i class="pi pi-pencil"></i>
             </button>
             <button
               @click="delete_table(table.id)"
-              class="px-3 py-1.5 rounded-lg border border-red-500/30 text-red-500 hover:bg-red-500/10 transition-colors font-medium text-sm"
+              class="px-3 py-1.5 rounded-3xl border border-red-500/30 text-red-500 hover:bg-red-500/10 transition-colors font-medium text-sm"
             >
               <i class="pi pi-trash"></i>
             </button>

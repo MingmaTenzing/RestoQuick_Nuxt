@@ -207,7 +207,7 @@ const add_item_with_options = () => {
                     <textarea
                         v-model="special_instruction"
                         rows="3"
-                        class="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/25"
+                        class="w-full rounded-3xl border border-border bg-background px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/25"
                         placeholder="E.g. No onions, extra spicy"
                     ></textarea>
                 </div>

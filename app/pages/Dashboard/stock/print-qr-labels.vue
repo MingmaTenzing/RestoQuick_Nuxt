@@ -20,7 +20,7 @@ const getStockQrValue = (stockId: string) => {
       <div
         v-for="item in stockItems"
         :key="item.id"
-        class="p-6 flex flex-col space-y-3 items-center rounded-lg border w-60"
+        class="p-6 flex flex-col space-y-3 items-center rounded-3xl border w-60"
       >
         <span class="text-base font-semibold text-center">{{ item.name }}</span>
         <Qrcode :value="getStockQrValue(item.id)" />

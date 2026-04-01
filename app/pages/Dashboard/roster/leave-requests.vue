@@ -80,7 +80,7 @@ async function updateStatus(status: LeaveStatus, request_id: string) {
     <button
       @click="activeFilter = 'all'"
       :class="[
-        'border px-4 py-1 rounded-lg hover:border',
+        'border px-4 py-1 rounded-3xl hover:border',
         activeFilter === 'all' ? 'border-ring bg-accent' : 'border-border bg-card hover:bg-accent hover:border-ring'
       ]"
     >
@@ -89,7 +89,7 @@ async function updateStatus(status: LeaveStatus, request_id: string) {
     <button
       @click="activeFilter = 'pending'"
       :class="[
-        'border px-4 py-1 rounded-lg hover:border hover:border-amber-500/20 text-amber-500',
+        'border px-4 py-1 rounded-3xl hover:border hover:border-amber-500/20 text-amber-500',
         activeFilter === 'pending' ? 'bg-amber-500/20 border-amber-500/20' : 'bg-amber-500/10 border-amber-500/20 hover:bg-amber-500/20'
       ]"
     >
@@ -98,7 +98,7 @@ async function updateStatus(status: LeaveStatus, request_id: string) {
     <button
       @click="activeFilter = 'approved'"
       :class="[
-        'border px-4 py-1 rounded-lg hover:border hover:border-green-500/20 text-green-500 border-green-500/20',
+        'border px-4 py-1 rounded-3xl hover:border hover:border-green-500/20 text-green-500 border-green-500/20',
         activeFilter === 'approved' ? 'bg-green-500/20' : 'bg-green-500/10 hover:bg-green-500/20'
       ]"
     >
@@ -106,11 +106,11 @@ Approved    </button>
     </div>
 
     <!-- Leave Requests List -->
-    <div class="space-y-3">
+    <div v-if="filteredRequests.length" class="space-y-3">
       <div
         v-for="request in filteredRequests"
         :key="request.id"
-        class="border border-border rounded-lg p-4 bg-card hover:bg-accent/50 transition-colors"
+        class="border border-border rounded-3xl p-4 bg-card hover:bg-accent/50 transition-colors"
       >
         <div class=" ">
           <!-- Request Info -->
@@ -127,7 +127,7 @@ Approved    </button>
                   </div>
                 </div>
                   <!-- Status Badge -->
-              <div :class="['flex items-center gap-2 px-3 py-1 rounded-lg border', getStatusColor(request.status)]">
+              <div :class="['flex items-center gap-2 px-3 py-1 rounded-3xl border', getStatusColor(request.status)]">
                 <i :class="['pi', getStatusIcon(request.status)]"></i>
                 <span class="text-sm font-medium capitalize">{{ request.status }}</span>
               </div>
@@ -178,16 +178,29 @@ Approved    </button>
 
         <!-- Action Buttons (for pending requests) -->
         <div v-if="request.status === 'pending'" class="flex gap-2 mt-4 pt-4 border-t border-border">
-          <button v-on:click="updateStatus('approved', request.id)" class="flex-1 px-4 py-2 bg-green-500/10 text-green-500 hover:bg-green-500/20 rounded-lg border border-green-500/20 transition-colors flex items-center justify-center gap-2">
+          <button v-on:click="updateStatus('approved', request.id)" class="flex-1 px-4 py-2 bg-green-500/10 text-green-500 hover:bg-green-500/20 rounded-3xl border border-green-500/20 transition-colors flex items-center justify-center gap-2">
             <i class="pi pi-check"></i>
             Approve
           </button>
-          <button v-on:click="updateStatus('rejected', request.id)"  class="flex-1 px-4 py-2 bg-red-500/10 text-destructive hover:bg-red-500/20 rounded-lg border border-red-500/20 transition-colors flex items-center justify-center gap-2">
+          <button v-on:click="updateStatus('rejected', request.id)"  class="flex-1 px-4 py-2 bg-red-500/10 text-destructive hover:bg-red-500/20 rounded-3xl border border-red-500/20 transition-colors flex items-center justify-center gap-2">
             <i class="pi pi-times"></i>
             Reject
           </button>
         </div>
       </div>
+    </div>
+
+    <div
+      v-else
+      class="rounded-3xl border border-dashed border-border bg-card px-6 py-12 text-center"
+    >
+      <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+        <i class="pi pi-inbox text-lg"></i>
+      </div>
+      <h2 class="mt-4 text-lg font-semibold text-foreground">No leave requests</h2>
+      <p class="mt-2 text-sm text-muted-foreground">
+        There are no leave requests for this view yet.
+      </p>
     </div>
 
    

@@ -27,7 +27,7 @@ const formattedPrice = computed(() => `$${(props.item.priceCents / 100).toFixed(
 </script>
 
 <template>
-	<div class="group w-full overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-sm">
+	<div class="group w-full overflow-hidden rounded-3xl border border-border bg-card text-card-foreground shadow-sm">
 		<div class="relative h-44 w-full overflow-hidden">
 			<img
 				:src="item.imageUrl || fallbackImage"
@@ -36,12 +36,12 @@ const formattedPrice = computed(() => `$${(props.item.priceCents / 100).toFixed(
 			
 			>
 
-			<div class="absolute left-3 top-3 inline-flex items-center gap-1 rounded-md bg-card/90 px-2.5 py-1 text-xs font-medium text-card-foreground">
+			<div class="absolute left-3 top-3 inline-flex items-center gap-1 rounded-2xl bg-card/90 px-2.5 py-1 text-xs font-medium text-card-foreground">
 				 {{ props.item.category }}
 			</div>
 
 			<div v-if="!isAvailable" class="absolute inset-0 flex items-center justify-center bg-black/30">
-				<span class="rounded-md bg-card px-3 py-1 text-xs font-semibold text-card-foreground">
+				<span class="rounded-2xl bg-card px-3 py-1 text-xs font-semibold text-card-foreground">
 					Unavailable
 				</span>
 			</div>
@@ -86,14 +86,14 @@ const formattedPrice = computed(() => `$${(props.item.priceCents / 100).toFixed(
 				<div class="flex items-center space-x-2">
 					<button
 						type="button"
-						class="inline-flex h-8 w-8 items-center justify-center rounded-md border transition-colors hover:bg-accent hover:text-accent-foreground"
+						class="inline-flex h-8 w-8 items-center justify-center rounded-2xl border transition-colors hover:bg-accent hover:text-accent-foreground"
 						@click="emit('view', item)"
 					>
 						<i class="pi pi-eye"></i>
 					</button>
 					<button
 						type="button"
-						class="inline-flex h-8 w-8 items-center justify-center rounded-md border transition-colors hover:bg-accent hover:text-accent-foreground"
+						class="inline-flex h-8 w-8 items-center justify-center rounded-2xl border transition-colors hover:bg-accent hover:text-accent-foreground"
 						@click="emit('edit', item)"
 					>
 						<i class="pi pi-pencil"></i>

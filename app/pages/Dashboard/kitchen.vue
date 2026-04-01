@@ -128,7 +128,7 @@ watch(data, (newValue: string) => {
 <!-- comleted order button and weboscket status -->
     <div  class="flex space-x-2">
     <div>
-        <button @click="open_completed_orders_modal" class="bg-green-500/20 text-green-500 px-4 py-2 rounded-lg"> Completed Orders</button>
+        <button @click="open_completed_orders_modal" class="bg-green-500/20 text-green-500 px-4 py-2 rounded-3xl"> Completed Orders</button>
     </div>
 
     <!-- websocket status -->

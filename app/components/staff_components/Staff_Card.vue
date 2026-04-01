@@ -34,7 +34,7 @@ const formattedDate = computed(() => {
 
 <template>
 
-    <div class="bg-card text-card-foreground  flex flex-col gap-6 rounded-xl border py-6 shadow-sm group relative overflow-hidden border-border">
+    <div class="bg-card text-card-foreground  flex flex-col gap-6 rounded-3xl border py-6 shadow-sm group relative overflow-hidden border-border">
         <div class="px-6 pt-6">
           <!-- Online Status Indicator -->
           <div class="absolute top-3 right-3">
@@ -51,7 +51,7 @@ const formattedDate = computed(() => {
               {{ getStaffInitials(staff) }}
             </div>
             <h3 class="font-semibold">{{staff.firstname}} {{ staff.lastName }}</h3>
-            <span class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap mt-1 bg-emerald-500/10 text-emerald-600 border-emerald-500/20">{{staff.role}}</span>
+            <span class="inline-flex items-center justify-center rounded-2xl border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap mt-1 bg-emerald-500/10 text-emerald-600 border-emerald-500/20">{{staff.role}}</span>
           </div>
 
           <!-- Contact & Info -->
@@ -103,20 +103,20 @@ const formattedDate = computed(() => {
           <!-- Action Buttons -->
           <div class="flex gap-2 mt-4 pt-3 border-t">
           
-            <a :href="`mailto:${staff.email}?subject=Restoquick&body=Hi there from restoquick`" class="flex-1 inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all border rounded-md h-8 px-3 bg-transparent hover:bg-accent hover:text-accent-foreground gap-1.5">
+            <a :href="`mailto:${staff.email}?subject=Restoquick&body=Hi there from restoquick`" class="flex-1 inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all border rounded-2xl h-8 px-3 bg-transparent hover:bg-accent hover:text-accent-foreground gap-1.5">
               <i class="pi pi-envelope text-xs"></i>
               Email
             </a>
             <button
               @click="showEditModal = true"
-              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all border h-8 w-8 bg-transparent hover:bg-accent hover:text-accent-foreground"
+              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl text-sm font-medium transition-all border h-8 w-8 bg-transparent hover:bg-accent hover:text-accent-foreground"
             >
               <i class="pi pi-pencil text-xs"></i>
             </button>
             <button
               type="button"
               @click="showDeleteModal = true"
-              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all border h-8 w-8 bg-transparent hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20"
+              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl text-sm font-medium transition-all border h-8 w-8 bg-transparent hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20"
             >
               <i class="pi pi-trash text-xs"></i>
             </button>

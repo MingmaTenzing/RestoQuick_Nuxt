@@ -69,7 +69,7 @@ async function submit_shift() {
 <template>
     <div  class=" flex  justify-center items-center fixed  w-screen h-screen bg-background/90 backdrop-blur-xs  top-0 z-10 left-0">
 
-        <div class=" w-125 flex flex-col gap-4  p-4 bg-background   drop-shadow-lg border   drop-shadow-accent opacity-100 rounded-lg" >
+        <div class=" w-125 flex flex-col gap-4  p-4 bg-background   drop-shadow-lg border   drop-shadow-accent opacity-100 rounded-3xl" >
             
             <section class=" space-y-2">
                 <!-- modal header -->
@@ -103,7 +103,7 @@ async function submit_shift() {
             </div>
             <div >
                 <div class="relative  items-center  w-1/2"> 
-                     <div  class="border border-border  p-2 rounded-lg flex justify-between items-center ">
+                     <div  class="border border-border  p-2 rounded-3xl flex justify-between items-center ">
                         
 
                         <input disabled  class=" text-muted-foreground font-light outline-none text-sm" placeholder="Select a staff member"  :value="editshiftModal.shift?.staff.firstname"></input>
@@ -125,7 +125,7 @@ async function submit_shift() {
                 ">
                     Start Time
                 </span>
-                <div class=" border border-border   p-2 rounded-lg">
+                <div class=" border border-border   p-2 rounded-3xl">
                     <input required class="outline-none text-primary  " type="time" :placeholder="editshiftModal.shift?.startTime"  v-model="shift_form.startTime" />
                 
 
@@ -138,7 +138,7 @@ async function submit_shift() {
                 ">
                     End Time
                 </span>
-                <div class=" border border-border focus:border-ring  p-2 rounded-lg">
+                <div class=" border border-border focus:border-ring  p-2 rounded-3xl">
                     <input required class="outline-none text-primar" type="time" placeholder="dfd"  v-model="shift_form.endTime"/>
 
                 </div>
@@ -153,7 +153,7 @@ async function submit_shift() {
                 ">
                    Position
                 </span>
-                <input class="outline-none border border-border rounded-lg p-2 text-sm" type="text" v-model="shift_form.position" :placeholder="editshiftModal.shift?.position"/>
+                <input class="outline-none border border-border rounded-3xl p-2 text-sm" type="text" v-model="shift_form.position" :placeholder="editshiftModal.shift?.position"/>
 
 
     </section>
@@ -162,8 +162,8 @@ async function submit_shift() {
 
     <section class=" flex justify-end space-x-2 items-center text-sm">
 
-        <button type="button" v-on:click="close_edit_shiftModal" :disabled="isSubmitting" class="px-4  py-2  hover:border-ring rounded-lg border border-border disabled:opacity-50 disabled:cursor-not-allowed">Cancel</button>
-        <button type="submit" :disabled="isSubmitting" class="px-4  py-2  hover:border-ring rounded-lg border border-border bg-green-600  text-green-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+        <button type="button" v-on:click="close_edit_shiftModal" :disabled="isSubmitting" class="px-4  py-2  hover:border-ring rounded-3xl border border-border disabled:opacity-50 disabled:cursor-not-allowed">Cancel</button>
+        <button type="submit" :disabled="isSubmitting" class="px-4  py-2  hover:border-ring rounded-3xl border border-border bg-green-600  text-green-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
             <i v-if="isSubmitting" class="pi pi-spin pi-spinner"></i>
             {{ isSubmitting ? 'Updating...' : 'Update Shift' }}
         </button>

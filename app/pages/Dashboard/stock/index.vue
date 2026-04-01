@@ -179,30 +179,30 @@ const handleDelete = async (item: StockItem) => {
       </template>
       <template v-else>
         <StockStatsCard
-          title="Total Items"
+          title="Items"
           :value="totalItems"
-          description="In inventory"
+          description="In stock"
           icon="pi pi-box"
         />
         <StockStatsCard
-          title="Low Stock Items"
+          title="Low Stock"
           :value="lowStockCount"
-          description="Need reordering"
+          description="Need attention"
           icon="pi pi-exclamation-triangle"
           icon-color="text-yellow-600"
         />
         <StockStatsCard
-          title="Items Below Reorder Level"
+          title="Reorder"
           :value="lowStockCount"
-          description="Need immediate restocking"
-          icon="pi pi-info"
+          description="Restock soon"
+          icon="pi pi-refresh"
           icon-color="text-orange-600"
         />
         <StockStatsCard
-          title="Categories"
+          title="Groups"
           :value="4"
-          description="Item categories"
-          icon="pi pi-shopping-cart"
+          description="Item types"
+          icon="pi pi-tags"
         />
       </template>
     </div>

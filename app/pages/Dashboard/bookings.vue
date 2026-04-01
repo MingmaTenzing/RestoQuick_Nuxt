@@ -132,7 +132,7 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
       <div>
         <button v-on:click="openAddBookingDialog"
     
-          class="border-border   border p-4 flex justify-center items-center space-x-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+          class="border-border   border p-4 flex justify-center items-center space-x-2 rounded-3xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
         >
           <i class="pi pi-plus"></i>
           <span>New Booking</span>
@@ -143,67 +143,67 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
      
 
     <!-- Stats Cards Grid -->
-    <div class="flex flex-col gap-4 md:flex-row md:justify-around w-full md:flex-wrap lg:flex-nowrap">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
       <!-- Total Bookings -->
-      <div class="border rounded-lg   shadow p-6  border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
-        <div class="flex flex-col justify-between h-full">
+      <div class="flex min-w-0 items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 text-card-foreground shadow sm:p-6">
+        <div class="flex min-w-0 flex-1 flex-col justify-between gap-4">
           <span class="font-light text-muted-foreground">Total Bookings</span>
           <div class="flex flex-col">
-            <span v-if="bookings_loading =='pending'" class=" w-[100px] h-12  bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+            <span v-if="bookings_loading =='pending'" class="h-12 w-25 rounded-3xl bg-muted-foreground/20 animate-pulse"></span>
      
             <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium ">{{ bookings?.length }}</span>
             <span class="text-muted-foreground font-light text-sm">This month</span>
           </div>
         </div>
-        <div>
-          <i class="pi pi-calendar text-[120px] text-muted-foreground opacity-5"></i>
+        <div class="shrink-0">
+          <i class="pi pi-calendar text-6xl text-muted-foreground/10 md:text-7xl"></i>
         </div>
       </div>
 
       <!-- Confirmed Bookings -->
-      <div class="border rounded-lg   shadow p-6  border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
-        <div class="flex flex-col justify-between h-full">
+      <div class="flex min-w-0 items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 text-card-foreground shadow sm:p-6">
+        <div class="flex min-w-0 flex-1 flex-col justify-between gap-4">
           <span class="font-light text-muted-foreground">Confirmed</span>
           <div class="flex flex-col">
-            <span v-if="bookings_loading == 'pending'" class="w-10 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+            <span v-if="bookings_loading == 'pending'" class="w-10 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
             <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium text-green-600">{{ total_confirmed_booking}}</span>
             <span class="text-muted-foreground font-light text-sm">Ready to serve</span>
           </div>
         </div>
-        <div>
-          <i class="pi pi-check-circle text-[120px] text-green-500 opacity-5"></i>
+        <div class="shrink-0">
+          <i class="pi pi-check-circle text-6xl text-green-500/15 md:text-7xl"></i>
         </div>
       </div>
 
       <!-- Total Guests -->
-      <div class="border rounded-lg   shadow p-6  border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
-        <div class="flex flex-col justify-between h-full">
+      <div class="flex min-w-0 items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 text-card-foreground shadow sm:p-6">
+        <div class="flex min-w-0 flex-1 flex-col justify-between gap-4">
           <span class="font-light text-muted-foreground">Total Guests</span>
           <div class="flex flex-col">
-            <span v-if="bookings_loading == 'pending'" class="w-14 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+            <span v-if="bookings_loading == 'pending'" class="w-14 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
 
             <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium ">{{ totalGuestCount}}</span>
             <span class="text-muted-foreground font-light text-sm">Expected arrivals</span>
           </div>
         </div>
-        <div>
-          <i class="pi pi-users text-[120px] text-muted-foreground opacity-5"></i>
+        <div class="shrink-0">
+          <i class="pi pi-users text-6xl text-muted-foreground/10 md:text-7xl"></i>
         </div>
       </div>
 
       <!-- Pending Bookings -->
-      <div class="border rounded-lg   shadow p-6  border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
-        <div class="flex flex-col justify-between h-full">
+      <div class="flex min-w-0 items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 text-card-foreground shadow sm:p-6">
+        <div class="flex min-w-0 flex-1 flex-col justify-between gap-4">
           <span class="font-light text-muted-foreground">Pending</span>
           <div class="flex flex-col">
-              <span v-if="bookings_loading == 'pending'" class="w-14 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
+              <span v-if="bookings_loading == 'pending'" class="w-14 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
 
             <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium text-primary">{{ total_pending_bookings }}</span>
             <span class="text-muted-foreground font-light text-sm">Awaiting confirmation</span>
           </div>
         </div>
-        <div>
-          <i class="pi pi-clock text-[120px] text-primary opacity-5"></i>
+        <div class="shrink-0">
+          <i class="pi pi-clock text-6xl text-primary/15 md:text-7xl"></i>
         </div>
       </div>
     </div>
@@ -253,7 +253,7 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
 
       <!-- All Bookings Tab -->
       <div v-if="currentTab === 'all'" class="space-y-4">
-        <div v-if="bookings?.length === 0" class="border border-border rounded-lg bg-card p-12 text-center">
+        <div v-if="bookings?.length === 0" class="border border-border rounded-3xl bg-card p-12 text-center">
           <i class="pi pi-inbox text-4xl text-muted-foreground mb-4 block"></i>
           <p class="text-muted-foreground">No bookings yet</p>
         </div>
@@ -274,7 +274,7 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
         </section>
       </div>
       <div v-if="currentTab === 'today'" class="space-y-4">
-        <div v-if="bookings?.length === 0" class="border border-border rounded-lg bg-card p-12 text-center">
+        <div v-if="bookings?.length === 0" class="border border-border rounded-3xl bg-card p-12 text-center">
           <i class="pi pi-inbox text-4xl text-muted-foreground mb-4 block"></i>
           <p class="text-muted-foreground">No bookings yet</p>
         </div>
@@ -286,7 +286,7 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
         </section>
       </div>
       <div v-if="currentTab === 'upcoming'" class="space-y-4">
-        <div v-if="bookings?.length === 0" class="border border-border rounded-lg bg-card p-12 text-center">
+        <div v-if="bookings?.length === 0" class="border border-border rounded-3xl bg-card p-12 text-center">
           <i class="pi pi-inbox text-4xl text-muted-foreground mb-4 block"></i>
           <p class="text-muted-foreground">No bookings yet</p>
         </div>

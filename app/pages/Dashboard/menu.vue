@@ -11,13 +11,19 @@ definePageMeta({
 })
 
 
-const { data: menuItems, refresh } = await useFetch<MenuItemWithOptions[]>('/api/menu')
+const { data: menuItems, pending: isMenuItemsPending, refresh } = await useFetch<MenuItemWithOptions[]>('/api/menu', {
+    lazy:true 
+})
 
-const { data: menu_category } = await useFetch<MenuCategory[]>('/api/menu/category')
+const { data: menu_category } = await useFetch<MenuCategory[]>('/api/menu/category', {
+    lazy: true
+})
 
 const toast = useToast()
 const searchQuery = ref('')
 const selectedCategory = ref<MenuCategory | ''>('')
+
+const showMenuSkeletons = computed(() => isMenuItemsPending.value && !(menuItems.value?.length))
 
 const filteredMenuItems = computed(() => {
     const items = menuItems.value ?? []
@@ -192,7 +198,7 @@ const update_availability = async (menu_item: MenuItem) => {
         <div class=" flex justify-between items-center">
                     <h1 class="text-2xl md:text-6xl">Manage Menu</h1>
 
-                    <div @click="openAddModal" class="border border-border px-3 space-x-2 py-2 rounded-lg bg-secondary hover:scale-105 transition-all ease-linear  text-card-foreground hover:border-ring ">
+                    <div @click="openAddModal" class="border border-border px-3 space-x-2 py-2 rounded-3xl bg-secondary hover:scale-105 transition-all ease-linear  text-card-foreground hover:border-ring ">
                         <i class="pi pi-file-plus"> </i>
 
                         <button class=" ">Add Menu Item</button>
@@ -200,18 +206,20 @@ const update_availability = async (menu_item: MenuItem) => {
 
 
         </div>
-        <div class=" flex items-center justify-between">
-            <input
-                v-model="searchQuery"
-                type="text"
-                placeholder="Search menu item"
-                class="w-1/3 rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:border-ring"
-            >
+        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div class="w-full xl:max-w-sm">
+                <input
+                    v-model="searchQuery"
+                    type="text"
+                    placeholder="Search menu item"
+                    class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:border-ring"
+                >
+            </div>
 
-            <div class="flex flex-wrap gap-2 ">
+            <div class="flex flex-wrap gap-2 xl:justify-end">
                 <button
                     type="button"
-                    class="rounded-md border uppercase px-3 py-1 text-sm transition-colors"
+                    class="rounded-2xl border uppercase px-3 py-1 text-sm transition-colors"
                     :class="selectedCategory === '' ? 'bg-primary text-primary-foreground border-primary' : 'border-input bg-background hover:bg-accent hover:text-accent-foreground'"
                     @click="selectedCategory = ''"
                 >
@@ -222,7 +230,7 @@ const update_availability = async (menu_item: MenuItem) => {
                     v-for="category in (menu_category ?? [])"
                     :key="category"
                     type="button"
-                    class="rounded-md border px-3 py-1 text-sm transition-colors"
+                    class="rounded-2xl border px-3 py-1 text-sm transition-colors"
                     :class="selectedCategory === category ? 'bg-primary text-primary-foreground border-primary' : 'border-input bg-background hover:bg-accent hover:text-accent-foreground'"
                     @click="selectedCategory = category"
                 >
@@ -231,7 +239,14 @@ const update_availability = async (menu_item: MenuItem) => {
             </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4  xl:grid-cols-5">
+        <div v-if="showMenuSkeletons" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+            <MenuComponentsMenuItemCardSkeleton
+                v-for="index in 10"
+                :key="`menu-skeleton-${index}`"
+            />
+        </div>
+
+        <div v-else class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4  xl:grid-cols-5">
             <div v-for="item in filteredMenuItems" :key="item.id" class="w-full max-w-85">
                 <MenuComponentsMenuItemCard
                     :item="item"
@@ -242,7 +257,7 @@ const update_availability = async (menu_item: MenuItem) => {
             </div>
         </div>
  
-        <div      v-if="filteredMenuItems.length === 0" class=" flex justify-center items-center  h-[80vh]"> 
+        <div v-if="!showMenuSkeletons && filteredMenuItems.length === 0" class=" flex justify-center items-center  h-[80vh]"> 
             <p
            
                 class="mt-6 font-light text-muted-foreground"

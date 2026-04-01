@@ -2,18 +2,17 @@
 </script>
 
 <template>
-  <div class="rounded-3xl border p-6 space-y-2 bg-card animate-pulse">
-    <div class="flex items-center justify-between h-full">
-      <div class="flex flex-col justify-between h-full flex-1">
-        <div>
-          <div class="h-4 w-24 bg-muted rounded"></div>
-        </div>
+  <div class="animate-pulse rounded-3xl border border-border bg-card p-5">
+    <div class="flex items-start justify-between gap-4">
+      <div class="min-w-0 flex-1 space-y-3">
         <div class="space-y-2">
-          <div class="h-10 w-32 bg-muted rounded"></div>
-          <div class="h-3 w-40 bg-muted rounded"></div>
+          <div class="h-3 w-20 rounded-full bg-muted"></div>
+          <div class="h-8 w-24 rounded-full bg-muted"></div>
+          <div class="h-3 w-28 rounded-full bg-muted"></div>
         </div>
       </div>
-      <div class="h-30 w-30 bg-muted rounded"></div>
+
+      <div class="h-10 w-10 shrink-0 rounded-2xl border border-border bg-muted/70"></div>
     </div>
   </div>
 </template>

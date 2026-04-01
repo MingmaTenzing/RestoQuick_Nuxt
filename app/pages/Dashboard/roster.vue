@@ -17,7 +17,7 @@ const route = useRoute();
         </div>
 
         <div class=" flex gap-3">
-            <NuxtLink to="/print-roster" class=" border-border  border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-lg">
+            <NuxtLink to="/print-roster" class=" border-border  border px-4 py-2 flex justify-center items-center space-x-2 text-card-foreground rounded-3xl">
                 <i class=" pi text-muted-foreground pi-print"></i>
                 <span>Print Roster</span>
             </NuxtLink>
@@ -31,7 +31,7 @@ const route = useRoute();
 
 
         <!-- total staff card -->
-    <div class="border  rounded-lg w-full shadow   p-6 border-border bg-card text-card-foreground h-[170px] flex items-center justify-between ">
+    <div class="border  rounded-3xl w-full shadow   p-6 border-border bg-card text-card-foreground h-42.5 flex items-center justify-between ">
   
   <!-- total stafff -->
         <div class=" flex flex-col justify-between h-full">
@@ -64,7 +64,7 @@ const route = useRoute();
 
 
         <!-- this week card -->
-   <div class="border  rounded-lg w-full shadow   p-6 border-border bg-card text-card-foreground h-[170px] flex items-center justify-between ">
+    <div class="border  rounded-3xl w-full shadow   p-6 border-border bg-card text-card-foreground h-42.5 flex items-center justify-between ">
   
   <!-- this weeek -->
         <div class=" flex flex-col justify-between h-full">
@@ -96,7 +96,7 @@ const route = useRoute();
 
 
         <!-- pending leaves card -->
-   <div class="border  rounded-lg w-full shadow   p-6 border-border bg-card text-card-foreground h-[170px] flex items-center justify-between ">
+    <div class="border  rounded-3xl w-full shadow   p-6 border-border bg-card text-card-foreground h-42.5 flex items-center justify-between ">
   
   <!-- pendin leave request -->
         <div class=" flex flex-col justify-between h-full">
@@ -136,11 +136,11 @@ const route = useRoute();
 
     <!-- nested roster routes links -->
 
-    <div class=" bg-accent py-1 px-2 rounded-lg flex gap-4 items-center  w-[420px]">
+    <div class=" bg-accent py-1 px-2 rounded-3xl flex gap-4 items-center  w-105">
 
-        <NuxtLink to="/dashboard/roster/weekly" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/weekly' ? 'bg-background': '']">Weekly schedule</NuxtLink>
-        <NuxtLink to="/dashboard/roster/leave-requests" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/leave-requests' ? 'bg-background': '']">Leave requests</NuxtLink>
-        <NuxtLink to="/dashboard/roster/staff-availability" :class="['px-2  py-2 rounded-lg text-sm', route.path == '/dashboard/roster/staff-availability' ? 'bg-background': '']">Staff Availability</NuxtLink>
+        <NuxtLink to="/dashboard/roster/weekly" :class="['px-2  py-2 rounded-3xl text-sm', route.path == '/dashboard/roster/weekly' ? 'bg-background': '']">Weekly schedule</NuxtLink>
+        <NuxtLink to="/dashboard/roster/leave-requests" :class="['px-2  py-2 rounded-3xl text-sm', route.path == '/dashboard/roster/leave-requests' ? 'bg-background': '']">Leave requests</NuxtLink>
+        <NuxtLink to="/dashboard/roster/staff-availability" :class="['px-2  py-2 rounded-3xl text-sm', route.path == '/dashboard/roster/staff-availability' ? 'bg-background': '']">Staff Availability</NuxtLink>
 
     </div>
 

@@ -23,7 +23,7 @@ const getStockQrValue = (stockId: string) => {
       </div>
 
       <NuxtLink to="/dashboard/stock/print-qr-labels">
-        <button class="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors border border-primary">
+        <button class="px-4 py-2 rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors border border-primary">
           Print All
         </button>
       </NuxtLink>
@@ -31,7 +31,7 @@ const getStockQrValue = (stockId: string) => {
 
     <div v-if="status === 'pending'" class="text-muted-foreground">Loading stock labels...</div>
 
-    <div v-else-if="!stockItems?.length" class="border border-border rounded-lg bg-card p-8 text-center text-muted-foreground">
+    <div v-else-if="!stockItems?.length" class="border border-border rounded-3xl bg-card p-8 text-center text-muted-foreground">
       No stock items found.
     </div>
 
@@ -39,7 +39,7 @@ const getStockQrValue = (stockId: string) => {
       <div
         v-for="item in stockItems"
         :key="item.id"
-        class="p-6 flex flex-col space-y-3 items-center rounded-lg border border-border bg-card w-70"
+        class="p-6 flex flex-col space-y-3 items-center rounded-3xl border border-border bg-card w-70"
       >
         <span class="text-lg font-semibold text-center">{{ item.name }}</span>
         <Qrcode :value="getStockQrValue(item.id)" />

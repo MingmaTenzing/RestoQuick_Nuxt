@@ -124,7 +124,7 @@ function clear_search() {
       <div>
         <button
           v-on:click="is_add_Staff_Modal = true"
-          class="bg-accent text-accent-foreground border border-border px-4 py-2 rounded-lg"
+          class="bg-accent text-accent-foreground border border-border px-4 py-2 rounded-3xl"
         >
           + Add Staff
         </button>
@@ -137,14 +137,14 @@ function clear_search() {
     >
       <!-- Total Staff -->
       <div
-        class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between"
+        class="border rounded-3xl shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between"
       >
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Total Staff</span>
           <div class="flex flex-col">
             <span
               v-if="staffs_status === 'pending'"
-              class="w-24 h-10 md:h-12 lg:h-14 bg-muted rounded-lg animate-pulse"
+              class="w-24 h-10 md:h-12 lg:h-14 bg-muted rounded-3xl animate-pulse"
             ></span>
             <span
               v-else
@@ -161,14 +161,14 @@ function clear_search() {
       </div>
       <!-- Managers -->
       <div
-        class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between"
+        class="border rounded-3xl shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between"
       >
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Managers</span>
           <div class="flex flex-col">
             <span
               v-if="staffs_status === 'pending'"
-              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-lg animate-pulse"
+              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-3xl animate-pulse"
             ></span>
             <span
               v-else
@@ -185,14 +185,14 @@ function clear_search() {
       </div>
       <!-- Full-time Staff -->
       <div
-        class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between"
+        class="border rounded-3xl shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between"
       >
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Full-time Staff</span>
           <div class="flex flex-col">
             <span
               v-if="staffs_status === 'pending'"
-              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-lg animate-pulse"
+              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-3xl animate-pulse"
             ></span>
             <span
               v-else
@@ -209,7 +209,7 @@ function clear_search() {
       </div>
       <!-- Pending Leave Requests -->
       <div
-        class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between"
+        class="border rounded-3xl shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between"
       >
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground"
@@ -218,7 +218,7 @@ function clear_search() {
           <div class="flex flex-col">
             <span
               v-if="leave_requests_status === 'pending'"
-              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-lg animate-pulse"
+              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-3xl animate-pulse"
             ></span>
             <span
               v-else
@@ -239,7 +239,7 @@ function clear_search() {
     <section class="flex justify-between">
       <!-- Search Bar -->
       <form
-        class="border border-border w-[30%] rounded-lg bg-background text-foreground flex items-center justify-between space-x-2 px-4 py-2"
+        class="border border-border w-[30%] rounded-3xl bg-background text-foreground flex items-center justify-between space-x-2 px-4 py-2"
         @submit.prevent="searchStaff(search_staff_name)"
       >
         <input
@@ -269,7 +269,7 @@ function clear_search() {
             >Role:</span
           >
           <div
-            class="border border-border px-2 py-2 space-x-2 flex items-center rounded-lg focus:outline-none"
+            class="border border-border px-2 py-2 space-x-2 flex items-center rounded-3xl focus:outline-none"
           >
             <select
               v-model="selected_role"
@@ -291,7 +291,7 @@ function clear_search() {
           >
           <select
             v-model="sort_by"
-            class="px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm"
+            class="px-3 py-2 border border-border rounded-3xl bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm"
           >
             <option :value="SortOption.asc">(A-Z)</option>
             <option :value="SortOption.dsc">(Z-A)</option>
