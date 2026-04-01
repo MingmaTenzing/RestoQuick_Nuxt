@@ -69,7 +69,7 @@ const emptyStateCopy = computed(() => props.serviceLabel
                         </div>
                     </div>
 
-                    <span class="rounded-full bg-accent px-3 py-1 text-sm font-medium text-foreground">
+                    <span class="inline-flex shrink-0 items-center whitespace-nowrap rounded-full bg-accent px-3 py-1 text-sm font-medium text-foreground">
                         {{ totalItems }} items
                     </span>
                 </div>
