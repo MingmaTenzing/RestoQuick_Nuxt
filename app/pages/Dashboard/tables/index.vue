@@ -229,7 +229,7 @@ function close_qr_modal() {
 
  <Transition>
      
-           <div  v-if="edit_table_modal.isOpen"  class="fixed inset-0 z-50 flex items-center justify-center bg-background/80" aria-hidden="true">
+           <div  v-if="edit_table_modal.isOpen"  class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 sm:p-6" aria-hidden="true">
 
 
      <Edit_Table_Modal_Component v-on:table_edited="refresh"></Edit_Table_Modal_Component>
@@ -244,7 +244,7 @@ function close_qr_modal() {
 
 <Transition>
 
-  <div v-if="add_table_modal" class="fixed inset-0 z-100 flex items-center justify-center bg-background/80" aria-hidden="true">
+  <div v-if="add_table_modal" class="fixed inset-0 z-100 flex items-center justify-center bg-background/80 p-4 sm:p-6" aria-hidden="true">
   
    <!-- here  whenever the child emits the table-added event it will refresh the fetch  -->
   <Add_Table_Modal_Component @table_added="refresh()">

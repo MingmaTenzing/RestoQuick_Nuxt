@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div class="rounded-lg border p-6 space-y-2 bg-card animate-pulse">
+  <div class="rounded-3xl border p-6 space-y-2 bg-card animate-pulse">
     <div class="flex items-center justify-between h-full">
       <div class="flex flex-col justify-between h-full flex-1">
         <div>

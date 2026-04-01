@@ -59,129 +59,145 @@ const formatCurrency = (amount: number) => {
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-8">
     <!-- Header Section -->
-    <div class="flex justify-between">
-      <div>
-        <div class="">
-          <h1 class="text-2xl md:text-6xl">Orders</h1>
+    <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+      <div class="space-y-2">
+        <p class="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">Operations</p>
+        <div>
+          <h1 class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl xl:text-5xl">Orders</h1>
         </div>
-        <span class="text-accent-foreground/60">View and manage all customer orders</span>
+        <span class="block max-w-2xl text-sm text-muted-foreground sm:text-base">View live order activity, revenue, and recent service updates in one place.</span>
       </div>
     </div>
 
     <!-- Stats Cards Grid -->
-    <div class="flex flex-col gap-4 md:flex-row md:justify-around w-full md:flex-wrap lg:flex-nowrap">
+    <div class="grid gap-4 sm:grid-cols-2 2xl:grid-cols-4">
       <!-- Total Orders -->
-      <div class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
-        <div class="flex flex-col justify-between h-full">
-          <span class="font-light text-muted-foreground">Total Orders</span>
-          <div class="flex flex-col">
-            <span v-if="orders_loading == 'pending'" class="w-[100px] h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
-            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium">{{ orders?.length || 0 }}</span>
-            <span class="text-muted-foreground font-light text-sm">{{ selected_range_label }}</span>
+      <div class="relative min-w-0 overflow-hidden rounded-3xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:p-6">
+        <div class="flex min-h-44 flex-col justify-between gap-6">
+          <div class="space-y-2 pr-12">
+            <span class="text-sm font-medium text-muted-foreground">Total Orders</span>
+            <p class="text-sm text-muted-foreground">Orders captured for the selected period.</p>
+          </div>
+          <div class="min-w-0 space-y-1">
+            <span v-if="orders_loading == 'pending'" class="block h-10 w-24 animate-pulse rounded-2xl bg-muted"></span>
+            <span v-else class="block min-w-0 truncate text-3xl font-semibold leading-none text-foreground sm:text-4xl">{{ orders?.length || 0 }}</span>
+            <span class="text-sm text-muted-foreground">{{ selected_range_label }}</span>
           </div>
         </div>
-        <div>
-          <i class="pi pi-shopping-bag text-[120px] text-muted-foreground opacity-5"></i>
-        </div>
+        <i class="pi pi-shopping-bag pointer-events-none absolute -bottom-4 right-0 text-7xl text-muted-foreground/10 sm:text-8xl"></i>
       </div>
 
       <!-- Total Revenue -->
-      <div class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
-        <div class="flex flex-col justify-between h-full">
-          <span class="font-light text-muted-foreground">Total Revenue</span>
-          <div class="flex flex-col">
-            <span v-if="orders_loading == 'pending'" class="w-24 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
-            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium text-green-600">{{ formatCurrency(totalRevenue) }}</span>
-              <span class="text-muted-foreground font-light text-sm">{{ selected_range === 'all' ? 'Total revenue' : `${selected_range_label} revenue` }}</span>
+      <div class="relative min-w-0 overflow-hidden rounded-3xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:p-6">
+        <div class="flex min-h-44 flex-col justify-between gap-6">
+          <div class="space-y-2 pr-14">
+            <span class="text-sm font-medium text-muted-foreground">Total Revenue</span>
+            <p class="text-sm text-muted-foreground">A clean view of earnings across the selected order range.</p>
+          </div>
+          <div class="min-w-0 space-y-1">
+            <span v-if="orders_loading == 'pending'" class="block h-10 w-28 animate-pulse rounded-2xl bg-muted"></span>
+            <span v-else class="block min-w-0 break-all text-3xl font-semibold leading-none text-emerald-600 sm:text-4xl">{{ formatCurrency(totalRevenue) }}</span>
+            <span class="text-sm text-muted-foreground">{{ selected_range === 'all' ? 'Total revenue' : `${selected_range_label} revenue` }}</span>
           </div>
         </div>
-        <div>
-          <i class="pi pi-dollar text-[120px] text-green-500 opacity-5"></i>
-        </div>
+        <i class="pi pi-dollar pointer-events-none absolute -bottom-4 right-0 text-7xl text-emerald-500/10 sm:text-8xl"></i>
       </div>
 
       <!-- Active Orders -->
-      <div class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
-        <div class="flex flex-col justify-between h-full">
-          <span class="font-light text-muted-foreground">Active Orders</span>
-          <div class="flex flex-col">
-            <span v-if="orders_loading == 'pending'" class="w-14 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
-            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium text-blue-600">{{ active_orders?.length || 0 }}</span>
-            <span class="text-muted-foreground font-light text-sm">In progress</span>
+      <div class="relative min-w-0 overflow-hidden rounded-3xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:p-6">
+        <div class="flex min-h-44 flex-col justify-between gap-6">
+          <div class="space-y-2 pr-12">
+            <span class="text-sm font-medium text-muted-foreground">Active Orders</span>
+            <p class="text-sm text-muted-foreground">Orders still moving through service right now.</p>
+          </div>
+          <div class="min-w-0 space-y-1">
+            <span v-if="orders_loading == 'pending'" class="block h-10 w-20 animate-pulse rounded-2xl bg-muted"></span>
+            <span v-else class="block min-w-0 truncate text-3xl font-semibold leading-none text-blue-600 sm:text-4xl">{{ active_orders?.length || 0 }}</span>
+            <span class="text-sm text-muted-foreground">In progress</span>
           </div>
         </div>
-        <div>
-          <i class="pi pi-spinner text-[120px] text-blue-500 opacity-5"></i>
-        </div>
+        <i class="pi pi-spinner pointer-events-none absolute -bottom-4 right-0 text-7xl text-blue-500/10 sm:text-8xl"></i>
       </div>
 
       <!-- Completed Orders -->
-      <div class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
-        <div class="flex flex-col justify-between h-full">
-          <span class="font-light text-muted-foreground">Completed</span>
-          <div class="flex flex-col">
-            <span v-if="orders_loading == 'pending'" class="w-14 h-12 bg-muted-foreground/20 animate-pulse rounded-lg"></span>
-            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium text-emerald-600">{{ total_completed_orders }}</span>
-            <span class="text-muted-foreground font-light text-sm">Finished orders</span>
+      <div class="relative min-w-0 overflow-hidden rounded-3xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:p-6">
+        <div class="flex min-h-44 flex-col justify-between gap-6">
+          <div class="space-y-2 pr-12">
+            <span class="text-sm font-medium text-muted-foreground">Completed</span>
+            <p class="text-sm text-muted-foreground">Orders fully closed out and handed off.</p>
+          </div>
+          <div class="min-w-0 space-y-1">
+            <span v-if="orders_loading == 'pending'" class="block h-10 w-20 animate-pulse rounded-2xl bg-muted"></span>
+            <span v-else class="block min-w-0 truncate text-3xl font-semibold leading-none text-emerald-600 sm:text-4xl">{{ total_completed_orders }}</span>
+            <span class="text-sm text-muted-foreground">Finished orders</span>
           </div>
         </div>
-        <div>
-          <i class="pi pi-check-circle text-[120px] text-emerald-500 opacity-5"></i>
-        </div>
+        <i class="pi pi-check-circle pointer-events-none absolute -bottom-4 right-0 text-7xl text-emerald-500/10 sm:text-8xl"></i>
       </div>
     </div>
 
     <!-- Orders List -->
     <div class="space-y-4">
-      <div class="flex justify-end flex-wrap items-center gap-3">
-        <form @submit.prevent="submitCustomerSearch" class="flex items-center gap-2">
-          <input
-            v-model="customer_search_input"
-            type="text"
-            placeholder="Search by customer"
-            class="rounded-md border border-border outline-none  px-3 py-1.5 text-sm text-foreground placeholder:text-muted-foreground  focus:ring focus:ring-ring"
-          />
-          <button
-            type="submit"
-            class="rounded-md border border-border px-3 py-1.5 text-sm text-foreground hover:bg-accent transition-colors"
-          >
-            Search
-          </button>
-        </form>
-        <span class="text-sm font-medium text-muted-foreground">Filter by:</span>
-        <button
-          @click="selected_range = 'all'"
-          :class="selected_range === 'all' ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent text-muted-foreground border-border hover:bg-accent'"
-          class="rounded-md border px-3 py-1.5 text-sm transition-colors"
-        >
-          All
-        </button>
-        <button
-          @click="selected_range = 'day'"
-          :class="selected_range === 'day' ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent text-muted-foreground border-border hover:bg-accent'"
-          class="rounded-md border px-3 py-1.5 text-sm transition-colors"
-        >
-          Day
-        </button>
-        <button
-          @click="selected_range = 'week'"
-          :class="selected_range === 'week' ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent text-muted-foreground border-border hover:bg-accent'"
-          class="rounded-md border px-3 py-1.5 text-sm transition-colors"
-        >
-          Week
-        </button>
-        <button
-          @click="selected_range = 'month'"
-          :class="selected_range === 'month' ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent text-muted-foreground border-border hover:bg-accent'"
-          class="rounded-md border px-3 py-1.5 text-sm transition-colors"
-        >
-          Month
-        </button>
+      <div class="rounded-3xl border border-border bg-card p-4 shadow-sm sm:p-5">
+        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+          <div>
+            <h2 class="text-lg font-semibold text-foreground">Recent Orders</h2>
+            <p class="text-sm text-muted-foreground">Search for a customer or narrow the time range without breaking the layout.</p>
+          </div>
+
+          <div class="flex flex-col gap-3 lg:flex-row lg:flex-wrap lg:items-center lg:justify-end">
+            <form @submit.prevent="submitCustomerSearch" class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+              <input
+                v-model="customer_search_input"
+                type="text"
+                placeholder="Search by customer"
+                class="w-full rounded-2xl border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:ring focus:ring-ring sm:min-w-64"
+              />
+              <button
+                type="submit"
+                class="rounded-2xl border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+              >
+                Search
+              </button>
+            </form>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="mr-1 text-sm font-medium text-muted-foreground">Filter by:</span>
+              <button
+                @click="selected_range = 'all'"
+                :class="selected_range === 'all' ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent text-muted-foreground border-border hover:bg-accent'"
+                class="rounded-full border px-4 py-2 text-sm transition-colors"
+              >
+                All
+              </button>
+              <button
+                @click="selected_range = 'day'"
+                :class="selected_range === 'day' ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent text-muted-foreground border-border hover:bg-accent'"
+                class="rounded-full border px-4 py-2 text-sm transition-colors"
+              >
+                Day
+              </button>
+              <button
+                @click="selected_range = 'week'"
+                :class="selected_range === 'week' ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent text-muted-foreground border-border hover:bg-accent'"
+                class="rounded-full border px-4 py-2 text-sm transition-colors"
+              >
+                Week
+              </button>
+              <button
+                @click="selected_range = 'month'"
+                :class="selected_range === 'month' ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent text-muted-foreground border-border hover:bg-accent'"
+                class="rounded-full border px-4 py-2 text-sm transition-colors"
+              >
+                Month
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div v-if="orders?.length === 0" class="border border-border rounded-lg bg-card p-12 text-center">
+      <div v-if="orders?.length === 0" class="rounded-3xl border border-border bg-card p-10 text-center shadow-sm sm:p-12">
         <i class="pi pi-inbox text-4xl text-muted-foreground mb-4 block"></i>
         <p class="text-muted-foreground">{{ selected_range === 'all' ? 'No orders yet' : `No orders for ${selected_range_label.toLowerCase()}` }}</p>
       </div>

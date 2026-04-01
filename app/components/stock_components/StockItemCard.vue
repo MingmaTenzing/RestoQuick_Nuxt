@@ -34,7 +34,7 @@ const getCategoryColor = (category: StockCategory) => {
 <template>
   <div
     :class="[
-      'rounded-lg border p-6 space-y-4 bg-card hover:shadow-md transition-shadow hover:border-ring',
+      'rounded-3xl border p-6 space-y-4 bg-card hover:shadow-md transition-shadow hover:border-ring',
      
     ]"
   >
@@ -44,7 +44,7 @@ const getCategoryColor = (category: StockCategory) => {
         <h3 class="text-lg font-semibold">{{ item.name }}</h3>
         <p v-if="item.supplier" class="text-xs text-muted-foreground mt-1">{{ item.supplier }}</p>
       </div>
-      <span :class="['px-2 py-1 rounded text-xs font-medium border', getCategoryColor(item.category)]">
+      <span :class="['px-3 py-1 rounded-full text-xs font-medium border', getCategoryColor(item.category)]">
         {{ item.category }}
       </span>
     </div>
@@ -55,7 +55,7 @@ const getCategoryColor = (category: StockCategory) => {
         <span class="text-sm text-muted-foreground">Current Stock</span>
         <span
           v-if="isLowStock(item)"
-          class="px-2 py-1 rounded text-xs font-medium bg-yellow-500/10 text-yellow-600 border border-yellow-500/20 flex items-center gap-1"
+          class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-600 border border-yellow-500/20 flex items-center gap-1"
         >
           <i class="pi pi-exclamation-triangle text-xs" />
           Low
@@ -91,13 +91,13 @@ const getCategoryColor = (category: StockCategory) => {
     <div class="flex gap-2 pt-2 border-t">
       <button
         @click="emit('restock', item)"
-        class="flex-1 px-3 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium"
+        class="flex-1 px-3 py-2 rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium"
       >
         Manage Stock
       </button>
       <button
         @click="emit('delete', item)"
-        class="px-3 py-2 rounded-md border border-destructive/20 bg-destructive/20 text-destructive/90 hover:bg-destructive/90 hover:text-destructive-foreground transition-colors text-sm font-medium"
+        class="px-3 py-2 rounded-2xl border border-destructive/20 bg-destructive/20 text-destructive/90 hover:bg-destructive/90 hover:text-destructive-foreground transition-colors text-sm font-medium"
         title="Delete item"
       >
         <i class="pi pi-trash" />
