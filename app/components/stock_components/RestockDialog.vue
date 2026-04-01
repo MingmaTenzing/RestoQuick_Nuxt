@@ -47,29 +47,40 @@ const closeDialog = () => {
 </script>
 
 <template>
-  <div v-if="open && item" class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-    <div class="bg-background rounded-lg border p-6 shadow-lg w-full max-w-md">
-      <h2 class="text-lg font-semibold mb-2">Manage Stock - {{ item.name }}</h2>
-      <p class="text-sm text-muted-foreground mb-4">Adjust inventory levels</p>
+  <div v-if="open && item" class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 backdrop-blur-sm sm:p-6">
+    <div class="w-full max-w-xl rounded-4xl border border-border bg-card p-6 shadow-sm sm:p-7">
+      <div class="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-semibold text-foreground">Manage Stock</h2>
+          <p class="mt-1 text-sm text-muted-foreground">Adjust inventory levels for {{ item.name }}.</p>
+        </div>
+        <button
+          type="button"
+          @click="closeDialog"
+          class="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-muted/50 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+        >
+          <i class="pi pi-times text-sm" />
+        </button>
+      </div>
 
       <div class="space-y-4">
         <div class="space-y-2">
           <label class="text-sm font-medium">Stock Adjustment</label>
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3 rounded-3xl border border-border bg-muted/50 p-3">
             <button
               @click="decrementStock"
-              class="px-4 py-2 rounded-md border border-input bg-background hover:bg-accent transition-colors text-lg font-semibold"
+              class="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card text-lg font-semibold text-foreground transition-colors hover:bg-accent"
             >
               <i class="pi pi-minus" />
             </button>
             <input
               v-model.number="adjustment"
               type="number"
-              class="flex-1 px-3 py-2 rounded-md border border-input bg-background text-foreground text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-ring"
+              class="min-w-0 flex-1 rounded-2xl border border-border bg-card px-4 py-3 text-center text-xl font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
             />
             <button
               @click="incrementStock"
-              class="px-4 py-2 rounded-md border border-input bg-background hover:bg-accent transition-colors text-lg font-semibold"
+              class="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card text-lg font-semibold text-foreground transition-colors hover:bg-accent"
             >
               <i class="pi pi-plus" />
             </button>
@@ -79,7 +90,7 @@ const closeDialog = () => {
           </p>
         </div>
 
-        <div class="bg-muted rounded-lg p-4 space-y-2">
+        <div class="space-y-3 rounded-3xl border border-border bg-muted/50 p-5">
           <div class="flex justify-between text-sm">
             <span class="text-muted-foreground">Current stock:</span>
             <span class="font-medium">{{ item.currentStock }} {{ item.unit }}</span>
@@ -90,23 +101,23 @@ const closeDialog = () => {
               {{ adjustment >= 0 ? '+' : '' }}{{ adjustment }} {{ item.unit }}
             </span>
           </div>
-          <div class="flex justify-between text-base font-bold border-t pt-2">
+          <div class="flex justify-between border-t border-border pt-3 text-base font-semibold">
             <span>New stock level:</span>
             <span>{{ item.currentStock + adjustment }} {{ item.unit }}</span>
           </div>
         </div>
 
-        <div class="flex gap-2 pt-4 border-t">
+        <div class="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row">
           <button
             @click="closeDialog"
-            class="flex-1 px-4 py-2 rounded-md border border-input bg-background hover:bg-accent transition-colors"
+            class="flex-1 rounded-2xl border border-border bg-muted/50 px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
             Cancel
           </button>
           <button
             @click="handleConfirm"
             :disabled="adjustment === 0"
-            class="flex-1 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            class="flex-1 rounded-2xl bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Confirm Changes
           </button>

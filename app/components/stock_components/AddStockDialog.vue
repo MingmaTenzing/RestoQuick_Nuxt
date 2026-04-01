@@ -55,10 +55,21 @@ const closeDialog = () => {
 </script>
 
 <template>
-  <div v-if="open" class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-    <div class="bg-background rounded-lg border p-6 shadow-lg w-full max-w-md">
-      <h2 class="text-lg font-semibold mb-2">Add Stock Item</h2>
-      <p class="text-sm text-muted-foreground mb-4">Add a new item to inventory</p>
+  <div v-if="open" class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 backdrop-blur-sm sm:p-6">
+    <div class="w-full max-w-2xl rounded-4xl border border-border bg-card p-6 shadow-sm sm:p-7">
+      <div class="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-semibold text-foreground">Add Stock Item</h2>
+          <p class="mt-1 text-sm text-muted-foreground">Add a new item to inventory.</p>
+        </div>
+        <button
+          type="button"
+          @click="closeDialog"
+          class="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-muted/50 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+        >
+          <i class="pi pi-times text-sm" />
+        </button>
+      </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <div class="space-y-2">
@@ -67,7 +78,7 @@ const closeDialog = () => {
             v-model="formData.name"
             type="text"
             required
-            class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            class="w-full rounded-2xl border border-border bg-muted/50 px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
           />
         </div>
 
@@ -75,7 +86,7 @@ const closeDialog = () => {
           <label class="text-sm font-medium">Category</label>
           <select
             v-model="formData.category"
-            class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            class="w-full rounded-2xl border border-border bg-muted/50 px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
           >
             <option :value="StockCategory.INGREDIENTS">Ingredients</option>
             <option :value="StockCategory.BEVERAGES">Beverages</option>
@@ -84,7 +95,7 @@ const closeDialog = () => {
           </select>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid gap-4 sm:grid-cols-2">
           <div class="space-y-2">
             <label class="text-sm font-medium">Current Stock</label>
             <input
@@ -92,7 +103,7 @@ const closeDialog = () => {
               type="number"
               min="0"
               required
-              class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              class="w-full rounded-2xl border border-border bg-muted/50 px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
             />
           </div>
           <div class="space-y-2">
@@ -102,12 +113,12 @@ const closeDialog = () => {
               type="text"
               placeholder="kg, liters, etc."
               required
-              class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              class="w-full rounded-2xl border border-border bg-muted/50 px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
             />
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid gap-4 sm:grid-cols-2">
           <div class="space-y-2">
             <label class="text-sm font-medium">Reorder Level</label>
             <input
@@ -115,7 +126,7 @@ const closeDialog = () => {
               type="number"
               min="0"
               required
-              class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              class="w-full rounded-2xl border border-border bg-muted/50 px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
             />
           </div>
           <div class="space-y-2">
@@ -125,7 +136,7 @@ const closeDialog = () => {
               type="number"
               min="0"
               required
-              class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              class="w-full rounded-2xl border border-border bg-muted/50 px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
             />
           </div>
         </div>
@@ -135,22 +146,22 @@ const closeDialog = () => {
           <input
             v-model="formData.supplier"
             type="text"
-            class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            class="w-full rounded-2xl border border-border bg-muted/50 px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
           />
         </div>
 
-        <div class="flex gap-2 pt-4 border-t">
+        <div class="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row">
           <button
             type="button"
             @click="closeDialog"
-            class="flex-1 px-4 py-2 rounded-md border border-input bg-background hover:bg-accent transition-colors"
+            class="flex-1 rounded-2xl border border-border bg-muted/50 px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
             Cancel
           </button>
           <button
             type="submit"
             :disabled="props.isLoading"
-            class="flex-1 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            class="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <i v-if="props.isLoading" class="pi pi-spinner animate-spin" />
             {{ props.isLoading ? 'Adding...' : 'Add Item' }}

@@ -155,7 +155,7 @@ const handleDelete = async (item: StockItem) => {
       <div class="flex items-center gap-2">
         <NuxtLink to="/dashboard/stock/qr-labels">
           <button
-            class="px-4 py-2 rounded-md border border-border bg-background text-foreground hover:bg-accent transition-all flex items-center gap-2"
+            class="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-2.5 text-foreground transition-all hover:bg-accent"
           >
             <i class="pi pi-qrcode" />
             QR Labels
@@ -164,7 +164,7 @@ const handleDelete = async (item: StockItem) => {
 
         <button
           @click="isAddDialogOpen = true"
-          class="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:shadow-lg flex items-center gap-2"
+          class="flex items-center gap-2 rounded-2xl bg-primary px-4 py-2.5 text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-lg"
         >
           <i class="pi pi-plus" />
           Add Item
