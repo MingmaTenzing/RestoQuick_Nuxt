@@ -22,7 +22,7 @@ function startDrag(event: DragEvent, data:Staff) {
 
 <template>
 
-     <div class=" border border-border p-4  rounded-lg flex flex-col space-y-4">
+     <div class=" border border-border p-4  rounded-3xl flex flex-col space-y-4">
 
         <span class=" font-semibold">Staff Members</span>
     <span class=" text-sm font-light text-muted-foreground">Drag and Drop staff to schedule shifts</span>

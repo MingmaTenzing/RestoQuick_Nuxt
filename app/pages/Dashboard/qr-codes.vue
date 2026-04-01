@@ -27,7 +27,7 @@ const runtime = useRuntimeConfig();
 
 </div>
 <NuxtLink to="/print-qr-codes">
-    <button class=" w-[120px] bg-primary text-primary-foreground p-4 rounded-lg border ">Print All</button>
+    <button class=" w-[120px] bg-primary text-primary-foreground p-4 rounded-3xl border ">Print All</button>
 </NuxtLink>
         </div>
 
@@ -37,7 +37,7 @@ const runtime = useRuntimeConfig();
         <!-- qr codes -->
         <div class=" flex w-full flex-wrap gap-4" >
   
-            <div class=" p-6 flex flex-col space-y-4  items-center rounded-lg border  w-[300px]"  v-for="table in tables" :key="table.id">
+            <div class=" p-6 flex flex-col space-y-4  items-center rounded-3xl border  w-[300px]"  v-for="table in tables" :key="table.id">
                 <span class=" text-lg">{{ table.number }}</span>
                 <Qrcode :value="`${runtime.public.BASE_URL}/order-table/${table.id}`" ></Qrcode>
                 <span class=" text-muted-foreground font-light text-sm">Scan to view menu and order</span>
@@ -45,7 +45,7 @@ const runtime = useRuntimeConfig();
                <!-- only for dev -->
                 <NuxtLink :to="`/order-table/${table.id}`">
 
-                    <button class="p-2 border rounded-lg">Order On Table (for Dev)</button>
+                    <button class="p-2 border rounded-3xl">Order On Table (for Dev)</button>
                 </NuxtLink>
             </div>
 

@@ -181,7 +181,7 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 								type="button"
 								:disabled="isUpdatingStatus"
 								@click="updateOrderStatus(statusOption)"
-								class="rounded-md border border-border px-4 py-2.5 text-sm font-semibold text-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent"
+								class="rounded-2xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent"
 								:class="order_details.status === statusOption ? 'bg-primary text-primary-foreground border-primary hover:bg-primary' : ''"
 							>
 								{{ formatStatusLabel(statusOption) }}

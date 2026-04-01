@@ -77,7 +77,7 @@ async function apply_suggestion() {
             <span class="text-xs border-green-500 border text-green-500 rounded-full px-2 py-0.5">AI</span>
             <h2 class="text-xl font-semibold">Roster Assistant</h2>
           </div>
-          <button v-on:click="closeModal" class="border px-3 py-1 rounded-lg hover:border-ring">
+          <button v-on:click="closeModal" class="border px-3 py-1 rounded-3xl hover:border-ring">
             Close
           </button>
         </div>
@@ -101,7 +101,7 @@ async function apply_suggestion() {
           <input
             type="number"
             min="0"
-            class="w-full border rounded-lg px-3 py-2 bg-background"
+            class="w-full border rounded-3xl px-3 py-2 bg-background"
             placeholder="5000"
           />
         </div>
@@ -115,13 +115,13 @@ async function apply_suggestion() {
           class="space-y-2"
         >
           <div :class="message.role === 'USER' ? 'flex justify-end' : 'flex justify-start'">
-            <div class="max-w-[80%] rounded-lg px-3 py-2 text-sm border" :class="message.role === 'USER' ? 'bg-accent' : 'bg-muted'">
+            <div class="max-w-[80%] rounded-3xl px-3 py-2 text-sm border" :class="message.role === 'USER' ? 'bg-accent' : 'bg-muted'">
               {{ message.content }}
             </div>
           </div>
 
           <div v-if="message.role === 'AI' && message.caution" class="flex justify-start">
-            <div class="max-w-[80%] rounded-md px-3 py-2 text-xs bg-background border">
+            <div class="max-w-[80%] rounded-2xl px-3 py-2 text-xs bg-background border">
               {{ message.caution }}
             </div>
           </div>
@@ -134,16 +134,16 @@ async function apply_suggestion() {
           v-model="prompt"
           @keydown.enter.exact.prevent="askAi"
           rows="3"
-          class="w-full resize-none border rounded-lg px-3 py-2 outline-none"
+          class="w-full resize-none border rounded-3xl px-3 py-2 outline-none"
           placeholder="Ask the AI to optimize your roster..."
         ></textarea>
 
         <div class="flex items-center justify-between mt-3">
-          <button type="submit" class="border px-4 py-2 rounded-lg hover:border-ring flex items-center gap-2" :disabled="response_loading">
+          <button type="submit" class="border px-4 py-2 rounded-3xl hover:border-ring flex items-center gap-2" :disabled="response_loading">
             <i v-if="response_loading" class="pi pi-spin pi-spinner"></i>
             <span>Ask AI</span>
           </button>
-          <button type="button" @click="apply_suggestion" :disabled="is_applying_suggestions" class="border px-4 py-2 rounded-lg hover:border-ring bg-accent text-accent-foreground flex items-center gap-2">
+          <button type="button" @click="apply_suggestion" :disabled="is_applying_suggestions" class="border px-4 py-2 rounded-3xl hover:border-ring bg-accent text-accent-foreground flex items-center gap-2">
             <i v-if="is_applying_suggestions" class="pi pi-spin pi-spinner"></i>
             Apply Suggestions
           </button>

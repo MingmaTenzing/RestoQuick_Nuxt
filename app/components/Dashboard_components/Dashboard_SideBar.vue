@@ -25,7 +25,7 @@ const isActive = (path: string) => {
 </script>
 
 <template>
-    <aside class="h-full min-w-46 shrink-0 bg-sidebar p-4 flex flex-col justify-between">
+    <aside class="h-full min-w-44 shrink-0 bg-sidebar p-4 flex flex-col justify-between">
         <div class=" space-y-8">
             <div class="flex justify-center">
                         <img src="../../assets/images/RestoQuick.png" width="100" class="dark:invert w-12 md:w-20"/>
@@ -37,7 +37,7 @@ const isActive = (path: string) => {
                         <NuxtLink
                             :to="item.to"
                             :class="[
-                                'flex items-center space-x-4 text-sm xl:text-base text-muted-foreground p-2 rounded-xl',
+                                'flex items-center space-x-4 text-sm xl:text-base text-muted-foreground p-2 rounded-3xl',
                                 isActive(item.to) ? 'bg-primary text-primary-foreground' : 'hover:bg-sidebar-accent hover:border-sidebar-border hover:text-accent-foreground'
                             ]"
                         >
@@ -51,7 +51,7 @@ const isActive = (path: string) => {
         </div>
 
         <div class="mt-4">
-            <NuxtLink to="/dashboard/settings" class="flex items-center space-x-4 text-sm text-muted-foreground p-2 rounded-lg hover:bg-sidebar-accent">
+            <NuxtLink to="/dashboard/settings" class="flex items-center space-x-4 text-sm text-muted-foreground p-2 rounded-3xl hover:bg-sidebar-accent">
                 <i class="pi pi-cog"></i>
                 <span>Settings</span>
             </NuxtLink>

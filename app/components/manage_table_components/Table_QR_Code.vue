@@ -33,7 +33,7 @@ const close = () => {
 
 <template>
 
-      <div class="w-full max-w-md p-6 bg-card rounded-lg shadow-lg relative">
+      <div class="w-full max-w-md p-6 bg-card rounded-3xl shadow-lg relative">
         <button @click="close" class="absolute top-3 right-3 text-sm rounded p-1 hover:bg-muted/20">✕</button>
 
         <h3 class="text-2xl mb-4 text-center"> Table: {{ table.number }}</h3>
@@ -42,8 +42,8 @@ const close = () => {
      <Qrcode :value="`${runtime.public.BASE_URL}/order-table/${table.id}`" ></Qrcode>
 
           <div class="flex space-x-2 mt-4">
-            <button @click="copyLink" class="px-4 py-2 rounded-lg border hover:border-ring">Copy Link</button>
-            <button @click="close" class="px-4 py-2 rounded-lg border">Close</button>
+            <button @click="copyLink" class="px-4 py-2 rounded-3xl border hover:border-ring">Copy Link</button>
+            <button @click="close" class="px-4 py-2 rounded-3xl border">Close</button>
           </div>
         </div>
 </div>
