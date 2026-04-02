@@ -116,7 +116,6 @@ const submitOrder = async (payload?: { customerName?: string }) => {
             title: isTakeawayOrder.value ? 'Takeaway order sent to kitchen' : 'Order sent to kitchen',
         })
     } catch (error) {
-        console.log(error)
         toast.error({
             title: 'Failed to send order',
         })

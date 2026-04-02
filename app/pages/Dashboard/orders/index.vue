@@ -72,13 +72,12 @@ const formatCurrency = (amount: number) => {
     </div>
 
     <!-- Stats Cards Grid -->
-    <div class="grid gap-4 sm:grid-cols-2 2xl:grid-cols-4">
+    <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
       <!-- Total Orders -->
-      <div class="relative min-w-0 overflow-hidden rounded-3xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:p-6">
-        <div class="flex min-h-44 flex-col justify-between gap-6">
-          <div class="space-y-2 pr-12">
+      <div class="relative min-w-0 overflow-hidden rounded-3xl border border-border bg-card p-4 text-card-foreground shadow-sm sm:p-5">
+        <div class="flex min-h-32 flex-col justify-between gap-4">
+          <div class="pr-12">
             <span class="text-sm font-medium text-muted-foreground">Total Orders</span>
-            <p class="text-sm text-muted-foreground">Orders captured for the selected period.</p>
           </div>
           <div class="min-w-0 space-y-1">
             <span v-if="orders_loading == 'pending'" class="block h-10 w-24 animate-pulse rounded-2xl bg-muted"></span>
@@ -90,11 +89,10 @@ const formatCurrency = (amount: number) => {
       </div>
 
       <!-- Total Revenue -->
-      <div class="relative min-w-0 overflow-hidden rounded-3xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:p-6">
-        <div class="flex min-h-44 flex-col justify-between gap-6">
-          <div class="space-y-2 pr-14">
+      <div class="relative min-w-0 overflow-hidden rounded-3xl border border-border bg-card p-4 text-card-foreground shadow-sm sm:p-5">
+        <div class="flex min-h-32 flex-col justify-between gap-4">
+          <div class="pr-14">
             <span class="text-sm font-medium text-muted-foreground">Total Revenue</span>
-            <p class="text-sm text-muted-foreground">A clean view of earnings across the selected order range.</p>
           </div>
           <div class="min-w-0 space-y-1">
             <span v-if="orders_loading == 'pending'" class="block h-10 w-28 animate-pulse rounded-2xl bg-muted"></span>
@@ -106,11 +104,10 @@ const formatCurrency = (amount: number) => {
       </div>
 
       <!-- Active Orders -->
-      <div class="relative min-w-0 overflow-hidden rounded-3xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:p-6">
-        <div class="flex min-h-44 flex-col justify-between gap-6">
-          <div class="space-y-2 pr-12">
+      <div class="relative min-w-0 overflow-hidden rounded-3xl border border-border bg-card p-4 text-card-foreground shadow-sm sm:p-5">
+        <div class="flex min-h-32 flex-col justify-between gap-4">
+          <div class="pr-12">
             <span class="text-sm font-medium text-muted-foreground">Active Orders</span>
-            <p class="text-sm text-muted-foreground">Orders still moving through service right now.</p>
           </div>
           <div class="min-w-0 space-y-1">
             <span v-if="orders_loading == 'pending'" class="block h-10 w-20 animate-pulse rounded-2xl bg-muted"></span>
@@ -122,11 +119,10 @@ const formatCurrency = (amount: number) => {
       </div>
 
       <!-- Completed Orders -->
-      <div class="relative min-w-0 overflow-hidden rounded-3xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:p-6">
-        <div class="flex min-h-44 flex-col justify-between gap-6">
-          <div class="space-y-2 pr-12">
+      <div class="relative min-w-0 overflow-hidden rounded-3xl border border-border bg-card p-4 text-card-foreground shadow-sm sm:p-5">
+        <div class="flex min-h-32 flex-col justify-between gap-4">
+          <div class="pr-12">
             <span class="text-sm font-medium text-muted-foreground">Completed</span>
-            <p class="text-sm text-muted-foreground">Orders fully closed out and handed off.</p>
           </div>
           <div class="min-w-0 space-y-1">
             <span v-if="orders_loading == 'pending'" class="block h-10 w-20 animate-pulse rounded-2xl bg-muted"></span>

@@ -16,8 +16,6 @@ const emit = defineEmits<{
 }>()
 
 const formatCategory = (category: string) => category.replaceAll('_', ' ')
-
-console.log(props.item.options)
 const show_menu_options = ref(false)
 const special_instruction = ref('')
 

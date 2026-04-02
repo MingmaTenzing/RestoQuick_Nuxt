@@ -6,7 +6,7 @@ export default defineEventHandler(async () => {
   const todayRange = getDayRange();
 
   const [weeklyRevenue, weeklyOrderCount, todayBookingsCount, weeklyShifts] =
-    await prisma.$transaction([
+    await Promise.all([
       prisma.order.aggregate({
         _sum: {
           totalAmountCents: true,

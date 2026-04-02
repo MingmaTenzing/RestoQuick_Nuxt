@@ -59,8 +59,6 @@ export const useOrderCart = () => {
       // Otherwise, add as new cart row
       cart_items.value.push(item);
     }
-    // For debugging
-    console.log(item);
   };
 
   // Remove only the exact variant from cart

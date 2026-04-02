@@ -1,7 +1,33 @@
 <script setup  lang="ts">
+type RosterOverviewStats = {
+  totalStaff: number
+  weeklyShiftCount: number
+  pendingLeaveRequests: number
+}
+
 definePageMeta({
     layout: 'dashboard-layout'
 })
+
+const { startOfWeek, endOfWeek } = useWeekNavigation()
+
+const { data: rosterStats, status: rosterStatsStatus } = await useAsyncData(
+  'roster-overview-stats',
+  () => $fetch<RosterOverviewStats>('/api/dashboard/stats/roster-overview', {
+    query: {
+      startDate: startOfWeek.value.toISOString(),
+      endDate: endOfWeek.value.toISOString()
+    }
+  }),
+  {
+    default: () => ({
+      totalStaff: 0,
+      weeklyShiftCount: 0,
+      pendingLeaveRequests: 0
+    }),
+    watch: [startOfWeek, endOfWeek]
+  }
+)
 
 const route = useRoute();
 </script>
@@ -44,8 +70,9 @@ const route = useRoute();
 
 
 <div class=" flex flex-col">
-<span class=" text-lg md:text-2xl font-bold">6</span>
-<span class=" text-muted-foreground font-light text-sm">Active employees</span>
+<span v-if="rosterStatsStatus === 'pending'" class="h-10 w-16 animate-pulse rounded-2xl bg-muted md:h-12 md:w-20"></span>
+<span v-else class="text-lg md:text-4xl lg:text-5xl font-medium">{{ rosterStats?.totalStaff ?? 0 }}</span>
+<span class=" text-muted-foreground font-light text-sm">Staff members</span>
   
 </div>
       
@@ -77,7 +104,8 @@ const route = useRoute();
 
 
 <div class=" flex flex-col">
-<span class=" text-lg md:text-2xl font-bold">42</span>
+<span v-if="rosterStatsStatus === 'pending'" class="h-10 w-16 animate-pulse rounded-2xl bg-muted md:h-12 md:w-20"></span>
+<span v-else class="text-lg md:text-4xl lg:text-5xl font-medium">{{ rosterStats?.weeklyShiftCount ?? 0 }}</span>
 <span class=" text-muted-foreground font-light text-sm">Shifts Scheduled</span>
   
 </div>
@@ -109,7 +137,8 @@ const route = useRoute();
 
 
 <div class=" flex flex-col">
-<span class=" text-lg md:text-2xl font-bold">12</span>
+<span v-if="rosterStatsStatus === 'pending'" class="h-10 w-16 animate-pulse rounded-2xl bg-muted md:h-12 md:w-20"></span>
+<span v-else class="text-lg md:text-4xl lg:text-5xl font-medium">{{ rosterStats?.pendingLeaveRequests ?? 0 }}</span>
 <span class=" text-muted-foreground font-light text-sm">Requests for leave </span>
   
 </div>

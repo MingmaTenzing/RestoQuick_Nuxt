@@ -23,10 +23,8 @@ const askAi = async () => {
  
 
   try {
-    const response = await sendPrompt(message);
-   console.log(response)
+    await sendPrompt(message);
   } catch (error){
-    console.log(error)
   }
 };
 

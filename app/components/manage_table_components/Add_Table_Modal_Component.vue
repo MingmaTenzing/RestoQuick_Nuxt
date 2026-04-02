@@ -53,7 +53,6 @@ async function addTable() {
         message: "Table Number already exists"
       })
     }
-     console.log(error)
   }
   finally {
     loading.value = false;

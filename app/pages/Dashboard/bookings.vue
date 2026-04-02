@@ -45,10 +45,6 @@ const total_pending_bookings = computed(() => {
   return bookings.value?.filter((booking) => booking.status == "PENDING").length
 })
 
-console.log(upcoming_bookings.value)
-
-console.log(today_booking.value)
-
 
 
 function openAddBookingDialog() {
@@ -97,7 +93,6 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
 }
 
   } catch (error) {
-    console.log(error)
     toast.error({title:"System Error "})
     
   }
@@ -143,7 +138,7 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
      
 
     <!-- Stats Cards Grid -->
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-4 xl:grid-cols-4">
       <!-- Total Bookings -->
       <div class="flex min-w-0 items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 text-card-foreground shadow sm:p-6">
         <div class="flex min-w-0 flex-1 flex-col justify-between gap-4">
