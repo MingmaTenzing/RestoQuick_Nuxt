@@ -4,6 +4,7 @@ import HomeFooter from '~/components/home_components/HomeFooter.vue';
 import NavBar from '~/components/home_components/NavBar.vue';
 import ScrollReveal from '~/components/home_components/ScrollReveal.vue';
 import heroShot from '~/assets/images/usecase/Cafe.webp';
+import menuScene from '~/assets/images/usecase/menu_scene.avif';
 import rosterShot from '~/assets/images/app_screenshots/AI Roster Suggestion.png';
 import kitchenShot from '~/assets/images/app_screenshots/Kitchen Display.webp';
 import analyticsShot from '~/assets/images/app_screenshots/Dashboard.webp';
@@ -217,20 +218,28 @@ const signatureNotes = [
 
     <main>
       <NavBar />
-      <section id="main" class="relative px-6 pb-24 pt-12 sm:pb-32 sm:pt-20">
+      <section id="main" class="relative isolate overflow-hidden px-6 pb-24 pt-12 sm:pb-32 sm:pt-20">
+        <img
+          :src="menuScene"
+          alt="Restaurant menu scene"
+          class="absolute inset-0 -z-20 h-full w-full object-cover"
+        >
+        <div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(10,12,10,0.34)_0%,rgba(10,12,10,0.58)_38%,rgba(10,12,10,0.88)_100%)]"></div>
+        <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.16),transparent_28%)]"></div>
+
         <div class="mx-auto grid max-w-7xl items-start gap-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-24">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.26em] text-green-700 dark:text-green-400">
+          <div class="relative z-10">
+            <p class="text-xs font-semibold uppercase tracking-[0.26em] text-green-300">
               AI-powered operations platform
             </p>
-            <h1 class="mt-5 max-w-3xl text-5xl font-semibold tracking-[-0.07em] text-foreground sm:text-6xl lg:text-[5.7rem] lg:leading-[0.92]">
+            <h1 class="mt-5 max-w-3xl text-5xl font-semibold tracking-[-0.07em] text-white sm:text-6xl lg:text-[5.7rem] lg:leading-[0.92]">
               Does more than a normal POS.
             </h1>
-            <p class="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
+            <p class="mt-7 max-w-2xl text-lg leading-8 text-white/80 sm:text-xl">
               More than a POS. RestoQuick brings bookings, kitchen flow, staffing, inventory, and reporting into one connected system.
             </p>
 
-            <p class="mt-8 text-xs tracking-[0.2em] text-muted-foreground">
+            <p class="mt-8 text-xs tracking-[0.2em] text-white/60">
               BOOKINGS / KITCHEN / TEAM / INVENTORY / REPORTING
             </p>
 
@@ -243,7 +252,7 @@ const signatureNotes = [
               </NuxtLink>
               <a
                 href="#demo"
-                class="text-sm font-medium text-muted-foreground underline underline-offset-4 transition hover:text-foreground"
+                class="text-sm font-medium text-white/72 underline underline-offset-4 transition hover:text-white"
               >
                 Watch Demo
               </a>
@@ -251,26 +260,31 @@ const signatureNotes = [
 
             <div class="mt-16 grid gap-8 sm:grid-cols-3">
               <div v-for="item in signatureNotes" :key="item.label">
-                <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">{{ item.label }}</p>
-                <p class="text-sm leading-7 text-muted-foreground">{{ item.value }}</p>
+                <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-white/55">{{ item.label }}</p>
+                <p class="text-sm leading-7 text-white/72">{{ item.value }}</p>
               </div>
             </div>
           </div>
 
-          <div id="demo" class="lg:pt-6">
-            <img :src="heroShot" alt="Chef and manager using RestoQuick during service" class="w-full object-cover shadow-2xl" />
+          <div id="demo" class="relative z-10 lg:pt-6">
+            <div class="rounded-[28px] border border-white/15 bg-black/25 p-8 shadow-2xl backdrop-blur-md sm:p-10">
+              <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-green-300">Why it fits growing venues</p>
+              <p class="mt-4 text-sm leading-8 text-white/72 sm:text-base">
+                Designed for operators who need one calm, all-in-one system across bookings, service,
+                staffing, stock, and day-to-day decision-making.
+              </p>
 
-            <div class="mt-8 grid gap-8 sm:grid-cols-2">
-              <div>
-                <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">Why it fits growing venues</p>
-                <p class="mt-3 text-sm leading-7 text-muted-foreground">
-                  Designed for operators who need one calm, usable system across bookings, service,
-                  staffing, stock, and day-to-day decision-making.
-                </p>
-              </div>
-              <div>
-                <p class="text-3xl font-semibold tracking-[-0.05em] text-foreground">24/7</p>
-                <p class="mt-2 text-sm leading-7 text-muted-foreground">Maya covers calls and reservations around the clock while your team stays focused on service.</p>
+              <div class="mt-8 h-px bg-white/10"></div>
+
+              <div class="mt-8 grid gap-8 sm:grid-cols-2">
+                <div>
+                  <p class="text-4xl font-semibold tracking-[-0.05em] text-white">24/7</p>
+                  <p class="mt-2 text-sm leading-7 text-white/70">Maya covers calls and reservations around the clock while your team stays focused on service.</p>
+                </div>
+                <div>
+                  <p class="text-4xl font-semibold tracking-[-0.05em] text-white">One place</p>
+                  <p class="mt-2 text-sm leading-7 text-white/70">Bookings, kitchen flow, staffing, inventory, and reporting stay connected inside one platform.</p>
+                </div>
               </div>
             </div>
           </div>
