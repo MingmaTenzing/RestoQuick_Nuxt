@@ -8,10 +8,6 @@ import notification_sound from "../../assets/audio/new-notification-022-370046.m
 import Complete_Order_Popup from '~/components/kitchenDisplay_components/Completed_Orders/Complete_Order_Popup.vue';
 import Loading_Order_Item from '~/components/kitchenDisplay_components/Loading_Order_Item.vue';
 
-definePageMeta({
-    layout: 'dashboard-layout'
-})
-
 
 const toast = useToast()
 

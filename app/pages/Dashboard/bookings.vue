@@ -2,11 +2,6 @@
 import { ref, computed } from 'vue'
 import type { Booking, BookingStatus } from '~/generated/prisma/client';
 
-
-definePageMeta({
-  layout: 'dashboard-layout'
-})
-
 const currentTab = ref('all')
 
 const toast = useToast();

@@ -4,13 +4,6 @@ import type { MenuItemCreateInput, MenuItemUpdateInput } from '~/generated/prism
 import type {  MenuItemWithOptions } from '~~/types/menu'
 
 
-
-
-definePageMeta({
-    layout: 'dashboard-layout'
-})
-
-
 const { data: menuItems, pending: isMenuItemsPending, refresh } = await useFetch<MenuItemWithOptions[]>('/api/menu', {
     lazy:true 
 })

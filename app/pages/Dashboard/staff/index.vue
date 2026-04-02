@@ -4,8 +4,6 @@ import Add_Staff_Modal from "~/components/staff_components/Add_Staff_Modal.vue";
 import Staff_Card from "~/components/staff_components/Staff_Card.vue";
 import Staff_Card_Loading from "~/components/staff_components/Staff_Card_Loading.vue";
 import type { Role, Staff } from "~/generated/prisma/client";
-
-
 const roles = [
   "Chef",
   "Waiter",

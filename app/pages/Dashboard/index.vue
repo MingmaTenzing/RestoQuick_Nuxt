@@ -6,10 +6,6 @@ import Recent_Orders from '~/components/Dashboard_components/Recent_Orders.vue'
 import SoldbyCategory_Piechart from '~/components/Dashboard_components/SoldbyCategory_Piechart.vue'
 import TopSelling_Items from '~/components/Dashboard_components/TopSelling_Items.vue'
 
-definePageMeta({
-	layout: 'dashboard-layout',
-})
-
 
 type WeeklyKpi = {
 	revenueCents: number
@@ -68,7 +64,6 @@ const stats = computed(() => {
 
 <template>
 	<div class="space-y-6 pb-8 w-full">
-
 		<Dashboard_Header></Dashboard_Header>
 
 	<!-- <DashboardComponentsDashboardHeader></DashboardComponentsDashboardHeader> -->

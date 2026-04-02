@@ -2,10 +2,6 @@
 import type { Table } from '~/generated/prisma/browser'
 import Table_Card from '~/components/pos_components/Table_Card.vue'
 
-definePageMeta({
-	layout: 'dashboard-layout'
-})
-
 const { data: tables, pending } = await useFetch<Table[]>('/api/tables')
 </script>
 

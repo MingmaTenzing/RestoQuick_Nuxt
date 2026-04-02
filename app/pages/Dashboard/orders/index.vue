@@ -3,10 +3,6 @@ import { ref, computed } from 'vue'
 
 import type{ OrderDetailsWithInclude } from '~~/types/orderwithInclude';
 
-definePageMeta({
-  layout: 'dashboard-layout'
-})
-
 type OrderRange = 'all' | 'day' | 'week' | 'month'
 
 const selected_range = ref<OrderRange>('all')
