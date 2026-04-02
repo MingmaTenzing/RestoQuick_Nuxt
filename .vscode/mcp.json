@@ -1,8 +1,13 @@
 {
-  "servers": {
-    "nuxt": {
-      "type": "http",
-      "url": "https://nuxt.com/mcp"
-    }
-  }
+	"servers": {
+		"nuxt": {
+			"type": "http",
+			"url": "https://nuxt.com/mcp"
+		},
+		"Clerk": {
+			"url": "https://mcp.clerk.dev/mcp",
+			"type": "http"
+		}
+	},
+	"inputs": []
 }
