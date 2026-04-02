@@ -26,8 +26,13 @@ const { isSidebar_open, open_side_bar, close_side_bar } = useSideBar();
     </div>
      <div>
          
-           <div class=" text-sm md:text-base ">Mingma</div>
-         <span class=" font-light text-xs md:text-sm">Admin</span>
+            <Show when="signed-out">
+      <SignInButton />
+      <SignUpButton />
+    </Show>
+    <Show when="signed-in">
+      <UserButton />
+    </Show>
      </div>
      <div>
          <i class=" pi pi-sign-out" ></i>
