@@ -44,7 +44,6 @@ onMounted(async () => {
                 message: error.message
             });
         }
-       console.log(error)
         
     }
     finally {

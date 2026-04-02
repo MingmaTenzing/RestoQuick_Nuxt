@@ -59,7 +59,6 @@ const add_availability_day = (available_day: WeekDay) => {
  return   staff_form.availability = staff_form.availability.filter((day) => day != check_day )
   }
   staff_form.availability.push(available_day)
-  console.log(staff_form.availability) 
 
    }
 
@@ -134,7 +133,6 @@ async function add_new_staff() {
 
    
  } catch (error) {
-  console.log(error)
  } finally {
    staff_add_loading.value = false
    await refreshNuxtData('staffs')

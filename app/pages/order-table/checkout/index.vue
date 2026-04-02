@@ -40,8 +40,7 @@ watch(stripe, async () => {
 
 
 onBeforeRouteLeave(() => {
-    checkout.value.destroy();
-    console.log('checkout ddestroy')
+  checkout.value?.destroy();
     
 })
 

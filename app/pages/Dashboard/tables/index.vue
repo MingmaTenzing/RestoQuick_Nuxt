@@ -118,7 +118,7 @@ function close_qr_modal() {
           <span class="font-light text-muted-foreground">Total Capacity</span>
           <div class="flex flex-col">
             <span v-if="pending" class="w-25 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
-            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium text-green-600">{{ tables?.reduce((sum, t) => sum + (t.capacity || 0), 0) || 0 }}</span>
+            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium ">{{ tables?.reduce((sum, t) => sum + (t.capacity || 0), 0) || 0 }}</span>
             <span class="text-muted-foreground font-light text-sm">Total guests</span>
           </div>
         </div>
@@ -133,7 +133,7 @@ function close_qr_modal() {
           <span class="font-light text-muted-foreground">Avg. Per Table</span>
           <div class="flex flex-col">
             <span v-if="pending" class="w-25 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
-            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium text-blue-600">{{ tables && tables.length > 0 ? Math.round(tables.reduce((sum, t) => sum + (t.capacity || 0), 0) / tables.length) : 0 }}</span>
+            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium">{{ tables && tables.length > 0 ? Math.round(tables.reduce((sum, t) => sum + (t.capacity || 0), 0) / tables.length) : 0 }}</span>
             <span class="text-muted-foreground font-light text-sm">Seats per table</span>
           </div>
         </div>

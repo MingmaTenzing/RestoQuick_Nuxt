@@ -38,7 +38,6 @@ onMounted(async () => {
     loading_orders.value = true
     all_orders.value = await $fetch<OrderDetailsWithInclude[]>('/api/orders/pending');
     loading_orders.value = false
-    console.log(all_orders.value)
 
 })
 
@@ -47,9 +46,6 @@ onMounted(async () => {
 watch(data, (newValue: string) => {
 
     // Each websocket message is parsed into a typed kitchen payload.
-    console.log('new data')
-
-    
     let parsed_data: websocket_payload = JSON.parse(newValue)
 
 

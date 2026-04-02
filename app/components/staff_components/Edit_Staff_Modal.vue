@@ -12,7 +12,6 @@ const { ROLES, WEEKDAYS } = RoleandWeekDay_Constant()
 
 // here the staff is passed from the staff card
 const props = defineProps<{ edit_staff: Staff }>()
-console.log(props.edit_staff)
 
 // the edit staff emits two event close modal and refetch-data when editing staff details is successfull
 const emit = defineEmits(['close_modal'])
@@ -80,7 +79,6 @@ const add_availability_day = (available_day: WeekDay) => {
  return   edit_staff_form.availability = edit_staff_form.availability.filter((day) => day != check_day )
   }
   edit_staff_form.availability.push(available_day)
-  console.log(edit_staff_form.availability) 
 
 }
 
@@ -113,7 +111,6 @@ async function submit_edit_staff() {
 
     
   } catch (error) {
-    console.log(error)
     toast.error({
       title: error as string
     })

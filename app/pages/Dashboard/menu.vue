@@ -108,7 +108,6 @@ const createMenuItem = async (payload: MenuItemCreateInput) => {
 
         closeAddModal()
     } catch (error) {
-        console.log(error)
         toast.error({
             title: 'Failed to create menu item'
         })
@@ -138,7 +137,6 @@ const updateEditedMenuItem = async (payload: { id: string, form: MenuItemUpdateI
         }
 
     } catch (error) {
-        console.log(error)
         toast.error({
             title: 'Failed to update menu item'
         })
@@ -165,7 +163,6 @@ const deleteMenuItem = async (menuItemId: string) => {
 
         closeEditModal()
     } catch (error) {
-        console.log(error)
         toast.error({
             title: 'Failed to delete menu item'
         })

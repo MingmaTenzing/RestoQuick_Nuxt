@@ -16,7 +16,7 @@ function submit_shift() {
     const currentShift = editDraftShiftModal.value.shift
 
     if (!currentShift) {
-      return console.log("No Current Draft Shift")
+      return
     }
 
     const updatedShift: Shift_With_Staff_Payload = {

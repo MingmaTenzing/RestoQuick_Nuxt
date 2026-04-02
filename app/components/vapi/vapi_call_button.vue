@@ -23,9 +23,7 @@ onMounted(() => {
       isLoading.value = false
     })
 
-    vapi.on('message', (message: unknown) => {
-      console.log('vapi message', message)
-    })
+    vapi.on('message', (_message: unknown) => {})
   } catch (error) {
     console.error('Vapi init error:', error)
   }

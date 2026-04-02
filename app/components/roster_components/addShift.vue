@@ -38,8 +38,6 @@ const shift_form = ref<Prisma.ShiftUncheckedCreateInput>({
 
 
 async function submit_shift() {
-
-    console.log(shift_form.value)
     // this can be optimized once connected with database 
 
     isSubmitting.value = true

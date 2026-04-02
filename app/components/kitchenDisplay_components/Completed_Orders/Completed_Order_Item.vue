@@ -9,18 +9,15 @@ const props = defineProps<{
 const serviceLabel = computed(() => props.order.orderType === 'TAKEAWAY'
   ? 'Takeaway'
   : `Table ${props.order.table?.number ?? '--'}`)
-
-console.log(props.order.items)
 async function recall_to_kitchen(order_id: string) {
   try {
-    const updatedOrder = await $fetch("/api/orders", {
+    await $fetch("/api/orders", {
       method: "PUT",
       body: {
         order_id: order_id, status: OrderStatus.PENDING
         
        },
     });
-    console.log(updatedOrder)
     
   } catch (e) {
     console.error("Failed to mark order as ready", e);

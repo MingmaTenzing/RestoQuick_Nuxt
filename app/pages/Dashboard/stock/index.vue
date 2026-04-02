@@ -102,7 +102,6 @@ try {
     body: itemData
   })
 
-  console.log(add_stock)
   refresh() //refresh the fetch if adding stock is successful
   toast.success({
     title: 'stock added'

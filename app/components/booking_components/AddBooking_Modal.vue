@@ -56,7 +56,6 @@ try {
     new_booking_form.value = reset_copy_booking_form.value;
   }
 } catch (error) {
-  console.log(error)
   toast.error({ title: "Error", message: 'Please call for booking.' })
   new_booking_form.value = reset_copy_booking_form.value
 }
