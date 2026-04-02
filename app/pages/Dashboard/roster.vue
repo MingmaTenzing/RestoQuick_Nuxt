@@ -5,10 +5,6 @@ type RosterOverviewStats = {
   pendingLeaveRequests: number
 }
 
-definePageMeta({
-    layout: 'dashboard-layout'
-})
-
 const { startOfWeek, endOfWeek } = useWeekNavigation()
 
 const { data: rosterStats, status: rosterStatsStatus } = await useAsyncData(

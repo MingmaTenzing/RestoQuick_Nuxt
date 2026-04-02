@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import type { StockItem } from '~/generated/prisma/client'
 
-
-definePageMeta({
-  layout: 'dashboard-layout'
-})
-
 const { data: stockItems, status } = await useFetch<StockItem[]>('/api/stock')
 const runtime = useRuntimeConfig()
 

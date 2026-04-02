@@ -12,10 +12,6 @@ import StockItemCardSkeleton from '~/components/stock_components/StockItemCardSk
 import type { StockItem } from '~/generated/prisma/client'
 import type { StockItemCreateInput } from '~/generated/prisma/models'
 
-definePageMeta({
-  layout: 'dashboard-layout'
-})
-
 const {data:stockItems, refresh, status: stockStatus} = useFetch<StockItem[]>("/api/stock")
 
 const filter = ref<'all' | 'low' | 'INGREDIENTS' | 'BEVERAGES' | 'SUPPLIES'>('all')

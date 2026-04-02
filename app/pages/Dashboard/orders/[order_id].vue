@@ -4,10 +4,6 @@ import { de } from 'zod/v4/locales'
 import { OrderStatus } from '~/generated/prisma/enums'
 import type { OrderDetailsWithInclude } from '~~/types/orderwithInclude'
 
-definePageMeta({
-	layout: 'dashboard-layout'
-})
-
 const route = useRoute()
 const toast = useToast()
 
