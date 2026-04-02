@@ -203,18 +203,16 @@ const signatureNotes = [
 
 <template>
   <div class="bg-background text-foreground">
-
-    <header>
-      <ClientOnly>
-        <Show when="signed-out">
-          <SignInButton />
-          <SignUpButton />
-        </Show>
-        <Show when="signed-in">
-          <UserButton />
-        </Show>
-      </ClientOnly>
-    </header>
+ <header>
+    <OrganizationSwitcher></OrganizationSwitcher>
+    <Show when="signed-out">
+      <SignInButton />
+      <SignUpButton />
+    </Show>
+    <Show when="signed-in">
+      <UserButton />
+    </Show>
+  </header>
 
     <main>
       <NavBar />
