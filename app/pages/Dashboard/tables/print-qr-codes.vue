@@ -2,6 +2,7 @@
 <!-- this page is just for printing the qr codes  -->
 <script setup lang="ts">
 definePageMeta({
+    layout:'dashboard-layout',
     colorMode:'light'
 })
 const { data: tables } = useFetch("/api/tables");

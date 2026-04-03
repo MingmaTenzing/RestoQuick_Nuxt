@@ -3,6 +3,7 @@ import type { StockItem } from '~/generated/prisma/client'
 
 
 definePageMeta({
+  layout: 'dashboard-layout',
   colorMode: 'light'
 })
 
