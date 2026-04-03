@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+    layout: 'dashboard-layout'
+})
+
 import type { Staff } from '~/generated/prisma/client';
 
 const { data: staffs } = await useFetch<Staff[]>("/api/staff");

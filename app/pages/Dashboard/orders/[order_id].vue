@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+	layout: 'dashboard-layout'
+})
+
 import { computed } from 'vue'
 import { de } from 'zod/v4/locales'
 import { OrderStatus } from '~/generated/prisma/enums'

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: 'dashboard-layout'
+})
+
 import type { StockItem } from '~/generated/prisma/client'
 
 

@@ -1,4 +1,8 @@
 <script setup  lang="ts">
+definePageMeta({
+  layout: 'dashboard-layout'
+})
+
 type RosterOverviewStats = {
   totalStaff: number
   weeklyShiftCount: number
