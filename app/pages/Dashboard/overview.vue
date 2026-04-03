@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+	layout: 'dashboard-layout'
+})
+
 import Dashboard_Header from '~/components/Dashboard_components/Dashboard_Header.vue'
 import Dashboard_KPI from '~/components/Dashboard_components/Dashboard_KPI.vue'
 import Monthly_Revenue from '~/components/Dashboard_components/Monthly_Revenue.vue'

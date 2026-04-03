@@ -50,11 +50,6 @@ const isActive = (path: string) => {
 
         </div>
 
-        <div class="mt-4">
-            <NuxtLink to="/dashboard/settings" class="flex items-center space-x-4 text-sm text-muted-foreground p-2 rounded-3xl hover:bg-sidebar-accent">
-                <i class="pi pi-cog"></i>
-                <span>Settings</span>
-            </NuxtLink>
-        </div>
+     
     </aside>
 </template>
