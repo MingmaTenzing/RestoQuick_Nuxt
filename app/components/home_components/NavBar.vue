@@ -83,7 +83,7 @@ onUnmounted(() => {
         </button>
 
         <NuxtLink
-          to="/dashboard/overview"
+          to="/dashboard"
           class="inline-flex items-center rounded-2xl px-5 py-2.5 text-sm font-semibold shadow-sm transition"
           :class="ctaClasses"
         >

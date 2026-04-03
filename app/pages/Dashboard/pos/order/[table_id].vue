@@ -1,8 +1,4 @@
 <script lang="ts" setup>
-definePageMeta({
-    layout: 'dashboard-layout'
-})
-
 import type { MenuCategory, Table } from '~/generated/prisma/browser'
 import type { MenuItemWithOptions } from '~~/types/menu'
 import type Order_Cart_Item from '~~/types/order-cart'
