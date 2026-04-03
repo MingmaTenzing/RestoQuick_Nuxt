@@ -61,12 +61,6 @@ export default defineNuxtConfig({
     "/dashboard": {
       redirect: "/dashboard/overview",
     },
-    "/dashboard/tables": {
-      ssr: false,
-    },
-    "/tables": {
-      ssr: false,
-    },
   },
 
   router: {
