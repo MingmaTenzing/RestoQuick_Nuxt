@@ -2,11 +2,14 @@
 import auth from '~/middleware/auth'
 
 definePageMeta({
-	layout: 'dashboard-layout',
+	// layout: 'dashboard-layout',
 	middleware: [auth]
 })
 </script>
 
 <template>
-	<NuxtPage />
+	<NuxtLayout name="dashboard-layout">
+
+		<NuxtPage />
+	</NuxtLayout>
 </template>
