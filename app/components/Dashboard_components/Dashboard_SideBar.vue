@@ -2,7 +2,7 @@
 const route = useRoute();
 
 const navItems = [
-    { to: '/dashboard/overview', icon: 'pi pi-chart-line', label: 'Overview' },
+    { to: '/dashboard', icon: 'pi pi-chart-line', label: 'Dashboard Overview' },
     { to: '/dashboard/roster/weekly', icon: 'pi pi-calendar', label: 'Roster' },
     { to: '/dashboard/bookings', icon: 'pi pi-calendar-clock', label: 'Bookings' },
     { to: '/dashboard/orders', icon: 'pi pi-shopping-cart', label: 'Orders' },
