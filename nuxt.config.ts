@@ -58,6 +58,9 @@ export default defineNuxtConfig({
     "/dashboard/roster": {
       redirect: "/dashboard/roster/weekly",
     },
+    "/dashboard": {
+      redirect: "/dashboard/overview",
+    },
     "/dashboard/tables": {
       ssr: false,
     },
