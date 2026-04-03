@@ -7,7 +7,7 @@
 
 
 definePageMeta({
-	middleware: 'auth',
+
 	layout:'dashboard-layout'
 })
 
