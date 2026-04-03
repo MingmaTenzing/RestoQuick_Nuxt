@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 
-import { lazy } from "zod";
 import type { RevenueTrend } from "~~/types/revenuetrend"
 defineOptions({
   tags: ['linecharts', 'singleline']
