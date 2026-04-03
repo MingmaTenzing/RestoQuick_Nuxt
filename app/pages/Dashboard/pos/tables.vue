@@ -1,8 +1,4 @@
 <script lang="ts" setup>
-definePageMeta({
-	layout: 'dashboard-layout'
-})
-
 import type { Table } from '~/generated/prisma/browser'
 import Table_Card from '~/components/pos_components/Table_Card.vue'
 

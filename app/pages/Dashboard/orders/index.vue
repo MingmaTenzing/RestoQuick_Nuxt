@@ -1,8 +1,4 @@
 <script setup lang="ts">
-definePageMeta({
-  layout: 'dashboard-layout'
-})
-
 import { ref, computed } from 'vue'
 
 import type{ OrderDetailsWithInclude } from '~~/types/orderwithInclude';

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-definePageMeta({
-    layout: 'dashboard-layout'
-})
-
 const { data:tables } = useFetch("/api/tables");
 
 

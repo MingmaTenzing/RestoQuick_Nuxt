@@ -1,8 +1,4 @@
 <script lang="ts" setup>
-definePageMeta({
-  layout: 'dashboard-layout'
-})
-
 import { SortOption } from "~/client_utils/enum";
 import Add_Staff_Modal from "~/components/staff_components/Add_Staff_Modal.vue";
 import Staff_Card from "~/components/staff_components/Staff_Card.vue";

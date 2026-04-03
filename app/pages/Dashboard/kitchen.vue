@@ -1,8 +1,4 @@
 <script lang="ts" setup>
-definePageMeta({
-    layout: 'dashboard-layout'
-})
-
 import { useWebSocket } from '@vueuse/core';
 import { ref, computed } from 'vue'
 import Order_Item from '~/components/kitchenDisplay_components/Order_Item.vue';

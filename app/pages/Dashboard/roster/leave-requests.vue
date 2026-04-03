@@ -1,8 +1,4 @@
 <script lang="ts" setup>
-definePageMeta({
-  layout: 'dashboard-layout'
-})
-
 import type { LeaveRequest, LeaveStatus, Staff } from "~/generated/prisma/client";
 
 // Fetch leave requests
