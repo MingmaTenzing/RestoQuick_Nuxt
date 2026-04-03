@@ -12,13 +12,12 @@ definePageMeta({
 })
 
 
-const { isSignedIn, isLoaded} = useAuth();
 </script>
 
 
 <template>
-	<main v-if="isLoaded">
-		<NuxtPage v-if="isSignedIn"/>
+	<main>
+		<NuxtPage />
 
 	</main>
 </template>
