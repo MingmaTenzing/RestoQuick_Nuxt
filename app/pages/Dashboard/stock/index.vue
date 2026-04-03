@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: 'dashboard-layout'
+})
+
 import { ref, computed } from 'vue'
 import AddStockDialog from '~/components/stock_components/AddStockDialog.vue'
 import RestockDialog from '~/components/stock_components/RestockDialog.vue'

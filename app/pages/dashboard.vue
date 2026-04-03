@@ -1,14 +1,12 @@
 <script setup lang="ts">
 definePageMeta({
-	layout: false,
+	layout: 'dashboard-layout'
 })
 </script>
 
 <template>
 	<main>
-		<NuxtLayout name="dashboard-layout">
-			<NuxtPage />
-		</NuxtLayout>
+		<NuxtPage />
 
 	</main>
 </template>

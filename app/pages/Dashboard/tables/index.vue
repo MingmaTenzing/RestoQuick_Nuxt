@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: 'dashboard-layout'
+})
+
 import type { NuxtError } from '#app';
 import Add_Table_Modal_Component from '~/components/manage_table_components/Add_Table_Modal_Component.vue';
 import Edit_Table_Modal_Component from '~/components/manage_table_components/Edit_Table_Modal_Component.vue';
