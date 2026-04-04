@@ -49,7 +49,7 @@ const emptyStateCopy = computed(() => props.serviceLabel
 </script>
 
 <template>
-    <aside class="w-90 h-[95vh]">
+    <aside class="h-full min-h-0 w-90 max-w-full shrink-0 self-stretch">
         <section class="flex h-full min-h-0 flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
             <div class="border-b border-border p-4">
                 <div class="flex items-start justify-between gap-4">
