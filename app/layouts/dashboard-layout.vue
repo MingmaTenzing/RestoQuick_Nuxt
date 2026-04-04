@@ -12,39 +12,38 @@ const { isSidebar_open } = useSideBar()
 
 <template>
 
-<div class="flex h-dvh overflow-hidden">
+  <div class="flex h-dvh overflow-hidden">
 
-    <Transition name="slide"> 
-  
-  <!-- the heeight of the sidebar is the same as the slot below to match with each other -->
-  <Dashboard_SideBar v-if="isSidebar_open " class=""  ></Dashboard_SideBar>
-  </Transition>
-  
-  
-  <div class="flex min-h-0 w-full flex-1 flex-col gap-6 p-4 lg:p-8">
-  
-         <!-- nav bar dashboard -->
-  <Dashboard_NavBar class="shrink-0"></Dashboard_NavBar>
+    <Transition name="slide">
+
+      <!-- the heeight of the sidebar is the same as the slot below to match with each other -->
+      <Dashboard_SideBar v-if="isSidebar_open" class=""></Dashboard_SideBar>
+    </Transition>
+
+
+    <div class="flex min-h-0 w-full flex-1 flex-col gap-4 p-4 lg:p-8 ">
+
+      <!-- nav bar dashboard -->
+      <Dashboard_NavBar class="shrink-0"></Dashboard_NavBar>
 
 
       <!-- the height is set to screen-4rem and overflow-y-scroll to give immersive experience -->
-<div class="min-h-0 flex-1 overflow-y-auto hide-scrollbar">
+      <div class="min-h-0 flex-1 overflow-y-auto hide-scrollbar">
 
-  <slot></slot>
-</div>
+        <slot></slot>
+      </div>
 
-</div>
+    </div>
 
 
 
-    
-</div>
+
+  </div>
 
 
 </template>
 
 <style>
-
 .slide-enter-active {
   transition: transform 0.4s ease-out, opacity 0.4s ease-out;
 }
@@ -76,10 +75,12 @@ const { isSidebar_open } = useSideBar()
 }
 
 .hide-scrollbar {
+
   /* For WebKit browsers */
   ::-webkit-scrollbar {
     display: none;
   }
+
   /* For IE and Edge */
   -ms-overflow-style: none;
   /* For Firefox */
