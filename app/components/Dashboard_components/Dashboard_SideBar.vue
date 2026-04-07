@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const route = useRoute();
 
-const { isSignedIn, has, orgRole, orgId, isLoaded } = useAuth();
+const { orgRole, isLoaded } = useAuth();
 
 const baseNavItems = [
     { to: '/dashboard/bookings', icon: 'pi pi-calendar-clock', label: 'Bookings' },
