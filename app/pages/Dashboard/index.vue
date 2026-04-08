@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
-	layout: 'dashboard-layout'
+	layout: 'dashboard-layout',
+	middleware: ['is-admin']
 })
 
 import Dashboard_Header from '~/components/Dashboard_components/Dashboard_Header.vue'
@@ -70,17 +71,10 @@ const stats = computed(() => {
 	<div class="space-y-6 pb-8 w-full">
 		<Dashboard_Header></Dashboard_Header>
 
-	<!-- <DashboardComponentsDashboardHeader></DashboardComponentsDashboardHeader> -->
+		<!-- <DashboardComponentsDashboardHeader></DashboardComponentsDashboardHeader> -->
 		<section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-			<Dashboard_KPI
-				v-for="stat in stats"
-				:key="stat.title"
-				:title="stat.title"
-				:value="stat.value"
-				:change="stat.change"
-				:headline="stat.headline"
-				:description="stat.description"
-			/>
+			<Dashboard_KPI v-for="stat in stats" :key="stat.title" :title="stat.title" :value="stat.value"
+				:change="stat.change" :headline="stat.headline" :description="stat.description" />
 		</section>
 
 		<section class="grid grid-cols-1 gap-6 xl:grid-cols-2 xl:items-stretch">
@@ -88,11 +82,11 @@ const stats = computed(() => {
 			<Monthly_Revenue class="min-w-0 w-full" />
 		</section>
 
-		
-			<SoldbyCategory_Piechart></SoldbyCategory_Piechart>
-			<Recent_Orders />
-			
-		
+
+		<SoldbyCategory_Piechart></SoldbyCategory_Piechart>
+		<Recent_Orders />
+
+
 
 	</div>
 </template>

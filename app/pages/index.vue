@@ -4,7 +4,6 @@ import HomeFooter from '~/components/home_components/HomeFooter.vue';
 import NavBar from '~/components/home_components/NavBar.vue';
 import ScrollReveal from '~/components/home_components/ScrollReveal.vue';
 import heroShot from '~/assets/images/usecase/Cafe.webp';
-import menuScene from '~/assets/images/usecase/menu_scene.avif';
 import rosterShot from '~/assets/images/app_screenshots/AI Roster Suggestion.png';
 import kitchenShot from '~/assets/images/app_screenshots/Kitchen Display.webp';
 import analyticsShot from '~/assets/images/app_screenshots/Dashboard.webp';
@@ -199,6 +198,39 @@ const signatureNotes = [
     value: 'Sharper business decisions without adding visual noise to the team.',
   },
 ];
+
+const heroMetrics = [
+  {
+    label: 'Calls covered',
+    value: '24/7',
+    detail: 'Maya keeps reservation demand moving without pulling staff off the floor.',
+  },
+  {
+    label: 'Core workflows',
+    value: '5',
+    detail: 'Bookings, kitchen, staffing, stock, and reporting stay connected.',
+  },
+  {
+    label: 'Setup feel',
+    value: 'Calm',
+    detail: 'A cleaner operating layer that feels clear even during peak service.',
+  },
+];
+
+const heroTimeline = [
+  {
+    title: 'Booking request captured',
+    meta: 'Maya confirms time, party size, and notes instantly.',
+  },
+  {
+    title: 'Kitchen and floor stay aligned',
+    meta: 'Orders and tables update from the same operational view.',
+  },
+  {
+    title: 'Managers see what needs attention',
+    meta: 'Live visibility across staffing, stock, and service pressure.',
+  },
+];
 </script>
 
 <template>
@@ -217,72 +249,117 @@ const signatureNotes = [
     <main>
       <NavBar />
       <section id="main" class="relative isolate overflow-hidden px-6 pb-24 pt-12 sm:pb-32 sm:pt-20">
-        <img :src="menuScene" alt="Restaurant menu scene" class="absolute inset-0 -z-20 h-full w-full object-cover">
-        <div
-          class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(10,12,10,0.34)_0%,rgba(10,12,10,0.58)_38%,rgba(10,12,10,0.88)_100%)]">
-        </div>
-        <div
-          class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(34,197,94,0.16),transparent_28%)]">
-        </div>
+        <div class="absolute inset-0 -z-30 bg-background"></div>
+        <div class="absolute inset-x-0 top-0 -z-20 h-136 bg-[radial-gradient(circle_at_top,rgba(34,197,94,0.12),transparent_42%)]"></div>
+        <div class="absolute left-1/2 top-24 -z-10 h-72 w-[min(72rem,92vw)] -translate-x-1/2 rounded-full bg-accent/70 blur-3xl"></div>
+        <div class="absolute inset-x-6 top-28 -z-10 mx-auto h-px max-w-7xl bg-border/80"></div>
 
-        <div class="mx-auto grid max-w-7xl items-start gap-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-24">
-          <div class="relative z-10">
-            <p class="text-xs font-semibold uppercase tracking-[0.26em] text-green-300">
+        <div class="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-2 lg:gap-20">
+          <div class="relative z-10 max-w-3xl">
+            <div class="inline-flex items-center gap-3 rounded-full border border-border bg-background/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground backdrop-blur">
+              <span class="inline-block h-2 w-2 rounded-full bg-green-600 dark:bg-green-400"></span>
               AI-powered operations platform
-            </p>
-            <h1
-              class="mt-5 max-w-3xl text-5xl font-semibold tracking-[-0.07em] text-white sm:text-6xl lg:text-[5.7rem] lg:leading-[0.92]">
-              Does more than a normal POS.
+            </div>
+
+            <h1 class="mt-8 max-w-4xl text-5xl font-semibold tracking-[-0.07em] text-foreground sm:text-6xl lg:text-[5.4rem] lg:leading-[0.92]">
+              Hospitality software that feels as calm as it looks.
             </h1>
-            <p class="mt-7 max-w-2xl text-lg leading-8 text-white/80 sm:text-xl">
-              More than a POS. RestoQuick brings bookings, kitchen flow, staffing, inventory, and reporting into one
-              connected system.
+
+            <p class="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
+              RestoQuick replaces fragmented tools with one sleek operating layer for bookings, kitchen flow, staffing,
+              inventory, and reporting.
             </p>
 
-            <p class="mt-8 text-xs tracking-[0.2em] text-white/60">
+            <p class="mt-8 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
               BOOKINGS / KITCHEN / TEAM / INVENTORY / REPORTING
             </p>
 
-            <div class="mt-10 flex items-center gap-8">
+            <div class="mt-10 flex flex-wrap items-center gap-4 sm:gap-6">
               <NuxtLink to="/dashboard"
-                class="inline-flex items-center justify-center bg-green-600 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-green-700">
+                class="inline-flex items-center justify-center rounded-full bg-green-600 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-green-700">
                 Get Started
               </NuxtLink>
               <a href="#demo"
-                class="text-sm font-medium text-white/72 underline underline-offset-4 transition hover:text-white">
+                class="inline-flex items-center text-sm font-medium text-foreground underline underline-offset-4 transition hover:text-green-700 dark:hover:text-green-400">
                 Watch Demo
               </a>
             </div>
 
-            <div class="mt-16 grid gap-8 sm:grid-cols-3">
+            <div class="mt-14 grid gap-8 border-t border-border pt-8 sm:grid-cols-3">
               <div v-for="item in signatureNotes" :key="item.label">
-                <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-white/55">{{ item.label }}</p>
-                <p class="text-sm leading-7 text-white/72">{{ item.value }}</p>
+                <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">{{ item.label }}</p>
+                <p class="mt-2 text-sm leading-7 text-foreground/80 dark:text-foreground/75">{{ item.value }}</p>
               </div>
             </div>
           </div>
 
-          <div id="demo" class="relative z-10 lg:pt-6">
-            <div class="rounded-[28px] border border-white/15 bg-black/25 p-8 shadow-2xl backdrop-blur-md sm:p-10">
-              <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-green-300">Why it fits growing venues
-              </p>
-              <p class="mt-4 text-sm leading-8 text-white/72 sm:text-base">
-                Designed for operators who need one calm, all-in-one system across bookings, service,
-                staffing, stock, and day-to-day decision-making.
-              </p>
+          <div id="demo" class="relative z-10">
+            <div class="relative overflow-hidden rounded-4xl border border-border bg-card/85 p-4 shadow-2xl backdrop-blur-xl sm:p-6">
+              <div class="absolute inset-x-8 top-0 h-px bg-border/70"></div>
+              <div class="absolute right-10 top-10 h-28 w-28 rounded-full bg-green-600/12 blur-2xl dark:bg-green-400/10"></div>
 
-              <div class="mt-8 h-px bg-white/10"></div>
-
-              <div class="mt-8 grid gap-8 sm:grid-cols-2">
-                <div>
-                  <p class="text-4xl font-semibold tracking-[-0.05em] text-white">24/7</p>
-                  <p class="mt-2 text-sm leading-7 text-white/70">Maya covers calls and reservations around the clock
-                    while your team stays focused on service.</p>
+              <div class="rounded-3xl border border-border bg-background/85 p-5 sm:p-6">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">Live operator view</p>
+                    <p class="mt-2 text-lg font-semibold tracking-[-0.03em] text-foreground">One control layer for the whole venue</p>
+                  </div>
+                  <div class="rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
+                    Updated in real time
+                  </div>
                 </div>
-                <div>
-                  <p class="text-4xl font-semibold tracking-[-0.05em] text-white">One place</p>
-                  <p class="mt-2 text-sm leading-7 text-white/70">Bookings, kitchen flow, staffing, inventory, and
-                    reporting stay connected inside one platform.</p>
+
+                <div class="mt-6 grid gap-4 sm:grid-cols-3">
+                  <div v-for="metric in heroMetrics" :key="metric.label" class="rounded-3xl border border-border bg-card p-4">
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">{{ metric.label }}</p>
+                    <p class="mt-3 text-3xl font-semibold tracking-[-0.05em] text-foreground">{{ metric.value }}</p>
+                    <p class="mt-2 text-sm leading-6 text-muted-foreground">{{ metric.detail }}</p>
+                  </div>
+                </div>
+
+                <div class="mt-6 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+                  <div class="rounded-3xl border border-border bg-card p-5">
+                    <div class="flex items-center justify-between gap-3">
+                      <p class="text-sm font-semibold text-foreground">Service timeline</p>
+                      <span class="text-xs font-medium text-muted-foreground">Always connected</span>
+                    </div>
+
+                    <div class="mt-5 space-y-4">
+                      <div v-for="(step, index) in heroTimeline" :key="step.title" class="flex gap-4">
+                        <div class="flex flex-col items-center">
+                          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-xs font-semibold text-foreground">{{ index + 1 }}</div>
+                          <div v-if="index < heroTimeline.length - 1" class="mt-2 h-full w-px bg-border"></div>
+                        </div>
+                        <div class="pb-4">
+                          <p class="text-sm font-semibold text-foreground">{{ step.title }}</p>
+                          <p class="mt-1 text-sm leading-6 text-muted-foreground">{{ step.meta }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="rounded-3xl border border-border bg-card p-5">
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">Why it fits growing venues</p>
+                    <p class="mt-3 text-sm leading-7 text-foreground/85 dark:text-foreground/80">
+                      Designed for operators who need one calm system across bookings, service, staffing, stock, and the
+                      day-to-day decisions that keep service moving.
+                    </p>
+
+                    <div class="mt-6 space-y-3">
+                      <div class="flex items-center justify-between rounded-2xl border border-border bg-background/80 px-4 py-3">
+                        <span class="text-sm text-muted-foreground">Reservations captured</span>
+                        <span class="text-sm font-semibold text-foreground">Without missed calls</span>
+                      </div>
+                      <div class="flex items-center justify-between rounded-2xl border border-border bg-background/80 px-4 py-3">
+                        <span class="text-sm text-muted-foreground">Team coordination</span>
+                        <span class="text-sm font-semibold text-foreground">One shared view</span>
+                      </div>
+                      <div class="flex items-center justify-between rounded-2xl border border-border bg-background/80 px-4 py-3">
+                        <span class="text-sm text-muted-foreground">Manager decisions</span>
+                        <span class="text-sm font-semibold text-foreground">Live visibility</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
