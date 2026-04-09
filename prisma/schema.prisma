@@ -85,13 +85,36 @@ enum BookingStatus {
   NO_SHOW
 }
 
+enum TableSessionStatus {
+  ACTIVE
+  CLOSED
+}
+
 // 2. Model to manage Restaurant Tables
 model Table {
-  id       String    @id @default(uuid())
-  number   String    @unique // e.g. "A1", "12", "Bar-1"
+  id       String         @id @default(uuid())
+  number   String         @unique // e.g. "A1", "12", "Bar-1"
   capacity Int // How many people fit at this table
   bookings Booking[]
+  sessions TableSession[]
   orders   Order[]
+}
+
+model TableSession {
+  id        String             @id @default(uuid())
+  status    TableSessionStatus @default(ACTIVE)
+  openedAt  DateTime           @default(now())
+  closedAt  DateTime?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  tableId String
+  table   Table  @relation(fields: [tableId], references: [id])
+
+  orders Order[]
+
+  @@index([tableId, status])
+  @@index([status, createdAt])
 }
 
 // 3. The Main Booking Model
@@ -200,6 +223,9 @@ model Order {
   // Relations
   tableId String?
   table   Table?  @relation(fields: [tableId], references: [id], onDelete: SetNull)
+
+  tableSessionId String?
+  tableSession   TableSession? @relation(fields: [tableSessionId], references: [id], onDelete: SetNull)
 
   // Order Items
   items OrderItem[]
