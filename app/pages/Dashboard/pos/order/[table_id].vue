@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 definePageMeta({
-    layout: 'dashboard-layout'
+    layout: 'dashboard-layout',
+    middleware: ['require-active-table-session']
 })
 
 import type { MenuCategory, Table } from '~/generated/prisma/browser'
 import type { MenuItemWithOptions } from '~~/types/menu'
-import type Order_Cart_Item from '~~/types/order-cart'
 import Pos_Filter_Bar from '~/components/pos_components/Pos_Filter_Bar.vue'
 import Pos_Menu_Item_Card from '~/components/pos_components/Pos_Menu_Item_Card.vue'
 import Pos_Order_Header from '~/components/pos_components/Pos_Order_Header.vue'
 import Pos_Order_Sidebar from '~/components/pos_components/Pos_Order_Sidebar.vue'
-
+import type { NuxtError } from '#app'
 
 
 // here the table_id from the route param can be an actual table_id or can be takeaway.. 
@@ -120,8 +120,10 @@ const submitOrder = async (payload?: { customerName?: string }) => {
             title: isTakeawayOrder.value ? 'Takeaway order sent to kitchen' : 'Order sent to kitchen',
         })
     } catch (error) {
+        const nuxtError = error as NuxtError;
+
         toast.error({
-            title: 'Failed to send order',
+            title: nuxtError.statusCode === 403 ? 'This table has no active session' : 'Failed to send order',
         })
     } finally {
         isSubmittingOrder.value = false
@@ -129,11 +131,13 @@ const submitOrder = async (payload?: { customerName?: string }) => {
 }
 
 
+await loadTable()
+
 watch(routeTableId, async () => {
     cart_items.value = []
 
     await loadTable()
-}, { immediate: true })
+})
 </script>
 
 <template>

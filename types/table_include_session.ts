@@ -1,10 +1,11 @@
-import type { Table } from '~/generated/prisma/browser'
+import type { TableGetPayload } from "~/generated/prisma/models";
 
-export type TableSessionInclude = {
-	id: string;
-	status?: 'ACTIVE' | 'CLOSED';
-};
-
-export type TableIncludeSession = Table & {
-	sessions: TableSessionInclude[];
-};
+export type TableGetPayloadWithSession = TableGetPayload<{
+  include: {
+    sessions: {
+      select: {
+        id: true;
+      };
+    };
+  };
+}>;

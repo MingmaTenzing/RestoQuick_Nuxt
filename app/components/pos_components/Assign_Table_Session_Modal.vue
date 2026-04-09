@@ -26,7 +26,7 @@ defineEmits<{
                 </p>
             </div>
             <button type="button"
-                class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-accent hover:text-foreground"
+                class="inline-flex   w-12 h-10  items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-accent hover:text-foreground"
                 @click="$emit('close')">
                 <span class="text-sm font-medium leading-none">x</span>
             </button>

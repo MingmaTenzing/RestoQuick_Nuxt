@@ -2,13 +2,22 @@
 definePageMeta({
 	layout: 'dashboard-layout'
 })
-
+import { type TableGetPayloadWithSession } from '~~/types/table_include_session'
+import Assign_Table_Session_Modal from '~/components/pos_components/Assign_Table_Session_Modal.vue'
 import Table_Card from '~/components/pos_components/Table_Card.vue'
+import { start } from 'repl'
 
 
+//the table is returned with active sessions included, 
+//as one table can only have one active session, 
+// we can check if the table has an active session by checking if the sessions array is empty or not.
+const { data: tables, pending, refresh } = await useFetch<TableGetPayloadWithSession[]>('/api/tables')
 
-const { data: tables, pending } = await useFetch('/api/tables')
-
+const router = useRouter();
+const toast = useToast();
+const showAssignModal = ref(false);
+const selectedTable = ref<TableGetPayloadWithSession | null>(null)
+const isAssigningTable = ref(false)
 
 const searchQuery = ref('')
 
@@ -24,6 +33,65 @@ const search_filteredTables = computed(() => {
 		return table.number.toLowerCase().includes(normalizedQuery) || String(table.capacity).includes(normalizedQuery)
 	})
 })
+
+
+function Assign_or_redirect(table: TableGetPayloadWithSession) {
+	//check if has active session if yes, redirect to the order page for that table, if not, open the assign modal to
+
+	if (table.sessions.length > 0) {
+		//redirect to the order page for that table
+		return router.push(`/dashboard/pos/order/${table.id}`)
+	}
+	//else open the assign modal to assign the table to a session and then redirect to the order page for that table
+	showAssignModal.value = true;
+	selectedTable.value = table;
+
+
+}
+
+
+async function assignTable() {
+	// open the assign modal and pass the table id to the modal
+	isAssigningTable.value = true;
+
+	try {
+		const start_session = await $fetch('/api/table-sessions', {
+			method: 'post',
+			body: {
+				tableId: selectedTable.value?.id
+			}
+		})
+
+		if (start_session) {
+
+			console.log(start_session)
+			toast.success({ message: 'Table assigned successfully!' });
+
+		}
+
+
+	} catch (error) {
+
+		console.log(error)
+		toast.error({ message: 'Failed to assign table. Please try again.' });
+
+
+	}
+	finally {
+		isAssigningTable.value = false;
+		showAssignModal.value = false;
+		selectedTable.value = null;
+		refresh()
+
+	}
+
+
+}
+
+function closeAssignModal() {
+	showAssignModal.value = false
+	selectedTable.value = null
+}
 </script>
 
 
@@ -78,10 +146,14 @@ const search_filteredTables = computed(() => {
 
 		<section v-else-if="search_filteredTables.length"
 			class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-			<NuxtLink v-for="table in search_filteredTables" :key="table.id" :to="`/dashboard/pos/order/${table.id}`"
-				class="block h-full">
-				<Table_Card :table="table" :is-active="table.sessions.length > 0" />
-			</NuxtLink>
+			<div v-for="table in search_filteredTables" :key="table.id" class=" block h-full">
+
+				<div v-on:click="Assign_or_redirect(table)">
+
+					<Table_Card :table="table" :is-active="table.sessions.length > 0" />
+				</div>
+
+			</div>
 		</section>
 
 		<section v-else-if="tables?.length"
@@ -98,5 +170,13 @@ const search_filteredTables = computed(() => {
 				Add your tables first before starting a dining order.
 			</p>
 		</section>
+
+		<Transition>
+			<div v-if="showAssignModal && selectedTable"
+				class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4">
+				<Assign_Table_Session_Modal :table="selectedTable" :is-assigning="isAssigningTable"
+					@close="closeAssignModal" @assign="assignTable" />
+			</div>
+		</Transition>
 	</main>
 </template>

@@ -24,5 +24,12 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  return tableSession;
+  if (tableSession) {
+    return tableSession;
+  } else {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "No active session found for this table",
+    });
+  }
 });
