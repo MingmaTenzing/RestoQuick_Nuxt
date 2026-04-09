@@ -8,11 +8,12 @@ const baseNavItems = [
     { to: '/dashboard/orders', icon: 'pi pi-shopping-cart', label: 'Orders' },
     { to: '/dashboard/pos', icon: 'pi pi-desktop', label: 'POS' },
     { to: '/dashboard/kitchen', icon: 'pi pi-building-columns', label: 'Kitchen' },
-    { to: '/dashboard/staff', icon: 'pi pi-users', label: 'Staff' },
     { to: '/dashboard/stock', icon: 'pi pi-box', label: 'Stock' }
 ];
 
 const adminNavItems = [
+    { to: '/dashboard/staff', icon: 'pi pi-users', label: 'Staff' },
+
     { to: '/dashboard', icon: 'pi pi-chart-line', label: 'Dashboard' },
     { to: '/dashboard/roster/weekly', icon: 'pi pi-calendar', label: 'Roster' },
     { to: '/dashboard/menu', icon: 'pi pi-file-check', label: 'Menu' },

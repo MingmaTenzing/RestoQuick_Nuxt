@@ -4,6 +4,6 @@ export default defineNuxtRouteMiddleware(() => {
   const isAdmin = has.value({ role: "org:admin" }) ?? false;
 
   if (!isAdmin) {
-    return navigateTo("/admin-only");
+    return navigateTo("/dashboard/pos");
   }
 });
