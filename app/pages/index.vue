@@ -250,18 +250,24 @@ const heroTimeline = [
       <NavBar />
       <section id="main" class="relative isolate overflow-hidden px-6 pb-24 pt-12 sm:pb-32 sm:pt-20">
         <div class="absolute inset-0 -z-30 bg-background"></div>
-        <div class="absolute inset-x-0 top-0 -z-20 h-136 bg-[radial-gradient(circle_at_top,rgba(34,197,94,0.12),transparent_42%)]"></div>
-        <div class="absolute left-1/2 top-24 -z-10 h-72 w-[min(72rem,92vw)] -translate-x-1/2 rounded-full bg-accent/70 blur-3xl"></div>
+        <div
+          class="absolute inset-x-0 top-0 -z-20 h-136 bg-[radial-gradient(circle_at_top,rgba(34,197,94,0.12),transparent_42%)]">
+        </div>
+        <div
+          class="absolute left-1/2 top-24 -z-10 h-72 w-[min(72rem,92vw)] -translate-x-1/2 rounded-full bg-accent/70 blur-3xl">
+        </div>
         <div class="absolute inset-x-6 top-28 -z-10 mx-auto h-px max-w-7xl bg-border/80"></div>
 
         <div class="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-2 lg:gap-20">
           <div class="relative z-10 max-w-3xl">
-            <div class="inline-flex items-center gap-3 rounded-full border border-border bg-background/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground backdrop-blur">
+            <div
+              class="inline-flex items-center gap-3 rounded-full border border-border bg-background/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground backdrop-blur">
               <span class="inline-block h-2 w-2 rounded-full bg-green-600 dark:bg-green-400"></span>
               AI-powered operations platform
             </div>
 
-            <h1 class="mt-8 max-w-4xl text-5xl font-semibold tracking-[-0.07em] text-foreground sm:text-6xl lg:text-[5.4rem] lg:leading-[0.92]">
+            <h1
+              class="mt-8 max-w-4xl text-5xl font-semibold tracking-[-0.07em] text-foreground sm:text-6xl lg:text-[5.4rem] lg:leading-[0.92]">
               Hospitality software that feels as calm as it looks.
             </h1>
 
@@ -287,31 +293,40 @@ const heroTimeline = [
 
             <div class="mt-14 grid gap-8 border-t border-border pt-8 sm:grid-cols-3">
               <div v-for="item in signatureNotes" :key="item.label">
-                <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">{{ item.label }}</p>
+                <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">{{ item.label }}
+                </p>
                 <p class="mt-2 text-sm leading-7 text-foreground/80 dark:text-foreground/75">{{ item.value }}</p>
               </div>
             </div>
           </div>
 
           <div id="demo" class="relative z-10">
-            <div class="relative overflow-hidden rounded-4xl border border-border bg-card/85 p-4 shadow-2xl backdrop-blur-xl sm:p-6">
+            <div
+              class="relative overflow-hidden rounded-4xl border border-border bg-card/85 p-4 shadow-2xl backdrop-blur-xl sm:p-6">
               <div class="absolute inset-x-8 top-0 h-px bg-border/70"></div>
-              <div class="absolute right-10 top-10 h-28 w-28 rounded-full bg-green-600/12 blur-2xl dark:bg-green-400/10"></div>
+              <div
+                class="absolute right-10 top-10 h-28 w-28 rounded-full bg-green-600/12 blur-2xl dark:bg-green-400/10">
+              </div>
 
               <div class="rounded-3xl border border-border bg-background/85 p-5 sm:p-6">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">Live operator view</p>
-                    <p class="mt-2 text-lg font-semibold tracking-[-0.03em] text-foreground">One control layer for the whole venue</p>
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">Live operator
+                      view</p>
+                    <p class="mt-2 text-lg font-semibold tracking-[-0.03em] text-foreground">One control layer for the
+                      whole venue</p>
                   </div>
-                  <div class="rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
+                  <div
+                    class="rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
                     Updated in real time
                   </div>
                 </div>
 
                 <div class="mt-6 grid gap-4 sm:grid-cols-3">
-                  <div v-for="metric in heroMetrics" :key="metric.label" class="rounded-3xl border border-border bg-card p-4">
-                    <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">{{ metric.label }}</p>
+                  <div v-for="metric in heroMetrics" :key="metric.label"
+                    class="rounded-3xl border border-border bg-card p-4">
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">{{
+                      metric.label }}</p>
                     <p class="mt-3 text-3xl font-semibold tracking-[-0.05em] text-foreground">{{ metric.value }}</p>
                     <p class="mt-2 text-sm leading-6 text-muted-foreground">{{ metric.detail }}</p>
                   </div>
@@ -327,7 +342,9 @@ const heroTimeline = [
                     <div class="mt-5 space-y-4">
                       <div v-for="(step, index) in heroTimeline" :key="step.title" class="flex gap-4">
                         <div class="flex flex-col items-center">
-                          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-xs font-semibold text-foreground">{{ index + 1 }}</div>
+                          <div
+                            class="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-xs font-semibold text-foreground">
+                            {{ index + 1 }}</div>
                           <div v-if="index < heroTimeline.length - 1" class="mt-2 h-full w-px bg-border"></div>
                         </div>
                         <div class="pb-4">
@@ -339,22 +356,26 @@ const heroTimeline = [
                   </div>
 
                   <div class="rounded-3xl border border-border bg-card p-5">
-                    <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">Why it fits growing venues</p>
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">Why it fits
+                      growing venues</p>
                     <p class="mt-3 text-sm leading-7 text-foreground/85 dark:text-foreground/80">
                       Designed for operators who need one calm system across bookings, service, staffing, stock, and the
                       day-to-day decisions that keep service moving.
                     </p>
 
                     <div class="mt-6 space-y-3">
-                      <div class="flex items-center justify-between rounded-2xl border border-border bg-background/80 px-4 py-3">
+                      <div
+                        class="flex items-center justify-between rounded-2xl border border-border bg-background/80 px-4 py-3">
                         <span class="text-sm text-muted-foreground">Reservations captured</span>
                         <span class="text-sm font-semibold text-foreground">Without missed calls</span>
                       </div>
-                      <div class="flex items-center justify-between rounded-2xl border border-border bg-background/80 px-4 py-3">
+                      <div
+                        class="flex items-center justify-between rounded-2xl border border-border bg-background/80 px-4 py-3">
                         <span class="text-sm text-muted-foreground">Team coordination</span>
                         <span class="text-sm font-semibold text-foreground">One shared view</span>
                       </div>
-                      <div class="flex items-center justify-between rounded-2xl border border-border bg-background/80 px-4 py-3">
+                      <div
+                        class="flex items-center justify-between rounded-2xl border border-border bg-background/80 px-4 py-3">
                         <span class="text-sm text-muted-foreground">Manager decisions</span>
                         <span class="text-sm font-semibold text-foreground">Live visibility</span>
                       </div>
