@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: 'dashboard-layout'
+})
+
 import type { StockItem } from '~/generated/prisma/client'
 
 
@@ -72,16 +76,16 @@ const saveStock = async () => {
 
     </div>
 
-    <div v-if="status === 'pending'" class="rounded-lg border border-border bg-card p-6 text-muted-foreground">
+    <div v-if="status === 'pending'" class="rounded-3xl border border-border bg-card p-6 text-muted-foreground">
       Loading stock item...
     </div>
 
-    <div v-else-if="error || !stockItem" class="rounded-lg border border-border bg-card p-6">
+    <div v-else-if="error || !stockItem" class="rounded-3xl border border-border bg-card p-6">
       <p class="text-red-500 font-medium">Stock item not found.</p>
       <p class="text-muted-foreground text-sm mt-2">Please check the QR label or try from the stock list.</p>
     </div>
 
-    <form v-else class="rounded-lg border border-border bg-card p-6 max-w-2xl space-y-6" @submit.prevent="saveStock">
+    <form v-else class="rounded-3xl border border-border bg-card p-6 max-w-2xl space-y-6" @submit.prevent="saveStock">
       <div class="space-y-1">
         <p class="text-sm text-muted-foreground">Scanned Item</p>
         <p class="text-2xl font-semibold">{{ stockItem.name }}</p>
@@ -102,14 +106,14 @@ const saveStock = async () => {
         </div>
       </div>
 
-      <div class="rounded-lg border border-border bg-background p-4 space-y-4 w-full">
+      <div class="rounded-3xl border border-border bg-background p-4 space-y-4 w-full">
         <p class="text-sm font-medium text-muted-foreground">Adjusted Stock (form value)</p>
 
         <div class="flex  items-center gap-3">
           <button
             type="button"
             @click="decreaseStock"
-            class="h-12 w-12 rounded-md border border-border text-xl font-semibold hover:bg-accent transition-colors"
+            class="h-12 w-12 rounded-2xl border border-border text-xl font-semibold hover:bg-accent transition-colors"
           >
             -
           </button>
@@ -118,13 +122,13 @@ const saveStock = async () => {
             v-model.number="adjustedStock"
             type="number"
             min="0"
-            class="h-12 w-36 rounded-md border border-border bg-card text-center text-xl font-semibold"
+            class="h-12 w-36 rounded-2xl border border-border bg-card text-center text-xl font-semibold"
           >
 
           <button
             type="button"
             @click="increaseStock"
-            class="h-12 w-12 rounded-md border border-border text-xl font-semibold hover:bg-accent transition-colors"
+            class="h-12 w-12 rounded-2xl border border-border text-xl font-semibold hover:bg-accent transition-colors"
           >
             +
           </button>
@@ -137,7 +141,7 @@ const saveStock = async () => {
         <button
           type="submit"
           :disabled="isSaving || !hasChanges"
-          class="rounded-md bg-primary text-primary-foreground px-4 py-2 hover:bg-primary/90 transition-colors disabled:opacity-60"
+          class="rounded-2xl bg-primary text-primary-foreground px-4 py-2 hover:bg-primary/90 transition-colors disabled:opacity-60"
         >
           {{ isSaving ? 'Updating...' : 'Update' }}
         </button>

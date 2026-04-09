@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+definePageMeta({
+    layout: 'dashboard-layout'
+})
+
 import { useWebSocket } from '@vueuse/core';
 import { ref, computed } from 'vue'
 import Order_Item from '~/components/kitchenDisplay_components/Order_Item.vue';
@@ -7,10 +11,6 @@ import type websocket_payload from '~~/types/websocket_payload';
 import notification_sound from "../../assets/audio/new-notification-022-370046.mp3"
 import Complete_Order_Popup from '~/components/kitchenDisplay_components/Completed_Orders/Complete_Order_Popup.vue';
 import Loading_Order_Item from '~/components/kitchenDisplay_components/Loading_Order_Item.vue';
-
-definePageMeta({
-    layout: 'dashboard-layout'
-})
 
 
 const toast = useToast()
@@ -38,7 +38,6 @@ onMounted(async () => {
     loading_orders.value = true
     all_orders.value = await $fetch<OrderDetailsWithInclude[]>('/api/orders/pending');
     loading_orders.value = false
-    console.log(all_orders.value)
 
 })
 
@@ -47,9 +46,6 @@ onMounted(async () => {
 watch(data, (newValue: string) => {
 
     // Each websocket message is parsed into a typed kitchen payload.
-    console.log('new data')
-
-    
     let parsed_data: websocket_payload = JSON.parse(newValue)
 
 
@@ -128,7 +124,7 @@ watch(data, (newValue: string) => {
 <!-- comleted order button and weboscket status -->
     <div  class="flex space-x-2">
     <div>
-        <button @click="open_completed_orders_modal" class="bg-green-500/20 text-green-500 px-4 py-2 rounded-lg"> Completed Orders</button>
+        <button @click="open_completed_orders_modal" class="bg-green-500/20 text-green-500 px-4 py-2 rounded-3xl"> Completed Orders</button>
     </div>
 
     <!-- websocket status -->

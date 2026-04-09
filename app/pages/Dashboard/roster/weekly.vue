@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+definePageMeta({
+    layout: 'dashboard-layout',
+    middleware: 'is-admin'
+})
 
 
 
@@ -15,9 +19,9 @@
 
 
     <div class="  ">
-    <RosterComponentsRosterCalendar  ></RosterComponentsRosterCalendar>
-   
-    
-</div>
+        <RosterComponentsRosterCalendar></RosterComponentsRosterCalendar>
+
+
+    </div>
 
 </template>

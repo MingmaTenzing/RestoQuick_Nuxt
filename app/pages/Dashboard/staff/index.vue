@@ -1,11 +1,14 @@
 <script lang="ts" setup>
+definePageMeta({
+  layout: 'dashboard-layout',
+  middleware: 'is-admin'
+})
+
 import { SortOption } from "~/client_utils/enum";
 import Add_Staff_Modal from "~/components/staff_components/Add_Staff_Modal.vue";
 import Staff_Card from "~/components/staff_components/Staff_Card.vue";
 import Staff_Card_Loading from "~/components/staff_components/Staff_Card_Loading.vue";
 import type { Role, Staff } from "~/generated/prisma/client";
-
-
 const roles = [
   "Chef",
   "Waiter",
@@ -46,16 +49,16 @@ const filtered_staff_data = computed(() => {
 //the data returned from server is already in sorted in ascending order by name;
 const { data: staffs, status: staffs_status } = await useAsyncData("staffs", () =>
   $fetch<Staff[]>("/api/staff"), {
-    lazy: true
-  }
-);  
+  lazy: true
+}
+);
 
 // Leave requests for "Pending leave requests" stat
 const { data: leaveRequests, status: leave_requests_status } = await useAsyncData("staff-leave-requests", () =>
-  $fetch<{ id: string; status: string }[]>("/api/leave-requests"),{
-    lazy:true
-  }
-);  
+  $fetch<{ id: string; status: string }[]>("/api/leave-requests"), {
+  lazy: true
+}
+);
 
 // Staff-related stats computed from existing data
 const staffStats = computed(() => {
@@ -63,10 +66,10 @@ const staffStats = computed(() => {
   const managersCount = list.filter((s) => s.role === "Manager").length;
   const fullTimeCount = list.filter(
     (s) => s.employmentType === "FullTime"
-  ).length;  
+  ).length;
   const kitchenStaffCount = list.filter((s) =>
     ["Chef", "Cook", "Kitchen_Hand"].includes(s.role)
-  ).length;  
+  ).length;
   const pendingLeaveCount =
     leaveRequests.value?.filter((r) => r.status === "pending").length ?? 0;
   return {
@@ -75,8 +78,8 @@ const staffStats = computed(() => {
     fullTime: fullTimeCount,
     kitchenStaff: kitchenStaffCount,
     pendingLeave: pendingLeaveCount,
-  };  
-});  
+  };
+});
 
 // the roles is copied as same as the schema
 //however if schema is updated it needs manual updating as well.
@@ -84,14 +87,14 @@ async function searchStaff(staff_name: string) {
 
   try {
     const response = await $fetch<Staff[]>("/api/staff", {
-    query: {
-      staff_name,
-    },
-  });
-  search_results.value = response;
+      query: {
+        staff_name,
+      },
+    });
+    search_results.value = response;
   } catch (error) {
     window.alert(error);
-    
+
   }
   finally {
     show_search_results.value = true;
@@ -102,7 +105,7 @@ function clear_search() {
   search_staff_name.value = "",
     show_search_results.value = false,
     search_results.value = [];
-    
+
 }
 
 </script>
@@ -116,121 +119,77 @@ function clear_search() {
           <h1 class="">Staff Management</h1>
           <i class="pi pi-user text-muted-foreground"></i>
         </div>
-        <p class="text-accent-foreground/60 text-lg mt-2"
-          >Manager your team members, roles and availability</p
-        >
+        <p class="text-accent-foreground/60 text-lg mt-2">Manager your team members, roles and availability</p>
       </div>
 
       <div>
-        <button
-          v-on:click="is_add_Staff_Modal = true"
-          class="bg-accent text-accent-foreground border border-border px-4 py-2 rounded-lg"
-        >
+        <button v-on:click="is_add_Staff_Modal = true"
+          class="bg-accent text-accent-foreground border border-border px-4 py-2 rounded-3xl">
           + Add Staff
         </button>
       </div>
     </section>
 
     <!-- Stats Cards Grid -->
-    <section
-      class="flex flex-col gap-4 md:flex-row md:justify-around w-full md:flex-wrap lg:flex-nowrap"
-    >
+    <section class="flex flex-col gap-4 md:flex-row md:justify-around w-full md:flex-wrap lg:flex-nowrap">
       <!-- Total Staff -->
       <div
-        class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between"
-      >
+        class="border rounded-3xl shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Total Staff</span>
           <div class="flex flex-col">
-            <span
-              v-if="staffs_status === 'pending'"
-              class="w-24 h-10 md:h-12 lg:h-14 bg-muted rounded-lg animate-pulse"
-            ></span>
-            <span
-              v-else
-              class="text-lg md:text-4xl lg:text-5xl font-medium"
-              >{{ staffStats.total }}</span
-            >
+            <span v-if="staffs_status === 'pending'"
+              class="w-24 h-10 md:h-12 lg:h-14 bg-muted rounded-3xl animate-pulse"></span>
+            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium">{{ staffStats.total }}</span>
           </div>
         </div>
         <div>
-          <i
-            class="pi pi-users text-[120px] text-muted-foreground opacity-5"
-          ></i>
+          <i class="pi pi-users text-[120px] text-muted-foreground opacity-5"></i>
         </div>
       </div>
       <!-- Managers -->
       <div
-        class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between"
-      >
+        class="border rounded-3xl shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Managers</span>
           <div class="flex flex-col">
-            <span
-              v-if="staffs_status === 'pending'"
-              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-lg animate-pulse"
-            ></span>
-            <span
-              v-else
-              class="text-lg md:text-4xl lg:text-5xl font-medium"
-              >{{ staffStats.managers }}</span
-            >
+            <span v-if="staffs_status === 'pending'"
+              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-3xl animate-pulse"></span>
+            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium">{{ staffStats.managers }}</span>
           </div>
         </div>
         <div>
-          <i
-            class="pi pi-id-card text-[120px] text-muted-foreground opacity-5"
-          ></i>
+          <i class="pi pi-id-card text-[120px] text-muted-foreground opacity-5"></i>
         </div>
       </div>
       <!-- Full-time Staff -->
       <div
-        class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between"
-      >
+        class="border rounded-3xl shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
         <div class="flex flex-col justify-between h-full">
           <span class="font-light text-muted-foreground">Full-time Staff</span>
           <div class="flex flex-col">
-            <span
-              v-if="staffs_status === 'pending'"
-              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-lg animate-pulse"
-            ></span>
-            <span
-              v-else
-              class="text-lg md:text-4xl lg:text-5xl font-medium"
-              >{{ staffStats.fullTime }}</span
-            >
+            <span v-if="staffs_status === 'pending'"
+              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-3xl animate-pulse"></span>
+            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium">{{ staffStats.fullTime }}</span>
           </div>
         </div>
         <div>
-          <i
-            class="pi pi-briefcase text-[120px] text-muted-foreground opacity-5"
-          ></i>
+          <i class="pi pi-briefcase text-[120px] text-muted-foreground opacity-5"></i>
         </div>
       </div>
       <!-- Pending Leave Requests -->
       <div
-        class="border rounded-lg shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between"
-      >
+        class="border rounded-3xl shadow p-6 border-border w-full bg-card text-card-foreground h-[170px] flex items-center justify-between">
         <div class="flex flex-col justify-between h-full">
-          <span class="font-light text-muted-foreground"
-            >Pending Leave Requests</span
-          >
+          <span class="font-light text-muted-foreground">Pending Leave Requests</span>
           <div class="flex flex-col">
-            <span
-              v-if="leave_requests_status === 'pending'"
-              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-lg animate-pulse"
-            ></span>
-            <span
-              v-else
-              class="text-lg md:text-4xl lg:text-5xl font-medium"
-              >{{ staffStats.pendingLeave }}</span
-            >
+            <span v-if="leave_requests_status === 'pending'"
+              class="w-20 h-10 md:h-12 lg:h-14 bg-muted rounded-3xl animate-pulse"></span>
+            <span v-else class="text-lg md:text-4xl lg:text-5xl font-medium">{{ staffStats.pendingLeave }}</span>
           </div>
         </div>
         <div>
-          <i
-            class="pi pi-calendar-times text-[120px] text-muted-foreground opacity-5"
-          ></i>
+          <i class="pi pi-calendar-times text-[120px] text-muted-foreground opacity-5"></i>
         </div>
       </div>
     </section>
@@ -239,23 +198,17 @@ function clear_search() {
     <section class="flex justify-between">
       <!-- Search Bar -->
       <form
-        class="border border-border w-[30%] rounded-lg bg-background text-foreground flex items-center justify-between space-x-2 px-4 py-2"
-        @submit.prevent="searchStaff(search_staff_name)"
-      >
-        <input
-          v-model="search_staff_name"
-          type="text"
-          required
-          placeholder="Search staff by name" 
-          class="outline-none w-full"
-        />
+        class="border border-border w-[30%] rounded-3xl bg-background text-foreground flex items-center justify-between space-x-2 px-4 py-2"
+        @submit.prevent="searchStaff(search_staff_name)">
+        <input v-model="search_staff_name" type="text" required placeholder="Search staff by name"
+          class="outline-none w-full" />
         <button type="submit">
           <i v-if="!show_search_results" class="pi pi-search text-muted-foreground"></i>
         </button>
         <button type="button" v-if="show_search_results" v-on:click="clear_search">
 
-          <i  class="pi pi-times text-muted-foreground"></i>
-          
+          <i class="pi pi-times text-muted-foreground"></i>
+
 
         </button>
 
@@ -265,16 +218,9 @@ function clear_search() {
       <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
         <!-- Role Dropdown -->
         <div class="flex items-center gap-2">
-          <span class="text-sm font-medium text-muted-foreground min-w-fit"
-            >Role:</span
-          >
-          <div
-            class="border border-border px-2 py-2 space-x-2 flex items-center rounded-lg focus:outline-none"
-          >
-            <select
-              v-model="selected_role"
-              class="appearance-none outline-none bg-background text-foreground text-sm"
-            >
+          <span class="text-sm font-medium text-muted-foreground min-w-fit">Role:</span>
+          <div class="border border-border px-2 py-2 space-x-2 flex items-center rounded-3xl focus:outline-none">
+            <select v-model="selected_role" class="appearance-none outline-none bg-background text-foreground text-sm">
               <option class="" value="">All Roles</option>
               <option v-for="role in roles" :key="role" :value="role">
                 {{ role }}
@@ -286,13 +232,9 @@ function clear_search() {
 
         <!-- Sort Dropdown -->
         <div class="flex items-center gap-2">
-          <span class="text-sm font-medium text-muted-foreground min-w-fit"
-            >Sort by Name:</span
-          >
-          <select
-            v-model="sort_by"
-            class="px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm"
-          >
+          <span class="text-sm font-medium text-muted-foreground min-w-fit">Sort by Name:</span>
+          <select v-model="sort_by"
+            class="px-3 py-2 border border-border rounded-3xl bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent text-sm">
             <option :value="SortOption.asc">(A-Z)</option>
             <option :value="SortOption.dsc">(Z-A)</option>
           </select>
@@ -307,13 +249,13 @@ function clear_search() {
       <!-- Staff Card -->
 
       <div v-if="staffs_status === 'pending'" v-for="number in 10" :key="number">
-        
+
 
         <Staff_Card_Loading></Staff_Card_Loading>
       </div>
 
 
-      <div v-if="show_search_results " v-for="staff in search_results" :key="staff.id">
+      <div v-if="show_search_results" v-for="staff in search_results" :key="staff.id">
         <Staff_Card :staff="staff"></Staff_Card>
       </div>
       <div v-if="!show_search_results" v-for="staff in filtered_staff_data" :key="staff.id">
@@ -323,10 +265,7 @@ function clear_search() {
 
     <!-- add staff modal -->
     <Transition>
-      <Add_Staff_Modal
-        v-if="is_add_Staff_Modal"
-        @close_modal="is_add_Staff_Modal = false"
-      ></Add_Staff_Modal>
+      <Add_Staff_Modal v-if="is_add_Staff_Modal" @close_modal="is_add_Staff_Modal = false"></Add_Staff_Modal>
     </Transition>
   </main>
 </template>

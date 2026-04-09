@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: 'dashboard-layout'
+})
+
 import { ref, computed } from 'vue'
 import AddStockDialog from '~/components/stock_components/AddStockDialog.vue'
 import RestockDialog from '~/components/stock_components/RestockDialog.vue'
@@ -11,10 +15,6 @@ import StockStatsCardSkeleton from '~/components/stock_components/StockStatsCard
 import StockItemCardSkeleton from '~/components/stock_components/StockItemCardSkeleton.vue'
 import type { StockItem } from '~/generated/prisma/client'
 import type { StockItemCreateInput } from '~/generated/prisma/models'
-
-definePageMeta({
-  layout: 'dashboard-layout'
-})
 
 const {data:stockItems, refresh, status: stockStatus} = useFetch<StockItem[]>("/api/stock")
 
@@ -102,7 +102,6 @@ try {
     body: itemData
   })
 
-  console.log(add_stock)
   refresh() //refresh the fetch if adding stock is successful
   toast.success({
     title: 'stock added'
@@ -155,7 +154,7 @@ const handleDelete = async (item: StockItem) => {
       <div class="flex items-center gap-2">
         <NuxtLink to="/dashboard/stock/qr-labels">
           <button
-            class="px-4 py-2 rounded-md border border-border bg-background text-foreground hover:bg-accent transition-all flex items-center gap-2"
+            class="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-2.5 text-foreground transition-all hover:bg-accent"
           >
             <i class="pi pi-qrcode" />
             QR Labels
@@ -164,7 +163,7 @@ const handleDelete = async (item: StockItem) => {
 
         <button
           @click="isAddDialogOpen = true"
-          class="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:shadow-lg flex items-center gap-2"
+          class="flex items-center gap-2 rounded-2xl bg-primary px-4 py-2.5 text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-lg"
         >
           <i class="pi pi-plus" />
           Add Item
@@ -179,30 +178,30 @@ const handleDelete = async (item: StockItem) => {
       </template>
       <template v-else>
         <StockStatsCard
-          title="Total Items"
+          title="Items"
           :value="totalItems"
-          description="In inventory"
+          description="In stock"
           icon="pi pi-box"
         />
         <StockStatsCard
-          title="Low Stock Items"
+          title="Low Stock"
           :value="lowStockCount"
-          description="Need reordering"
+          description="Need attention"
           icon="pi pi-exclamation-triangle"
           icon-color="text-yellow-600"
         />
         <StockStatsCard
-          title="Items Below Reorder Level"
+          title="Reorder"
           :value="lowStockCount"
-          description="Need immediate restocking"
-          icon="pi pi-info"
+          description="Restock soon"
+          icon="pi pi-refresh"
           icon-color="text-orange-600"
         />
         <StockStatsCard
-          title="Categories"
+          title="Groups"
           :value="4"
-          description="Item categories"
-          icon="pi pi-shopping-cart"
+          description="Item types"
+          icon="pi pi-tags"
         />
       </template>
     </div>

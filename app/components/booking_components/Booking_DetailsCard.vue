@@ -37,7 +37,7 @@ const getStatusColor = (status: string) => {
     <section >
           <div
             
-            class="border border-border rounded-lg bg-card p-4 hover:bg-accent/30 transition-colors"
+            class="border border-border rounded-3xl bg-card p-4 hover:bg-accent/30 transition-colors"
           >
             <div class="flex items-start justify-between mb-4">
               <div class="flex-1">
@@ -85,13 +85,13 @@ const getStatusColor = (status: string) => {
             <div v-if="booking_details.status === 'PENDING'" class="flex gap-2 pt-3 border-t border-border">
               <button v-on:click="emit('update-status', 'CONFIRMED', booking_details.id)"
                 
-                class="flex-1 px-3 py-2 rounded-lg border border-border bg-green-500/10 text-green-500 hover:bg-green-500/20 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
+                class="flex-1 px-3 py-2 rounded-3xl border border-border bg-green-500/10 text-green-500 hover:bg-green-500/20 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
               >
                 <i class="pi pi-check"></i>
                 Confirm
               </button>
               <button v-on:click="emit('update-status', 'CANCELLED', booking_details.id)"
-                class="flex-1 px-3 py-2 rounded-lg border border-border bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
+                class="flex-1 px-3 py-2 rounded-3xl border border-border bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
               >
                 <i class="pi pi-times"></i>
                 Cancel

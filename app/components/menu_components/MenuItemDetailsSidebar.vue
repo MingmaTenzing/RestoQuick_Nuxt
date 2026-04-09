@@ -46,7 +46,7 @@ const formattedCategory = computed(() => props.item.category.replaceAll('_', ' '
 
           <button
             type="button"
-            class="inline-flex items-center justify-center rounded-md border border-sidebar-border px-3 py-2 text-sm transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            class="inline-flex items-center justify-center rounded-2xl border border-sidebar-border px-3 py-2 text-sm transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             @click="emit('close')"
           >
             Close
@@ -103,7 +103,7 @@ const formattedCategory = computed(() => props.item.category.replaceAll('_', ' '
             <div
               v-for="option in item.options"
               :key="option.id"
-              class="flex items-center justify-between rounded-xl border border-sidebar-border bg-sidebar px-4 py-3"
+              class="flex items-center justify-between rounded-3xl border border-sidebar-border bg-sidebar px-4 py-3"
             >
               <div>
                 <p class="text-sm font-medium text-sidebar-foreground">
@@ -120,7 +120,7 @@ const formattedCategory = computed(() => props.item.category.replaceAll('_', ' '
 
           <div
             v-else
-            class="rounded-xl border border-dashed border-sidebar-border bg-sidebar px-4 py-6 text-sm text-muted-foreground"
+            class="rounded-3xl border border-dashed border-sidebar-border bg-sidebar px-4 py-6 text-sm text-muted-foreground"
           >
             This menu item does not have any options yet.
           </div>

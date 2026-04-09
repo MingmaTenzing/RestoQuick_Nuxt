@@ -38,9 +38,18 @@ function deleteShift() {
        
 
      
-       <div class=" flex flex-col bg-accent p-1 rounded-lg w-full border hover:border-dashed hover:border-ring">
-        <div v-if="!isPrintRosterPage" v-on:click="open_edit_shiftModal(shift)"  class="cursor-pointer flex justify-end   text-muted-foreground hover:text-primary">
-            <i class=" pi pi-pencil"></i>
+       <div class=" flex flex-col bg-accent p-2 rounded-2xl w-full border hover:border-dashed hover:border-ring">
+        <div
+          v-if="!isPrintRosterPage"
+          v-on:click="open_edit_shiftModal(shift)"
+          class="flex justify-end"
+        >
+          <button
+            type="button"
+            class="flex h-7 w-7 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+          >
+            <i class="pi pi-pencil text-xs"></i>
+          </button>
            
         </div>
         <div class="flex justify-between items-end ">
@@ -62,7 +71,12 @@ function deleteShift() {
 </div>
                
                <div v-if="!isPrintRosterPage" v-on:click="deleteShift()">
-                 <i class=" pi pi-trash    text-muted-foreground hover:text-destructive cursor-pointer"></i>
+                 <button
+                   type="button"
+                   class="flex h-7 w-7 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                 >
+                   <i class="pi pi-trash text-xs"></i>
+                 </button>
                </div>
         </div>
       

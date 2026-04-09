@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 
-import { lazy } from "zod";
 import type { RevenueTrend } from "~~/types/revenuetrend"
 defineOptions({
   tags: ['linecharts', 'singleline']
@@ -44,7 +43,7 @@ const xFormatter = (tick: number, _i?: number, _ticks?: number[]): string => {
   
   
   <div
-    class="min-w-0 w-full space-y-6 rounded-lg bg-card p-6 border"
+    class="min-w-0 w-full space-y-6 rounded-3xl bg-card p-6 border"
     :class="showTitle ? 'p-6' : ''"
   >
     <div class="flex items-center justify-between">

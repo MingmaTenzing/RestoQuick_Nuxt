@@ -49,7 +49,6 @@ const selectedCategory_menu_items = computed(() =>
 
 {
     if (selectedCategory.value == 'All') {
-        console.log(selectedCategory.value)
         return menu_items.value;
     }
     else {

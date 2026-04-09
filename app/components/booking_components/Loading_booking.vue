@@ -9,7 +9,7 @@
 
   <section>
   
-    <div class="border border-border rounded-lg bg-card p-4">
+    <div class="border border-border rounded-3xl bg-card p-4">
       <!-- Header -->
       <div class="flex items-start justify-between mb-4">
         <div class="flex-1">
@@ -56,15 +56,15 @@
    
       <!-- Action Buttons -->
       <div class="flex gap-2 pt-3 border-t border-border">
-        <div class="flex-1 h-10 bg-muted rounded-lg animate-pulse"></div>
-        <div class="flex-1 h-10 bg-muted rounded-lg animate-pulse"></div>
+        <div class="flex-1 h-10 bg-muted rounded-3xl animate-pulse"></div>
+        <div class="flex-1 h-10 bg-muted rounded-3xl animate-pulse"></div>
       </div>
     </div>
   </section>
   
   <section>
   
-    <div class="border border-border rounded-lg bg-card p-4">
+    <div class="border border-border rounded-3xl bg-card p-4">
       <!-- Header -->
       <div class="flex items-start justify-between mb-4">
         <div class="flex-1">
@@ -111,15 +111,15 @@
    
       <!-- Action Buttons -->
       <div class="flex gap-2 pt-3 border-t border-border">
-        <div class="flex-1 h-10 bg-muted rounded-lg animate-pulse"></div>
-        <div class="flex-1 h-10 bg-muted rounded-lg animate-pulse"></div>
+        <div class="flex-1 h-10 bg-muted rounded-3xl animate-pulse"></div>
+        <div class="flex-1 h-10 bg-muted rounded-3xl animate-pulse"></div>
       </div>
     </div>
   </section>
   
   <section>
   
-    <div class="border border-border rounded-lg bg-card p-4">
+    <div class="border border-border rounded-3xl bg-card p-4">
       <!-- Header -->
       <div class="flex items-start justify-between mb-4">
         <div class="flex-1">
@@ -166,15 +166,15 @@
    
       <!-- Action Buttons -->
       <div class="flex gap-2 pt-3 border-t border-border">
-        <div class="flex-1 h-10 bg-muted rounded-lg animate-pulse"></div>
-        <div class="flex-1 h-10 bg-muted rounded-lg animate-pulse"></div>
+        <div class="flex-1 h-10 bg-muted rounded-3xl animate-pulse"></div>
+        <div class="flex-1 h-10 bg-muted rounded-3xl animate-pulse"></div>
       </div>
     </div>
   </section>
   
   <section>
   
-    <div class="border border-border rounded-lg bg-card p-4">
+    <div class="border border-border rounded-3xl bg-card p-4">
       <!-- Header -->
       <div class="flex items-start justify-between mb-4">
         <div class="flex-1">
@@ -221,15 +221,15 @@
    
       <!-- Action Buttons -->
       <div class="flex gap-2 pt-3 border-t border-border">
-        <div class="flex-1 h-10 bg-muted rounded-lg animate-pulse"></div>
-        <div class="flex-1 h-10 bg-muted rounded-lg animate-pulse"></div>
+        <div class="flex-1 h-10 bg-muted rounded-3xl animate-pulse"></div>
+        <div class="flex-1 h-10 bg-muted rounded-3xl animate-pulse"></div>
       </div>
     </div>
   </section>
   
   <section>
   
-    <div class="border border-border rounded-lg bg-card p-4">
+    <div class="border border-border rounded-3xl bg-card p-4">
       <!-- Header -->
       <div class="flex items-start justify-between mb-4">
         <div class="flex-1">
@@ -276,8 +276,8 @@
    
       <!-- Action Buttons -->
       <div class="flex gap-2 pt-3 border-t border-border">
-        <div class="flex-1 h-10 bg-muted rounded-lg animate-pulse"></div>
-        <div class="flex-1 h-10 bg-muted rounded-lg animate-pulse"></div>
+        <div class="flex-1 h-10 bg-muted rounded-3xl animate-pulse"></div>
+        <div class="flex-1 h-10 bg-muted rounded-3xl animate-pulse"></div>
       </div>
     </div>
   </section>

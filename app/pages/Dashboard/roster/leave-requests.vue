@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+definePageMeta({
+  layout: 'dashboard-layout',
+  middleware: 'is-admin'
+})
+
 import type { LeaveRequest, LeaveStatus, Staff } from "~/generated/prisma/client";
 
 // Fetch leave requests
@@ -53,12 +58,12 @@ async function updateStatus(status: LeaveStatus, request_id: string) {
     method: 'put',
     body: { status }
   })
-  if (update_request_status.value && put_status.value == "success" ){
+  if (update_request_status.value && put_status.value == "success") {
     // if the update_status is complelet it will recall the useFetch api call 
     //using the refresh function
     refresh();
   }
-  
+
 }
 </script>
 
@@ -77,112 +82,103 @@ async function updateStatus(status: LeaveStatus, request_id: string) {
 
     <!-- Filter Tabs -->
     <div class="flex gap-2">
-    <button
-      @click="activeFilter = 'all'"
-      :class="[
-        'border px-4 py-1 rounded-lg hover:border',
+      <button @click="activeFilter = 'all'" :class="[
+        'border px-4 py-1 rounded-3xl hover:border',
         activeFilter === 'all' ? 'border-ring bg-accent' : 'border-border bg-card hover:bg-accent hover:border-ring'
-      ]"
-    >
+      ]">
         All Requests
-    </button>
-    <button
-      @click="activeFilter = 'pending'"
-      :class="[
-        'border px-4 py-1 rounded-lg hover:border hover:border-amber-500/20 text-amber-500',
+      </button>
+      <button @click="activeFilter = 'pending'" :class="[
+        'border px-4 py-1 rounded-3xl hover:border hover:border-amber-500/20 text-amber-500',
         activeFilter === 'pending' ? 'bg-amber-500/20 border-amber-500/20' : 'bg-amber-500/10 border-amber-500/20 hover:bg-amber-500/20'
-      ]"
-    >
-       Pending
-    </button>
-    <button
-      @click="activeFilter = 'approved'"
-      :class="[
-        'border px-4 py-1 rounded-lg hover:border hover:border-green-500/20 text-green-500 border-green-500/20',
+      ]">
+        Pending
+      </button>
+      <button @click="activeFilter = 'approved'" :class="[
+        'border px-4 py-1 rounded-3xl hover:border hover:border-green-500/20 text-green-500 border-green-500/20',
         activeFilter === 'approved' ? 'bg-green-500/20' : 'bg-green-500/10 hover:bg-green-500/20'
-      ]"
-    >
-Approved    </button>
+      ]">
+        Approved </button>
     </div>
 
     <!-- Leave Requests List -->
-    <div class="space-y-3">
-      <div
-        v-for="request in filteredRequests"
-        :key="request.id"
-        class="border border-border rounded-lg p-4 bg-card hover:bg-accent/50 transition-colors"
-      >
+    <div v-if="filteredRequests.length" class="space-y-3">
+      <div v-for="request in filteredRequests" :key="request.id"
+        class="border border-border rounded-3xl p-4 bg-card hover:bg-accent/50 transition-colors">
         <div class=" ">
           <!-- Request Info -->
           <div class=" gap-2 flex flex-col">
             <div class=" flex items-start gap-4">
 
-                <div class="flex items-center gap-3 mb-3">
-                  <div class="w-10 h-10 bg-accent rounded-full flex justify-center items-center">
-                   {{request.staff.firstname[0]}}{{ request.staff.lastName[0] }}
-                  </div>
-                  <div>
-                    <h3 class="font-medium">{{ request.staff.firstname }} {{ request.staff.lastName }}</h3>
-                  
-                  </div>
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-accent rounded-full flex justify-center items-center">
+                  {{ request.staff.firstname[0] }}{{ request.staff.lastName[0] }}
                 </div>
-                  <!-- Status Badge -->
-              <div :class="['flex items-center gap-2 px-3 py-1 rounded-lg border', getStatusColor(request.status)]">
+                <div>
+                  <h3 class="font-medium">{{ request.staff.firstname }} {{ request.staff.lastName }}</h3>
+
+                </div>
+              </div>
+              <!-- Status Badge -->
+              <div :class="['flex items-center gap-2 px-3 py-1 rounded-3xl border', getStatusColor(request.status)]">
                 <i :class="['pi', getStatusIcon(request.status)]"></i>
                 <span class="text-sm font-medium capitalize">{{ request.status }}</span>
               </div>
-              
+
             </div>
-             <!--reason  -->
+            <!--reason  -->
             <div>
-  <p class="text-sm text-muted-foreground">Reason: {{ request.reason}}</p>
+              <p class="text-sm text-muted-foreground">Reason: {{ request.reason }}</p>
             </div>
 
             <!-- Dates -->
             <div class="flex items-center gap-4 mb-2">
               <div class="text-sm">
                 <span class="text-muted-foreground">From:</span>
-                <span class="font-medium ml-2">{{new Date(request.startDate).toLocaleDateString('en-AU', {
-    month: 'short',
-    year: 'numeric',
-                day:'2-digit'
-              }) }}</span>
+                <span class="font-medium ml-2">{{ new Date(request.startDate).toLocaleDateString('en-AU', {
+                  month: 'short',
+                  year: 'numeric',
+                  day:'2-digit'
+                  }) }}</span>
               </div>
               <div class="text-muted-foreground">→</div>
               <div class="text-sm">
                 <span class="text-muted-foreground">To:</span>
                 <span class="font-medium ml-2">{{ new Date(request.endDate).toLocaleDateString('en-AU', {
-    month: 'short',
-    year: 'numeric',
-                day:'2-digit'
-              }) }}</span>
+                  month: 'short',
+                  year: 'numeric',
+                  day:'2-digit'
+                  }) }}</span>
               </div>
               <div class="text-sm bg-accent px-2 py-1 rounded">
                 <span class="text-muted-foreground">Duration:</span>
-                <span class="font-medium ml-2">{{ Math.ceil((new Date(request.endDate).getTime() - new Date(request.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1 }} day(s)</span>
+                <span class="font-medium ml-2">{{ Math.ceil((new Date(request.endDate).getTime() - new
+                  Date(request.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1 }} day(s)</span>
               </div>
             </div>
 
             <!-- Submitted Date -->
             <p class="text-xs text-muted-foreground">
               Submitted on {{ new Date(request.submittedAt).toLocaleDateString('en-AU', {
-    month: 'short',
-    year: 'numeric',
-                day:'2-digit'
+                month: 'short',
+                year: 'numeric',
+                day: '2-digit'
               }) }}
             </p>
           </div>
 
-        
+
         </div>
 
         <!-- Action Buttons (for pending requests) -->
         <div v-if="request.status === 'pending'" class="flex gap-2 mt-4 pt-4 border-t border-border">
-          <button v-on:click="updateStatus('approved', request.id)" class="flex-1 px-4 py-2 bg-green-500/10 text-green-500 hover:bg-green-500/20 rounded-lg border border-green-500/20 transition-colors flex items-center justify-center gap-2">
+          <button v-on:click="updateStatus('approved', request.id)"
+            class="flex-1 px-4 py-2 bg-green-500/10 text-green-500 hover:bg-green-500/20 rounded-3xl border border-green-500/20 transition-colors flex items-center justify-center gap-2">
             <i class="pi pi-check"></i>
             Approve
           </button>
-          <button v-on:click="updateStatus('rejected', request.id)"  class="flex-1 px-4 py-2 bg-red-500/10 text-destructive hover:bg-red-500/20 rounded-lg border border-red-500/20 transition-colors flex items-center justify-center gap-2">
+          <button v-on:click="updateStatus('rejected', request.id)"
+            class="flex-1 px-4 py-2 bg-red-500/10 text-destructive hover:bg-red-500/20 rounded-3xl border border-red-500/20 transition-colors flex items-center justify-center gap-2">
             <i class="pi pi-times"></i>
             Reject
           </button>
@@ -190,6 +186,16 @@ Approved    </button>
       </div>
     </div>
 
-   
+    <div v-else class="rounded-3xl border border-dashed border-border bg-card px-6 py-12 text-center">
+      <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+        <i class="pi pi-inbox text-lg"></i>
+      </div>
+      <h2 class="mt-4 text-lg font-semibold text-foreground">No leave requests</h2>
+      <p class="mt-2 text-sm text-muted-foreground">
+        There are no leave requests for this view yet.
+      </p>
+    </div>
+
+
   </div>
 </template>

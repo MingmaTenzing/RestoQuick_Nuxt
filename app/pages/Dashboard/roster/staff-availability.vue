@@ -1,4 +1,9 @@
 <script setup lang="ts">
+definePageMeta({
+    layout: 'dashboard-layout',
+    middleware: 'is-admin'
+})
+
 import type { Staff } from '~/generated/prisma/client';
 
 const { data: staffs } = await useFetch<Staff[]>("/api/staff");
@@ -10,30 +15,30 @@ const { data: staffs } = await useFetch<Staff[]>("/api/staff");
 const { staffisDragged } = useStaffDrag()
 
 
-function startDrag(event: DragEvent, data:Staff) {
-    
+function startDrag(event: DragEvent, data: Staff) {
+
     event.dataTransfer?.setData('staffId', data.id)
 
     staffisDragged();
-    
+
 
 }
 </script>
 
 <template>
 
-     <div class=" border border-border p-4  rounded-lg flex flex-col space-y-4">
+    <div class=" border border-border p-4  rounded-3xl flex flex-col space-y-4">
 
         <span class=" font-semibold">Staff Members</span>
-    <span class=" text-sm font-light text-muted-foreground">Drag and Drop staff to schedule shifts</span>
-    
+        <span class=" text-sm font-light text-muted-foreground">Drag and Drop staff to schedule shifts</span>
+
         <div class="flex flex-wrap gap-2">
-            
+
             <div v-for="staff in staffs" draggable="true" :key="staff.id" @dragstart="startDrag($event, staff)">
-                
+
                 <RosterComponentsStaffs :staff="staff"></RosterComponentsStaffs>
             </div>
         </div>
     </div>
-    
+
 </template>

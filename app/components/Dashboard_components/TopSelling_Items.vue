@@ -33,7 +33,7 @@ const yFormatter = (tick: number) => tick.toString()
 
 <template>
   <div
-    class="min-w-0 w-full space-y-6 rounded-lg border bg-card p-6"
+    class="min-w-0 w-full space-y-6 rounded-3xl border bg-card p-6"
     :class="showTitle ? 'p-6' : ''"
   >
     <div class="flex items-center justify-between">

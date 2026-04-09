@@ -53,7 +53,6 @@ async function addTable() {
         message: "Table Number already exists"
       })
     }
-     console.log(error)
   }
   finally {
     loading.value = false;
@@ -81,34 +80,48 @@ async function addTable() {
 <template>
 
 
-      <div class=" bg-card rounded-lg w-full max-w-md p-6 shadow-md">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-lg font-medium">Add Table</h3>
-          <button @click="close_add_table_modal" class="text-muted-foreground">✕</button>
+      <div class="w-full max-w-lg rounded-4xl border border-border bg-card p-6 shadow-sm sm:p-7">
+        <div class="mb-6 flex items-start justify-between gap-4">
+          <div class="space-y-2">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-accent text-foreground">
+              <i class="pi pi-plus text-sm"></i>
+            </span>
+            <div>
+              <h3 class="text-xl font-semibold text-foreground">Add Table</h3>
+              <p class="text-sm text-muted-foreground">Create a new table with a clear number and seating capacity.</p>
+            </div>
+          </div>
+          <button
+            @click="close_add_table_modal"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            aria-label="Close add table form"
+          >
+            <i class="pi pi-times text-sm"></i>
+          </button>
         </div>
 
-        <form v-on:submit.prevent="addTable" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-muted-foreground mb-1">Number</label>
-            <input type="text" class="w-full px-3 py-2 border rounded" v-model="table_number"  placeholder="e.g. A1" required />
+        <form v-on:submit.prevent="addTable" class="space-y-5">
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-foreground">Number</label>
+            <input type="text" class="w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/80 focus:border-primary" v-model="table_number"  placeholder="e.g. A1" required />
           
           </div>
 
-          <div>
-            <label class="block text-sm font-medium text-muted-foreground mb-1">Capacity</label>
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-foreground">Capacity</label>
           
-            <input type="number" min="1" v-model="capacity" class="w-full px-3 py-2 border rounded" placeholder="e.g. 4" />
+            <input type="number" min="1" v-model="capacity" class="w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/80 focus:border-primary" placeholder="e.g. 4" />
           </div>
 
-          <div class="flex justify-end space-x-2 mt-6">
-            <button @click.prevent="close_add_table_modal" type="button" class="px-4 py-2 rounded-lg hover:border-ring border">Cancel</button>
+          <div class="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
+            <button @click.prevent="close_add_table_modal" type="button" class="inline-flex items-center justify-center rounded-2xl border border-border bg-background px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-accent">Cancel</button>
           
-            <div v-if="loading"  class="bg-card-foreground  px-7  rounded-lg flex justify-center items-center ">
+            <div v-if="loading"  class="inline-flex min-h-12 items-center justify-center rounded-2xl bg-card-foreground px-7 text-card">
               <div class="w-5 h-5 border-2 border-card border-t-transparent rounded-full animate-spin"></div>
 
             </div>
 
-            <button v-else  type="submit" class="px-4 py-2 rounded-lg hover:border-ring border  bg-card-foreground text-card">Create</button>
+            <button v-else  type="submit" class="inline-flex items-center justify-center rounded-2xl bg-card-foreground px-5 py-3 text-sm font-medium text-card transition-opacity hover:opacity-90">Create</button>
           </div>
         </form>
       </div>

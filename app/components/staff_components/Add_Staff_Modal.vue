@@ -59,7 +59,6 @@ const add_availability_day = (available_day: WeekDay) => {
  return   staff_form.availability = staff_form.availability.filter((day) => day != check_day )
   }
   staff_form.availability.push(available_day)
-  console.log(staff_form.availability) 
 
    }
 
@@ -134,7 +133,6 @@ async function add_new_staff() {
 
    
  } catch (error) {
-  console.log(error)
  } finally {
    staff_add_loading.value = false
    await refreshNuxtData('staffs')
@@ -148,7 +146,7 @@ async function add_new_staff() {
 
 <template>
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80">
-    <div class="bg-background h-[80vh] overflow-y-scroll rounded-lg border p-6 shadow-lg w-full max-w-lg">
+    <div class="bg-background h-[80vh] overflow-y-scroll rounded-3xl border p-6 shadow-lg w-full max-w-lg">
       <!-- Header -->
       <div class="flex flex-col gap-2 mb-6">
         <h2 class="text-lg font-semibold">Add Staff Member</h2>
@@ -165,7 +163,7 @@ async function add_new_staff() {
               type="text"
               placeholder="First name"
               v-model="staff_form.firstname"
-              class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
           <div class="space-y-2">
@@ -175,7 +173,7 @@ async function add_new_staff() {
               placeholder="Last name"
             
               v-model="staff_form.lastName"
-              class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
         </div>
@@ -187,7 +185,7 @@ async function add_new_staff() {
             type="email"
             v-model="staff_form.email"
             placeholder="email@restaurant.com"
-            class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
 
@@ -198,7 +196,7 @@ async function add_new_staff() {
             type="tel"
             placeholder="555-0106"
             v-model="staff_form.phone"
-            class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
 
@@ -206,7 +204,7 @@ async function add_new_staff() {
     <div class="grid grid-cols-2 gap-4">
       <div class="space-y-2">
         <label class="text-sm font-medium">EmploymentType</label>
-        <select required v-model="staff_form.employmentType" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+        <select required v-model="staff_form.employmentType" class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
        <option selected disabled>{{staff_form.employmentType}}</option>
         <option v-for="employmentType in employmentTypes" :key="employmentType"  :value="employmentType">
    {{ employmentType }}
@@ -215,7 +213,7 @@ async function add_new_staff() {
       </div>
       <div class="space-y-2">
         <label class="text-sm font-medium">Per hour Rate </label>
-        <div class="rounded-md border border-border   flex items-center px-3 py-2 space-x-2 outline-none">
+        <div class="rounded-2xl border border-border   flex items-center px-3 py-2 space-x-2 outline-none">
           <span>
  $
           </span>
@@ -249,7 +247,7 @@ async function add_new_staff() {
             
             
             id="profile_picture_input"
-            class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-ring"
+            class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-ring"
           />
 
         </div>
@@ -259,7 +257,7 @@ async function add_new_staff() {
         <!-- Role -->
          <div class="space-y-2">
       <label class="text-sm font-medium">Role</label>
-      <select required v-model="staff_form.role" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+      <select required v-model="staff_form.role" class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
        
         <option v-for="role in ROLES" :key="role"  :value="role">
    {{ role }}
@@ -278,7 +276,7 @@ async function add_new_staff() {
               @click="add_availability_day(day as WeekDay)" 
               type="button"
               :class="[
-                'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                'px-3 py-1.5 rounded-2xl text-sm font-medium transition-colors',
                 isDaySelected(day as WeekDay) 
                   ? 'bg-primary text-primary-foreground' 
                   : 'bg-muted text-muted-foreground hover:bg-muted/80'
@@ -291,14 +289,14 @@ async function add_new_staff() {
 
       <!-- Footer -->
       <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end pt-6 border-t">
-        <button @click="emit('close_modal')" class="px-4 py-2 rounded-md border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+        <button @click="emit('close_modal')" class="px-4 py-2 rounded-2xl border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
           Cancel
         </button>
         <div>
-          <button  v-if="staff_add_loading" class="px-4 py-2 rounded-md w-26 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+          <button  v-if="staff_add_loading" class="px-4 py-2 rounded-2xl w-26 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
             <i  class="pi pi-spinner animate-spin"></i>
           </button>
-          <button v-else type="submit" class="px-4 py-2 w-26 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+          <button v-else type="submit" class="px-4 py-2 w-26 rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
             Add Staff
           </button>
 

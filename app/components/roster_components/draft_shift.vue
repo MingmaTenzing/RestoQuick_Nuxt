@@ -29,7 +29,7 @@ function delete_shift(shift: Shift_With_Staff_Payload) {
 </script>
   
 <template>
-  <div class="flex flex-col bg-secondary p-2 rounded-lg w-full border border-dashed hover:border-amber-500">
+  <div class="flex flex-col bg-secondary p-2 rounded-3xl w-full border border-dashed hover:border-amber-500">
     <div class="flex justify-end">
       <span
         class="text-[10px] px-2 py-0.5 rounded-full border bg-amber-500/20 border-amber-600 text-amber-600 font-medium"

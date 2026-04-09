@@ -56,7 +56,6 @@ try {
     new_booking_form.value = reset_copy_booking_form.value;
   }
 } catch (error) {
-  console.log(error)
   toast.error({ title: "Error", message: 'Please call for booking.' })
   new_booking_form.value = reset_copy_booking_form.value
 }
@@ -72,7 +71,7 @@ try {
 
 <!-- Add Booking Modal -->
     <div class="  flex  justify-center items-center fixed w-screen h-screen bg-background/90 backdrop-blur-xs  top-0 z-10 left-0">
-      <div class="bg-card text-foreground rounded-xl shadow-xl border border-border p-6 w-full max-w-md relative">
+      <div class="bg-card text-foreground rounded-3xl shadow-xl border border-border p-6 w-full max-w-md relative">
         <!-- this button is used for closing the modal -->
         <button
         
@@ -91,7 +90,7 @@ try {
             <input
               v-model="new_booking_form.customerName"
               type="text"
-              class="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none placeholder-muted-foreground"
+              class="w-full border border-border bg-background text-foreground rounded-3xl px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none placeholder-muted-foreground"
               placeholder="John Doe"
               required
             />
@@ -102,7 +101,7 @@ try {
             <input
               v-model="new_booking_form.customerPhone"
               type="tel"
-              class="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none placeholder-muted-foreground"
+              class="w-full border border-border bg-background text-foreground rounded-3xl px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none placeholder-muted-foreground"
               placeholder="+1 234-567-8900"
               required
             />
@@ -113,7 +112,7 @@ try {
             <input
               v-model="new_booking_form.bookingTime"
               type="datetime-local"
-              class="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none"
+              class="w-full border border-border bg-background text-foreground rounded-3xl px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none"
               required
             />
           </div>
@@ -125,7 +124,7 @@ try {
               type="number"
               min="1"
               max="25"
-              class="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none"
+              class="w-full border border-border bg-background text-foreground rounded-3xl px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none"
               required
             />
           </div>
@@ -134,7 +133,7 @@ try {
             <label class="block mb-2 text-sm font-medium text-muted-foreground">Special Requests</label>
             <textarea
               v-model="new_booking_form.specialRequest"
-              class="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none placeholder-muted-foreground resize-none"
+              class="w-full border border-border bg-background text-foreground rounded-3xl px-3 py-2 focus:ring-2 focus:ring-ring focus:outline-none placeholder-muted-foreground resize-none"
               rows="3"
               placeholder="Window seat, birthday party, allergies, etc."
             ></textarea>
@@ -144,13 +143,13 @@ try {
             <button
               type="button"
              v-on:click="closeDialog"
-              class="flex-1 px-4 py-2 rounded-lg border border-border bg-muted text-foreground hover:bg-accent transition-colors"
+              class="flex-1 px-4 py-2 rounded-3xl border border-border bg-muted text-foreground hover:bg-accent transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="flex-1 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-2 focus:ring-ring transition-colors"
+              class="flex-1 px-4 py-2 rounded-3xl bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-2 focus:ring-ring transition-colors"
             >
               Create Booking
             </button>

@@ -1,12 +1,12 @@
 <script setup lang="ts">
+definePageMeta({
+	layout: 'dashboard-layout'
+})
+
 import { computed } from 'vue'
 import { de } from 'zod/v4/locales'
 import { OrderStatus } from '~/generated/prisma/enums'
 import type { OrderDetailsWithInclude } from '~~/types/orderwithInclude'
-
-definePageMeta({
-	layout: 'dashboard-layout'
-})
 
 const route = useRoute()
 const toast = useToast()
@@ -15,8 +15,6 @@ const order_id = route.params.order_id
 
 const { data: order_details, status, refresh } = await useFetch<OrderDetailsWithInclude>(`/api/orders/${order_id}`)
 
-
-console.log(order_details)
 const formatStatusLabel = (statusValue: string) => {
 	return statusValue.charAt(0) + statusValue.slice(1).toLowerCase()
 }
@@ -181,7 +179,7 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 								type="button"
 								:disabled="isUpdatingStatus"
 								@click="updateOrderStatus(statusOption)"
-								class="rounded-md border border-border px-4 py-2.5 text-sm font-semibold text-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent"
+								class="rounded-2xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent"
 								:class="order_details.status === statusOption ? 'bg-primary text-primary-foreground border-primary hover:bg-primary' : ''"
 							>
 								{{ formatStatusLabel(statusOption) }}

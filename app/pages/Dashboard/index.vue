@@ -1,14 +1,15 @@
 <script setup lang="ts">
+definePageMeta({
+	layout: 'dashboard-layout',
+	middleware: ['is-admin']
+})
+
 import Dashboard_Header from '~/components/Dashboard_components/Dashboard_Header.vue'
 import Dashboard_KPI from '~/components/Dashboard_components/Dashboard_KPI.vue'
 import Monthly_Revenue from '~/components/Dashboard_components/Monthly_Revenue.vue'
 import Recent_Orders from '~/components/Dashboard_components/Recent_Orders.vue'
 import SoldbyCategory_Piechart from '~/components/Dashboard_components/SoldbyCategory_Piechart.vue'
 import TopSelling_Items from '~/components/Dashboard_components/TopSelling_Items.vue'
-
-definePageMeta({
-	layout: 'dashboard-layout',
-})
 
 
 type WeeklyKpi = {
@@ -68,20 +69,12 @@ const stats = computed(() => {
 
 <template>
 	<div class="space-y-6 pb-8 w-full">
-
 		<Dashboard_Header></Dashboard_Header>
 
-	<!-- <DashboardComponentsDashboardHeader></DashboardComponentsDashboardHeader> -->
+		<!-- <DashboardComponentsDashboardHeader></DashboardComponentsDashboardHeader> -->
 		<section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-			<Dashboard_KPI
-				v-for="stat in stats"
-				:key="stat.title"
-				:title="stat.title"
-				:value="stat.value"
-				:change="stat.change"
-				:headline="stat.headline"
-				:description="stat.description"
-			/>
+			<Dashboard_KPI v-for="stat in stats" :key="stat.title" :title="stat.title" :value="stat.value"
+				:change="stat.change" :headline="stat.headline" :description="stat.description" />
 		</section>
 
 		<section class="grid grid-cols-1 gap-6 xl:grid-cols-2 xl:items-stretch">
@@ -89,11 +82,11 @@ const stats = computed(() => {
 			<Monthly_Revenue class="min-w-0 w-full" />
 		</section>
 
-		
-			<SoldbyCategory_Piechart></SoldbyCategory_Piechart>
-			<Recent_Orders />
-			
-		
+
+		<SoldbyCategory_Piechart></SoldbyCategory_Piechart>
+		<Recent_Orders />
+
+
 
 	</div>
 </template>

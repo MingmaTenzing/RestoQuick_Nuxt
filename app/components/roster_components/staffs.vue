@@ -24,7 +24,7 @@ const isAvailable = (day: WeekDay) => props.staff.availability.includes(day)
 
     <div >
         
-        <div class=" w-[320px] border border-border hover:border-ring bg-card text-card-foreground  p-4 rounded-lg">
+        <div class=" w-[320px] border border-border hover:border-ring bg-card text-card-foreground  p-4 rounded-3xl">
 <div class=" flex justify-end">
     <i class=" pi pi-ellipsis-v">
 
@@ -38,7 +38,7 @@ const isAvailable = (day: WeekDay) => props.staff.availability.includes(day)
                 <div class="space-y-2 flex flex-col items-center">
 
                     <div>{{staff.firstname}} {{ staff.lastName }}</div>
-                    <div class=" rounded-lg border border-border bg-secondary  text-card-foreground px-4 text-sm  w-fit  ">
+                    <div class=" rounded-3xl border border-border bg-secondary  text-card-foreground px-4 text-sm  w-fit  ">
                         <span class=" w-auto">{{ staff.role }}</span>
                     </div>
                 </div>

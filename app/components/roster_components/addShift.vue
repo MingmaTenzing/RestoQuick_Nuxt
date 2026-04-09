@@ -38,8 +38,6 @@ const shift_form = ref<Prisma.ShiftUncheckedCreateInput>({
 
 
 async function submit_shift() {
-
-    console.log(shift_form.value)
     // this can be optimized once connected with database 
 
     isSubmitting.value = true
@@ -81,7 +79,7 @@ function onSelectStaff(staff: Staff) {
 <template>
     <div v-if="addShiftModal.isOpen" class=" flex  justify-center items-center fixed w-screen h-screen bg-background/90 backdrop-blur-xs  top-0 z-10 left-0">
 
-        <div class=" w-125 flex flex-col gap-4  p-4 bg-background   drop-shadow-lg border   drop-shadow-accent opacity-100 rounded-lg" >
+        <div class=" w-125 flex flex-col gap-4  p-4 bg-background   drop-shadow-lg border   drop-shadow-accent opacity-100 rounded-3xl" >
             
             <section class=" space-y-2">
                 <!-- modal header -->
@@ -111,7 +109,7 @@ function onSelectStaff(staff: Staff) {
             </div>
             <div >
                 <div class="relative  items-center  w-1/2"> 
-                     <div v-on:click="is_select_staff_open = !is_select_staff_open" class="border border-border  p-2 rounded-lg flex justify-between items-center ">
+                     <div v-on:click="is_select_staff_open = !is_select_staff_open" class="border border-border  p-2 rounded-3xl flex justify-between items-center ">
                         
 
                         <input v-if="selected_staff" class=" text-muted-foreground font-light outline-none text-sm" placeholder="Select a staff member"  :value="selected_staff.firstname"></input>
@@ -119,7 +117,7 @@ function onSelectStaff(staff: Staff) {
                          <i class=" pi pi-angle-down"></i>
                          </div>
 
-                    <div v-if="is_select_staff_open" class=" absolute w-full h-65 overflow-y-scroll  z-10  space-y-2  bg-background  shadow-2xl rounded-lg ">
+                    <div v-if="is_select_staff_open" class=" absolute w-full h-65 overflow-y-scroll  z-10  space-y-2  bg-background  shadow-2xl rounded-3xl ">
                         <div v-on:click="() => onSelectStaff(staff)" class="hover:bg-accent" v-for="staff in staffs" :key="staff.id" >
                             <div class="flex  items-center justify-between p-2 ">
                                 <div class=" flex space-x-2 items-center">
@@ -131,7 +129,7 @@ function onSelectStaff(staff: Staff) {
                                 </div>
                             
 
-                            <span class=" border  border-border text-muted-foreground text-xs px-2 py-1 rounded-lg">{{ staff.role }}</span>
+                            <span class=" border  border-border text-muted-foreground text-xs px-2 py-1 rounded-3xl">{{ staff.role }}</span>
                             </div>
                 
                         </div>
@@ -151,7 +149,7 @@ function onSelectStaff(staff: Staff) {
                 ">
                     Start Time
                 </span>
-                <div class=" border border-border   p-2 rounded-lg">
+                <div class=" border border-border   p-2 rounded-3xl">
                     <input required class="outline-none text-primary  " type="time" v-model="shift_form.startTime" />
                 
 
@@ -164,7 +162,7 @@ function onSelectStaff(staff: Staff) {
                 ">
                     End Time
                 </span>
-                <div class=" border border-border focus:border-ring  p-2 rounded-lg">
+                <div class=" border border-border focus:border-ring  p-2 rounded-3xl">
                     <input required class="outline-none text-primar" type="time" v-model="shift_form.endTime"/>
 
                 </div>
@@ -179,7 +177,7 @@ function onSelectStaff(staff: Staff) {
                 ">
                    Position
                 </span>
-                <input  class="outline-none border border-border rounded-lg p-2 text-sm" type="text" v-model="shift_form.position" placeholder="eg:- Kitchen, Receiption, Front, Floor"/>
+                <input  class="outline-none border border-border rounded-3xl p-2 text-sm" type="text" v-model="shift_form.position" placeholder="eg:- Kitchen, Receiption, Front, Floor"/>
 
 
     </section>
@@ -188,8 +186,8 @@ function onSelectStaff(staff: Staff) {
 
     <section class=" flex justify-end space-x-2 items-center text-sm">
 
-        <button type="button" v-on:click="close_add_shiftModal()" :disabled="isSubmitting" class="px-4  py-2  hover:border-ring rounded-lg border border-border disabled:opacity-50 disabled:cursor-not-allowed">Cancel</button>
-        <button type="submit" :disabled="isSubmitting" class="px-4  py-2  hover:border-ring rounded-lg border border-border bg-green-600  text-green-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+        <button type="button" v-on:click="close_add_shiftModal()" :disabled="isSubmitting" class="px-4  py-2  hover:border-ring rounded-3xl border border-border disabled:opacity-50 disabled:cursor-not-allowed">Cancel</button>
+        <button type="submit" :disabled="isSubmitting" class="px-4  py-2  hover:border-ring rounded-3xl border border-border bg-green-600  text-green-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
             <i v-if="isSubmitting" class="pi pi-spin pi-spinner"></i>
             {{ isSubmitting ? 'Adding...' : 'Add Shift' }}
         </button>

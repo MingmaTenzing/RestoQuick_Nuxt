@@ -1,4 +1,11 @@
 {
     "prisma.pinToPrisma6": false,
-   
+    "editor.inlineSuggest.enabled": true,
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false,
+        "vue": true
+    }
 }

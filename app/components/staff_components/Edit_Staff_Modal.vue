@@ -12,7 +12,6 @@ const { ROLES, WEEKDAYS } = RoleandWeekDay_Constant()
 
 // here the staff is passed from the staff card
 const props = defineProps<{ edit_staff: Staff }>()
-console.log(props.edit_staff)
 
 // the edit staff emits two event close modal and refetch-data when editing staff details is successfull
 const emit = defineEmits(['close_modal'])
@@ -80,7 +79,6 @@ const add_availability_day = (available_day: WeekDay) => {
  return   edit_staff_form.availability = edit_staff_form.availability.filter((day) => day != check_day )
   }
   edit_staff_form.availability.push(available_day)
-  console.log(edit_staff_form.availability) 
 
 }
 
@@ -113,7 +111,6 @@ async function submit_edit_staff() {
 
     
   } catch (error) {
-    console.log(error)
     toast.error({
       title: error as string
     })
@@ -127,7 +124,7 @@ async function submit_edit_staff() {
 </script>
 <template>
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80">
-    <div class="bg-background rounded-lg border p-6 shadow-lg w-full max-w-lg h-[80vh] overflow-y-scroll">
+    <div class="bg-background rounded-3xl border p-6 shadow-lg w-full max-w-lg h-[80vh] overflow-y-scroll">
       <!-- Header -->
 
       <div class=" flex  justify-between items-center">
@@ -158,7 +155,7 @@ async function submit_edit_staff() {
           v-model="edit_staff_form.firstname"
           type="text"
           placeholder="First name"
-          class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         />
       </div>
       <div class="space-y-2">
@@ -167,7 +164,7 @@ async function submit_edit_staff() {
           v-model="edit_staff_form.lastName"
           type="text"
           placeholder="Last name"
-          class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         />
       </div>
     </div>
@@ -185,7 +182,7 @@ async function submit_edit_staff() {
         accept="image/*"
         @change="image_upload($event)"
         id="edit_profile_picture_input"
-        class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-ring"
+        class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-ring"
       />
     </div>
 
@@ -196,7 +193,7 @@ async function submit_edit_staff() {
         v-model="edit_staff_form.email"
         type="email"
         placeholder="email@restaurant.com"
-        class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
       />
     </div>
 
@@ -208,7 +205,7 @@ async function submit_edit_staff() {
           v-model="edit_staff_form.phone"
           type="tel"
           placeholder="555-0106"
-          class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         />
       </div>
     
@@ -219,7 +216,7 @@ async function submit_edit_staff() {
     <div class="grid grid-cols-2 gap-4">
       <div class="space-y-2">
         <label class="text-sm font-medium">EmploymentType</label>
-        <select v-model="edit_staff_form.employmentType" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+        <select v-model="edit_staff_form.employmentType" class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
        <option selected disabled>{{props.edit_staff.employmentType}}</option>
         <option v-for="employmentType in employmentTypes" :key="employmentType"  :value="employmentType">
    {{ employmentType }}
@@ -228,7 +225,7 @@ async function submit_edit_staff() {
       </div>
       <div class="space-y-2">
         <label class="text-sm font-medium">Per hour Rate </label>
-        <div class="rounded-md border border-border   flex items-center px-3 py-2 space-x-2 outline-none">
+        <div class="rounded-2xl border border-border   flex items-center px-3 py-2 space-x-2 outline-none">
           <span>
  $
           </span>
@@ -249,7 +246,7 @@ async function submit_edit_staff() {
    <!-- Role -->
          <div class="space-y-2">
       <label class="text-sm font-medium">Role</label>
-      <select v-model="edit_staff_form.role" class="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+      <select v-model="edit_staff_form.role" class="w-full px-3 py-2 rounded-2xl border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
        <option selected disabled>{{ props.edit_staff.role }}</option>
         <option v-for="role in ROLES" :key="role"  :value="role">
    {{ role }}
@@ -267,7 +264,7 @@ async function submit_edit_staff() {
               @click="add_availability_day(day as WeekDay)" 
               type="button"
               :class="[
-                'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                'px-3 py-1.5 rounded-2xl text-sm font-medium transition-colors',
                 isDaySelected(day as WeekDay) 
                   ? 'bg-primary text-primary-foreground' 
                   : 'bg-muted text-muted-foreground hover:bg-muted/80'
@@ -281,14 +278,14 @@ async function submit_edit_staff() {
 
   <!-- Footer -->
   <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end mt-8 pt-6 border-t">
-    <button type="button" :disabled="isLoading" v-on:click="emit('close_modal')" class="px-4 py-2 rounded-md border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+    <button type="button" :disabled="isLoading" v-on:click="emit('close_modal')" class="px-4 py-2 rounded-2xl border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
       Cancel
     </button>
-    <button v-if="!isLoading" type="submit" class="w-34 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+    <button v-if="!isLoading" type="submit" class="w-34 px-4 py-2 rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
       Save Changes
     </button>
 
-    <div v-if="isLoading" class="w-34 flex justify-center items-center px-4 py-2 rounded-md bg-primary text-primary-foreground transition-colors">
+    <div v-if="isLoading" class="w-34 flex justify-center items-center px-4 py-2 rounded-2xl bg-primary text-primary-foreground transition-colors">
       <i class="pi pi-spinner animate-spin"></i>
     </div>
   </div>

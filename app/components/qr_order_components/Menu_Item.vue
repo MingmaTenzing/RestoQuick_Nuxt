@@ -17,8 +17,6 @@ const { add_to_cart, remove_from_cart, cart_items } = useOrderCart();
 const special_instruction  = ref('')
 
 function add_item_to_cart() {
-    console.log(props.menu_item)
-
     const order_cart_item: Order_Cart_Item = {
         itemName: props.menu_item.name,
         quantity: 1, 
@@ -26,7 +24,7 @@ function add_item_to_cart() {
         menuItemId: props.menu_item.id,
         specialInstructions: special_instruction.value,
         image_url: props.menu_item.imageUrl,
-        // selected_options: props.menu_item.options        
+        selected_options: [],
     }
 
     add_to_cart(order_cart_item)
@@ -45,7 +43,7 @@ function add_item_to_cart() {
 
 
      <div class=" border flex p-4 gap-2  rounded-lg">
-                <NuxtImg  :src="menu_item?.imageUrl!" width="200" height="200" class="rounded-lg w-[100px] h-[100px] object-cover"/>
+                <NuxtImg  :src="menu_item?.imageUrl!" width="200" height="200" class="rounded-lg w-25 h-25 object-cover"/>
 
                 <div class="space-y-2 w-full">
                     <div class=" flex justify-between items-center">

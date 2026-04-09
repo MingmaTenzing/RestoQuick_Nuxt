@@ -49,7 +49,7 @@ const emptyStateCopy = computed(() => props.serviceLabel
 </script>
 
 <template>
-    <aside class="w-90 h-[95vh]">
+    <aside class="h-full min-h-0 w-90 max-w-full shrink-0 self-stretch">
         <section class="flex h-full min-h-0 flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
             <div class="border-b border-border p-4">
                 <div class="flex items-start justify-between gap-4">
@@ -64,12 +64,12 @@ const emptyStateCopy = computed(() => props.serviceLabel
                                 v-model="customerName"
                                 type="text"
                                 placeholder="Customer name"
-                                class="w-full mt-1 rounded-lg border border-border bg-card p-2 text-sm"
+                                class="w-full mt-1 rounded-3xl border border-border bg-card p-2 text-sm"
                             />
                         </div>
                     </div>
 
-                    <span class="rounded-full bg-accent px-3 py-1 text-sm font-medium text-foreground">
+                    <span class="inline-flex shrink-0 items-center whitespace-nowrap rounded-full bg-accent px-3 py-1 text-sm font-medium text-foreground">
                         {{ totalItems }} items
                     </span>
                 </div>
@@ -88,9 +88,9 @@ const emptyStateCopy = computed(() => props.serviceLabel
                                 :src="item.image_url"
                                 width="96"
                                 height="96"
-                                class="h-16 w-16 rounded-xl object-cover"
+                                class="h-16 w-16 rounded-3xl object-cover"
                             />
-                            <div v-else class="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-accent text-[11px] text-muted-foreground">
+                            <div v-else class="flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl bg-accent text-[11px] text-muted-foreground">
                                 No image
                             </div>
     
