@@ -5,6 +5,7 @@ export type TableGetPayloadWithSession = TableGetPayload<{
     sessions: {
       select: {
         id: true;
+        openedAt: true;
       };
     };
   };

@@ -12,9 +12,30 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  const activeTableSession = await prisma.tableSession.findFirst({
+    where: {
+      tableId: data.tableId,
+      status: "ACTIVE",
+    },
+    select: {
+      id: true,
+    },
+    orderBy: {
+      openedAt: "desc",
+    },
+  });
+
+  if (!activeTableSession) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "No active session found for this table",
+    });
+  }
+
   const order = await prisma.order.create({
     data: {
       ...data,
+      tableSessionId: activeTableSession.id,
       orderType: "DINING",
       paymentStatus: "UNPAID",
       paymentMethod: null,
@@ -33,6 +54,7 @@ export default defineEventHandler(async (event) => {
         },
       },
       table: true,
+      tableSession: true,
     },
   });
 

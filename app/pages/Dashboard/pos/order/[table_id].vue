@@ -100,7 +100,7 @@ const submitOrder = async (payload?: { customerName?: string }) => {
             ? (payload?.customerName && payload.customerName.trim() !== '' ? payload.customerName.trim() : 'Takeaway')
             : 'Walk_in'
 
-        await $fetch(endpoint, {
+        const created_order = await $fetch(endpoint, {
             method: 'POST',
             body: {
                 data: {
@@ -115,6 +115,8 @@ const submitOrder = async (payload?: { customerName?: string }) => {
         })
 
         empty_cart()
+
+        console.log(created_order)
 
         toast.success({
             title: isTakeawayOrder.value ? 'Takeaway order sent to kitchen' : 'Order sent to kitchen',

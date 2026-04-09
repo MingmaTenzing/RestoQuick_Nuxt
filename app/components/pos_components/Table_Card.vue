@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { Table } from '~/generated/prisma/client'
+import type { TableGetPayloadWithSession } from '~~/types/table_include_session'
 
 defineProps<{
-    table: Table
+    table: TableGetPayloadWithSession
     isActive?: boolean
 }>()
 </script>
@@ -19,15 +19,19 @@ defineProps<{
 
             <div class="space-y-2">
                 <h2 class="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">{{ table.number }}</h2>
-                <p class="text-sm text-muted-foreground">{{ isActive ? 'This table currently has an active session.' :
-                    'Ready for a new dining order.' }}</p>
+                <div v-if="isActive && table.sessions[0]" class="space-y-1 text-sm text-muted-foreground">
+                    <p>This table currently has an active session.</p>
+
+                </div>
+                <p v-else class="text-sm text-muted-foreground">Ready for a new dining order.</p>
             </div>
         </div>
 
         <div class="flex items-center justify-between gap-3 border-t px-5 py-4 md:px-6"
             :class="isActive ? 'border-green-500/20 bg-green-500/5' : 'border-border bg-accent/30'">
             <div>
-                <p class="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">{{ isActive ? 'Status' :
+                <p class="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">{{ isActive ? 'Session'
+                    :
                     'Capacity' }}</p>
                 <p class="mt-1 text-sm font-medium text-foreground">{{ isActive ? 'Occupied' : 'Seats available' }}</p>
             </div>
@@ -36,7 +40,10 @@ defineProps<{
                 :class="isActive ? 'text-green-700' : 'text-foreground'">
                 <i
                     :class="isActive ? 'pi pi-circle-fill text-[10px] text-green-500' : 'pi pi-users text-xs text-muted-foreground'"></i>
-                <span>{{ isActive ? 'Active' : table.capacity }}</span>
+                <span v-if="isActive && table.sessions[0]">
+                    <NuxtTime :datetime="new Date(table.sessions[0].openedAt).getTime()" relative />
+                </span>
+                <span v-else>{{ table.capacity }}</span>
             </div>
         </div>
     </div>
