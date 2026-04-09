@@ -204,16 +204,16 @@ const signatureNotes = [
   <div class="bg-background text-foreground">
     <main>
       <NavBar />
-      <section id="main" class="relative isolate overflow-hidden px-6 pt-24 pb-24 sm:pt-40 sm:pb-32">
+      <section id="main" class="group relative isolate overflow-hidden px-6 pt-24 pb-24 sm:pt-40 sm:pb-32">
         <div class="absolute inset-0 -z-30 bg-background"></div>
 
         <!-- Professional subtle dot pattern that fades out -->
         <div
-          class="absolute inset-0 -z-20 h-[800px] bg-[radial-gradient(circle_at_center,rgba(156,163,175,0.3)_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_80%_70%_at_50%_0%,#000_20%,transparent_100%)]">
+          class="absolute inset-0 -z-20 h-[800px] bg-[radial-gradient(circle_at_center,rgba(156,163,175,0.4)_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_80%_70%_at_50%_0%,#000_20%,transparent_100%)] transition-transform duration-1000 ease-out group-hover:scale-[1.02]">
         </div>
         <!-- Top atmospheric dark green glow -->
         <div
-          class="absolute inset-x-0 top-0 -z-20 h-[800px] bg-[radial-gradient(circle_at_top,rgba(34,197,94,0.06),transparent_50%)]">
+          class="absolute inset-x-0 top-0 -z-20 h-[800px] bg-[radial-gradient(circle_at_top,rgba(34,197,94,0.15),transparent_60%)]">
         </div>
 
         <div class="mx-auto max-w-5xl text-center">
