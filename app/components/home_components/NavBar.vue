@@ -49,43 +49,33 @@ onUnmounted(() => {
 
 <template>
   <header class="sticky top-0 z-50">
-    <nav
-      class="flex w-full items-center justify-between px-4 py-3 transition duration-300 sm:px-6"
-      :class="navClasses"
-      aria-label="Primary"
-    >
+    <nav class="flex w-full items-center justify-between px-4 py-3 transition duration-300 sm:px-6" :class="navClasses"
+      aria-label="Primary">
       <NuxtLink to="/" class="flex items-center px-2 py-1.5">
-        <img :src="logoUrl" alt="RestoQuick" class="h-10 w-auto transition sm:h-11" :class="logoClasses">
+        <img :src="logoUrl" alt="RestoQuick" class="h-10 w-auto transition sm:h-11 invert" :class="logoClasses">
       </NuxtLink>
 
       <div class="hidden items-center gap-2 lg:flex">
-        <a
-          v-for="link in links"
-          :key="link.label"
-          :href="link.href"
-          class="px-4 py-2.5 text-sm font-medium transition duration-200"
-          :class="navItemClasses"
-        >
+        <a v-for="link in links" :key="link.label" :href="link.href"
+          class="px-4 py-2.5 text-sm font-medium transition duration-200" :class="navItemClasses">
           {{ link.label }}
         </a>
       </div>
 
-      <div class="flex items-center gap-2 sm:gap-3">
-        <button
-          type="button"
-          class="inline-flex items-center justify-center p-2 transition duration-200"
-          :class="actionClasses"
-          :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-          @click="toggleColorMode"
-        >
-          <i :class="isDark ? 'pi pi-sun' : 'pi pi-moon'"></i>
-        </button>
+      <div class="flex items-center gap-4 sm:gap-5">
+        <Show when="signed-out">
+          <div class="flex items-center gap-3">
+            <SignInButton />
+            <SignUpButton />
+          </div>
+        </Show>
+        <Show when="signed-in">
+          <UserButton />
+        </Show>
 
-        <NuxtLink
-          to="/dashboard"
+        <NuxtLink to="/dashboard"
           class="inline-flex items-center rounded-2xl px-5 py-2.5 text-sm font-semibold shadow-sm transition"
-          :class="ctaClasses"
-        >
+          :class="ctaClasses">
           <span class="hidden sm:inline">View Dashboard</span>
         </NuxtLink>
       </div>

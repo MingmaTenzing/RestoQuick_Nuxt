@@ -198,191 +198,55 @@ const signatureNotes = [
     value: 'Sharper business decisions without adding visual noise to the team.',
   },
 ];
-
-const heroMetrics = [
-  {
-    label: 'Calls covered',
-    value: '24/7',
-    detail: 'Maya keeps reservation demand moving without pulling staff off the floor.',
-  },
-  {
-    label: 'Core workflows',
-    value: '5',
-    detail: 'Bookings, kitchen, staffing, stock, and reporting stay connected.',
-  },
-  {
-    label: 'Setup feel',
-    value: 'Calm',
-    detail: 'A cleaner operating layer that feels clear even during peak service.',
-  },
-];
-
-const heroTimeline = [
-  {
-    title: 'Booking request captured',
-    meta: 'Maya confirms time, party size, and notes instantly.',
-  },
-  {
-    title: 'Kitchen and floor stay aligned',
-    meta: 'Orders and tables update from the same operational view.',
-  },
-  {
-    title: 'Managers see what needs attention',
-    meta: 'Live visibility across staffing, stock, and service pressure.',
-  },
-];
 </script>
 
 <template>
   <div class="bg-background text-foreground">
-    <header>
-
-      <Show when="signed-out">
-        <SignInButton />
-        <SignUpButton />
-      </Show>
-      <Show when="signed-in">
-        <UserButton />
-      </Show>
-    </header>
-
     <main>
       <NavBar />
-      <section id="main" class="relative isolate overflow-hidden px-6 pb-24 pt-12 sm:pb-32 sm:pt-20">
+      <section id="main" class="relative isolate overflow-hidden px-6 pt-24 pb-24 sm:pt-40 sm:pb-32">
         <div class="absolute inset-0 -z-30 bg-background"></div>
+
+        <!-- Professional subtle dot pattern that fades out -->
         <div
-          class="absolute inset-x-0 top-0 -z-20 h-136 bg-[radial-gradient(circle_at_top,rgba(34,197,94,0.12),transparent_42%)]">
+          class="absolute inset-0 -z-20 h-[800px] bg-[radial-gradient(circle_at_center,rgba(156,163,175,0.3)_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_80%_70%_at_50%_0%,#000_20%,transparent_100%)]">
         </div>
+        <!-- Top atmospheric dark green glow -->
         <div
-          class="absolute left-1/2 top-24 -z-10 h-72 w-[min(72rem,92vw)] -translate-x-1/2 rounded-full bg-accent/70 blur-3xl">
+          class="absolute inset-x-0 top-0 -z-20 h-[800px] bg-[radial-gradient(circle_at_top,rgba(34,197,94,0.06),transparent_50%)]">
         </div>
-        <div class="absolute inset-x-6 top-28 -z-10 mx-auto h-px max-w-7xl bg-border/80"></div>
 
-        <div class="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-2 lg:gap-20">
-          <div class="relative z-10 max-w-3xl">
-            <div
-              class="inline-flex items-center gap-3 rounded-full border border-border bg-background/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground backdrop-blur">
-              <span class="inline-block h-2 w-2 rounded-full bg-green-600 dark:bg-green-400"></span>
-              AI-powered operations platform
-            </div>
+        <div class="mx-auto max-w-5xl text-center">
+          <h1
+            class="mt-10 text-5xl font-semibold tracking-[-0.05em] text-foreground sm:text-7xl lg:text-[5.5rem] lg:leading-[0.95]">
+            Run your venue with absolute precision.
+          </h1>
 
-            <h1
-              class="mt-8 max-w-4xl text-5xl font-semibold tracking-[-0.07em] text-foreground sm:text-6xl lg:text-[5.4rem] lg:leading-[0.92]">
-              Hospitality software that feels as calm as it looks.
-            </h1>
+          <p class="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
+            Replace scattered tools with one cohesive operating layer. Handle bookings, kitchen flow, staffing, and
+            inventory management in a system actually designed for the rush.
+          </p>
 
-            <p class="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
-              RestoQuick replaces fragmented tools with one sleek operating layer for bookings, kitchen flow, staffing,
-              inventory, and reporting.
-            </p>
-
-            <p class="mt-8 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              BOOKINGS / KITCHEN / TEAM / INVENTORY / REPORTING
-            </p>
-
-            <div class="mt-10 flex flex-wrap items-center gap-4 sm:gap-6">
-              <NuxtLink to="/dashboard"
-                class="inline-flex items-center justify-center rounded-full bg-green-600 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-green-700">
-                Get Started
-              </NuxtLink>
-              <a href="#demo"
-                class="inline-flex items-center text-sm font-medium text-foreground underline underline-offset-4 transition hover:text-green-700 dark:hover:text-green-400">
-                Watch Demo
-              </a>
-            </div>
-
-            <div class="mt-14 grid gap-8 border-t border-border pt-8 sm:grid-cols-3">
-              <div v-for="item in signatureNotes" :key="item.label">
-                <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">{{ item.label }}
-                </p>
-                <p class="mt-2 text-sm leading-7 text-foreground/80 dark:text-foreground/75">{{ item.value }}</p>
-              </div>
-            </div>
+          <div class="mt-12 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+            <NuxtLink to="/dashboard"
+              class="inline-flex h-12 items-center justify-center rounded-full bg-foreground px-8 text-sm font-semibold tracking-[0.02em] text-background transition-transform hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-foreground/5">
+              Start Operating
+            </NuxtLink>
+            <a href="#overview"
+              class="inline-flex h-12 items-center justify-center rounded-full border border-border bg-card/50 px-8 text-sm font-semibold tracking-[0.02em] text-foreground backdrop-blur-md transition-colors hover:bg-accent/50">
+              Explore the system
+            </a>
           </div>
+        </div>
 
-          <div id="demo" class="relative z-10">
-            <div
-              class="relative overflow-hidden rounded-4xl border border-border bg-card/85 p-4 shadow-2xl backdrop-blur-xl sm:p-6">
-              <div class="absolute inset-x-8 top-0 h-px bg-border/70"></div>
-              <div
-                class="absolute right-10 top-10 h-28 w-28 rounded-full bg-green-600/12 blur-2xl dark:bg-green-400/10">
-              </div>
-
-              <div class="rounded-3xl border border-border bg-background/85 p-5 sm:p-6">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">Live operator
-                      view</p>
-                    <p class="mt-2 text-lg font-semibold tracking-[-0.03em] text-foreground">One control layer for the
-                      whole venue</p>
-                  </div>
-                  <div
-                    class="rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-                    Updated in real time
-                  </div>
-                </div>
-
-                <div class="mt-6 grid gap-4 sm:grid-cols-3">
-                  <div v-for="metric in heroMetrics" :key="metric.label"
-                    class="rounded-3xl border border-border bg-card p-4">
-                    <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">{{
-                      metric.label }}</p>
-                    <p class="mt-3 text-3xl font-semibold tracking-[-0.05em] text-foreground">{{ metric.value }}</p>
-                    <p class="mt-2 text-sm leading-6 text-muted-foreground">{{ metric.detail }}</p>
-                  </div>
-                </div>
-
-                <div class="mt-6 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-                  <div class="rounded-3xl border border-border bg-card p-5">
-                    <div class="flex items-center justify-between gap-3">
-                      <p class="text-sm font-semibold text-foreground">Service timeline</p>
-                      <span class="text-xs font-medium text-muted-foreground">Always connected</span>
-                    </div>
-
-                    <div class="mt-5 space-y-4">
-                      <div v-for="(step, index) in heroTimeline" :key="step.title" class="flex gap-4">
-                        <div class="flex flex-col items-center">
-                          <div
-                            class="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-xs font-semibold text-foreground">
-                            {{ index + 1 }}</div>
-                          <div v-if="index < heroTimeline.length - 1" class="mt-2 h-full w-px bg-border"></div>
-                        </div>
-                        <div class="pb-4">
-                          <p class="text-sm font-semibold text-foreground">{{ step.title }}</p>
-                          <p class="mt-1 text-sm leading-6 text-muted-foreground">{{ step.meta }}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="rounded-3xl border border-border bg-card p-5">
-                    <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">Why it fits
-                      growing venues</p>
-                    <p class="mt-3 text-sm leading-7 text-foreground/85 dark:text-foreground/80">
-                      Designed for operators who need one calm system across bookings, service, staffing, stock, and the
-                      day-to-day decisions that keep service moving.
-                    </p>
-
-                    <div class="mt-6 space-y-3">
-                      <div
-                        class="flex items-center justify-between rounded-2xl border border-border bg-background/80 px-4 py-3">
-                        <span class="text-sm text-muted-foreground">Reservations captured</span>
-                        <span class="text-sm font-semibold text-foreground">Without missed calls</span>
-                      </div>
-                      <div
-                        class="flex items-center justify-between rounded-2xl border border-border bg-background/80 px-4 py-3">
-                        <span class="text-sm text-muted-foreground">Team coordination</span>
-                        <span class="text-sm font-semibold text-foreground">One shared view</span>
-                      </div>
-                      <div
-                        class="flex items-center justify-between rounded-2xl border border-border bg-background/80 px-4 py-3">
-                        <span class="text-sm text-muted-foreground">Manager decisions</span>
-                        <span class="text-sm font-semibold text-foreground">Live visibility</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <div class="mx-auto max-w-6xl mt-24">
+          <div
+            class="grid grid-cols-1 divide-y divide-border border border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0 rounded-4xl bg-card/40 backdrop-blur-sm shadow-2xl shadow-green-900/5 overflow-hidden">
+            <div v-for="item in signatureNotes" :key="item.label"
+              class="p-10 sm:p-12 transition-colors hover:bg-accent/40">
+              <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-green-600 dark:text-green-500">{{
+                item.label }}</p>
+              <p class="mt-4 text-base font-medium leading-relaxed text-foreground/90">{{ item.value }}</p>
             </div>
           </div>
         </div>
@@ -407,14 +271,16 @@ const heroTimeline = [
               </p>
             </div>
 
-            <div class="mt-16 grid gap-14 lg:grid-cols-3">
-              <article v-for="card in overviewCards" :key="card.title">
-                <div class="overflow-hidden">
+            <div class="mt-20 grid gap-16 lg:grid-cols-3">
+              <article v-for="card in overviewCards" :key="card.title" class="flex flex-col">
+                <div class="overflow-hidden rounded-2xl ring-1 ring-border/50">
                   <img :src="card.image" :alt="card.alt"
-                    class="h-56 w-full object-cover transition duration-500 hover:scale-[1.03]">
+                    class="h-64 w-full object-cover object-top transition duration-700 hover:scale-[1.03]">
                 </div>
-                <h3 class="mt-6 text-xl font-semibold tracking-[-0.03em] text-foreground">{{ card.title }}</h3>
-                <p class="mt-3 text-sm leading-7 text-muted-foreground sm:text-base">{{ card.description }}</p>
+                <div class="mt-8">
+                  <h3 class="text-2xl font-semibold tracking-[-0.04em] text-foreground">{{ card.title }}</h3>
+                  <p class="mt-4 text-base font-medium leading-relaxed text-muted-foreground">{{ card.description }}</p>
+                </div>
               </article>
             </div>
           </div>
@@ -535,13 +401,12 @@ const heroTimeline = [
               </h2>
             </div>
 
-            <div class="mt-14 grid gap-6 lg:grid-cols-3">
-              <article v-for="item in testimonials" :key="item.name"
-                class="rounded-[30px] border border-border bg-card p-8">
-                <p class="text-lg leading-8 tracking-[-0.02em] text-card-foreground">“{{ item.quote }}”</p>
-                <div class="mt-8 border-t border-border pt-6">
-                  <p class="text-sm font-semibold text-card-foreground">{{ item.name }}</p>
-                  <p class="mt-1 text-sm text-muted-foreground">{{ item.title }}</p>
+            <div class="mt-20 grid gap-12 lg:grid-cols-3 lg:gap-8">
+              <article v-for="item in testimonials" :key="item.name" class="flex flex-col justify-between">
+                <p class="text-xl leading-relaxed tracking-[-0.02em] text-foreground">“{{ item.quote }}”</p>
+                <div class="mt-8 pt-6">
+                  <p class="text-sm font-bold text-foreground uppercase tracking-[0.05em]">{{ item.name }}</p>
+                  <p class="mt-1.5 text-sm text-muted-foreground">{{ item.title }}</p>
                 </div>
               </article>
             </div>
@@ -564,36 +429,36 @@ const heroTimeline = [
               </h2>
             </div>
 
-            <div class="mt-16 grid lg:grid-cols-3">
+            <div class="mt-20 grid gap-12 lg:grid-cols-3 lg:gap-8">
               <article v-for="plan in pricingPlans" :key="plan.name"
-                class="relative py-8 lg:px-8 lg:first:pl-0 lg:last:pr-0"
-                :class="{ 'lg:border-x lg:border-border': plan.featured }">
-                <div v-if="plan.featured"
-                  class="mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-green-600 dark:text-green-400">
-                  Recommended
+                class="flex flex-col border-t border-border pt-8 pl-0">
+                <div class="flex items-center gap-3">
+                  <p class="text-xs font-bold uppercase tracking-[0.25em] text-foreground">{{ plan.name }}</p>
+                  <span v-if="plan.featured"
+                    class="rounded-full bg-green-500/10 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-green-600 dark:text-green-500">
+                    Recommended
+                  </span>
                 </div>
-                <p class="text-sm font-semibold uppercase tracking-[0.22em] text-muted-foreground">{{ plan.name }}</p>
-                <div class="mt-6 flex items-end gap-2">
-                  <p v-if="plan.oldPrice" class="pb-1 text-sm text-muted-foreground line-through">{{ plan.oldPrice }}
-                  </p>
-                  <p class="text-4xl font-semibold tracking-[-0.05em]"
-                    :class="plan.featured ? 'text-foreground' : 'text-muted-foreground line-through'">{{ plan.price }}
-                  </p>
-                  <p v-if="plan.price !== 'Custom'" class="pb-1 text-sm text-muted-foreground">/ month</p>
+                <div class="mt-6 flex items-baseline gap-2">
+                  <p v-if="plan.oldPrice" class="pb-1 text-sm font-medium text-muted-foreground line-through">{{
+                    plan.oldPrice }}</p>
+                  <p class="text-5xl font-semibold tracking-[-0.05em] text-foreground">{{ plan.price }}</p>
+                  <p v-if="plan.price !== 'Custom'" class="pb-1.5 text-sm font-medium text-muted-foreground">/ month</p>
                 </div>
-                <p class="mt-4 text-sm leading-7 text-muted-foreground">{{ plan.note }}</p>
+                <p class="mt-6 text-sm font-medium leading-relaxed text-muted-foreground">{{ plan.note }}</p>
 
-                <ul class="mt-8 space-y-3">
+                <ul class="mt-8 space-y-4 flex-grow">
                   <li v-for="feature in plan.features" :key="feature"
-                    class="flex items-start gap-3 text-sm leading-7 text-muted-foreground">
-                    <span class="mt-2 h-2 w-2 shrink-0 rounded-full bg-green-600 dark:bg-green-400"></span>
+                    class="flex items-center gap-3 text-sm font-medium text-foreground/80">
+                    <span class="h-[3px] w-[3px] shrink-0 rounded-full bg-green-600 dark:bg-green-500"></span>
                     <span>{{ feature }}</span>
                   </li>
                 </ul>
 
-                <NuxtLink to="/dashboard" class="mt-8 inline-flex items-center text-sm font-semibold transition"
-                  :class="plan.featured ? 'bg-green-600 px-5 py-2.5 text-white hover:bg-green-700' : 'text-muted-foreground underline underline-offset-4 hover:text-foreground'">
-                  Get Started
+                <NuxtLink to="/dashboard"
+                  class="mt-12 inline-flex h-12 w-full items-center justify-center rounded-full text-sm font-semibold tracking-[0.02em] transition-transform"
+                  :class="plan.featured ? 'bg-foreground text-background shadow-xl shadow-foreground/5 hover:scale-[1.02] active:scale-[1] ' : 'border border-border bg-transparent text-foreground hover:bg-accent/50'">
+                  Start Operating
                 </NuxtLink>
               </article>
             </div>
