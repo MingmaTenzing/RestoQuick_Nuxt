@@ -149,7 +149,7 @@ const add_item_with_options = () => {
                     <h4 class="mt-1 text-xl font-semibold text-foreground">{{ item.name }} options</h4>
                 </div>
                 <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-accent hover:text-foreground" @click="show_menu_options = false">
-                    <i class="pi pi-times text-sm"></i>
+                    <span class="text-sm font-medium leading-none">x</span>
                 </button>
             </div>
 

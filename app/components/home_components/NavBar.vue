@@ -3,7 +3,6 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import logoUrl from '~/assets/images/RestoQuick.png';
 
 const colorMode = useColorMode();
-const route = useRoute();
 const scrolled = ref(false);
 
 const links = [
