@@ -6,6 +6,10 @@ const runtimeConfig = useRuntimeConfig()
 const publicKey = runtimeConfig.public.VAPI_PUBLIC_KEY
 const assistantId = runtimeConfig.public.VAPI_ASSISTANT_KEY
 
+const props = defineProps<{
+  variant?: 'full' | 'button-only'
+}>()
+
 const isCalling = ref(false)
 const isLoading = ref(false)
 let vapi: Vapi | null = null
@@ -16,6 +20,7 @@ onMounted(() => {
 
     vapi.on('call-start', () => {
       isCalling.value = true
+      isLoading.value = false
     })
 
     vapi.on('call-end', () => {
@@ -64,7 +69,32 @@ async function endCall() {
 </script>
 
 <template>
-  <div class="overflow-hidden rounded-4xl border border-border bg-card shadow-sm">
+  <template v-if="variant === 'button-only'">
+    <div class="relative flex items-center justify-center min-w-[200px] transition-all duration-300">
+      <button
+        @click="isCalling ? endCall() : startCall()"
+        :disabled="isLoading"
+        class="inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-full border px-8 text-sm font-semibold tracking-[0.02em] backdrop-blur-md transition-all duration-300 overflow-hidden shadow-xs"
+        :class="[
+          isCalling 
+            ? 'bg-destructive/10 border-destructive/30 text-destructive hover:bg-destructive/20 hover:border-destructive/40' 
+            : isLoading
+              ? 'bg-card/50 text-muted-foreground border-border cursor-not-allowed opacity-70'
+              : 'bg-card/50 text-foreground border-border hover:bg-accent/60'
+        ]"
+      >
+        <span v-if="isCalling" class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-destructive"></span>
+        </span>
+        <i v-else class="pi" :class="isLoading ? 'pi-spinner pi-spin' : 'pi-microphone'"></i>
+        
+        <span>{{ isCalling ? 'End Call (Live)' : isLoading ? 'Connecting...' : 'Call Maya (AI)' }}</span>
+      </button>
+    </div>
+  </template>
+
+  <div v-else class="overflow-hidden rounded-4xl border border-border bg-card shadow-sm">
     <div class="relative border-b border-border px-6 py-10 sm:px-8 sm:py-12">
       <div
         aria-hidden="true"
@@ -121,5 +151,4 @@ async function endCall() {
       </div>
     </div>
   </div>
-
 </template>
