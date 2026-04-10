@@ -235,7 +235,8 @@ const signatureNotes = [
         </div>
 
         <div class="mx-auto max-w-5xl text-center flex flex-col items-center">
-          <p class="inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-sm font-medium text-green-700 dark:text-green-400 mb-6">
+          <p
+            class="inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-sm font-medium text-green-700 dark:text-green-400 mb-6">
             <span class="flex h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
             AI voice assistant & roster management
           </p>
