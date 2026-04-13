@@ -27,8 +27,8 @@ const searchFilteredTables = computed(() => {
     })
 })
 
-function openTableCheckout(tableId: string) {
-    router.push(`/dashboard/cashier/${tableId}`)
+function openTableCheckout(table_session_id: string) {
+    router.push(`/dashboard/cashier/checkout/${table_session_id}`)
 }
 
 function hasActiveSession(table: TableGetPayloadWithSession) {
@@ -87,7 +87,8 @@ function hasActiveSession(table: TableGetPayloadWithSession) {
             <button v-for="table in searchFilteredTables" :key="table.id" type="button"
                 class="block h-full text-left transition-transform"
                 :class="hasActiveSession(table) ? 'hover:-translate-y-0.5 cursor-pointer' : 'cursor-not-allowed opacity-80'"
-                :disabled="!hasActiveSession(table)" @click="hasActiveSession(table) && openTableCheckout(table.id)">
+                :disabled="!hasActiveSession(table)"
+                @click="hasActiveSession(table) && openTableCheckout(table.sessions[0]?.id!)">
                 <Table_Card :table="table" :is-active="table.sessions.length > 0" />
             </button>
         </section>
