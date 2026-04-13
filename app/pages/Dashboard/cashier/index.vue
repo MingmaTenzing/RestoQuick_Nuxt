@@ -1,0 +1,110 @@
+<script setup lang="ts">
+definePageMeta({
+    layout: 'dashboard-layout'
+})
+
+import { computed, ref } from 'vue'
+import type { TableGetPayloadWithSession } from '~~/types/table_include_session'
+import Table_Card from '~/components/pos_components/Table_Card.vue'
+
+
+const router = useRouter()
+
+const searchQuery = ref('')
+
+const { data: tables, pending: tablesPending } = await useFetch<TableGetPayloadWithSession[]>('/api/tables')
+
+const searchFilteredTables = computed(() => {
+    const allTables = tables.value ?? []
+    const normalizedQuery = searchQuery.value.trim().toLowerCase()
+
+    if (!normalizedQuery) {
+        return allTables
+    }
+
+    return allTables.filter((table) => {
+        return table.number.toLowerCase().includes(normalizedQuery) || String(table.capacity).includes(normalizedQuery)
+    })
+})
+
+function openTableCheckout(tableId: string) {
+    router.push(`/dashboard/cashier/${tableId}`)
+}
+
+function hasActiveSession(table: TableGetPayloadWithSession) {
+    return table.sessions.length > 0
+}
+
+
+</script>
+
+<template>
+    <main class="space-y-8">
+        <section class="rounded-4xl border border-border bg-card p-6 shadow-sm md:p-8">
+            <div class="max-w-3xl space-y-4">
+                <p class="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Cashier</p>
+                <h1 class="text-2xl font-semibold text-foreground md:text-4xl">Choose a table</h1>
+                <p class="text-sm leading-6 text-muted-foreground md:text-base">
+                    Select a dining table to open its checkout page. Tables with active sessions already show a green
+                    border.
+                </p>
+            </div>
+        </section>
+
+        <section class="rounded-4xl border border-border bg-card p-5 shadow-sm md:p-6">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                    <p class="text-sm font-medium text-foreground">Table overview</p>
+                    <p class="mt-1 text-sm text-muted-foreground">Browse the floor and open the table checkout you need.
+                    </p>
+                </div>
+
+                <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+                    <label class="relative block w-full max-w-md">
+                        <span
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-muted-foreground">
+                            <i class="pi pi-search text-sm"></i>
+                        </span>
+                        <input v-model="searchQuery" type="search" placeholder="Search by table number or capacity"
+                            class="h-12 w-full rounded-2xl border border-border bg-background pl-11 pr-4 text-sm text-foreground outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20">
+                    </label>
+
+                    <div class="inline-flex items-center gap-2 rounded-2xl bg-accent px-3 py-2 text-sm text-foreground">
+                        <i class="pi pi-th-large text-xs"></i>
+                        <span>{{ searchFilteredTables.length }} of {{ tables?.length ?? 0 }} tables</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section v-if="tablesPending" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div v-for="index in 8" :key="index" class="h-56 animate-pulse rounded-4xl border border-border bg-card">
+            </div>
+        </section>
+
+        <section v-else-if="searchFilteredTables.length"
+            class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <button v-for="table in searchFilteredTables" :key="table.id" type="button"
+                class="block h-full text-left transition-transform"
+                :class="hasActiveSession(table) ? 'hover:-translate-y-0.5 cursor-pointer' : 'cursor-not-allowed opacity-80'"
+                :disabled="!hasActiveSession(table)" @click="hasActiveSession(table) && openTableCheckout(table.id)">
+                <Table_Card :table="table" :is-active="table.sessions.length > 0" />
+            </button>
+        </section>
+
+        <section v-else-if="tables?.length"
+            class="rounded-4xl border border-dashed border-border bg-card px-6 py-14 text-center shadow-sm">
+            <h2 class="text-xl font-semibold text-foreground">No matching tables</h2>
+            <p class="mt-2 text-sm leading-6 text-muted-foreground">
+                Try another table number or search by seat capacity.
+            </p>
+        </section>
+
+        <section v-else class="rounded-4xl border border-dashed border-border bg-card px-6 py-14 text-center shadow-sm">
+            <h2 class="text-xl font-semibold text-foreground">No tables available</h2>
+            <p class="mt-2 text-sm leading-6 text-muted-foreground">
+                Add your tables first before starting a checkout.
+            </p>
+        </section>
+    </main>
+</template>

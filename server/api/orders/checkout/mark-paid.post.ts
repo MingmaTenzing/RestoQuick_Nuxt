@@ -86,6 +86,11 @@ export default defineEventHandler(async (event) => {
       items: {
         include: {
           menuItem: true,
+          orderItemOptions: {
+            include: {
+              menuOption: true,
+            },
+          },
         },
       },
     },

@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  //returns the active session table with orders with the same session id.
   const tableSession = await prisma.tableSession.findFirst({
     where: {
       tableId,
@@ -17,6 +18,19 @@ export default defineEventHandler(async (event) => {
     include: {
       table: true,
       orders: {
+        include: {
+          table: true,
+          items: {
+            include: {
+              menuItem: true,
+              orderItemOptions: {
+                include: {
+                  menuOption: true,
+                },
+              },
+            },
+          },
+        },
         orderBy: {
           createdAt: "asc",
         },
