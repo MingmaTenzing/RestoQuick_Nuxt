@@ -27,6 +27,12 @@ const searchFilteredTables = computed(() => {
     })
 })
 
+const activeSessionCount = computed(() => {
+    const allTables = tables.value ?? []
+
+    return allTables.filter((table) => table.sessions.length > 0).length
+})
+
 function openTableCheckout(table_session_id: string) {
     router.push(`/dashboard/cashier/checkout/${table_session_id}`)
 }
@@ -40,14 +46,33 @@ function hasActiveSession(table: TableGetPayloadWithSession) {
 
 <template>
     <main class="space-y-8">
-        <section class="rounded-4xl border border-border bg-card p-6 shadow-sm md:p-8">
-            <div class="max-w-3xl space-y-4">
-                <p class="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Cashier</p>
-                <h1 class="text-2xl font-semibold text-foreground md:text-4xl">Choose a table</h1>
-                <p class="text-sm leading-6 text-muted-foreground md:text-base">
-                    Select a dining table to open its checkout page. Tables with active sessions already show a green
-                    border.
-                </p>
+        <section class="px-1 pt-2">
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div class="max-w-3xl space-y-4">
+                    <div class="inline-flex items-center gap-3">
+                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-foreground/80">Cashier</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h1 class="text-2xl font-semibold tracking-tight text-foreground md:text-4xl">
+                            Choose an active table session.
+                        </h1>
+
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3 lg:justify-end">
+                    <div
+                        class="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm text-foreground shadow-sm">
+                        <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+                        <span>{{ activeSessionCount }} active session{{ activeSessionCount !== 1 ? 's' : '' }}</span>
+                    </div>
+                    <div
+                        class="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm text-foreground">
+                        <i class="pi pi-th-large text-xs"></i>
+                        <span>{{ tables?.length ?? 0 }} table{{ (tables?.length ?? 0) !== 1 ? 's' : '' }}</span>
+                    </div>
+                </div>
             </div>
         </section>
 
