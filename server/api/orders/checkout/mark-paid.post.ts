@@ -65,6 +65,7 @@ export default defineEventHandler(async (event) => {
       },
       data: {
         paymentStatus: "PAID",
+        status: "COMPLETED", //marking the order as completed once it's paid
         paymentMethod,
         paidAt: paid_at,
       },

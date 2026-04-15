@@ -31,6 +31,9 @@ const allOrders = computed(() => session.value?.orders ?? []);
 const payableOrders = computed(() =>
     allOrders.value.filter((order) => order.paymentStatus === "UNPAID")
 );
+const sessionTotalCents = computed(() =>
+    allOrders.value.reduce((total, order) => total + order.totalAmountCents, 0)
+);
 const payableTotalCents = computed(() =>
     payableOrders.value.reduce((total, order) => total + order.totalAmountCents, 0)
 );
@@ -52,6 +55,10 @@ const canPay = computed(() => {
 
 function addQuickAmount(amount: number) {
     tenderedAmount.value = Number(((tenderedAmount.value ?? 0) + amount).toFixed(2));
+}
+
+function cleanupPrintMode() {
+    document.body.classList.remove("receipt-printing");
 }
 
 async function settle() {
@@ -80,9 +87,83 @@ async function settle() {
         isSubmitting.value = false;
     }
 }
+
+function printReceipt() {
+    document.body.classList.add("receipt-printing");
+    window.print();
+}
+
+onMounted(() => {
+    window.addEventListener("afterprint", cleanupPrintMode);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("afterprint", cleanupPrintMode);
+    cleanupPrintMode();
+});
 </script>
 
 <template>
+    <div v-if="session" class="receipt-print-area hidden print:block">
+        <div class="mx-auto w-[80mm] space-y-3 bg-white px-4 py-6 font-mono text-[11px] leading-[1.45] text-black">
+            <div class="text-center">
+                <p class="text-[13px] font-bold uppercase tracking-widest">RestoQuick</p>
+                <p class="text-[10px] text-black/60">Table Session Receipt</p>
+            </div>
+
+            <div class="space-y-1 border-y border-dashed border-black/30 py-2">
+                <div class="flex justify-between">
+                    <span>Table</span>
+                    <span class="font-semibold">{{ session.table.number }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Session</span>
+                    <span>{{ session.status }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Opened</span>
+                    <NuxtTime :datetime="session.openedAt" locale="en-AU" day="2-digit" month="short" year="numeric"
+                        hour="2-digit" minute="2-digit" />
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <template v-for="order in allOrders" :key="order.id">
+                    <div>
+                        <div class="flex justify-between font-semibold">
+                            <span>Order #{{ order.orderNo }}</span>
+                            <span>${{ (order.totalAmountCents / 100).toFixed(2) }}</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-black/60">
+                            <span>{{ order.customerName }}</span>
+                            <span>{{ order.paymentStatus }}</span>
+                        </div>
+                        <div v-for="item in order.items" :key="item.id" class="mt-1 pl-2">
+                            <div class="flex justify-between">
+                                <span>{{ item.quantity }}x {{ item.itemName }}</span>
+                                <span>${{ ((item.unitPriceCents * item.quantity) / 100).toFixed(2) }}</span>
+                            </div>
+                            <div v-for="option in item.orderItemOptions" :key="option.id" class="pl-3 text-black/60">
+                                + {{ option.quantity }}x {{ option.menuOption?.name ?? "Option" }}
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="space-y-1 border-y border-dashed border-black/30 py-2">
+                <div class="flex justify-between font-semibold">
+                    <span>Session total</span>
+                    <span>${{ (sessionTotalCents / 100).toFixed(2) }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Outstanding</span>
+                    <span>${{ (payableTotalCents / 100).toFixed(2) }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <main class="space-y-6 print:hidden">
         <div class="flex flex-wrap items-start justify-between gap-4">
             <div class="space-y-2">
@@ -109,6 +190,13 @@ async function settle() {
                     <span v-if="session.table.capacity"> · Capacity {{ session.table.capacity }}</span>
                 </p>
             </div>
+
+            <button v-if="session" type="button"
+                class="inline-flex items-center gap-2 rounded-2xl border border-border bg-secondary px-4 py-2.5 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-accent"
+                @click="printReceipt">
+                <i class="pi pi-print text-sm"></i>
+                Print receipt
+            </button>
         </div>
 
         <div v-if="pending" class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
@@ -295,3 +383,23 @@ async function settle() {
         </div>
     </main>
 </template>
+
+<style>
+@media print {
+    body.receipt-printing * {
+        visibility: hidden;
+    }
+
+    body.receipt-printing .receipt-print-area,
+    body.receipt-printing .receipt-print-area * {
+        visibility: visible;
+    }
+
+    body.receipt-printing .receipt-print-area {
+        position: absolute;
+        inset: 0;
+        display: block !important;
+        background: white;
+    }
+}
+</style>
