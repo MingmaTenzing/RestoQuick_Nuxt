@@ -23,8 +23,13 @@ const { isSidebar_open } = useSideBar()
 
     <div class="flex min-h-0 w-full flex-1 flex-col gap-4 p-4 lg:p-8 ">
 
-      <!-- nav bar dashboard -->
-      <Dashboard_NavBar class="shrink-0"></Dashboard_NavBar>
+      <ClientOnly>
+        <!-- the navbar is made client cause the auth needs to be checked on the client side -->
+
+        <!-- nav bar dashboard -->
+        <Dashboard_NavBar class="shrink-0"></Dashboard_NavBar>
+
+      </ClientOnly>
 
 
       <!-- the height is set to screen-4rem and overflow-y-scroll to give immersive experience -->
