@@ -57,10 +57,6 @@ function addQuickAmount(amount: number) {
     tenderedAmount.value = Number(((tenderedAmount.value ?? 0) + amount).toFixed(2));
 }
 
-function cleanupPrintMode() {
-    document.body.classList.remove("receipt-printing");
-}
-
 async function settle() {
     if (!session.value || !canPay.value || isSubmitting.value) {
         return;
@@ -89,22 +85,12 @@ async function settle() {
 }
 
 function printReceipt() {
-    document.body.classList.add("receipt-printing");
     window.print();
 }
-
-onMounted(() => {
-    window.addEventListener("afterprint", cleanupPrintMode);
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener("afterprint", cleanupPrintMode);
-    cleanupPrintMode();
-});
 </script>
 
 <template>
-    <div v-if="session" class="receipt-print-area hidden print:block">
+    <div v-if="session" class="print-receipt-root hidden print:block">
         <div class="mx-auto w-[80mm] space-y-3 bg-white px-4 py-6 font-mono text-[11px] leading-[1.45] text-black">
             <div class="text-center">
                 <p class="text-[13px] font-bold uppercase tracking-widest">RestoQuick</p>
@@ -385,21 +371,45 @@ onBeforeUnmount(() => {
 </template>
 
 <style>
+@page {
+    size: 80mm auto;
+    margin: 0;
+}
+
 @media print {
-    body.receipt-printing * {
-        visibility: hidden;
+
+    html,
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
     }
 
-    body.receipt-printing .receipt-print-area,
-    body.receipt-printing .receipt-print-area * {
-        visibility: visible;
+    body * {
+        visibility: hidden !important;
     }
 
-    body.receipt-printing .receipt-print-area {
+    .print-receipt-root,
+    .print-receipt-root * {
+        visibility: visible !important;
+    }
+
+    .print-receipt-root {
         position: absolute;
-        inset: 0;
+        left: 0;
+        top: 0;
         display: block !important;
-        background: white;
+        width: 80mm;
+        min-width: 80mm;
+        max-width: 80mm;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+    }
+
+    .print-receipt-root>div {
+        margin: 0 !important;
+        box-shadow: none !important;
     }
 }
 </style>
