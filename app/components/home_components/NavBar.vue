@@ -3,14 +3,34 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import logoUrl from '~/assets/images/RestoQuick.png';
 
 const colorMode = useColorMode();
+const router = useRouter();
+const { isLoaded, signIn, setActive } = useSignIn();
 const scrolled = ref(false);
+const isDemoSigningIn = ref(false);
+const demoLoginError = ref<string | null>(null);
+
+const DEMO_CREDENTIALS = {
+  email: 'jhondoe@gmail.com',
+  password: '1w18%%%AsBHtv788',
+};
 
 const links = [
   { label: 'Features', href: '#features' },
   { label: 'AI Assistant', href: '#maya' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Demo', href: '#demo' },
 ];
+
+const resolveClerkErrorMessage = (error: unknown) => {
+  const clerkError = error as {
+    errors?: Array<{ longMessage?: string; message?: string }>;
+    message?: string;
+  } | null;
+
+  return clerkError?.errors?.[0]?.longMessage
+    ?? clerkError?.errors?.[0]?.message
+    ?? clerkError?.message
+    ?? 'Unable to sign in to the demo account.';
+};
 
 const isDark = computed(() => colorMode.value === 'dark');
 const logoClasses = computed(() =>
@@ -28,9 +48,49 @@ const actionClasses = computed(() =>
 const ctaClasses = computed(() =>
   'bg-green-600 text-white hover:bg-green-700',
 );
+const demoButtonClasses = computed(() =>
+  'inline-flex items-center rounded-2xl border border-border bg-card/80 px-4 py-2.5 text-sm font-semibold text-foreground shadow-sm transition hover:bg-accent/60 disabled:cursor-not-allowed disabled:opacity-60',
+);
 
 const toggleColorMode = () => {
   colorMode.preference = isDark.value ? 'light' : 'dark';
+};
+
+const signInToDemo = async () => {
+  if (!isLoaded.value || !signIn.value || !setActive.value || isDemoSigningIn.value) {
+    return;
+  }
+
+  if (!DEMO_CREDENTIALS.email || !DEMO_CREDENTIALS.password) {
+    demoLoginError.value = 'Add the demo Clerk email and password in NavBar.vue first.';
+    return;
+  }
+
+  demoLoginError.value = null;
+  isDemoSigningIn.value = true;
+
+  try {
+    const signInAttempt = await signIn.value.create({
+      strategy: 'password',
+      identifier: DEMO_CREDENTIALS.email,
+      password: DEMO_CREDENTIALS.password,
+    });
+
+    if (signInAttempt.status !== 'complete' || !signInAttempt.createdSessionId) {
+      demoLoginError.value = 'The demo account needs an extra Clerk verification step before it can sign in.';
+      return;
+    }
+
+    await setActive.value({
+      session: signInAttempt.createdSessionId,
+    });
+
+    await router.push('/dashboard');
+  } catch (error) {
+    demoLoginError.value = resolveClerkErrorMessage(error);
+  } finally {
+    isDemoSigningIn.value = false;
+  }
 };
 
 const updateScrollState = () => {
@@ -62,22 +122,31 @@ onUnmounted(() => {
         </a>
       </div>
 
-      <div class="flex items-center gap-4 sm:gap-5">
-        <Show when="signed-out">
-          <div class="flex items-center gap-3">
-            <SignInButton />
-            <SignUpButton />
-          </div>
-        </Show>
-        <Show when="signed-in">
-          <UserButton />
-        </Show>
+      <div class="flex flex-col items-end gap-2">
+        <div class="flex flex-wrap items-center justify-end gap-3 sm:gap-4">
+          <Show when="signed-out">
+            <div class="flex flex-wrap items-center justify-end gap-3">
 
-        <NuxtLink to="/dashboard"
-          class="inline-flex items-center rounded-2xl px-5 py-2.5 text-sm font-semibold shadow-sm transition"
-          :class="ctaClasses">
-          <span class="hidden sm:inline">View Dashboard</span>
-        </NuxtLink>
+              <button type="button" :disabled="isDemoSigningIn || !isLoaded" :class="demoButtonClasses"
+                @click="signInToDemo">
+                {{ isDemoSigningIn ? 'Signing In…' : 'View Demo' }}
+              </button>
+            </div>
+          </Show>
+          <Show when="signed-in">
+            <UserButton />
+          </Show>
+
+          <NuxtLink to="/dashboard"
+            class="inline-flex items-center rounded-2xl px-5 py-2.5 text-sm font-semibold shadow-sm transition"
+            :class="ctaClasses">
+            <span class="hidden sm:inline">View Dashboard</span>
+          </NuxtLink>
+        </div>
+
+        <p v-if="demoLoginError" class="max-w-xs text-right text-xs text-red-600 dark:text-red-400" aria-live="polite">
+          {{ demoLoginError }}
+        </p>
       </div>
     </nav>
   </header>
