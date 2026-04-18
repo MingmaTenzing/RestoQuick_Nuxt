@@ -1,111 +1,106 @@
+import { PaymentMethod } from "~/generated/prisma/enums";
 import { usePrisma } from "~~/server/utils/prisma";
 
 type MarkPaidBody = {
-  tableId?: string;
-  orderIds?: string[];
-  paymentMethod?: "CASH" | "CARD_TERMINAL";
+  tableSessionId: string;
+  orderIds: string[];
+  paymentMethod: PaymentMethod;
 };
 
 export default defineEventHandler(async (event) => {
-  const prisma = usePrisma() as any;
+  const prisma = usePrisma();
   const body = (await readBody(event)) as MarkPaidBody;
 
-  const tableId = body?.tableId;
-  const requestedOrderIds = body?.orderIds ?? [];
-  const paymentMethod =
-    body?.paymentMethod === "CASH" || body?.paymentMethod === "CARD_TERMINAL"
-      ? body.paymentMethod
-      : "CARD_TERMINAL";
+  const tableSessionId = body.tableSessionId;
+  const orderIds = body.orderIds;
+  const paymentMethod = body.paymentMethod;
 
-  if (!tableId) {
+  if (!orderIds.length) {
     throw createError({
       statusCode: 400,
-      statusMessage: "tableId is required",
+      statusMessage: "orderIds are required",
     });
   }
 
-  const unpaidCompletedOrders = await prisma.order.findMany({
-    where: {
-      tableId,
-      status: "COMPLETED",
-      paymentStatus: "UNPAID",
-    },
-    select: {
-      id: true,
-      totalAmountCents: true,
-    },
-  });
+  return prisma.$transaction(async (transaction) => {
+    let unpaidOrders: { id: string; totalAmountCents: number }[] = [];
 
-  if (!unpaidCompletedOrders.length) {
-    return {
-      tableId,
-      updatedCount: 0,
-      totalPaidCents: 0,
-      orders: [],
-      message: "No unpaid completed orders found for this table",
-    };
-  }
+    try {
+      unpaidOrders = await transaction.order.findMany({
+        where: {
+          id: {
+            in: orderIds,
+          },
+          paymentStatus: "UNPAID",
+        },
+        select: {
+          id: true,
+          totalAmountCents: true,
+        },
+      });
+    } catch {
+      throw createError({
+        statusCode: 500,
+        statusMessage: "Failed to fetch unpaid orders",
+      });
+    }
 
-  const unpaidOrderIds = unpaidCompletedOrders.map(
-    (order: { id: string }) => order.id,
-  );
-  const targetOrderIds = requestedOrderIds.length
-    ? requestedOrderIds.filter((orderId) => unpaidOrderIds.includes(orderId))
-    : unpaidOrderIds;
+    if (!unpaidOrders.length) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "No unpaid orders found for the provided orderIds",
+      });
+    }
 
-  if (!targetOrderIds.length) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "No matching unpaid orderIds found for this table",
-    });
-  }
+    const paid_at = new Date();
+    const unpaidOrderIds = unpaidOrders.map(
+      (order: { id: string }) => order.id,
+    );
 
-  const paidAt = new Date();
-
-  await prisma.order.updateMany({
-    where: {
-      id: {
-        in: targetOrderIds,
-      },
-    },
-    data: {
-      paymentStatus: "PAID",
-      paymentMethod,
-      paidAt,
-    },
-  });
-
-  const paidOrders = await prisma.order.findMany({
-    where: {
-      id: {
-        in: targetOrderIds,
-      },
-    },
-    include: {
-      table: true,
-      items: {
-        include: {
-          menuItem: true,
+    await transaction.order.updateMany({
+      where: {
+        id: {
+          in: unpaidOrderIds,
         },
       },
-    },
-    orderBy: {
-      createdAt: "asc",
-    },
+      data: {
+        paymentStatus: "PAID",
+        status: "COMPLETED", //marking the order as completed once it's paid
+        paymentMethod,
+        paidAt: paid_at,
+      },
+    });
+
+    //closes the session once the orders are marked ass paid
+    try {
+      await transaction.tableSession.update({
+        where: {
+          id: tableSessionId,
+        },
+        data: {
+          status: "CLOSED",
+          closedAt: paid_at,
+        },
+      });
+    } catch {
+      throw createError({
+        statusCode: 500,
+        statusMessage: "Failed to close table session",
+      });
+    }
+
+    const totalPaidCents = unpaidOrders.reduce(
+      (sum: number, order: { totalAmountCents: number }) =>
+        sum + order.totalAmountCents,
+      0,
+    );
+
+    return {
+      updatedCount: unpaidOrderIds.length,
+      totalPaidCents,
+      paidAt: paid_at,
+      paymentMethod,
+      orderIds: unpaidOrderIds,
+    };
   });
-
-  const totalPaidCents = paidOrders.reduce(
-    (sum: number, order: { totalAmountCents: number }) =>
-      sum + order.totalAmountCents,
-    0,
-  );
-
-  return {
-    tableId,
-    updatedCount: paidOrders.length,
-    totalPaidCents,
-    paidAt,
-    paymentMethod,
-    orders: paidOrders,
-  };
 });

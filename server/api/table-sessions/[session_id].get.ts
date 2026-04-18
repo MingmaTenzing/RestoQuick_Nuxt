@@ -1,19 +1,17 @@
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
-  const tableId = getRouterParam(event, "table_id");
+  const sessionId = getRouterParam(event, "session_id");
 
-  if (!tableId) {
+  if (!sessionId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "table_id is required",
+      statusMessage: "session_id is required",
     });
   }
 
-  //returns the active session table with orders with the same session id.
-  const tableSession = await prisma.tableSession.findFirst({
+  const tableSession = await prisma.tableSession.findUnique({
     where: {
-      tableId,
-      status: "ACTIVE",
+      id: sessionId,
     },
     include: {
       table: true,
@@ -38,12 +36,12 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  if (tableSession) {
-    return tableSession;
-  } else {
+  if (!tableSession) {
     throw createError({
       statusCode: 404,
-      statusMessage: "No active session found for this table",
+      statusMessage: "No session found for this id",
     });
   }
+
+  return tableSession;
 });
