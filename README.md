@@ -57,6 +57,12 @@ DATABASE_URL="postgresql://postgres:password@localhost:5432/mydb?schema=public"
 BASE_URL="http://localhost:3000"
 WEBSOCKET_HOST="ws://localhost:3000/api/websocket"
 
+# Clerk
+NUXT_CLERK_ORG_ID="org_xxxxxxxxxxxxx"
+NUXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL="/dashboard"
+NUXT_PUBLIC_DEMO_CLERK_EMAIL="demo@example.com"
+NUXT_PUBLIC_DEMO_CLERK_PASSWORD="your-demo-password"
+
 # Stripe
 STRIPE_SECRET_KEY=""
 STRIPE_PUBLIC_KEY=""
