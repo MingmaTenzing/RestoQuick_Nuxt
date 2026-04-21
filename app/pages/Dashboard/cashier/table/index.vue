@@ -34,7 +34,7 @@ const activeSessionCount = computed(() => {
 })
 
 function openTableCheckout(table_session_id: string) {
-    router.push(`/dashboard/cashier/checkout/${table_session_id}`)
+    router.push(`/dashboard/cashier/table/checkout/${table_session_id}`)
 }
 
 function hasActiveSession(table: TableGetPayloadWithSession) {
