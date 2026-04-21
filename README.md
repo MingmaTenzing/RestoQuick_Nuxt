@@ -1,280 +1,422 @@
-# RestoQuick (Nuxt 4)
+# RestoQuick
 
-RestoQuick is a restaurant operations platform built with Nuxt 4.
+RestoQuick is a Nuxt 4 restaurant operations platform for running front-of-house, kitchen, staff, and stock workflows from a single app.
 
 It includes:
 
-- order management
+- dine-in and takeaway order flows
+- cashier settlement for table sessions
+- kitchen display with realtime websocket updates
 - booking management
-- kitchen display with real-time updates
-- roster/staff management
-- stock tracking
-- Stripe checkout flow
-- Vapi voice-assistant booking integration
+- roster and leave management
+- stock tracking with QR label generation
+- Stripe embedded checkout for table ordering
+- Clerk-based dashboard authentication
+- Vapi voice booking widget
+- AI-assisted roster planning
 
-## Tech Stack
+## Stack
 
 - Nuxt 4 + Vue 3 + TypeScript
-- Nitro server API (`server/api`)
-- Prisma ORM + PostgreSQL
+- Nitro server routes in `server/api`
+- Prisma ORM with PostgreSQL
 - Tailwind CSS v4
-- PWA (`@vite-pwa/nuxt`)
-- Stripe (`@unlok-co/nuxt-stripe`)
-- Vapi (`@vapi-ai/web`, `@vapi-ai/server-sdk`)
-- WebSockets (`crossws` via Nitro websocket support)
+- Clerk for authentication and organization access control
+- Stripe for checkout
+- Vapi for voice booking
+- `@openai/agents` for roster generation
+- `crossws` and Nitro websocket support for kitchen updates
 
 ## Prerequisites
 
-- Node.js 22 (required by `package.json` engines)
-- npm (or another package manager, but this repo is set up for npm scripts)
-- PostgreSQL database
+- Node.js `22`
+- npm
+- PostgreSQL
 
-Optional for local DB:
+Optional for local setup:
 
-- Docker + Docker Compose
+- Docker and Docker Compose for running Postgres locally
 
-## Quick Start
+## What Runs Where
 
-### 1) Clone and install
+Core directories:
+
+- `app/pages`: customer-facing pages and dashboard screens
+- `app/components`: domain components grouped by feature
+- `app/composables`: shared UI and state logic
+- `server/api`: backend API handlers
+- `server/utils`: server utilities such as Prisma and websocket broadcast helpers
+- `prisma/schema.prisma`: database schema
+- `prisma/migrations`: migration history
+- `types`: shared app types
+
+Important runtime behavior:
+
+- kitchen realtime updates connect to `/api/websocket`
+- Stripe checkout returns to `/order-table/checkout/return`
+- dashboard access is protected through Clerk middleware
+- admin-only behavior is checked from Clerk org roles
+
+## Local Setup
+
+### 1. Install dependencies
 
 ```bash
-git clone <your-repo-url>
-cd RestoQuick_Nuxt
 npm install
 ```
 
-> `postinstall` runs `nuxt prepare && prisma generate` automatically.
+`postinstall` runs `nuxt prepare && prisma generate` automatically.
 
-### 2) Configure environment variables
+### 2. Create your environment file
 
-Create `.env` in project root.
+Create a `.env` file in the project root.
+
+Start from this template:
 
 ```env
-# Database
+# Required for app boot
 DATABASE_URL="postgresql://postgres:password@localhost:5432/mydb?schema=public"
-
-# App
 BASE_URL="http://localhost:3000"
-WEBSOCKET_HOST="ws://localhost:3000/api/websocket"
+WEBSOCKET_HOST="ws://localhost:3000"
 
-# Clerk
-NUXT_CLERK_ORG_ID="org_xxxxxxxxxxxxx"
+# Required for Clerk auth
+NUXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_xxxxx"
+NUXT_CLERK_SECRET_KEY="sk_test_xxxxx"
+
+# Recommended Clerk app settings
+NUXT_CLERK_ORG_ID="org_xxxxx"
 NUXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL="/dashboard"
 NUXT_PUBLIC_DEMO_CLERK_EMAIL="demo@example.com"
-NUXT_PUBLIC_DEMO_CLERK_PASSWORD="your-demo-password"
+NUXT_PUBLIC_DEMO_CLERK_PASSWORD="demo-password"
 
-# Stripe
-STRIPE_SECRET_KEY=""
-STRIPE_PUBLIC_KEY=""
+# Optional: Stripe checkout
+STRIPE_SECRET_KEY="sk_test_xxxxx"
+STRIPE_PUBLIC_KEY="pk_test_xxxxx"
 
-# Vapi / OpenAI
-NUXT_VAPI_PUBLIC_KEY=""
-NUXT_VAPI_ASSISTANT_KEY=""
-OPENAI_API_KEY=""
+# Optional: Vapi voice booking
+NUXT_VAPI_PUBLIC_KEY="public_key_xxxxx"
+NUXT_VAPI_ASSISTANT_KEY="assistant_xxxxx"
 
-# Cloudinary
-CLOUDINARY_API_SECRET_KEY=""
+# Optional: AI roster planner
+OPENAI_API_KEY="sk-xxxx"
+
+# Optional: Cloudinary unsigned uploads
+CLOUDINARY_CLOUD_NAME="your-cloud-name"
+CLOUDINARY_UPLOAD_PRESET_MENU_ITEMS="menu-items-preset"
+CLOUDINARY_UPLOAD_PRESET_STAFF="staff-preset"
+
+# Present in runtime config but not required for current unsigned upload flows
+CLOUDINARY_UPLOAD_PRESET="generic-preset"
 CLOUDINARY_API_KEY=""
-CLOUDINARY_CLOUD_NAME=""
-CLOUDINARY_UPLOAD_PRESET=""
-CLOUDINARY_UPLOAD_PRESET_STAFF=""
-CLOUDINARY_UPLOAD_PRESET_MENU_ITEMS=""
+CLOUDINARY_API_SECRET_KEY=""
 ```
 
-### 3) Start PostgreSQL
+### 3. Start PostgreSQL
 
-Option A: local postgres service
-
-Option B: docker compose from this repo:
+You can use your own Postgres instance, or use the included Docker Compose file.
 
 ```bash
 docker compose up -d
 ```
 
-This starts postgres at:
+That Compose file starts:
 
 - host: `localhost`
 - port: `5432`
-- user: `postgres`
+- database: `mydb`
+- username: `postgres`
 - password: `password`
-- db: `mydb`
 
-### 4) Apply Prisma migrations
+### 4. Apply database migrations
+
+For local development:
 
 ```bash
 npx prisma migrate dev
 ```
 
-### 5) Run app
+If you only want to apply existing migrations without creating a new one:
+
+```bash
+npx prisma migrate deploy
+```
+
+### 5. Run the app
 
 ```bash
 npm run dev
 ```
 
-App runs at `http://localhost:3000`.
+The dev server runs at `http://localhost:3000`.
+
+## Environment Variables
+
+This section describes what each variable is for and whether the project actually needs it.
+
+### Required for basic local development
+
+`DATABASE_URL`
+
+- Used by Prisma and the server Prisma adapter.
+- Required for all data-backed features.
+
+`BASE_URL`
+
+- Used when generating absolute links for stock QR labels, table QR codes, and Stripe return URLs.
+- For local development use `http://localhost:3000`.
+
+`WEBSOCKET_HOST`
+
+- Used by dashboard websocket clients such as the kitchen display.
+- Set this to the websocket host only, for example `ws://localhost:3000`.
+- Do not include `/api/websocket`, because the app appends that path itself.
+
+`NUXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+
+- Required by the `@clerk/nuxt` module on the client.
+- Needed for sign-in, sign-up, `useAuth`, `UserButton`, and protected dashboard access.
+
+`NUXT_CLERK_SECRET_KEY`
+
+- Required by Clerk on the server.
+- Needed for authenticated dashboard flows.
+
+### Recommended Clerk variables
+
+`NUXT_CLERK_ORG_ID`
+
+- Used by `app/middleware/auth.global.ts`.
+- If set, only users in that organization can access `/dashboard` routes.
+- If omitted, the org restriction is effectively disabled.
+
+`NUXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL`
+
+- Used by the landing page sign-in button.
+- Typical value: `/dashboard`.
+
+`NUXT_PUBLIC_DEMO_CLERK_EMAIL`
+
+- Used for demo credentials shown on the landing page.
+- Optional.
+
+`NUXT_PUBLIC_DEMO_CLERK_PASSWORD`
+
+- Used for demo credentials shown on the landing page.
+- Optional.
+
+### Optional Stripe variables
+
+`STRIPE_SECRET_KEY`
+
+- Required for `server/api/stripe-checkout/index.post.ts`.
+- Needed if you want QR ordering and embedded checkout to work.
+
+`STRIPE_PUBLIC_KEY`
+
+- Exposed to the client through runtime config.
+- Needed by the frontend Stripe integration.
+
+If Stripe is not configured, the rest of the dashboard can still run, but checkout flows will not work.
+
+### Optional Vapi variables
+
+`NUXT_VAPI_PUBLIC_KEY`
+
+- Used by the `Vapi` web client component.
+- Required for the voice booking button.
+
+`NUXT_VAPI_ASSISTANT_KEY`
+
+- Used when starting calls with the configured assistant.
+- Required for the voice booking button.
+
+If these are missing, the Vapi button cannot start calls.
+
+### Optional OpenAI variable
+
+`OPENAI_API_KEY`
+
+- Needed by the roster agent endpoint in `server/api/roster-agent/index.post.ts`.
+- Only required if you want AI roster generation.
+
+### Optional Cloudinary variables
+
+`CLOUDINARY_CLOUD_NAME`
+
+- Used by the current browser upload helper for staff and menu images.
+
+`CLOUDINARY_UPLOAD_PRESET_MENU_ITEMS`
+
+- Used when uploading menu item images.
+
+`CLOUDINARY_UPLOAD_PRESET_STAFF`
+
+- Used when uploading staff profile images.
+
+`CLOUDINARY_UPLOAD_PRESET`
+
+- Present in runtime config, but not used by the current upload flows.
+
+`CLOUDINARY_API_KEY`
+
+- Present in runtime config, but not required for the current unsigned browser uploads.
+
+`CLOUDINARY_API_SECRET_KEY`
+
+- Present in runtime config, but not required for the current unsigned browser uploads.
+- Leave this unset unless you are changing the upload flow to a signed server-side implementation.
+
+## Feature Setup Matrix
+
+If you want only the core app running locally, you need:
+
+- `DATABASE_URL`
+- `BASE_URL`
+- `WEBSOCKET_HOST`
+- Clerk keys
+
+If you also want payments:
+
+- Stripe keys
+
+If you also want voice booking:
+
+- Vapi keys
+
+If you also want AI roster generation:
+
+- `OPENAI_API_KEY`
+
+If you also want image uploads:
+
+- Cloudinary cloud name and upload presets
 
 ## Available Scripts
 
-- `npm run dev` - start Nuxt dev server
-- `npm run build` - production build
-- `npm run start` - run production server from `.output`
-- `npm run preview` - preview production build
-- `npm run generate` - static generation
-
-## Project Structure
-
-```text
-app/                  # Nuxt app (pages, components, composables, layouts)
-server/api/           # Nitro backend API routes
-server/utils/         # backend helpers (e.g., websocket broadcast)
-prisma/               # schema + migrations
-types/                # shared TS types
-public/               # static assets
+```bash
+npm run dev
+npm run build
+npm run start
+npm run preview
+npm run generate
 ```
 
-## Architecture Overview
+What they do:
 
-### Frontend (Nuxt)
+- `npm run dev`: start the Nuxt development server
+- `npm run build`: create a production build
+- `npm run start`: run the built Nitro server from `.output`
+- `npm run preview`: preview the production build locally
+- `npm run generate`: run static generation
 
-- UI pages and dashboard live in `app/pages`.
-- Components are grouped by domain under `app/components/*`.
-- Composables in `app/composables` manage app state and logic.
-- Route rules disable SSR for:
-  - `/dashboard`
-  - `/vapi`
-
-### Backend (Nitro API)
-
-- REST-style handlers in `server/api`.
-- File-based routing examples:
-  - `server/api/orders/index.get.ts` -> `GET /api/orders`
-  - `server/api/orders/[order_id].get.ts` -> `GET /api/orders/:order_id`
-
-### Real-Time Kitchen Updates
-
-- WebSocket endpoint at `server/api/websocket.ts`.
-- Kitchen events are broadcast through backend utils (`server/utils/kitchenSocket.ts`) to subscribers.
-
-### Data Layer (Prisma)
-
-- Schema: `prisma/schema.prisma`
-- Generated client: `app/generated/prisma`
-- Core models:
-  - `Staff`, `Shift`, `LeaveRequest`
-  - `Table`, `Booking`
-  - `Order`, `OrderItem`, `MenuItem`
-  - `StockItem`
-
-## Domain Conventions
-
-- Money is stored in **cents**:
-  - `Order.totalAmountCents`
-  - `OrderItem.unitPriceCents`
-  - `MenuItem.priceCents`
-- Use Prisma enums for statuses and roles.
-- Booking/order timestamps are stored as `DateTime`.
-
-## API Overview
-
-Main route groups under `server/api`:
-
-- `/api/orders`
-- `/api/bookings`
-- `/api/menu`
-- `/api/staff`
-- `/api/shift`
-- `/api/stock`
-- `/api/tables`
-- `/api/leave-requests`
-- `/api/stripe-checkout`
-- `/api/vapi-booking-tool`
-
-### Orders filtering
-
-`GET /api/orders` supports:
-
-- `range=all|day|week|month`
-- `customer=<name>` (or `customerName=<name>`) for customer-name filtering
-
-Example:
-
-```http
-GET /api/orders?range=week&customer=James
-```
-
-## Prisma Workflow
-
-When schema changes:
+## Common Development Commands
 
 ```bash
-npx prisma migrate dev --name <migration_name>
+npx prisma migrate dev --name your_change
+npx prisma migrate deploy
 npx prisma generate
-```
-
-Useful commands:
-
-```bash
 npx prisma studio
 npx prisma format
 ```
 
-## Integrations
+Notes:
 
-### Stripe
+- there is no seed script in this repository
+- `npm install` already runs `prisma generate`
+- schema changes should be committed with a migration
 
-- Secret key is server-only (`runtimeConfig.stripe.key`).
-- Public key is exposed in `runtimeConfig.public.stripe.key`.
+## Project Features and Where They Live
 
-### Cloudinary
+### Orders and cashier
 
-- Used for image upload flows.
-- Requires API credentials and upload presets.
+- order listing and detail views live under `app/pages/dashboard/orders`
+- POS order entry lives under `app/pages/dashboard/pos`
+- cashier settlement lives under `app/pages/dashboard/cashier`
+- order APIs live under `server/api/orders`
+- table session APIs live under `server/api/table-sessions`
 
-### Vapi
+### Kitchen realtime display
 
-- Voice booking assistant endpoint: `/api/vapi-booking-tool`.
-- Ensure request date/time payloads are timezone-safe (prefer ISO with offset or `Z`).
+- kitchen screen: `app/pages/dashboard/kitchen.vue`
+- websocket endpoint: `server/api/websocket.ts`
+- broadcast helper: `server/utils/kitchenSocket.ts`
 
-## Production Run
+### Bookings
 
-```bash
-npm run build
-npm run start
-```
+- booking APIs live under `server/api/bookings`
+- Vapi booking tool endpoint lives under `server/api/vapi-booking-tool`
 
-Or preview locally:
+### Staff and roster
 
-```bash
-npm run preview
-```
+- staff APIs live under `server/api/staff`
+- leave request APIs live under `server/api/leave-requests`
+- shift APIs live under `server/api/shift`
+- AI roster endpoint lives under `server/api/roster-agent`
+
+### Stock and QR labels
+
+- stock APIs live under `server/api/stock`
+- stock QR pages live under `app/pages/dashboard/stock`
+
+## Data Conventions
+
+- monetary values are stored in cents
+- order totals use `totalAmountCents`
+- order item prices use `unitPriceCents`
+- menu prices use `priceCents`
+- order and booking timestamps are stored as Prisma `DateTime`
+- Prisma enums are used for roles, booking states, order states, and payment states
+
+## Production Notes
+
+Before a production deployment:
+
+- set all production environment variables
+- run `npx prisma migrate deploy`
+- run `npm run build`
+- start with `npm run start`
+- make sure `BASE_URL` points to the public app origin
+- make sure `WEBSOCKET_HOST` points to the public websocket origin
 
 ## Troubleshooting
 
-### Prisma connection errors
+### Database connection fails
 
-- Check `DATABASE_URL`.
-- Verify postgres is running on expected host/port.
-- Re-run `npx prisma migrate dev`.
+- verify `DATABASE_URL`
+- verify Postgres is running
+- run `npx prisma migrate dev`
 
-### Missing generated Prisma client
+### Clerk auth is broken
 
-```bash
-npx prisma generate
-```
+- verify `NUXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- verify `NUXT_CLERK_SECRET_KEY`
+- verify `NUXT_CLERK_ORG_ID` if dashboard access is unexpectedly denied
 
-### Realtime updates not arriving
+### Kitchen realtime updates do not arrive
 
-- Verify `WEBSOCKET_HOST` in env/runtime config.
-- Confirm websocket endpoint is reachable at `/api/websocket`.
+- verify `WEBSOCKET_HOST`
+- do not include `/api/websocket` in that env var
+- confirm the websocket endpoint is reachable at `/api/websocket`
 
-### Booking time shifts
+### Stripe checkout does not return correctly
 
-- Usually caused by timezone-less timestamps.
-- Send ISO timestamps with explicit offset (e.g. `2026-03-08T17:00:00+11:00`) or UTC `Z`.
+- verify `BASE_URL`
+- verify both Stripe keys are set
 
-## Notes for Contributors
+### Image uploads fail
 
-- Keep changes domain-focused (`orders`, `booking`, `kitchen`, etc.).
-- Avoid changing money fields away from cents.
-- Add migrations for all Prisma schema updates.
-- Do not commit secrets or real API keys.
+- verify `CLOUDINARY_CLOUD_NAME`
+- verify the relevant upload preset exists
+- verify the preset allows unsigned uploads if you are using the current browser upload flow
+
+### AI roster endpoint fails
+
+- verify `OPENAI_API_KEY`
+
+## Contributor Notes
+
+- keep secrets out of git
+- do not commit a real `.env`
+- prefer small, domain-focused changes
+- keep money values in cents
+- add Prisma migrations for schema changes
