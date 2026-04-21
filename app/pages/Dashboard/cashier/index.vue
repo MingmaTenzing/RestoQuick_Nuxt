@@ -1,136 +1,91 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 definePageMeta({
     layout: 'dashboard-layout'
 })
 
-import { computed, ref } from 'vue'
-import type { TableGetPayloadWithSession } from '~~/types/table_include_session'
-import Table_Card from '~/components/pos_components/Table_Card.vue'
-
-
-const router = useRouter()
-
-const searchQuery = ref('')
-
-const { data: tables, pending: tablesPending } = await useFetch<TableGetPayloadWithSession[]>('/api/tables')
-
-const searchFilteredTables = computed(() => {
-    const allTables = tables.value ?? []
-    const normalizedQuery = searchQuery.value.trim().toLowerCase()
-
-    if (!normalizedQuery) {
-        return allTables
-    }
-
-    return allTables.filter((table) => {
-        return table.number.toLowerCase().includes(normalizedQuery) || String(table.capacity).includes(normalizedQuery)
-    })
-})
-
-const activeSessionCount = computed(() => {
-    const allTables = tables.value ?? []
-
-    return allTables.filter((table) => table.sessions.length > 0).length
-})
-
-function openTableCheckout(table_session_id: string) {
-    router.push(`/dashboard/cashier/checkout/${table_session_id}`)
-}
-
-function hasActiveSession(table: TableGetPayloadWithSession) {
-    return table.sessions.length > 0
-}
-
-
+const checkoutOptions = [
+    {
+        id: 'table',
+        title: 'Table Checkout',
+        subtitle: 'Dine-in Customers',
+        description: 'Select an active table and collect payment for the dining session.',
+        icon: 'pi pi-table',
+        to: '/dashboard/cashier/table',
+        accent: 'group-hover:border-primary/50 group-hover:bg-primary/5',
+        iconClasses: 'bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground',
+    },
+    {
+        id: 'takeaway',
+        title: 'Takeaway Checkout',
+        subtitle: 'Walk-ins & Pickup',
+        description: 'Jump directly to the takeaway order flow to process a quick pickup.',
+        icon: 'pi pi-shopping-bag',
+        to: '/dashboard/cashier/takeaway',
+        accent: 'group-hover:border-amber-500/50 group-hover:bg-amber-500/5',
+        iconClasses: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500 group-hover:text-white',
+    },
+]
 </script>
 
 <template>
-    <main class="space-y-8">
-        <section class="px-1 pt-2">
-            <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                <div class="max-w-3xl space-y-4">
-                    <div class="inline-flex items-center gap-3">
-                        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-foreground/80">Cashier</p>
-                    </div>
-
-                    <div class="space-y-3">
-                        <h1 class="text-2xl font-semibold tracking-tight text-foreground md:text-4xl">
-                            Choose an active table session.
-                        </h1>
-
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-3 lg:justify-end">
-                    <div
-                        class="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm text-foreground shadow-sm">
-                        <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-                        <span>{{ activeSessionCount }} active session{{ activeSessionCount !== 1 ? 's' : '' }}</span>
-                    </div>
-                    <div
-                        class="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm text-foreground">
-                        <i class="pi pi-th-large text-xs"></i>
-                        <span>{{ tables?.length ?? 0 }} table{{ (tables?.length ?? 0) !== 1 ? 's' : '' }}</span>
-                    </div>
-                </div>
+    <main class="space-y-12 pb-10">
+        <header class="max-w-2xl space-y-5">
+            <div
+                class="inline-flex items-center gap-2.5 rounded-full border border-border bg-card px-3.5 py-1.5 shadow-sm">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span
+                        class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/70 opacity-75"></span>
+                    <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary"></span>
+                </span>
+                <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-foreground/70">Cashier
+                    Terminal</span>
             </div>
-        </section>
 
-        <section class="rounded-4xl border border-border bg-card p-5 shadow-sm md:p-6">
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                <div>
-                    <p class="text-sm font-medium text-foreground">Table overview</p>
-                    <p class="mt-1 text-sm text-muted-foreground">Browse the floor and open the table checkout you need.
-                    </p>
-                </div>
+            <h1 class="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+                Ready for checkout?
+            </h1>
+            <p class="text-lg leading-relaxed text-muted-foreground">
+                Select the order type you want to process right now.
+            </p>
+        </header>
 
-                <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-                    <label class="relative block w-full max-w-md">
+        <section class="grid gap-6 md:grid-cols-2">
+            <NuxtLink v-for="option in checkoutOptions" :key="option.id" :to="option.to"
+                class="group relative overflow-hidden rounded-[2.5rem] border border-border bg-card p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl dark:shadow-none dark:hover:shadow-black/50 sm:p-10"
+                :class="option.accent">
+
+                <div class="relative z-10 flex h-full flex-col justify-between gap-12">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl transition-all duration-500 group-hover:scale-110 group-hover:shadow-lg"
+                            :class="option.iconClasses">
+                            <i :class="[option.icon, 'text-2xl']"></i>
+                        </div>
                         <span
-                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-muted-foreground">
-                            <i class="pi pi-search text-sm"></i>
+                            class="text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground/60 transition-colors group-hover:text-foreground">
+                            {{ option.subtitle }}
                         </span>
-                        <input v-model="searchQuery" type="search" placeholder="Search by table number or capacity"
-                            class="h-12 w-full rounded-2xl border border-border bg-background pl-11 pr-4 text-sm text-foreground outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20">
-                    </label>
+                    </div>
 
-                    <div class="inline-flex items-center gap-2 rounded-2xl bg-accent px-3 py-2 text-sm text-foreground">
-                        <i class="pi pi-th-large text-xs"></i>
-                        <span>{{ searchFilteredTables.length }} of {{ tables?.length ?? 0 }} tables</span>
+                    <div class="space-y-4">
+                        <h2 class="text-3xl font-semibold tracking-tight text-foreground transition-colors sm:text-4xl">
+                            {{ option.title }}
+                        </h2>
+                        <p
+                            class="max-w-sm text-base leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground/80">
+                            {{ option.description }}
+                        </p>
+                    </div>
+
+                    <div
+                        class="mt-4 flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-muted-foreground transition-colors group-hover:text-foreground">
+                        <span>Continue</span>
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background transition-all duration-500 group-hover:border-transparent group-hover:bg-foreground group-hover:text-background">
+                            <i class="pi pi-arrow-right text-sm"></i>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section v-if="tablesPending" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <div v-for="index in 8" :key="index" class="h-56 animate-pulse rounded-4xl border border-border bg-card">
-            </div>
-        </section>
-
-        <section v-else-if="searchFilteredTables.length"
-            class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <button v-for="table in searchFilteredTables" :key="table.id" type="button"
-                class="block h-full text-left transition-transform"
-                :class="hasActiveSession(table) ? 'hover:-translate-y-0.5 cursor-pointer' : 'cursor-not-allowed opacity-80'"
-                :disabled="!hasActiveSession(table)"
-                @click="hasActiveSession(table) && openTableCheckout(table.sessions[0]?.id!)">
-                <Table_Card :table="table" :is-active="table.sessions.length > 0" />
-            </button>
-        </section>
-
-        <section v-else-if="tables?.length"
-            class="rounded-4xl border border-dashed border-border bg-card px-6 py-14 text-center shadow-sm">
-            <h2 class="text-xl font-semibold text-foreground">No matching tables</h2>
-            <p class="mt-2 text-sm leading-6 text-muted-foreground">
-                Try another table number or search by seat capacity.
-            </p>
-        </section>
-
-        <section v-else class="rounded-4xl border border-dashed border-border bg-card px-6 py-14 text-center shadow-sm">
-            <h2 class="text-xl font-semibold text-foreground">No tables available</h2>
-            <p class="mt-2 text-sm leading-6 text-muted-foreground">
-                Add your tables first before starting a checkout.
-            </p>
+            </NuxtLink>
         </section>
     </main>
 </template>

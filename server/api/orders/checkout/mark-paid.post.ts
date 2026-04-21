@@ -2,7 +2,7 @@ import { PaymentMethod } from "~/generated/prisma/enums";
 import { usePrisma } from "~~/server/utils/prisma";
 
 type MarkPaidBody = {
-  tableSessionId: string;
+  tableSessionId?: string;
   orderIds: string[];
   paymentMethod: PaymentMethod;
 };
@@ -71,22 +71,23 @@ export default defineEventHandler(async (event) => {
       },
     });
 
-    //closes the session once the orders are marked ass paid
-    try {
-      await transaction.tableSession.update({
-        where: {
-          id: tableSessionId,
-        },
-        data: {
-          status: "CLOSED",
-          closedAt: paid_at,
-        },
-      });
-    } catch {
-      throw createError({
-        statusCode: 500,
-        statusMessage: "Failed to close table session",
-      });
+    if (tableSessionId) {
+      try {
+        await transaction.tableSession.update({
+          where: {
+            id: tableSessionId,
+          },
+          data: {
+            status: "CLOSED",
+            closedAt: paid_at,
+          },
+        });
+      } catch {
+        throw createError({
+          statusCode: 500,
+          statusMessage: "Failed to close table session",
+        });
+      }
     }
 
     const totalPaidCents = unpaidOrders.reduce(
@@ -100,6 +101,7 @@ export default defineEventHandler(async (event) => {
       totalPaidCents,
       paidAt: paid_at,
       paymentMethod,
+      tableSessionId: tableSessionId ?? null,
       orderIds: unpaidOrderIds,
     };
   });
