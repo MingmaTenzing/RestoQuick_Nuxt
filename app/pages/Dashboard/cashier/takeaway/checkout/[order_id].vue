@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { PaymentMethod } from "~/generated/prisma/enums";
 import type { CashierPaidOrder } from "~~/types/cashier";
 
 definePageMeta({
@@ -8,14 +9,43 @@ definePageMeta({
 const route = useRoute()
 const orderId = computed(() => route.params.order_id?.toString() ?? "")
 
-const { data: order, pending, error } = await useFetch<CashierPaidOrder>(
+const { data: order, pending, error, refresh } = await useFetch<CashierPaidOrder>(
     () => `/api/orders/${orderId.value}`
 )
+
+const paymentMethod = ref<PaymentMethod>("CASH")
+const isSubmitting = ref(false)
+const paymentError = ref("")
 
 const totalItems = computed(() => {
     return (order.value?.items ?? []).reduce((sum, item) => sum + item.quantity, 0)
 })
 
+
+async function closeSale() {
+    if (!order.value || isSubmitting.value) {
+        return
+    }
+
+    isSubmitting.value = true
+    paymentError.value = ""
+
+    try {
+        order.value = await $fetch<CashierPaidOrder>('/api/orders/checkout/takeaway/closesales', {
+            method: 'POST',
+            body: {
+                orderId: orderId.value,
+                paymentMethod: paymentMethod.value,
+            },
+        })
+
+        await refresh()
+    } catch (error) {
+        paymentError.value = error instanceof Error ? error.message : 'Unable to close sale.'
+    } finally {
+        isSubmitting.value = false
+    }
+}
 function printReceipt() {
     window.print()
 }
@@ -158,7 +188,7 @@ function printReceipt() {
                                 <div class="min-w-0 flex-1">
                                     <p class="text-sm font-semibold text-foreground sm:text-base">
                                         <span class="mr-2 tabular-nums text-muted-foreground">{{ item.quantity
-                                            }}×</span>
+                                        }}×</span>
                                         {{ item.itemName }}
                                     </p>
                                     <p v-if="item.specialInstructions"
@@ -198,6 +228,11 @@ function printReceipt() {
                                 <span>Payment</span>
                                 <span class="font-medium text-foreground">{{ order.paymentStatus }}</span>
                             </div>
+                            <div class="flex items-center justify-between text-sm text-muted-foreground">
+                                <span>Method</span>
+                                <span class="font-medium text-foreground">{{ paymentMethod === 'CARD_TERMINAL' ? 'Card'
+                                    : 'Cash' }}</span>
+                            </div>
                             <div class="border-t border-border pt-3">
                                 <p class="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Total
                                     due</p>
@@ -207,12 +242,38 @@ function printReceipt() {
                             </div>
                         </div>
 
-                        <button type="button"
+                        <div v-if="order.paymentStatus !== 'PAID'" class="mt-5 flex gap-2">
+                            <button type="button"
+                                class="flex-1 rounded-2xl border px-4 py-2.5 text-sm font-semibold transition-colors"
+                                :class="paymentMethod === 'CASH'
+                                    ? 'border-primary bg-primary text-primary-foreground'
+                                    : 'border-border bg-secondary text-foreground hover:bg-accent'"
+                                @click="paymentMethod = 'CASH'">
+                                <i class="pi pi-money-bill mr-1.5 text-sm"></i>
+                                Cash
+                            </button>
+                            <button type="button"
+                                class="flex-1 rounded-2xl border px-4 py-2.5 text-sm font-semibold transition-colors"
+                                :class="paymentMethod === 'CARD_TERMINAL'
+                                    ? 'border-primary bg-primary text-primary-foreground'
+                                    : 'border-border bg-secondary text-foreground hover:bg-accent'"
+                                @click="paymentMethod = 'CARD_TERMINAL'">
+                                <i class="pi pi-credit-card mr-1.5 text-sm"></i>
+                                Card
+                            </button>
+                        </div>
+
+                        <button type="button" :disabled="isSubmitting || order.paymentStatus === 'PAID'"
                             class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-background px-4 py-3 text-sm font-semibold text-foreground transition-colors active:opacity-80"
-                            @click="printReceipt">
-                            <i class="pi pi-print text-sm"></i>
-                            Print receipt
+                            @click="closeSale">
+                            <i class="pi pi-check text-sm"></i>
+                            <span>{{ isSubmitting ? 'Closing sale...' : order.paymentStatus === 'PAID' ? 'Sale Closed' :
+                                'Close Sale' }}</span>
                         </button>
+
+                        <p v-if="paymentError" class="mt-4 text-sm text-red-600 dark:text-red-400">
+                            {{ paymentError }}
+                        </p>
                     </section>
                 </aside>
             </div>

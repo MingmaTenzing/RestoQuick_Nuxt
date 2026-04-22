@@ -66,7 +66,7 @@ async function settle() {
     paymentError.value = "";
 
     try {
-        await $fetch("/api/orders/checkout/mark-paid", {
+        await $fetch("/api/orders/checkout/table/mark-paid", {
             method: "POST",
             body: {
                 tableSessionId: sessionId.value,
