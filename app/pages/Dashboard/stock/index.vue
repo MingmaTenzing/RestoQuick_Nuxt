@@ -16,7 +16,7 @@ import StockItemCardSkeleton from '~/components/stock_components/StockItemCardSk
 import type { StockItem } from '~/generated/prisma/client'
 import type { StockItemCreateInput } from '~/generated/prisma/models'
 
-const {data:stockItems, refresh, status: stockStatus} = useFetch<StockItem[]>("/api/stock")
+const { data: stockItems, refresh, status: stockStatus } = useFetch<StockItem[]>("/api/stock")
 
 const filter = ref<'all' | 'low' | 'INGREDIENTS' | 'BEVERAGES' | 'SUPPLIES'>('all')
 const searchQuery = ref('')
@@ -37,7 +37,7 @@ const filteredItems = computed(() => {
       if (filter.value === 'low') return matchesSearch && isLowStock(item)
       return matchesSearch && item.category === filter.value
     })
-    
+
   }
   return [];
 })
@@ -65,11 +65,11 @@ const openDeleteDialog = (item: StockItem) => {
 
 const handleRestock = async (stock_item: StockItem, quantity: number) => {
   try {
-    
- 
+
+
 
     const newStock = stock_item.currentStock + quantity
-    
+
     const update_stock = await $fetch(`/api/stock/${stock_item.id}`, {
       method: 'PUT',
       body: {
@@ -84,7 +84,7 @@ const handleRestock = async (stock_item: StockItem, quantity: number) => {
       toast.success({
         title: "Stock Updated"
       })
-      
+
     }
 
 
@@ -93,28 +93,28 @@ const handleRestock = async (stock_item: StockItem, quantity: number) => {
   }
 }
 
-const handleAddItem = async(itemData: StockItemCreateInput) => {
-isAddItemLoading.value = true
-try {
-  
-  const add_stock = await $fetch('/api/stock', {
-    method: 'POST',
-    body: itemData
-  })
+const handleAddItem = async (itemData: StockItemCreateInput) => {
+  isAddItemLoading.value = true
+  try {
 
-  refresh() //refresh the fetch if adding stock is successful
-  toast.success({
-    title: 'stock added'
-  })
-} catch (error) {
-  
-} finally {
-  isAddItemLoading.value = false
-  isAddDialogOpen.value = false
+    const add_stock = await $fetch('/api/stock', {
+      method: 'POST',
+      body: itemData
+    })
 
-  
+    refresh() //refresh the fetch if adding stock is successful
+    toast.success({
+      title: 'stock added'
+    })
+  } catch (error) {
 
-}
+  } finally {
+    isAddItemLoading.value = false
+    isAddDialogOpen.value = false
+
+
+
+  }
 }
 
 const handleDelete = async (item: StockItem) => {
@@ -146,25 +146,22 @@ const handleDelete = async (item: StockItem) => {
     <!-- Header -->
     <div class="flex items-center justify-between">
 
-          <div class=" space-y-2 text-2xl md:text-6xl">
-          <h1 class="">Stock Management</h1>
-          <p class="text-muted-foreground text-lg ">Track inventory levels and manage supplies</p>
-        </div>
-   
+      <div class=" space-y-2 text-2xl md:text-6xl">
+        <h1 class="text-2xl md:text-6xl">Stock Management</h1>
+        <p class="text-muted-foreground text-lg ">Track inventory levels and manage supplies</p>
+      </div>
+
       <div class="flex items-center gap-2">
         <NuxtLink to="/dashboard/stock/qr-labels">
           <button
-            class="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-2.5 text-foreground transition-all hover:bg-accent"
-          >
+            class="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-2.5 text-foreground transition-all hover:bg-accent">
             <i class="pi pi-qrcode" />
             QR Labels
           </button>
         </NuxtLink>
 
-        <button
-          @click="isAddDialogOpen = true"
-          class="flex items-center gap-2 rounded-2xl bg-primary px-4 py-2.5 text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-lg"
-        >
+        <button @click="isAddDialogOpen = true"
+          class="flex items-center gap-2 rounded-2xl bg-primary px-4 py-2.5 text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-lg">
           <i class="pi pi-plus" />
           Add Item
         </button>
@@ -177,41 +174,17 @@ const handleDelete = async (item: StockItem) => {
         <StockStatsCardSkeleton v-for="i in 4" :key="`stat-skeleton-${i}`" />
       </template>
       <template v-else>
-        <StockStatsCard
-          title="Items"
-          :value="totalItems"
-          description="In stock"
-          icon="pi pi-box"
-        />
-        <StockStatsCard
-          title="Low Stock"
-          :value="lowStockCount"
-          description="Need attention"
-          icon="pi pi-exclamation-triangle"
-          icon-color="text-yellow-600"
-        />
-        <StockStatsCard
-          title="Reorder"
-          :value="lowStockCount"
-          description="Restock soon"
-          icon="pi pi-refresh"
-          icon-color="text-orange-600"
-        />
-        <StockStatsCard
-          title="Groups"
-          :value="4"
-          description="Item types"
-          icon="pi pi-tags"
-        />
+        <StockStatsCard title="Items" :value="totalItems" description="In stock" icon="pi pi-box" />
+        <StockStatsCard title="Low Stock" :value="lowStockCount" description="Need attention"
+          icon="pi pi-exclamation-triangle" icon-color="text-yellow-600" />
+        <StockStatsCard title="Reorder" :value="lowStockCount" description="Restock soon" icon="pi pi-refresh"
+          icon-color="text-orange-600" />
+        <StockStatsCard title="Groups" :value="4" description="Item types" icon="pi pi-tags" />
       </template>
     </div>
 
     <!-- Search & Filters -->
-    <StockFilterBar
-      v-model="filter"
-      v-model:search-query="searchQuery"
-      :filters="filterOptions"
-    />
+    <StockFilterBar v-model="filter" v-model:search-query="searchQuery" :filters="filterOptions" />
 
     <!-- Stock Items Grid -->
     <template v-if="stockStatus === 'pending'">
@@ -221,13 +194,8 @@ const handleDelete = async (item: StockItem) => {
     </template>
     <template v-else>
       <div v-if="filteredItems.length > 0" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <StockItemCard
-          v-for="item in filteredItems"
-          :key="item.id"
-          :item="item"
-          @restock="openRestockDialog"
-          @delete="openDeleteDialog"
-        />
+        <StockItemCard v-for="item in filteredItems" :key="item.id" :item="item" @restock="openRestockDialog"
+          @delete="openDeleteDialog" />
       </div>
 
       <!-- Empty State -->
@@ -235,25 +203,13 @@ const handleDelete = async (item: StockItem) => {
     </template>
 
     <!-- Add Item Dialog -->
-    <AddStockDialog
-      v-model:open="isAddDialogOpen"
-        :is-loading="isAddItemLoading"
-      @add-item="handleAddItem"
-    />
+    <AddStockDialog v-model:open="isAddDialogOpen" :is-loading="isAddItemLoading" @add-item="handleAddItem" />
 
     <!-- Restock Dialog -->
-    <RestockDialog
-      v-model:open="isRestockDialogOpen"
-      :item="selectedItem"
-      @restock="handleRestock"
-    />
+    <RestockDialog v-model:open="isRestockDialogOpen" :item="selectedItem" @restock="handleRestock" />
 
     <!-- Delete Dialog -->
-    <DeleteStockDialog
-      v-model:open="isDeleteDialogOpen"
-      :item="selectedItem"
-      :is-loading="isDeleteLoading"
-      @delete="handleDelete"
-    />
+    <DeleteStockDialog v-model:open="isDeleteDialogOpen" :item="selectedItem" :is-loading="isDeleteLoading"
+      @delete="handleDelete" />
   </div>
 </template>

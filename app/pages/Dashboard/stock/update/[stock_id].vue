@@ -70,7 +70,7 @@ const saveStock = async () => {
     <div class="w-full max-w-2xl space-y-6">
     <div>
       <div>
-        <h1 class="text-2xl md:text-4xl font-bold">Stock Scan Form</h1>
+        <h1 class="text-2xl md:text-6xl">Stock Scan Form</h1>
         <p class="text-muted-foreground">Quick adjust view for scanned stock label</p>
       </div>
 

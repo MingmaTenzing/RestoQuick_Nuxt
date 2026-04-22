@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CashierTableCheckoutSkeleton from "~/components/cashier_components/CashierTableCheckoutSkeleton.vue";
 import type { PaymentMethod } from "~/generated/prisma/enums";
 import type { TableSessionWithOrders } from "~~/types/table_session_with_orders";
 
@@ -8,7 +9,7 @@ definePageMeta({ layout: "dashboard-layout" });
 const route = useRoute();
 const sessionId = computed(() => route.params.session_id?.toString() ?? "");
 
-const { data: session, pending, error: sessionError, refresh } = await useFetch<TableSessionWithOrders>(
+const { data: session, status, error: sessionError, refresh } = await useFetch<TableSessionWithOrders>(
     () => `/api/table-sessions/${sessionId.value}`,
 
 );
@@ -152,7 +153,7 @@ function printReceipt() {
 
     <main class="space-y-6 print:hidden">
         <div class="flex flex-wrap items-start justify-between gap-4">
-            <div class="space-y-2">
+            <div class="space-y-4">
                 <NuxtLink to="/dashboard/cashier"
                     class="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
                     <i class="pi pi-arrow-left text-xs"></i>
@@ -160,9 +161,7 @@ function printReceipt() {
                 </NuxtLink>
 
                 <div class="flex flex-wrap items-center gap-3">
-                    <h1 class="text-3xl font-semibold tracking-tight text-foreground">
-                        Table {{ session?.table.number ?? "—" }}
-                    </h1>
+                    <h1 class="text-2xl md:text-5xl">Table {{ session?.table.number ?? "—" }}</h1>
                     <span v-if="session"
                         class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-emerald-700 dark:text-emerald-400">
                         {{ session.status.toLowerCase() }} session
@@ -185,14 +184,7 @@ function printReceipt() {
             </button>
         </div>
 
-        <div v-if="pending" class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
-            <div class="space-y-4">
-                <div v-for="index in 3" :key="index"
-                    class="h-40 animate-pulse rounded-3xl border border-border bg-card">
-                </div>
-            </div>
-            <div class="h-96 animate-pulse rounded-3xl border border-border bg-card"></div>
-        </div>
+        <CashierTableCheckoutSkeleton v-if="status === 'pending'" />
 
         <div v-else-if="!session" class="rounded-4xl border border-dashed border-border bg-card px-6 py-20 text-center">
             <i class="pi pi-receipt text-4xl text-muted-foreground"></i>
@@ -333,7 +325,7 @@ function printReceipt() {
                             <button v-for="amount in quickAmounts" :key="amount" type="button"
                                 class="rounded-2xl border border-border bg-secondary py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
                                 @click="addQuickAmount(amount)">
-                                +{{ (amount) }}
+                                +{{ amount }}
                             </button>
                         </div>
 

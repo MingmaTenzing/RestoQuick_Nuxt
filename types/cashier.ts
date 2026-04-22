@@ -25,7 +25,6 @@ export type CashierPaymentMethod = Extract<
 export type CashierReceipt = {
   tableId: string;
   updatedCount: number;
-  totalPaidCents: number;
   paidAt: Date | string | null;
   paymentMethod: CashierPaymentMethod;
   orders: CashierPaidOrder[];

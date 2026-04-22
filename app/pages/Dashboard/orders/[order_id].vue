@@ -104,23 +104,25 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 
 		<section v-else-if="order_details" class="space-y-5">
 			<div class="flex flex-wrap items-start justify-between gap-3">
-				<div>
-					<h1 class="text-3xl font-semibold">Details of Order No: {{ order_details.orderNo }}</h1>
+				<div class=" space-y-2">
+					<h1 class="text-2xl md:text-4xl">Details of Order No: {{ order_details.orderNo }}</h1>
 					<p class="text-muted-foreground text-sm mt-1">
 						<i class="pi pi-clock text-xs"></i>
-						Placed <NuxtTime :datetime="new Date(order_details.createdAt).getTime()" relative /> • {{ placedAt }}
+						Placed
+						<NuxtTime :datetime="new Date(order_details.createdAt).getTime()" relative /> • {{ placedAt }}
 					</p>
 				</div>
 
 				<div class="flex items-center gap-2">
-					<span class="inline-flex items-center rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
-						{{ order_details.orderType === 'UBER' ? 'Uber Eats' : order_details.orderType === 'DINING' ? 'Dine In' : 'Takeaway' }}
+					<span
+						class="inline-flex items-center rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+						{{ order_details.orderType === 'UBER' ? 'Uber Eats' : order_details.orderType === 'DINING' ?
+							'Dine In' : 'Takeaway' }}
 					</span>
 					<span class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium"
 						:class="order_details.status === 'PENDING' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
-						order_details.status === 'COMPLETED' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
-						'bg-red-500/10 text-red-500 border-red-500/20'"
-					>
+							order_details.status === 'COMPLETED' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
+								'bg-red-500/10 text-red-500 border-red-500/20'">
 						<span class="h-1.5 w-1.5 rounded-full bg-current"></span>
 						{{ formatStatusLabel(order_details.status) }}
 					</span>
@@ -136,18 +138,16 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 						</div>
 
 						<div class="p-5 space-y-4">
-							<div class="grid grid-cols-12 text-xs font-semibold text-muted-foreground uppercase border-b border-dashed border-border pb-3">
+							<div
+								class="grid grid-cols-12 text-xs font-semibold text-muted-foreground uppercase border-b border-dashed border-border pb-3">
 								<p class="col-span-6">Item</p>
 								<p class="col-span-2 text-center">Qty</p>
 								<p class="col-span-2 text-right">Unit</p>
 								<p class="col-span-2 text-right">Total</p>
 							</div>
 
-							<div
-								v-for="item in order_details.items"
-								:key="item.id"
-								class="grid grid-cols-12 items-start py-2 border-b border-dashed border-border last:border-b-0"
-							>
+							<div v-for="item in order_details.items" :key="item.id"
+								class="grid grid-cols-12 items-start py-2 border-b border-dashed border-border last:border-b-0">
 								<div class="col-span-6 pr-3">
 									<p class="font-semibold">{{ item.itemName }}</p>
 									<p v-if="item.specialInstructions" class="text-xs italic text-destructive mt-0.5">
@@ -156,7 +156,8 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 								</div>
 								<p class="col-span-2 text-center font-semibold">x{{ item.quantity }}</p>
 								<p class="col-span-2 text-right">${{ item.unitPriceCents / 100 }}</p>
-								<p class="col-span-2 text-right font-semibold">${{ (item.unitPriceCents * item.quantity) / 100 }}</p>
+								<p class="col-span-2 text-right font-semibold">${{ (item.unitPriceCents * item.quantity)
+									/ 100 }}</p>
 							</div>
 
 							<div class="border-t border-dashed border-border pt-4">
@@ -170,18 +171,14 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 
 					<div class="rounded-2xl border border-border bg-card p-5 space-y-4">
 						<h3 class="text-xl font-semibold text-primary">Update Status</h3>
-						<p class="text-sm text-muted-foreground">Current: {{ formatStatusLabel(order_details.status) }}</p>
+						<p class="text-sm text-muted-foreground">Current: {{ formatStatusLabel(order_details.status) }}
+						</p>
 
 						<div class="flex flex-wrap gap-2">
-							<button
-								v-for="statusOption in availableStatuses"
-								:key="statusOption"
-								type="button"
-								:disabled="isUpdatingStatus"
-								@click="updateOrderStatus(statusOption)"
+							<button v-for="statusOption in availableStatuses" :key="statusOption" type="button"
+								:disabled="isUpdatingStatus" @click="updateOrderStatus(statusOption)"
 								class="rounded-2xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent"
-								:class="order_details.status === statusOption ? 'bg-primary text-primary-foreground border-primary hover:bg-primary' : ''"
-							>
+								:class="order_details.status === statusOption ? 'bg-primary text-primary-foreground border-primary hover:bg-primary' : ''">
 								{{ formatStatusLabel(statusOption) }}
 							</button>
 						</div>
@@ -193,18 +190,21 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 						<h3 class="text-xl font-semibold text-primary">Customer</h3>
 
 						<div class="flex items-center gap-3">
-							<div class="h-11 w-11 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
+							<div
+								class="h-11 w-11 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
 								{{ order_details.customerName?.slice(0, 2).toUpperCase() }}
 							</div>
 							<div>
 								<p class="font-semibold">{{ order_details.customerName }}</p>
-								<p class="text-sm text-muted-foreground">{{ order_details.orderType === 'DINING' ? 'Walk-in customer' : 'Online customer' }}</p>
+								<p class="text-sm text-muted-foreground">{{ order_details.orderType === 'DINING' ?
+									'Walk-in customer' : 'Online customer' }}</p>
 							</div>
 						</div>
 
 						<div>
 							<p class="text-sm text-muted-foreground">Order Type</p>
-							<p class="font-semibold">{{ order_details.orderType === 'UBER' ? 'Uber Eats' : order_details.orderType === 'DINING' ? 'Dine In' : 'Takeaway' }}</p>
+							<p class="font-semibold">{{ order_details.orderType === 'UBER' ? 'Uber Eats' :
+								order_details.orderType === 'DINING' ? 'Dine In' : 'Takeaway' }}</p>
 						</div>
 					</div>
 
