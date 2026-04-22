@@ -4,11 +4,17 @@ definePageMeta({
 })
 
 import { computed, ref } from 'vue'
+import CashierTakeawayQueueSkeleton from '~/components/cashier_components/CashierTakeawayQueueSkeleton.vue'
 import type { OrderDetailsWithInclude } from '~~/types/orderwithInclude'
 
 const searchQuery = ref('')
 
-const { data: orders, pending, error, refresh } = await useFetch<OrderDetailsWithInclude[]>('/api/orders/takeaway-unpaid')
+const { data: orders, status, error, refresh } = await useFetch<OrderDetailsWithInclude[]>(
+    '/api/orders/takeaway-unpaid',
+    {
+        lazy: true
+    }
+)
 
 const filteredOrders = computed(() => {
     const allOrders = orders.value ?? []
@@ -46,9 +52,7 @@ const totalItems = (order: OrderDetailsWithInclude) => {
                         Back
                     </NuxtLink>
 
-                    <h1 class="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-                        Unpaid Takeaway Orders
-                    </h1>
+                    <h1 class="text-2xl md:text-6xl">Unpaid Takeaway Orders</h1>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3 lg:justify-end">
@@ -56,7 +60,7 @@ const totalItems = (order: OrderDetailsWithInclude) => {
                         class="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm text-foreground shadow-sm">
                         <span class="h-2.5  rounded-full bg-amber-500"></span>
                         <span>{{ filteredOrders.length }} unpaid order{{ filteredOrders.length !== 1 ? 's' : ''
-                        }}</span>
+                            }}</span>
                     </div>
                     <div
                         class="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm text-foreground">
@@ -100,10 +104,7 @@ const totalItems = (order: OrderDetailsWithInclude) => {
             </div>
         </section>
 
-        <section v-if="pending" class="grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">
-            <div v-for="index in 6" :key="index" class="h-72 animate-pulse rounded-4xl border border-border bg-card">
-            </div>
-        </section>
+        <CashierTakeawayQueueSkeleton v-if="status === 'pending'" />
 
         <section v-else-if="error"
             class="rounded-4xl border border-dashed border-border bg-card px-6 py-14 text-center shadow-sm">

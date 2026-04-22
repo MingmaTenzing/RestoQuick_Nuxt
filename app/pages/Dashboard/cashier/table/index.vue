@@ -6,13 +6,16 @@ definePageMeta({
 import { computed, ref } from 'vue'
 import type { TableGetPayloadWithSession } from '~~/types/table_include_session'
 import Table_Card from '~/components/pos_components/Table_Card.vue'
+import TableCardSkeleton from '~/components/pos_components/TableCardSkeleton.vue'
 
 
 const router = useRouter()
 
 const searchQuery = ref('')
 
-const { data: tables, pending: tablesPending } = await useFetch<TableGetPayloadWithSession[]>('/api/tables')
+const { data: tables, pending: tablesPending } = await useFetch<TableGetPayloadWithSession[]>('/api/tables', {
+    lazy: true
+})
 
 const searchFilteredTables = computed(() => {
     const allTables = tables.value ?? []
@@ -54,9 +57,7 @@ function hasActiveSession(table: TableGetPayloadWithSession) {
                     </div>
 
                     <div class="space-y-3">
-                        <h1 class="text-2xl font-semibold tracking-tight text-foreground md:text-4xl">
-                            Choose an active table session.
-                        </h1>
+                        <h1 class="text-2xl md:text-5xl">Choose an active table session.</h1>
 
                     </div>
                 </div>
@@ -103,8 +104,7 @@ function hasActiveSession(table: TableGetPayloadWithSession) {
         </section>
 
         <section v-if="tablesPending" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <div v-for="index in 8" :key="index" class="h-56 animate-pulse rounded-4xl border border-border bg-card">
-            </div>
+            <TableCardSkeleton v-for="index in 8" :key="index" />
         </section>
 
         <section v-else-if="searchFilteredTables.length"

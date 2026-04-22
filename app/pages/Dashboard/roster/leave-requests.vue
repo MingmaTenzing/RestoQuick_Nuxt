@@ -72,7 +72,7 @@ async function updateStatus(status: LeaveStatus, request_id: string) {
     <!-- Header -->
     <div class="flex justify-between items-center">
       <div>
-        <h1 class="text-2xl md:text-4xl font-bold">Leave Requests</h1>
+        <h1 class="text-2xl md:text-6xl">Leave Requests</h1>
         <span class="text-accent-foreground/60">Manage and approve staff leave requests</span>
       </div>
       <div class="text-sm text-muted-foreground">

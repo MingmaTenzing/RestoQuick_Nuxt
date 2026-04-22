@@ -1,8 +1,9 @@
 import { PaymentMethod } from "~/generated/prisma/enums";
+import { broadCast } from "~~/server/utils/kitchenSocket";
 import { usePrisma } from "~~/server/utils/prisma";
 
 type MarkPaidBody = {
-  tableSessionId?: string;
+  tableSessionId: string;
   orderIds: string[];
   paymentMethod: PaymentMethod;
 };
@@ -22,7 +23,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  return prisma.$transaction(async (transaction) => {
+  const checkoutResult = await prisma.$transaction(async (transaction) => {
     let unpaidOrders: { id: string; totalAmountCents: number }[] = [];
 
     try {
@@ -53,14 +54,14 @@ export default defineEventHandler(async (event) => {
     }
 
     const paid_at = new Date();
-    const unpaidOrderIds = unpaidOrders.map(
+    const settledOrderIds = unpaidOrders.map(
       (order: { id: string }) => order.id,
     );
 
     await transaction.order.updateMany({
       where: {
         id: {
-          in: unpaidOrderIds,
+          in: settledOrderIds,
         },
       },
       data: {
@@ -71,38 +72,58 @@ export default defineEventHandler(async (event) => {
       },
     });
 
-    if (tableSessionId) {
-      try {
-        await transaction.tableSession.update({
-          where: {
-            id: tableSessionId,
+    const completedOrders = await transaction.order.findMany({
+      where: {
+        id: {
+          in: settledOrderIds,
+        },
+      },
+      include: {
+        table: true,
+        items: {
+          include: {
+            menuItem: true,
+            orderItemOptions: true,
           },
-          data: {
-            status: "CLOSED",
-            closedAt: paid_at,
-          },
-        });
-      } catch {
-        throw createError({
-          statusCode: 500,
-          statusMessage: "Failed to close table session",
-        });
-      }
+        },
+      },
+    });
+
+    //closes the session once the orders are marked ass paid
+    try {
+      await transaction.tableSession.update({
+        where: {
+          id: tableSessionId,
+        },
+        data: {
+          status: "CLOSED",
+          closedAt: paid_at,
+        },
+      });
+    } catch {
+      throw createError({
+        statusCode: 500,
+        statusMessage: "Failed to close table session",
+      });
     }
 
-    const totalPaidCents = unpaidOrders.reduce(
-      (sum: number, order: { totalAmountCents: number }) =>
-        sum + order.totalAmountCents,
-      0,
-    );
-
     return {
-      updatedCount: unpaidOrderIds.length,
-      totalPaidCents,
+      updatedCount: settledOrderIds.length,
       paidAt: paid_at,
       paymentMethod,
-      tableSessionId: tableSessionId ?? null,
-      orderIds: unpaidOrderIds,
+      orderIds: settledOrderIds,
+      completedOrders,
     };
   });
+
+  for (const order of checkoutResult.completedOrders) {
+    broadCast({ type: "ORDER_MARKED_COMPLETED", payload: order });
+  }
+
+  return {
+    updatedCount: checkoutResult.updatedCount,
+    paidAt: checkoutResult.paidAt,
+    paymentMethod: checkoutResult.paymentMethod,
+    orderIds: checkoutResult.orderIds,
+  };
 });

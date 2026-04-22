@@ -13,7 +13,9 @@ const { data: order, pending, error, refresh } = await useFetch<CashierPaidOrder
     () => `/api/orders/${orderId.value}`
 )
 
+const quickAmounts = [10, 20, 50, 100]
 const paymentMethod = ref<PaymentMethod>("CASH")
+const tenderedAmount = ref<number | null>(null)
 const isSubmitting = ref(false)
 const paymentError = ref("")
 
@@ -21,9 +23,30 @@ const totalItems = computed(() => {
     return (order.value?.items ?? []).reduce((sum, item) => sum + item.quantity, 0)
 })
 
+const totalDueCents = computed(() => order.value?.totalAmountCents ?? 0)
+const tenderedCents = computed(() => Math.round((tenderedAmount.value ?? 0) * 100))
+const changeDueCents = computed(() =>
+    paymentMethod.value === "CASH" ? Math.max(tenderedCents.value - totalDueCents.value, 0) : 0
+)
+const canCloseSale = computed(() => {
+    if (!order.value || order.value.paymentStatus === 'PAID') {
+        return false
+    }
+
+    if (paymentMethod.value === 'CARD_TERMINAL') {
+        return true
+    }
+
+    return tenderedCents.value >= totalDueCents.value
+})
+
+function addQuickAmount(amount: number) {
+    tenderedAmount.value = Number(((tenderedAmount.value ?? 0) + amount).toFixed(2))
+}
+
 
 async function closeSale() {
-    if (!order.value || isSubmitting.value) {
+    if (!order.value || isSubmitting.value || !canCloseSale.value) {
         return
     }
 
@@ -39,6 +62,7 @@ async function closeSale() {
             },
         })
 
+        tenderedAmount.value = null
         await refresh()
     } catch (error) {
         paymentError.value = error instanceof Error ? error.message : 'Unable to close sale.'
@@ -130,9 +154,7 @@ function printReceipt() {
                             </span>
                         </div>
 
-                        <h1 class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-                            Order #{{ order?.orderNo ?? '—' }}
-                        </h1>
+                        <h1 class="text-2xl md:text-6xl">Order #{{ order?.orderNo ?? '—' }}</h1>
 
                         <p v-if="order" class="text-sm text-muted-foreground sm:text-base">
                             {{ order.customerName || 'Walk-in order' }}
@@ -263,7 +285,40 @@ function printReceipt() {
                             </button>
                         </div>
 
-                        <button type="button" :disabled="isSubmitting || order.paymentStatus === 'PAID'"
+                        <div v-if="order.paymentStatus !== 'PAID' && paymentMethod === 'CASH'" class="mt-5 space-y-4">
+                            <label class="block space-y-1.5">
+                                <span class="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                                    Tendered amount
+                                </span>
+                                <input v-model.number="tenderedAmount" type="number" min="0" step="0.01" inputmode="decimal"
+                                    placeholder="0.00"
+                                    class="h-12 w-full rounded-2xl border border-border bg-secondary px-4 text-lg font-semibold text-foreground outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20">
+                            </label>
+
+                            <div class="grid grid-cols-4 gap-2">
+                                <button v-for="amount in quickAmounts" :key="amount" type="button"
+                                    class="rounded-2xl border border-border bg-secondary py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+                                    @click="addQuickAmount(amount)">
+                                    +{{ amount }}
+                                </button>
+                            </div>
+
+                            <div class="rounded-3xl border border-border bg-secondary px-4 py-3.5 shadow-sm">
+                                <p class="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Change due</p>
+                                <p class="mt-1 text-2xl font-semibold" :class="tenderedCents >= totalDueCents && totalDueCents > 0
+                                    ? 'text-emerald-700 dark:text-emerald-400'
+                                    : 'text-foreground'">
+                                    $ {{ (changeDueCents / 100).toFixed(2) }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div v-else-if="order.paymentStatus !== 'PAID'"
+                            class="mt-5 rounded-3xl border border-border bg-secondary px-4 py-4 text-sm text-muted-foreground">
+                            Present the EFTPOS terminal to the customer. Confirm payment, then record it below.
+                        </div>
+
+                        <button type="button" :disabled="isSubmitting || !canCloseSale"
                             class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-background px-4 py-3 text-sm font-semibold text-foreground transition-colors active:opacity-80"
                             @click="closeSale">
                             <i class="pi pi-check text-sm"></i>

@@ -30,20 +30,9 @@ const checkoutOptions = [
 <template>
     <main class="space-y-12 pb-10">
         <header class="max-w-2xl space-y-5">
-            <div
-                class="inline-flex items-center gap-2.5 rounded-full border border-border bg-card px-3.5 py-1.5 shadow-sm">
-                <span class="relative flex h-2.5 w-2.5">
-                    <span
-                        class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/70 opacity-75"></span>
-                    <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary"></span>
-                </span>
-                <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-foreground/70">Cashier
-                    Terminal</span>
-            </div>
 
-            <h1 class="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-                Ready for checkout?
-            </h1>
+
+            <h1 class="text-2xl md:text-6xl">Ready for checkout?</h1>
             <p class="text-lg leading-relaxed text-muted-foreground">
                 Select the order type you want to process right now.
             </p>

@@ -36,6 +36,19 @@ A restaurant order & staff management system with real-time kitchen updates, Str
 
 **Environment variables:** DATABASE*URL, STRIPE_SECRET_KEY, STRIPE_PUBLIC_KEY, VAPI*\_, CLOUDINARY\_\_, WEBSOCKET_HOST via runtimeConfig (nuxt.config.ts).
 
+## Code quality principles
+
+**Write simple, readable code first:**
+
+- Choose the simplest solution that correctly solves the problem — complexity must be justified, not defaulted to
+- If a computed value, helper, or abstraction is only used once, inline it instead
+- Prefer flat logic over deeply nested conditions; early returns over wrapping everything in if-blocks
+- Name variables after what they are at the time they are used, not what they were before a mutation (e.g. `settledOrderIds` not `unpaidOrderIds` after an update)
+- Remove code that is not consumed — unused returns, unused type fields, and dead computations are noise, not safety nets
+- Do not add try/catch around operations that cannot fail in practice; only catch errors at real failure boundaries
+- Do not compute values on the server that the client already has, and vice versa — think about where the data lives before adding a round-trip or an extra reduce
+- When the backend can return exactly what the frontend needs, do it there; avoid pushing filtering, totalling, or sorting work onto the client unnecessarily
+
 ## Project conventions & patterns
 
 **File structure conventions:**
