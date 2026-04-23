@@ -111,15 +111,16 @@ CLOUDINARY_API_KEY=""
 CLOUDINARY_API_SECRET_KEY=""
 ```
 
+
 ### 3. Start PostgreSQL
 
-You can use your own Postgres instance, or use the included Docker Compose file.
+You can use your own Postgres instance. Make sure your database is running and accessible at the URL specified in your `.env` file:
 
-```bash
-docker compose up -d
+```
+DATABASE_URL="postgresql://postgres:password@localhost:5432/mydb?schema=public"
 ```
 
-That Compose file starts:
+Default local values:
 
 - host: `localhost`
 - port: `5432`
