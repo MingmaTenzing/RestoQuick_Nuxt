@@ -5,7 +5,6 @@ definePageMeta({
 import { type TableGetPayloadWithSession } from '~~/types/table_include_session'
 import Assign_Table_Session_Modal from '~/components/pos_components/Assign_Table_Session_Modal.vue'
 import Table_Card from '~/components/pos_components/Table_Card.vue'
-import { start } from 'repl'
 
 
 //the table is returned with active sessions included, 
@@ -55,7 +54,7 @@ async function assignTable() {
 	isAssigningTable.value = true;
 
 	try {
-		const start_session = await $fetch('/api/table-sessions', {
+		const start_session = await $fetch('/api/table-sessions/create', {
 			method: 'post',
 			body: {
 				tableId: selectedTable.value?.id
