@@ -20,3 +20,16 @@ export type TableSessionWithOrders = TableSessionGetPayload<{
     };
   };
 }>;
+
+export type TableSessionCheckoutResponse = TableSessionWithOrders & {
+  summary: {
+    orderCount: number;
+    payableOrderCount: number;
+    paidOrderCount: number;
+    payableOrderIds: string[];
+    sessionTotalCents: number;
+    payableTotalCents: number;
+    paidTotalCents: number;
+    hasOutstandingBalance: boolean;
+  };
+};
