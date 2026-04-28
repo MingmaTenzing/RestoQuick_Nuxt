@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 definePageMeta({
-    layout: 'dashboard-layout'
+  layout: 'dashboard-layout'
 })
 
-import { useWebSocket } from '@vueuse/core';
+import { useIntervalFn, useWebSocket } from '@vueuse/core';
 import { ref, computed } from 'vue'
 import Order_Item from '~/components/kitchenDisplay_components/Order_Item.vue';
-import type{ OrderDetailsWithInclude } from '~~/types/orderwithInclude';
+import type { OrderDetailsWithInclude } from '~~/types/orderwithInclude';
 import type websocket_payload from '~~/types/websocket_payload';
 import notification_sound from "../../assets/audio/new-notification-022-370046.mp3"
 import Complete_Order_Popup from '~/components/kitchenDisplay_components/Completed_Orders/Complete_Order_Popup.vue';
@@ -22,10 +22,30 @@ const loading_orders = ref(false)
 const runtime = useRuntimeConfig();
 
 
-const { modal_state, open_completed_orders_modal} = useCompleted_Order_Modal()
+const { modal_state, open_completed_orders_modal } = useCompleted_Order_Modal()
 
 // Realtime channel for kitchen updates (new order, completed, recall, cancelled).
-const { status, data, send, close } = useWebSocket(`${runtime.public.WEBSOCKET_HOST}/api/websocket`)
+const { status, data, send, close } = useWebSocket(`${runtime.public.WEBSOCKET_HOST}/api/websocket`, {
+
+
+  autoReconnect: {
+    retries: 3,
+    delay: 1000,
+    onFailed() {
+      alert('Failed to connect WebSocket after 3 retries')
+    },
+
+  },
+
+  heartbeat: {
+    message: 'ping',
+    interval: 30000, // 30 seconds,
+    pongTimeout: 20000, // 20 seconds
+  },
+
+
+
+})
 
 
 
@@ -35,9 +55,9 @@ const { status, data, send, close } = useWebSocket(`${runtime.public.WEBSOCKET_H
 // - This is the base list shown before websocket updates arrive.
 
 onMounted(async () => {
-    loading_orders.value = true
-    all_orders.value = await $fetch<OrderDetailsWithInclude[]>('/api/orders/pending');
-    loading_orders.value = false
+  loading_orders.value = true
+  all_orders.value = await $fetch<OrderDetailsWithInclude[]>('/api/orders/pending');
+  loading_orders.value = false
 
 })
 
@@ -45,56 +65,64 @@ onMounted(async () => {
 
 watch(data, (newValue: string) => {
 
-    // Each websocket message is parsed into a typed kitchen payload.
-    let parsed_data: websocket_payload = JSON.parse(newValue)
+  // Each websocket message is parsed into a typed kitchen payload.
 
 
-    if (parsed_data.type == 'ORDER_CREATED') {
+  if (!newValue) return;
 
-            // New pending order: add to active kitchen queue.
+  if (newValue == "pong") {
+    console.log("pong received");
+    return;
+  }
+  let parsed_data: websocket_payload = JSON.parse(newValue)
 
-            all_orders.value.push(parsed_data.payload)
-             toast.info({
-            
-                title: 'New Order Received '
-             })
-        
-             //plays the notification sound
-            const audio = new Audio(notification_sound);
-            audio.play();
-         
-           
-    }
 
-    if (parsed_data.type == 'ORDER_MARKED_COMPLETED') {
+  if (parsed_data.type == 'ORDER_CREATED') {
 
-         // Completed orders should leave active kitchen queue.
+    // New pending order: add to active kitchen queue.
 
-       all_orders.value =  all_orders.value.filter((item) => item.id !== parsed_data.payload.id)
-        toast.success({
-            title:"Order Marked as Completed"
-        })
+    all_orders.value.push(parsed_data.payload)
+    toast.info({
 
-    }
-    if (parsed_data.type == "ORDER_RECALL") {
+      title: 'New Order Received '
+    })
 
-        // Recalled order is put back into active queue.
-        all_orders.value.push(parsed_data.payload)
-        toast.question({
-          
-            title: 'Order Recalled'
+    //plays the notification sound
+    const audio = new Audio(notification_sound);
+    audio.play();
 
-        })
-    }
 
-    if (parsed_data.type == 'ORDER_CANCELLED') {
+  }
 
-        // Cancelled orders are removed from active queue.
-        all_orders.value = all_orders.value.filter((item) => item.id !== parsed_data.payload.id)
-        toast.warning({
-            title: 'Order Cancelled'
-        })
-    }
+  if (parsed_data.type == 'ORDER_MARKED_COMPLETED') {
+
+    // Completed orders should leave active kitchen queue.
+
+    all_orders.value = all_orders.value.filter((item) => item.id !== parsed_data.payload.id)
+    toast.success({
+      title: "Order Marked as Completed"
+    })
+
+  }
+  if (parsed_data.type == "ORDER_RECALL") {
+
+    // Recalled order is put back into active queue.
+    all_orders.value.push(parsed_data.payload)
+    toast.question({
+
+      title: 'Order Recalled'
+
+    })
+  }
+
+  if (parsed_data.type == 'ORDER_CANCELLED') {
+
+    // Cancelled orders are removed from active queue.
+    all_orders.value = all_orders.value.filter((item) => item.id !== parsed_data.payload.id)
+    toast.warning({
+      title: 'Order Cancelled'
+    })
+  }
 
 
 
@@ -108,105 +136,103 @@ watch(data, (newValue: string) => {
 
 <template>
 
-    <main class=" space-y-6">
-       
-
-      
-            <!-- header -->
-        <section class=" space-y-4">
- <div class=" flex justify-between items-center">
-    <div>
-        <h2 class="text-2xl md:text-6xl"> Kitchen Display </h2>
-        <p class=" text-sm lg:text-base text-muted-foreground">Manage incoming order and preparation status</p>
-
-    </div>
-
-<!-- comleted order button and weboscket status -->
-    <div  class="flex space-x-2">
-    <div>
-        <button @click="open_completed_orders_modal" class="bg-green-500/20 text-green-500 px-4 py-2 rounded-3xl"> Completed Orders</button>
-    </div>
-
-    <!-- websocket status -->
-    <div class=" bg-accent rounded-full px-4 py-2">
-        
-
-               <div  class="flex items-center space-x-2 "
-        v-if="status == 'OPEN'"> 
-        
-        <div class=" w-4 h-4 rounded-full bg-green-500" />
-        <p>Connected</p>
-  </div>
-             
-  
-  <div  class="flex items-center space-x-2 "
-        v-if="status == 'CONNECTING'"> 
-        
-        <div class=" w-4 h-4 rounded-full bg-gray-500" />
-        <p>Connecting</p>
-  </div>
-  
-  <div  class="flex items-center space-x-2 "
-        v-if="status == 'CLOSED'"> 
-        
-        <div class=" w-4 h-4 rounded-full bg-destructive" />
-        <p>Not Connected</p>
-  </div>
-
-    
-     
-    </div>
-    
-
-</div>
-
- </div>
-            
-        </section>
+  <main class=" space-y-6">
 
 
 
-        <!-- skeleton loading orders -->
-
-        <section v-if="loading_orders" class=" flex flex-wrap gap-2"> 
-         
-        <div v-for="i in 10" :key="i">
-            <Loading_Order_Item></Loading_Order_Item>
+    <!-- header -->
+    <section class=" space-y-4">
+      <div class=" flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl md:text-6xl"> Kitchen Display </h2>
+          <p class=" text-sm lg:text-base text-muted-foreground">Manage incoming order and preparation status</p>
 
         </div>
 
-        </section>
-
-       
-
-        <!-- Active kitchen list loaded from /api/orders/pending, then kept in sync by websocket events -->
-        <section v-else class=" ">
-
-          <div v-if="all_orders.length === 0">
-            <div class=" flex justify-center items-center w-full h-[70vh]">
-                <p class=" text-2xl text-muted-foreground">No Orders at the moment</p>
-
-            </div>
+        <!-- comleted order button and weboscket status -->
+        <div class="flex space-x-2">
+          <div>
+            <button @click="open_completed_orders_modal" class="bg-green-500/20 text-green-500 px-4 py-2 rounded-3xl">
+              Completed Orders</button>
           </div>
 
-          <div v-else class=" flex flex-wrap gap-2 ">
-            <div v-for="order in all_orders" :key="order.id">
-              <Order_Item :order="order" />
+          <!-- websocket status -->
+          <div class=" bg-accent rounded-full px-4 py-2">
+
+
+            <div class="flex items-center space-x-2 " v-if="status == 'OPEN'">
+
+              <div class=" w-4 h-4 rounded-full bg-green-500" />
+              <p>Connected</p>
             </div>
+
+
+            <div class="flex items-center space-x-2 " v-if="status == 'CONNECTING'">
+
+              <div class=" w-4 h-4 rounded-full bg-gray-500" />
+              <p>Connecting</p>
+            </div>
+
+            <div class="flex items-center space-x-2 " v-if="status == 'CLOSED'">
+
+              <div class=" w-4 h-4 rounded-full bg-destructive" />
+              <p>Not Connected</p>
+            </div>
+
+
+
           </div>
 
-        </section>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- skeleton loading orders -->
+
+    <section v-if="loading_orders" class=" flex flex-wrap gap-2">
+
+      <div v-for="i in 10" :key="i">
+        <Loading_Order_Item></Loading_Order_Item>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- Active kitchen list loaded from /api/orders/pending, then kept in sync by websocket events -->
+    <section v-else class=" ">
+
+      <div v-if="all_orders.length === 0">
+        <div class=" flex justify-center items-center w-full h-[70vh]">
+          <p class=" text-2xl text-muted-foreground">No Orders at the moment</p>
+
+        </div>
+      </div>
+
+      <div v-else class=" flex flex-wrap gap-2 ">
+        <div v-for="order in all_orders" :key="order.id">
+          <Order_Item :order="order" />
+        </div>
+      </div>
+
+    </section>
 
 
     <!-- Opens completed-orders modal (which separately fetches /api/orders/completed) -->
 
-        <Transition>
-            <div v-if="modal_state == true" class="fixed z-50 inset-0 flex items-center justify-center bg-background/80">
-       <Complete_Order_Popup></Complete_Order_Popup>
-        </div>
+    <Transition>
+      <div v-if="modal_state == true" class="fixed z-50 inset-0 flex items-center justify-center bg-background/80">
+        <Complete_Order_Popup></Complete_Order_Popup>
+      </div>
 
-        </Transition>
+    </Transition>
 
 
-    </main>
+  </main>
 </template>
