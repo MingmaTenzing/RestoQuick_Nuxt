@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
     // Most generic thermal printers use ESC/POS (EPSON mode).
     type: PrinterTypes.EPSON,
     width: 80, // Number of characters in one line
-    interface: "tcp://192.168.1.250:3000", // Printer interface
+    interface: "tcp://10.10.10.150:3000", // Printer interface
     removeSpecialCharacters: true,
     lineCharacter: "=", // Set character for lines - default: "-"
     breakLine: BreakLine.WORD, // Break line after WORD or CHARACTERS. Disabled with NONE - default: WORD
