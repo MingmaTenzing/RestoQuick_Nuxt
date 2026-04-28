@@ -116,7 +116,7 @@ function clear_search() {
     <section class="flex justify-between">
       <div>
         <div class="flex items-center gap-6 text-2xl md:text-6xl">
-          <h1 class="">Staff Management</h1>
+          <h1 class="text-2xl md:text-6xl">Staff Management</h1>
           <i class="pi pi-user text-muted-foreground"></i>
         </div>
         <p class="text-accent-foreground/60 text-lg mt-2">Manager your team members, roles and availability</p>

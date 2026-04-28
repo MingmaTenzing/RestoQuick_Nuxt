@@ -30,5 +30,7 @@ logs
 .github
 .vscode
 
+Dockerfile
+
 .VSCodeCounter
 

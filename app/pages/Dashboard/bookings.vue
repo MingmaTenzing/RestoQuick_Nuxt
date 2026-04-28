@@ -12,8 +12,8 @@ const toast = useToast();
 
 const isAddBooking_dialog_open = ref<boolean>(false);
 
-const { data: bookings, refresh, status:bookings_loading } = await useFetch<Booking[]>('/api/bookings', {
-  lazy:true
+const { data: bookings, refresh, status: bookings_loading } = await useFetch<Booking[]>('/api/bookings', {
+  lazy: true
 })
 
 
@@ -65,7 +65,7 @@ function handle_close_dialog() {
   //because there's only two outcome from the modal
   // it's either booking or not 
   //so when the modal closes it will refetch the data
-    refresh()
+  refresh()
 
 
 }
@@ -76,31 +76,31 @@ async function update_booking_status(status: BookingStatus, booking_id: string) 
   //<booking_details_card>
 
   try {
-const response = await $fetch(`/api/bookings/${booking_id}`, {
-        method: 'put', 
-  body: {
-    status: status
-  }
-            
-})
+    const response = await $fetch(`/api/bookings/${booking_id}`, {
+      method: 'put',
+      body: {
+        status: status
+      }
+
+    })
 
     if (response) {
       toast.success({ title: "Booking Updated" })
       // once the response is received it will refetch the intial bookings request
       refresh();
-  
-}
+
+    }
 
   } catch (error) {
-    toast.error({title:"System Error "})
-    
+    toast.error({ title: "System Error " })
+
   }
 
 }
 
 
 
- 
+
 
 
 
@@ -116,35 +116,35 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
     <div class="flex justify-between">
       <div>
         <div class="">
-          
+
           <h1 class="text-2xl md:text-6xl ">Reservations</h1>
-          
+
 
         </div>
         <span class="text-accent-foreground/60">Manage table bookings and customer reservations</span>
       </div>
       <div>
         <button v-on:click="openAddBookingDialog"
-    
-          class="border-border   border p-4 flex justify-center items-center space-x-2 rounded-3xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-        >
+          class="border-border   border p-4 flex justify-center items-center space-x-2 rounded-3xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
           <i class="pi pi-plus"></i>
           <span>New Booking</span>
         </button>
-        
+
       </div>
     </div>
-     
+
 
     <!-- Stats Cards Grid -->
     <div class="grid grid-cols-1 gap-4 md:grid-cols-4 xl:grid-cols-4">
       <!-- Total Bookings -->
-      <div class="flex min-w-0 items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 text-card-foreground shadow sm:p-6">
+      <div
+        class="flex min-w-0 items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 text-card-foreground shadow sm:p-6">
         <div class="flex min-w-0 flex-1 flex-col justify-between gap-4">
           <span class="font-light text-muted-foreground">Total Bookings</span>
           <div class="flex flex-col">
-            <span v-if="bookings_loading =='pending'" class="h-12 w-25 rounded-3xl bg-muted-foreground/20 animate-pulse"></span>
-     
+            <span v-if="bookings_loading == 'pending'"
+              class="h-12 w-25 rounded-3xl bg-muted-foreground/20 animate-pulse"></span>
+
             <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium ">{{ bookings?.length }}</span>
             <span class="text-muted-foreground font-light text-sm">This month</span>
           </div>
@@ -155,12 +155,15 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
       </div>
 
       <!-- Confirmed Bookings -->
-      <div class="flex min-w-0 items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 text-card-foreground shadow sm:p-6">
+      <div
+        class="flex min-w-0 items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 text-card-foreground shadow sm:p-6">
         <div class="flex min-w-0 flex-1 flex-col justify-between gap-4">
           <span class="font-light text-muted-foreground">Confirmed</span>
           <div class="flex flex-col">
-            <span v-if="bookings_loading == 'pending'" class="w-10 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
-            <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium text-green-600">{{ total_confirmed_booking}}</span>
+            <span v-if="bookings_loading == 'pending'"
+              class="w-10 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
+            <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium text-green-600">{{
+              total_confirmed_booking }}</span>
             <span class="text-muted-foreground font-light text-sm">Ready to serve</span>
           </div>
         </div>
@@ -170,13 +173,15 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
       </div>
 
       <!-- Total Guests -->
-      <div class="flex min-w-0 items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 text-card-foreground shadow sm:p-6">
+      <div
+        class="flex min-w-0 items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 text-card-foreground shadow sm:p-6">
         <div class="flex min-w-0 flex-1 flex-col justify-between gap-4">
           <span class="font-light text-muted-foreground">Total Guests</span>
           <div class="flex flex-col">
-            <span v-if="bookings_loading == 'pending'" class="w-14 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
+            <span v-if="bookings_loading == 'pending'"
+              class="w-14 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
 
-            <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium ">{{ totalGuestCount}}</span>
+            <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium ">{{ totalGuestCount }}</span>
             <span class="text-muted-foreground font-light text-sm">Expected arrivals</span>
           </div>
         </div>
@@ -186,13 +191,16 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
       </div>
 
       <!-- Pending Bookings -->
-      <div class="flex min-w-0 items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 text-card-foreground shadow sm:p-6">
+      <div
+        class="flex min-w-0 items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 text-card-foreground shadow sm:p-6">
         <div class="flex min-w-0 flex-1 flex-col justify-between gap-4">
           <span class="font-light text-muted-foreground">Pending</span>
           <div class="flex flex-col">
-              <span v-if="bookings_loading == 'pending'" class="w-14 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
+            <span v-if="bookings_loading == 'pending'"
+              class="w-14 h-12 bg-muted-foreground/20 animate-pulse rounded-3xl"></span>
 
-            <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium text-primary">{{ total_pending_bookings }}</span>
+            <span v-else class="text-lg md:text-4xl lg:text-5xl  font-medium text-primary">{{ total_pending_bookings
+              }}</span>
             <span class="text-muted-foreground font-light text-sm">Awaiting confirmation</span>
           </div>
         </div>
@@ -203,47 +211,37 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
     </div>
 
 
- 
+
     <!-- Tabs Navigation -->
     <div class="space-y-4">
       <div class="flex gap-2 border-b border-border">
-        <button
-        v-on:click="currentTab = 'all'" 
- 
-          :class="[
-            'px-4 py-2 text-sm font-medium border-b-2 transition-colors',
-            currentTab === 'all'
-              ? 'border-primary text-foreground font-semibold'
-              : 'border-transparent text-muted-foreground hover:text-foreground'
-          ]"
-        >
+        <button v-on:click="currentTab = 'all'" :class="[
+          'px-4 py-2 text-sm font-medium border-b-2 transition-colors',
+          currentTab === 'all'
+            ? 'border-primary text-foreground font-semibold'
+            : 'border-transparent text-muted-foreground hover:text-foreground'
+        ]">
           All Bookings
         </button>
-        <button
-          @click="currentTab = 'today'"
-          :class="[
-            'px-4 py-2 text-sm font-medium border-b-2 transition-colors',
-            currentTab === 'today'
-              ? 'border-primary text-foreground font-semibold'
-              : 'border-transparent text-muted-foreground hover:text-foreground'
-          ]"
-        >
-          Today ({{ today_booking?.length}})
+        <button @click="currentTab = 'today'" :class="[
+          'px-4 py-2 text-sm font-medium border-b-2 transition-colors',
+          currentTab === 'today'
+            ? 'border-primary text-foreground font-semibold'
+            : 'border-transparent text-muted-foreground hover:text-foreground'
+        ]">
+          Today ({{ today_booking?.length }})
         </button>
-        <button
-          @click="currentTab = 'upcoming'"
-          :class="[
-            'px-4 py-2 text-sm font-medium border-b-2 transition-colors',
-            currentTab === 'upcoming'
-              ? 'border-primary text-foreground font-semibold'
-              : 'border-transparent text-muted-foreground hover:text-foreground'
-          ]"
-        >
+        <button @click="currentTab = 'upcoming'" :class="[
+          'px-4 py-2 text-sm font-medium border-b-2 transition-colors',
+          currentTab === 'upcoming'
+            ? 'border-primary text-foreground font-semibold'
+            : 'border-transparent text-muted-foreground hover:text-foreground'
+        ]">
           Upcoming ({{ upcoming_bookings?.length }})
         </button>
       </div>
-   
-      
+
+
 
       <!-- All Bookings Tab -->
       <div v-if="currentTab === 'all'" class="space-y-4">
@@ -251,20 +249,20 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
           <i class="pi pi-inbox text-4xl text-muted-foreground mb-4 block"></i>
           <p class="text-muted-foreground">No bookings yet</p>
         </div>
-        
+
 
         <section v-if="bookings_loading == 'pending'">
           <booking-components-loading-booking></booking-components-loading-booking>
         </section>
 
-     
 
-      
-        <section v-if="bookings_loading == 'success'" v-for="booking in bookings"
-            :key="booking.id" >
 
-            <booking-components-booking-details-card @update-status="update_booking_status" :booking_details="booking"></booking-components-booking-details-card>
-          
+
+        <section v-if="bookings_loading == 'success'" v-for="booking in bookings" :key="booking.id">
+
+          <booking-components-booking-details-card @update-status="update_booking_status"
+            :booking_details="booking"></booking-components-booking-details-card>
+
         </section>
       </div>
       <div v-if="currentTab === 'today'" class="space-y-4">
@@ -272,11 +270,11 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
           <i class="pi pi-inbox text-4xl text-muted-foreground mb-4 block"></i>
           <p class="text-muted-foreground">No bookings yet</p>
         </div>
-        <section v-else v-for="booking in today_booking"
-            :key="booking.id" >
+        <section v-else v-for="booking in today_booking" :key="booking.id">
 
-            <booking-components-booking-details-card @update-status="update_booking_status" :booking_details="booking"></booking-components-booking-details-card>
-          
+          <booking-components-booking-details-card @update-status="update_booking_status"
+            :booking_details="booking"></booking-components-booking-details-card>
+
         </section>
       </div>
       <div v-if="currentTab === 'upcoming'" class="space-y-4">
@@ -284,20 +282,20 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
           <i class="pi pi-inbox text-4xl text-muted-foreground mb-4 block"></i>
           <p class="text-muted-foreground">No bookings yet</p>
         </div>
-        <section v-else v-for="booking in upcoming_bookings"
-            :key="booking.id" >
+        <section v-else v-for="booking in upcoming_bookings" :key="booking.id">
 
-            <booking-components-booking-details-card @update-status="update_booking_status" :booking_details="booking"></booking-components-booking-details-card>
-          
+          <booking-components-booking-details-card @update-status="update_booking_status"
+            :booking_details="booking"></booking-components-booking-details-card>
+
         </section>
       </div>
 
-    
+
     </div>
 
 
 
-    
+
   </div>
 
 
@@ -306,12 +304,12 @@ const response = await $fetch(`/api/bookings/${booking_id}`, {
 
     <!-- here the @dialog-closed is the emit event name -->
 
-    <booking-components-add-booking-modal  @diaglog-closed="handle_close_dialog"></booking-components-add-booking-modal>
+    <booking-components-add-booking-modal @diaglog-closed="handle_close_dialog"></booking-components-add-booking-modal>
 
 
   </div>
 
 
 
-  
+
 </template>

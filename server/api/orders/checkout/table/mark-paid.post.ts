@@ -1,4 +1,5 @@
 import { PaymentMethod } from "~/generated/prisma/enums";
+import { broadCast } from "~~/server/utils/kitchenSocket";
 import { usePrisma } from "~~/server/utils/prisma";
 
 type MarkPaidBody = {
@@ -22,7 +23,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  return prisma.$transaction(async (transaction) => {
+  const checkoutResult = await prisma.$transaction(async (transaction) => {
     let unpaidOrders: { id: string; totalAmountCents: number }[] = [];
 
     try {
@@ -53,14 +54,14 @@ export default defineEventHandler(async (event) => {
     }
 
     const paid_at = new Date();
-    const unpaidOrderIds = unpaidOrders.map(
+    const settledOrderIds = unpaidOrders.map(
       (order: { id: string }) => order.id,
     );
 
     await transaction.order.updateMany({
       where: {
         id: {
-          in: unpaidOrderIds,
+          in: settledOrderIds,
         },
       },
       data: {
@@ -68,6 +69,23 @@ export default defineEventHandler(async (event) => {
         status: "COMPLETED", //marking the order as completed once it's paid
         paymentMethod,
         paidAt: paid_at,
+      },
+    });
+
+    const completedOrders = await transaction.order.findMany({
+      where: {
+        id: {
+          in: settledOrderIds,
+        },
+      },
+      include: {
+        table: true,
+        items: {
+          include: {
+            menuItem: true,
+            orderItemOptions: true,
+          },
+        },
       },
     });
 
@@ -89,18 +107,23 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const totalPaidCents = unpaidOrders.reduce(
-      (sum: number, order: { totalAmountCents: number }) =>
-        sum + order.totalAmountCents,
-      0,
-    );
-
     return {
-      updatedCount: unpaidOrderIds.length,
-      totalPaidCents,
+      updatedCount: settledOrderIds.length,
       paidAt: paid_at,
       paymentMethod,
-      orderIds: unpaidOrderIds,
+      orderIds: settledOrderIds,
+      completedOrders,
     };
   });
+
+  for (const order of checkoutResult.completedOrders) {
+    broadCast({ type: "ORDER_MARKED_COMPLETED", payload: order });
+  }
+
+  return {
+    updatedCount: checkoutResult.updatedCount,
+    paidAt: checkoutResult.paidAt,
+    paymentMethod: checkoutResult.paymentMethod,
+    orderIds: checkoutResult.orderIds,
+  };
 });

@@ -7,17 +7,20 @@ export default defineWebSocketHandler({
   open(peer) {
     addPeer(peer);
     peer.subscribe(room);
-    peer.publish(room, "another user joined chat");
   },
 
   message(peer, message) {
-    // broadCast({ type: "order", payload: order });
-    peer.send("im only visible to you at the moment");
-    peer.publish(room, message.text());
+    const text = message.text();
+
+    // HEARTBEAT HANDLING
+    if (text === "ping") {
+      peer.send("pong");
+      console.log("pong sent");
+      return;
+    }
   },
 
   close(peer, message) {
     remove_peer(peer);
-    peer.publish(room, "a user left chat");
   },
 });

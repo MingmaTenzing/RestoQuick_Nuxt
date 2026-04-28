@@ -5,7 +5,6 @@ definePageMeta({
 import { type TableGetPayloadWithSession } from '~~/types/table_include_session'
 import Assign_Table_Session_Modal from '~/components/pos_components/Assign_Table_Session_Modal.vue'
 import Table_Card from '~/components/pos_components/Table_Card.vue'
-import { start } from 'repl'
 
 
 //the table is returned with active sessions included, 
@@ -55,7 +54,7 @@ async function assignTable() {
 	isAssigningTable.value = true;
 
 	try {
-		const start_session = await $fetch('/api/table-sessions', {
+		const start_session = await $fetch('/api/table-sessions/create', {
 			method: 'post',
 			body: {
 				tableId: selectedTable.value?.id
@@ -98,18 +97,24 @@ function closeAssignModal() {
 <template>
 	<main class="space-y-8">
 		<section class="rounded-4xl border border-border bg-card p-6 shadow-sm md:p-8">
-			<div class="max-w-3xl space-y-4">
+			<div class=" flex justify-between items-center">
+
+				<div>
+
+					<p class="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Dining service
+					</p>
+					<h1 class="text-2xl md:text-5xl">Choose a table</h1>
+					<p class="text-sm leading-6 text-muted-foreground md:text-base">
+						Select a table here and you will be redirected to the order page for that table.
+					</p>
+				</div>
+
 				<NuxtLink to="/dashboard/pos"
-					class="inline-flex items-center gap-3 rounded-2xl border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent">
+					class="inline-flex items-center gap-4  rounded-full border border-border bg-secondary px-6 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent">
 					<i class="pi pi-arrow-left text-sm"></i>
 					<span>Back to POS</span>
 				</NuxtLink>
 
-				<p class="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Dining service</p>
-				<h1 class="text-2xl font-semibold text-foreground md:text-4xl">Choose a table</h1>
-				<p class="text-sm leading-6 text-muted-foreground md:text-base">
-					Select a table here and you will be redirected to the order page for that table.
-				</p>
 			</div>
 		</section>
 
