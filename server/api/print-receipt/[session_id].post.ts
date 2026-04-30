@@ -1,9 +1,15 @@
 import { ThermalPrinter, PrinterTypes, BreakLine } from "node-thermal-printer";
 import type { TableSessionWithOrders } from "~~/types/table_session_with_orders";
 
+type PrintReceiptRequestBody = {
+  printerIp?: string;
+};
+
 export default defineEventHandler(async (event) => {
   const prisma = usePrisma();
   const sessionId = getRouterParam(event, "session_id");
+  const body = await readBody<PrintReceiptRequestBody>(event);
+  const printerIp = body?.printerIp?.trim();
 
   if (!sessionId) {
     throw createError({
@@ -11,6 +17,24 @@ export default defineEventHandler(async (event) => {
       statusMessage: "session_id is required",
     });
   }
+
+  if (!printerIp) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "printerIp is required in request body",
+    });
+  }
+
+  if (!/^(\d{1,3}\.){3}\d{1,3}(:\d+)?$/.test(printerIp)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "printerIp must be a valid IPv4 address (optional :port)",
+    });
+  }
+
+  const printerTarget = printerIp.includes(":")
+    ? printerIp
+    : `${printerIp}:9100`;
 
   const tableSessionWithOrders: TableSessionWithOrders | null =
     await prisma.tableSession.findUnique({
@@ -52,7 +76,7 @@ export default defineEventHandler(async (event) => {
     // Most generic thermal printers use ESC/POS (EPSON mode).
     type: PrinterTypes.EPSON,
     width: 80, // Number of characters in one line
-    interface: "tcp://10.10.10.150:3000", // Printer interface
+    interface: `tcp://${printerTarget}`, // Printer interface from checkout page
     removeSpecialCharacters: true,
     lineCharacter: "=", // Set character for lines - default: "-"
     breakLine: BreakLine.WORD, // Break line after WORD or CHARACTERS. Disabled with NONE - default: WORD
@@ -87,8 +111,10 @@ export default defineEventHandler(async (event) => {
     const isConnected = await printer.isPrinterConnected();
 
     if (!isConnected) {
-      console.error("Printer not connected");
-      return;
+      throw createError({
+        statusCode: 503,
+        statusMessage: `Printer not connected at ${printerTarget}`,
+      });
     }
 
     printer.clear();
@@ -145,6 +171,7 @@ export default defineEventHandler(async (event) => {
     return {
       ok: true,
       sessionId: tableSessionWithOrders.id,
+      printerTarget,
       itemCount: printableItems.length,
       totalCents,
     };
