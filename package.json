@@ -1,6 +1,9 @@
 {
   "name": "restoquick_nuxt",
   "type": "module",
+
+  "main": "dist-electron/main.js",
+
   "engines": {
     "node": "22"
   },
@@ -51,10 +54,15 @@
     "@prisma/client": "^7.3.0",
     "@types/node": "^24.10.0",
     "@vite-pwa/assets-generator": "^1.0.2",
+    "electron": "^41.3.0",
+    "electron-builder": "^26.8.1",
     "i": "^0.3.7",
     "npm": "^11.9.0",
+    "nuxt-electron": "^0.7.0",
     "prisma": "^7.3.0",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite-plugin-electron": "^0.29.1",
+    "vite-plugin-electron-renderer": "^0.14.7"
   }
 }
