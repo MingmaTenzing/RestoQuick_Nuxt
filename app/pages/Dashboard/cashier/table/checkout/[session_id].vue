@@ -28,6 +28,10 @@ const paymentMethod = ref<PaymentMethod>("CASH");
 const tenderedAmount = ref<number | null>(null);
 const isSubmitting = ref(false);
 const paymentError = ref("");
+const printerIp = ref("");
+const isRealPrinting = ref(false);
+const printError = ref("");
+const printSuccess = ref("");
 
 const allOrders = computed(() => session.value?.orders ?? []);
 const sessionSummary = computed(() => session.value?.summary);
@@ -97,8 +101,39 @@ async function settle() {
   }
 }
 
-function printReceipt() {
+function printReceiptDemo() {
   window.print();
+}
+
+async function printReceiptReal() {
+  if (!session.value || isRealPrinting.value) {
+    return;
+  }
+
+  if (!printerIp.value.trim()) {
+    printError.value = "Please enter the thermal printer IP address.";
+    printSuccess.value = "";
+    return;
+  }
+
+  isRealPrinting.value = true;
+  printError.value = "";
+  printSuccess.value = "";
+
+  try {
+    await $fetch(`/api/print-receipt/${sessionId.value}`, {
+      method: "POST",
+      body: {
+        printerIp: printerIp.value.trim(),
+      },
+    });
+    printSuccess.value = "Receipt sent to thermal printer.";
+  } catch (error) {
+    printError.value =
+      error instanceof Error ? error.message : "Unable to print receipt.";
+  } finally {
+    isRealPrinting.value = false;
+  }
 }
 </script>
 
@@ -223,15 +258,50 @@ function printReceipt() {
         </p>
       </div>
 
-      <button
-        v-if="session"
-        type="button"
-        class="inline-flex items-center gap-2 rounded-2xl border border-border bg-secondary px-4 py-2.5 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-accent"
-        @click="printReceipt"
-      >
-        <i class="pi pi-print text-sm"></i>
-        Print receipt
-      </button>
+      <div v-if="session" class="w-full max-w-sm space-y-2">
+        <input
+          v-model="printerIp"
+          type="text"
+          placeholder="Thermal printer IP (e.g. 192.168.1.50:9100)"
+          class="h-10 w-full rounded-2xl border border-border bg-secondary px-3 text-sm text-foreground outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
+        />
+        <div class="flex flex-wrap gap-2">
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-2xl border border-border bg-secondary px-3 py-2 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-accent"
+            @click="printReceiptDemo"
+          >
+            <i class="pi pi-print text-sm"></i>
+            Demo Print
+          </button>
+          <button
+            type="button"
+            :disabled="isRealPrinting"
+            class="inline-flex items-center gap-2 rounded-2xl bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+            @click="printReceiptReal"
+          >
+            <i
+              v-if="isRealPrinting"
+              class="pi pi-spinner animate-spin text-sm"
+            ></i>
+            <i v-else class="pi pi-send text-sm"></i>
+            Real Print
+          </button>
+        </div>
+        <p class="text-xs text-muted-foreground">
+          Real Print only works on native applications with network access to
+          the thermal printer.
+        </p>
+        <p v-if="printError" class="text-xs text-red-600 dark:text-red-400">
+          {{ printError }}
+        </p>
+        <p
+          v-if="printSuccess"
+          class="text-xs text-emerald-700 dark:text-emerald-400"
+        >
+          {{ printSuccess }}
+        </p>
+      </div>
     </div>
 
     <CashierTableCheckoutSkeleton v-if="status === 'pending'" />
