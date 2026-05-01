@@ -20,8 +20,18 @@ export default defineNuxtConfig({
     "nuxt-time",
     "@vite-pwa/nuxt",
     "nuxt-charts",
+    "nuxt-electron",
     "@clerk/nuxt",
   ],
+
+  electron: {
+    build: [
+      {
+        entry: "electron/main.ts",
+      },
+    ],
+    disableDefaultOptions: true,
+  },
 
   pwa: {
     registerType: "autoUpdate",
