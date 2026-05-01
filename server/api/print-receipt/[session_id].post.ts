@@ -156,7 +156,9 @@ export default defineEventHandler(async (event) => {
           .padEnd(itemNameWidth)
           .slice(0, itemNameWidth);
         const optionQty = String(option.qty).padStart(qtyWidth);
-        const optionPrice = formatMoney(option.priceCents).padStart(amountWidth);
+        const optionPrice = formatMoney(option.priceCents).padStart(
+          amountWidth,
+        );
         printer.println(`${optionName}${optionQty}${optionPrice}`);
       }
     }
