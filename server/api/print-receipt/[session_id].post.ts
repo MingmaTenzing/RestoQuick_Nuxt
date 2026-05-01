@@ -133,22 +133,30 @@ export default defineEventHandler(async (event) => {
     printer.println(`Table: ${tableSessionWithOrders.table.number}`);
     printer.drawLine();
 
+    const itemNameWidth = 26;
+    const qtyWidth = 4;
+    const amountWidth = 10;
+
     printer.bold(true);
-    printer.println("Item              Qty    Amount");
+    printer.println(
+      `${"Item".padEnd(itemNameWidth)}${"Qty".padStart(qtyWidth)}${"Amount".padStart(amountWidth)}`,
+    );
     printer.bold(false);
 
     for (const item of printableItems) {
-      const name = item.name.padEnd(16).slice(0, 16);
-      const qty = String(item.qty).padStart(3);
-      const price = formatMoney(item.amountCents).padStart(9);
+      const name = item.name.padEnd(itemNameWidth).slice(0, itemNameWidth);
+      const qty = String(item.qty).padStart(qtyWidth);
+      const price = formatMoney(item.amountCents).padStart(amountWidth);
       printer.bold(true);
       printer.println(`${name}${qty}${price}`);
       printer.bold(false);
 
       for (const option of item.options) {
-        const optionName = `  + ${option.name}`.padEnd(16).slice(0, 16);
-        const optionQty = String(option.qty).padStart(3);
-        const optionPrice = formatMoney(option.priceCents).padStart(9);
+        const optionName = `  + ${option.name}`
+          .padEnd(itemNameWidth)
+          .slice(0, itemNameWidth);
+        const optionQty = String(option.qty).padStart(qtyWidth);
+        const optionPrice = formatMoney(option.priceCents).padStart(amountWidth);
         printer.println(`${optionName}${optionQty}${optionPrice}`);
       }
     }
