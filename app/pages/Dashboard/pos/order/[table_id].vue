@@ -116,8 +116,6 @@ const submitOrder = async (payload?: { customerName?: string }) => {
 
         empty_cart()
 
-        console.log(created_order)
-
         toast.success({
             title: isTakeawayOrder.value ? 'Takeaway order sent to kitchen' : 'Order sent to kitchen',
         })

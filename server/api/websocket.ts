@@ -15,7 +15,6 @@ export default defineWebSocketHandler({
     // HEARTBEAT HANDLING
     if (text === "ping") {
       peer.send("pong");
-      console.log("pong sent");
       return;
     }
   },

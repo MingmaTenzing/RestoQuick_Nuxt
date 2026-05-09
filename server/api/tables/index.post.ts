@@ -5,7 +5,6 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
   const { table_number, capacity } = body;
-  console.log(table_number, capacity);
   try {
     const create_table = await prisma.table.create({
       data: {

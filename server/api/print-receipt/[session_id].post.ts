@@ -167,7 +167,6 @@ export default defineEventHandler(async (event) => {
     printer.cut();
 
     await printer.execute();
-    console.log("Session receipt printed successfully.");
     return {
       ok: true,
       sessionId: tableSessionWithOrders.id,

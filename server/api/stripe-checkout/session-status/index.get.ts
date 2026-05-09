@@ -105,7 +105,6 @@ export default defineEventHandler(async (event) => {
         table: true,
       },
     });
-    console.log(order);
 
     // Notify kitchen clients that a new order was created
     try {

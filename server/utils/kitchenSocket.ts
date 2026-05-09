@@ -6,7 +6,6 @@ const peers = new Set<KitchenPeer>();
 
 export const addPeer = (client: KitchenPeer) => {
   peers.add(client);
-  return console.log(peers);
 };
 export const remove_peer = (client: KitchenPeer) => {
   return peers.delete(client);

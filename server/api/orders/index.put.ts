@@ -58,7 +58,6 @@ export default defineEventHandler(async (event) => {
       data: updatedOrder,
     };
   } catch (error) {
-    console.log(error);
     throw createError({
       message: "Something went wrong",
       statusCode: 500,

@@ -13,7 +13,6 @@ export default defineEventHandler(async (event) => {
 
     return updatedStaff;
   } catch (error) {
-    console.log(error);
     throw createError({
       statusCode: 400,
       statusMessage: "Failed to update staff",

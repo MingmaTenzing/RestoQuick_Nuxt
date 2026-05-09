@@ -62,16 +62,12 @@ async function assignTable() {
 		})
 
 		if (start_session) {
-
-			console.log(start_session)
 			toast.success({ message: 'Table assigned successfully!' });
 
 		}
 
 
 	} catch (error) {
-
-		console.log(error)
 		toast.error({ message: 'Failed to assign table. Please try again.' });
 
 

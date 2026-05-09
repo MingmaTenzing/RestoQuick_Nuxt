@@ -71,7 +71,6 @@ watch(data, (newValue: string) => {
   if (!newValue) return;
 
   if (newValue == "pong") {
-    console.log("pong received");
     return;
   }
   let parsed_data: websocket_payload = JSON.parse(newValue)

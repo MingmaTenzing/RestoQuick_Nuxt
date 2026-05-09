@@ -25,6 +25,5 @@ export default defineEventHandler(async (event) => {
       options: true,
     },
   });
-  console.log(menuItem);
   return menuItem;
 });

@@ -11,8 +11,6 @@ export default defineEventHandler(async (event) => {
   const cart_items: Order_Cart_Item[] = body.cart_items;
   const table_id = body.table_id;
 
-  console.log(cart_items, table_id);
-
   //mapping data for stripe line_items
   const stripe_line_items = cart_items.map((item: Order_Cart_Item) => ({
     price_data: {
