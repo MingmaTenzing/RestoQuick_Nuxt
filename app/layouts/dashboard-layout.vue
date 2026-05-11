@@ -21,7 +21,7 @@ const { isSidebar_open } = useSideBar()
     </Transition>
 
 
-    <div class="flex min-h-0 w-full flex-1 flex-col gap-4 p-4 lg:p-8 ">
+    <div class="flex min-h-0 w-full flex-1 flex-col gap-4 p-4 ">
 
       <ClientOnly>
         <!-- the navbar is made client cause the auth needs to be checked on the client side -->

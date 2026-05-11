@@ -16,6 +16,7 @@ const adminNavItems = [
     { to: '/dashboard/staff', icon: 'pi pi-users', label: 'Staff' },
 
     { to: '/dashboard', icon: 'pi pi-chart-line', label: 'Dashboard' },
+    { to: '/dashboard/agent', icon: 'pi pi-sparkles', label: 'Agent' },
     { to: '/dashboard/roster/weekly', icon: 'pi pi-calendar', label: 'Roster' },
     { to: '/dashboard/menu', icon: 'pi pi-file-check', label: 'Menu' },
     { to: '/dashboard/tables', icon: 'pi pi-qrcode', label: 'Tables' }
