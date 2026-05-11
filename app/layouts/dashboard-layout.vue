@@ -33,7 +33,7 @@ const { isSidebar_open } = useSideBar()
 
 
       <!-- the height is set to screen-4rem and overflow-y-scroll to give immersive experience -->
-      <div class="min-h-0 flex-1 overflow-y-auto hide-scrollbar">
+      <div class="min-h-0 flex-1 overflow-y-auto hide-scrollbar p-4">
 
         <slot></slot>
       </div>

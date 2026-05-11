@@ -42,6 +42,23 @@ const messages = ref<ChatMessage[]>([
         role: 'assistant',
         content:
             'Yes. I would first inspect current stock, identify high-turn ingredients, propose a menu draft around those items, and separate missing ingredients into a purchasing list for approval.'
+    },
+    {
+        id: 'assistant-welcome',
+        role: 'assistant',
+        content:
+            'Welcome to RestoQuick Assistant. This is a simple chat template for future automations like menu creation, stock updates, and staff changes.'
+    },
+    {
+        id: 'user-example',
+        role: 'user',
+        content: 'Can you create a new seasonal menu draft from ingredients already in stock and flag anything we need to buy first?'
+    },
+    {
+        id: 'assistant-example',
+        role: 'assistant',
+        content:
+            'Yes. I would first inspect current stock, identify high-turn ingredients, propose a menu draft around those items, and separate missing ingredients into a purchasing list for approval.'
     }
 ])
 
@@ -123,15 +140,14 @@ onMounted(() => {
                 </div>
             </div>
 
-            <form class="sticky bottom-0 bg-background/95 px-4 py-4 backdrop-blur md:px-8"
-                @submit.prevent="sendMessage()">
+            <form class="sticky bottom-0 bg-background/95  backdrop-blur md:px-8" @submit.prevent="sendMessage()">
                 <div class="mx-auto max-w-3xl">
-                    <div class="rounded-3xl bg-card p-3 shadow-sm">
+                    <div class="rounded-3xl bg-card p-4 shadow-sm">
                         <textarea v-model="draftMessage" rows="3"
                             class="w-full resize-none bg-transparent pr-14 text-sm leading-7 text-foreground outline-none placeholder:text-muted-foreground"
                             placeholder="Message RestoQuick Assistant..."></textarea>
 
-                        <div class="mt-3 flex justify-end">
+                        <div class=" flex justify-end">
                             <button type="submit"
                                 class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
                                 aria-label="Send message" :disabled="!draftMessage.trim() || isResponding">
