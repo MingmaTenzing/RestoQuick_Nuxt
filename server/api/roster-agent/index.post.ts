@@ -89,7 +89,7 @@ Output format (strict):
     tools: [get_staffs, get_leave_request],
   });
 
-  const result = await run(agent, user_message);
+  const result = await run(agent, user_message, {});
   const output = result.finalOutput as RosterAgentStructuredOutput;
 
   return {

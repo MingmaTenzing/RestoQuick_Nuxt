@@ -140,7 +140,7 @@ onMounted(() => {
                 </div>
             </div>
 
-            <form class="sticky bottom-0 bg-background/95  backdrop-blur md:px-8" @submit.prevent="sendMessage()">
+            <form class="sticky bottom-0 md:px-8" @submit.prevent="sendMessage()">
                 <div class="mx-auto max-w-3xl">
                     <div class="rounded-3xl bg-card p-4 shadow-sm">
                         <textarea v-model="draftMessage" rows="3"
