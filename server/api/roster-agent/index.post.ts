@@ -59,6 +59,7 @@ export default defineEventHandler(async (event) => {
   const agent = new Agent({
     name: "Roster Agent",
     model: "gpt-5-mini-2025-08-07",
+    
     outputType: RosterAgentStructuredOutputSchema,
     instructions: `You are a restaurant roster planner.
 
