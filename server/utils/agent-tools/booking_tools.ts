@@ -73,6 +73,63 @@ export const booking_tools = () => {
     },
   });
 
+  const update_booking = tool({
+    name: "update_booking",
+    description:
+      "Update booking using the customer phone number. Pass null for any field you do not want to change.",
+    parameters: z
+      .object({
+        customerPhone: z.string().min(1),
+        customerName: z.string().nullable(),
+        status: bookingStatusSchema.nullable(),
+        bookingTime: z.string().nullable(),
+        guestCount: z.number().int().positive().nullable(),
+        specialRequest: z.string().nullable(),
+      })
+      .strict(),
+    execute: async ({
+      customerPhone,
+      status,
+      bookingTime,
+      guestCount,
+      specialRequest,
+      customerName,
+    }) => {
+      const existingBooking = await prisma.booking.findFirst({
+        where: {
+          customerPhone,
+        },
+        orderBy: {
+          bookingTime: "asc",
+        },
+      });
+
+      if (!existingBooking) {
+        throw new Error("Booking not found for this customer phone number.");
+      }
+
+      const booking = await prisma.booking.update({
+        where: {
+          id: existingBooking.id,
+        },
+        data: {
+          ...(customerName !== null ? { customerName } : {}),
+          ...(status !== null ? { status } : {}),
+          ...(bookingTime !== null
+            ? { bookingTime: new Date(bookingTime) }
+            : {}),
+          ...(guestCount !== null ? { guestCount } : {}),
+          ...(specialRequest !== null ? { specialRequest } : {}),
+        },
+        include: {
+          table: true,
+        },
+      });
+
+      return booking;
+    },
+  });
+
   const delete_booking = tool({
     name: "delete_booking",
     description:
@@ -104,5 +161,5 @@ export const booking_tools = () => {
     },
   });
 
-  return [get_bookings, add_booking, delete_booking];
+  return [get_bookings, add_booking, update_booking, delete_booking];
 };

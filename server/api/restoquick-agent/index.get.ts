@@ -11,27 +11,10 @@ export default defineEventHandler(async (event) => {
     tools: [...leave_request_tools(), ...booking_tools()],
   });
 
-  const result = await run(agent, [
-    {
-      role: "user",
-      content:
-        "delet booking for phone number 1234567890, no need to ask just delete",
-    },
-    {
-      role: "assistant",
-      status: "completed",
-      content: [
-        {
-          type: "output_text",
-          text: 'I can\'t delete records without your confirmation. I found 1 booking that matches phone 1234567890: id: 4ec8bca3-626e-4cc6-b0d8-22cc8f99d658 customerName: zing bookingTime: 2026-05-19T11:00:00.000Z guestCount: 4\nstatus: PENDING\nspecialRequest: (none)\n\nConfirm you want me to delete this booking. Reply "yes" to delete or "no" to cancel.',
-        },
-      ],
-    },
-    {
-      role: "user",
-      content: "yes",
-    },
-  ]);
+  const result = await run(
+    agent,
+    "update the booking for 0456231641 change the guest count to 6, name to elon altman and booking time to 6pm",
+  );
 
   return result.finalOutput;
 });
