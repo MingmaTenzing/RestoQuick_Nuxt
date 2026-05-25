@@ -1,4 +1,4 @@
-import { Agent, Runner } from "@openai/agents";
+import { Agent, run } from "@openai/agents";
 import { OpenAIProvider } from "@openai/agents-openai";
 import { booking_tools } from "~~/server/utils/agent-tools/booking_tools";
 import { leave_request_tools } from "~~/server/utils/agent-tools/leave_request_tools";
@@ -9,16 +9,28 @@ import { table_tools } from "~~/server/utils/agent-tools/table_tools";
 
 import { restoquickAgentInstructions } from "~~/server/utils/restoquick-agent-instructions";
 export default defineEventHandler(async (event) => {
+  const body = await readBody<{ message?: string }>(event);
+  const userMessage = body?.message?.trim();
+
+  if (!userMessage) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "A message is required.",
+    });
+  }
+
   const runtimeConfig = useRuntimeConfig();
-  const ollamaBaseUrl = runtimeConfig.OLLAMA_BASE_URL?.trim();
-  const ollamaModel = runtimeConfig.OLLAMA_MODEL?.trim();
-  const ollamaApiBaseUrl = ollamaBaseUrl?.endsWith("/v1")
-    ? ollamaBaseUrl
-    : `${ollamaBaseUrl}/v1`;
+
+  if (!runtimeConfig.OPENAI_API_KEY?.trim()) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: "OPENAI_API_KEY is not configured.",
+    });
+  }
 
   const agent = new Agent({
     name: "RestoQuick Assistant",
-    model: ollamaModel || "gpt-5-mini-2025-08-07",
+    model: "gpt-5-mini-2025-08-07",
 
     instructions: restoquickAgentInstructions,
     tools: [
@@ -31,22 +43,13 @@ export default defineEventHandler(async (event) => {
     ],
   });
 
-  const runner = new Runner(
-    ollamaApiBaseUrl
-      ? {
-          modelProvider: new OpenAIProvider({
-            apiKey: runtimeConfig.OLLAMA_API_KEY || "ollama",
-            baseURL: ollamaApiBaseUrl,
-            useResponses: false,
-          }),
-        }
-      : undefined,
-  );
+  const result = await run(agent, userMessage, { stream: true });
 
-  const result = await runner.run(
-    agent,
-    "provide me the order details of the last order made.",
-  );
+  setResponseHeader(event, "content-type", "text/plain; charset=utf-8");
+  setResponseHeader(event, "cache-control", "no-cache, no-transform");
 
-  return result.finalOutput;
+  return sendStream(
+    event,
+    result.toTextStream({ compatibleWithNodeStreams: true }),
+  );
 });

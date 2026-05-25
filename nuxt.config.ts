@@ -21,6 +21,7 @@ export default defineNuxtConfig({
     "@vite-pwa/nuxt",
     "nuxt-charts",
     "@clerk/nuxt",
+    "@nuxtjs/mdc",
   ],
 
   pwa: {
