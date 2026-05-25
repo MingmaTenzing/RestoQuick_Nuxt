@@ -13,41 +13,57 @@ import NavBar from '~/components/home_components/NavBar.vue';
         <div class="mx-auto max-w-7xl border-t border-border"></div>
       </div>
 
-      <LazyHomeComponentsHomeOverviewSection />
+      <ClientOnly fallback-tag="section">
+        <LazyHomeComponentsHomeOverviewSection />
+      </ClientOnly>
 
       <div class="px-6">
         <div class="mx-auto max-w-7xl border-t border-border"></div>
       </div>
 
-      <LazyHomeComponentsHomeMayaSection />
+      <ClientOnly fallback-tag="section">
+        <LazyHomeComponentsHomeMayaSection />
+      </ClientOnly>
 
       <div class="px-6">
         <div class="mx-auto max-w-7xl border-t border-border"></div>
       </div>
 
-      <LazyHomeComponentsHomeFeaturesSection />
+      <ClientOnly fallback-tag="section">
+        <LazyHomeComponentsHomeFeaturesSection />
+      </ClientOnly>
 
       <div class="px-6">
         <div class="mx-auto max-w-7xl border-t border-border"></div>
       </div>
 
-      <LazyHomeComponentsHomeBenefitsSection />
+      <ClientOnly fallback-tag="section">
+        <LazyHomeComponentsHomeBenefitsSection />
+      </ClientOnly>
 
-      <LazyHomeComponentsHomeTestimonialsSection />
-
-      <div class="px-6">
-        <div class="mx-auto max-w-7xl border-t border-border"></div>
-      </div>
-
-      <LazyHomeComponentsHomePricingSection />
+      <ClientOnly fallback-tag="section">
+        <LazyHomeComponentsHomeTestimonialsSection />
+      </ClientOnly>
 
       <div class="px-6">
         <div class="mx-auto max-w-7xl border-t border-border"></div>
       </div>
 
-      <LazyHomeComponentsHomeCtaSection />
+      <ClientOnly fallback-tag="section">
+        <LazyHomeComponentsHomePricingSection />
+      </ClientOnly>
+
+      <div class="px-6">
+        <div class="mx-auto max-w-7xl border-t border-border"></div>
+      </div>
+
+      <ClientOnly fallback-tag="section">
+        <LazyHomeComponentsHomeCtaSection />
+      </ClientOnly>
     </main>
 
-    <LazyHomeComponentsHomeFooter />
+    <ClientOnly fallback-tag="footer">
+      <LazyHomeComponentsHomeFooter />
+    </ClientOnly>
   </div>
 </template>
