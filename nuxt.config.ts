@@ -77,6 +77,9 @@ export default defineNuxtConfig({
     },
 
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    OLLAMA_BASE_URL: process.env.OLLAMA_BASE_URL,
+    OLLAMA_MODEL: process.env.OLLAMA_MODEL,
+    OLLAMA_API_KEY: process.env.OLLAMA_API_KEY,
 
     CLOUDINARY_API_SECRET_KEY: process.env.CLOUDINARY_API_SECRET_KEY,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,

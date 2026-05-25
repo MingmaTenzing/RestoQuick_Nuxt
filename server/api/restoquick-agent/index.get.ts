@@ -1,4 +1,5 @@
-import { Agent, run, webSearchTool } from "@openai/agents";
+import { Agent, Runner } from "@openai/agents";
+import { OpenAIProvider } from "@openai/agents-openai";
 import { booking_tools } from "~~/server/utils/agent-tools/booking_tools";
 import { leave_request_tools } from "~~/server/utils/agent-tools/leave_request_tools";
 import { orders_tools } from "~~/server/utils/agent-tools/orders_tools";
@@ -8,9 +9,16 @@ import { table_tools } from "~~/server/utils/agent-tools/table_tools";
 
 import { restoquickAgentInstructions } from "~~/server/utils/restoquick-agent-instructions";
 export default defineEventHandler(async (event) => {
+  const runtimeConfig = useRuntimeConfig();
+  const ollamaBaseUrl = runtimeConfig.OLLAMA_BASE_URL?.trim();
+  const ollamaModel = runtimeConfig.OLLAMA_MODEL?.trim();
+  const ollamaApiBaseUrl = ollamaBaseUrl?.endsWith("/v1")
+    ? ollamaBaseUrl
+    : `${ollamaBaseUrl}/v1`;
+
   const agent = new Agent({
     name: "RestoQuick Assistant",
-    model: "gpt-5-mini-2025-08-07",
+    model: ollamaModel || "gpt-5-mini-2025-08-07",
 
     instructions: restoquickAgentInstructions,
     tools: [
@@ -23,9 +31,21 @@ export default defineEventHandler(async (event) => {
     ],
   });
 
-  const result = await run(
+  const runner = new Runner(
+    ollamaApiBaseUrl
+      ? {
+          modelProvider: new OpenAIProvider({
+            apiKey: runtimeConfig.OLLAMA_API_KEY || "ollama",
+            baseURL: ollamaApiBaseUrl,
+            useResponses: false,
+          }),
+        }
+      : undefined,
+  );
+
+  const result = await runner.run(
     agent,
-    "print receipt in the 192.168.1.250 printer for the session with id e0b1b9cf-50c5-4c94-9910-29e0b84d11ad",
+    "provide me the order details of the last order made.",
   );
 
   return result.finalOutput;
