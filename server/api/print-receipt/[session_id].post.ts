@@ -107,6 +107,9 @@ export default defineEventHandler(async (event) => {
   function formatMoney(value: number) {
     return `$${(value / 100).toFixed(2)}`;
   }
+
+  const itemColumnWidth = 24;
+
   try {
     const isConnected = await printer.isPrinterConnected();
 
@@ -134,11 +137,11 @@ export default defineEventHandler(async (event) => {
     printer.drawLine();
 
     printer.bold(true);
-    printer.println("Item              Qty    Amount");
+    printer.println("Item                    Qty    Amount");
     printer.bold(false);
 
     for (const item of printableItems) {
-      const name = item.name.padEnd(16).slice(0, 16);
+      const name = item.name.padEnd(itemColumnWidth).slice(0, itemColumnWidth);
       const qty = String(item.qty).padStart(3);
       const price = formatMoney(item.amountCents).padStart(9);
       printer.bold(true);
@@ -146,7 +149,9 @@ export default defineEventHandler(async (event) => {
       printer.bold(false);
 
       for (const option of item.options) {
-        const optionName = `  + ${option.name}`.padEnd(16).slice(0, 16);
+        const optionName = `  + ${option.name}`
+          .padEnd(itemColumnWidth)
+          .slice(0, itemColumnWidth);
         const optionQty = String(option.qty).padStart(3);
         const optionPrice = formatMoney(option.priceCents).padStart(9);
         printer.println(`${optionName}${optionQty}${optionPrice}`);
