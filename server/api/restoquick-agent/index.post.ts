@@ -1,15 +1,7 @@
 import { Agent, imageGenerationTool, run, webSearchTool } from "@openai/agents";
-import { booking_tools } from "~~/server/utils/agent-tools/booking_tools";
-import { leave_request_tools } from "~~/server/utils/agent-tools/leave_request_tools";
-import { menu_tools } from "~~/server/utils/agent-tools/menu_tools";
-import { orders_tools } from "~~/server/utils/agent-tools/orders_tools";
-import { receipt_tool } from "~~/server/utils/agent-tools/receipt_tool";
-import { shift_tools } from "~~/server/utils/agent-tools/shift_tools";
-import { staff_tool } from "~~/server/utils/agent-tools/staff_tool";
-import { stock_tools } from "~~/server/utils/agent-tools/stock_tools";
-import { table_tools } from "~~/server/utils/agent-tools/table_tools";
 
-import { restoquickAgentInstructions } from "~~/server/utils/restoquick-agent-instructions";
+import { main_agent } from "~~/server/utils/agent/main-agent";
+
 type ChatRole = "assistant" | "user";
 
 type ChatMessage = {
@@ -40,28 +32,8 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const agent = new Agent({
-    name: "RestoQuick Assistant",
-    model: "gpt-5-mini-2025-08-07",
-
-    instructions: restoquickAgentInstructions,
-    tools: [
-      webSearchTool(),
-      imageGenerationTool(),
-      ...leave_request_tools(),
-      ...booking_tools(),
-      ...menu_tools(),
-      ...orders_tools(),
-      ...receipt_tool(),
-      ...shift_tools(),
-      ...staff_tool(),
-      ...stock_tools(),
-      ...table_tools(),
-    ],
-  });
-
   const result = await run(
-    agent,
+    main_agent,
     messages.map((message) =>
       message.role === "user"
         ? {

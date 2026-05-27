@@ -132,7 +132,8 @@ async function apply_suggestion() {
           v-model="prompt"
           @keydown.enter.exact.prevent="askAi"
           rows="3"
-          class="w-full resize-none border rounded-3xl px-3 py-2 outline-none"
+          :disabled="response_loading"
+          class="w-full resize-none border rounded-3xl px-3 py-2 outline-none disabled:cursor-not-allowed disabled:opacity-60"
           placeholder="Ask the AI to optimize your roster..."
         ></textarea>
 
