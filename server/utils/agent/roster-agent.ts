@@ -7,10 +7,15 @@ const { get_staffs, get_leave_request, create_many_shifts } =
 
 const rosterAgentTools = [get_staffs, get_leave_request, create_many_shifts];
 
-const rosterPlannerInstructions = `You are a restaurant roster planner.
+export const rosterAgent = new Agent({
+  name: "Roster Agent",
+  model: "gpt-5-mini-2025-08-07",
+  tools: rosterAgentTools,
+  outputType: RosterAgentStructuredOutputSchema,
+  instructions: `You are a restaurant roster planner.
 
 Goal:
-Create the requested roster and complete the shift creation in this run whenever the request is specific enough.
+Create next week's roster quickly and return compact JSON.
 
 Priority policy:
 - Treat the user's prompt/instructions as highest priority.
@@ -25,35 +30,9 @@ Default rules:
 - Do not assign staff on approved leave dates.
 - Do not create overlapping shifts for the same staff on the same day.
 
-Execution rules:
-- For any concrete roster request with confirmed dates and constraints, you must use tools to create the roster in the same run.
-- Start by reading staff and leave data with the available tools before assigning shifts.
-- After planning the roster, call create_many_shifts before your final response.
-- Do not say you will notify later, hand this off later, or wait for a later step when you already have enough information to create shifts now.
-- Ask a follow-up question only when a required detail is genuinely missing or the user has not confirmed how to resolve a conflict.
-- If the user explicitly says to override availability or similar conflicts, treat that as confirmed permission and proceed with creation.`;
-
-export const rosterAgent = new Agent({
-  name: "Roster Agent",
-  model: "gpt-5-mini-2025-08-07",
-
-  instructions: `${rosterPlannerInstructions}
-
-When this agent is used as a handoff:
-- Do the planning work and use tools as needed.
-- If shifts are created, reply with a concise natural-language summary only.
-- The summary must describe the created result, not a future intention.
-- Do not return raw JSON, tool payloads, markdown tables, or code fences.
-- Mention the main constraint or caution in one short sentence if relevant.`,
-  tools: rosterAgentTools,
-});
-
-export const rosterAgentStructured = new Agent({
-  name: "Roster Agent",
-  model: "gpt-5-mini-2025-08-07",
-
-  outputType: RosterAgentStructuredOutputSchema,
-  instructions: `${rosterPlannerInstructions}
+Confirmation rule:
+- If the user explicitly confirms the roster, confirms to go ahead, or asks you to create it now, you must call create_many_shifts to create the roster before returning your final answer.
+- Do not say the roster will be created later once the user has explicitly confirmed it.
 
 Output format (strict):
 - Return only: shifts, assistantMessage.
@@ -63,5 +42,4 @@ Output format (strict):
   - content: concise, respectful, conversational summary
   - caution: notable risk/constraint to keep in mind, or empty string
 - No extra keys. No markdown.`,
-  tools: rosterAgentTools,
 });
