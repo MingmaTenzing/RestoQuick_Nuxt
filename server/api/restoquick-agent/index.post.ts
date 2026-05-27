@@ -1,4 +1,4 @@
-import { Agent, run } from "@openai/agents";
+import { Agent, run, webSearchTool } from "@openai/agents";
 import { booking_tools } from "~~/server/utils/agent-tools/booking_tools";
 import { leave_request_tools } from "~~/server/utils/agent-tools/leave_request_tools";
 import { orders_tools } from "~~/server/utils/agent-tools/orders_tools";
@@ -43,6 +43,7 @@ export default defineEventHandler(async (event) => {
 
     instructions: restoquickAgentInstructions,
     tools: [
+      webSearchTool(),
       ...leave_request_tools(),
       ...booking_tools(),
       ...orders_tools(),
