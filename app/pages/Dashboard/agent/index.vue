@@ -23,18 +23,23 @@ const responseError = ref('')
 const chatViewport = useTemplateRef<HTMLDivElement>('chatViewport')
 const hasConversation = computed(() => messages.value.length > 0)
 
-const scrollChatToBottom = async () => {
+const scrollMessageToTop = async (messageId: string) => {
     await nextTick()
 
-    if (chatViewport.value) {
-        chatViewport.value.scrollTop = chatViewport.value.scrollHeight
+    const messageElement = chatViewport.value?.querySelector<HTMLElement>(`[data-message-id="${messageId}"]`)
+
+    if (messageElement) {
+        messageElement.scrollIntoView({ block: 'start' })
     }
 }
 
-const streamAssistantReply = async (content: string, assistantMessageId: string) => {
+const streamAssistantReply = async (assistantMessageId: string, userMessageId: string) => {
+    //here assistanMessage_Id is required becuase we are streaming the response,
+    // assistantMesageId will add the message to the correct index in the messages array and update the content as the stream progresses.
     const response = await $fetch<ReadableStream>('/api/restoquick-agent', {
         method: 'POST',
-        body: { message: content },
+        // Exclude the trailing placeholder assistant message because it has no content yet.
+        body: { messages: messages.value.slice(0, -1) },
         responseType: 'stream'
     })
 
@@ -59,19 +64,21 @@ const streamAssistantReply = async (content: string, assistantMessageId: string)
             assistantMessage.content += value
         }
 
-        await scrollChatToBottom()
+        await scrollMessageToTop(userMessageId)
     }
 }
 
-const sendMessage = async (value?: string) => {
-    const content = (value ?? draftMessage.value).trim()
+const sendMessage = async () => {
+    const content = draftMessage.value.trim()
 
     if (!content || isResponding.value) {
         return
     }
 
+    const userMessageId = `user-${crypto.randomUUID()}`
+
     messages.value.push({
-        id: `user-${crypto.randomUUID()}`,
+        id: userMessageId,
         role: 'user',
         content
     })
@@ -79,8 +86,6 @@ const sendMessage = async (value?: string) => {
     draftMessage.value = ''
     responseError.value = ''
     isResponding.value = true
-    await scrollChatToBottom()
-
     const assistantMessageId = `assistant-${crypto.randomUUID()}`
 
     messages.value.push({
@@ -89,8 +94,10 @@ const sendMessage = async (value?: string) => {
         content: ''
     })
 
+    await scrollMessageToTop(userMessageId)
+
     try {
-        await streamAssistantReply(content, assistantMessageId)
+        await streamAssistantReply(assistantMessageId, userMessageId)
     } catch (error) {
         responseError.value = error instanceof Error ? error.message : 'Failed to stream assistant response.'
 
@@ -100,30 +107,33 @@ const sendMessage = async (value?: string) => {
         }
     } finally {
         isResponding.value = false
-        await scrollChatToBottom()
     }
 }
-
-onMounted(() => {
-    scrollChatToBottom()
-})
 </script>
 
 <template>
     <div class="h-full">
 
         <main
-            :class="['flex h-full w-full flex-col justify-center items-center', !hasConversation ? 'gap-4' : 'gap-6']">
+            :class="['flex h-full w-full flex-col justify-center items-center', !hasConversation ? 'gap-12' : 'gap-6']">
             <div v-if="!hasConversation">
                 <h1 class="text-3xl">Hi, How can I Assist You?</h1>
             </div>
             <div v-else class="flex min-h-0 w-full max-w-6xl flex-1 overflow-y-scroll">
                 <div ref="chatViewport" class="flex w-full flex-col gap-8">
-                    <div v-for="message in messages" :key="message.id"
+                    <div v-for="message in messages" :key="message.id" :data-message-id="message.id"
                         :class="['flex items-start ', message.role === 'assistant' ? 'justify-start' : 'justify-end']">
                         <div
-                            :class="['p-4 text-base', message.role === 'assistant' ? 'max-w-[70%] [&_h2]:mb-3 [&_h2]:text-lg [&_h2]:font-semibold [&_h3]:mb-2 [&_h3]:text-base [&_h3]:font-semibold [&_ol]:ml-5 [&_ol]:list-decimal [&_ol]:space-y-1 [&_p]:leading-7 [&_ul]:ml-5 [&_ul]:list-disc [&_ul]:space-y-1' : 'bg-secondary text-secondary-foreground rounded-full']">
-                            <MDC v-if="message.role === 'assistant'" :value="message.content" tag="article" />
+                            :class="['p-4 text-base prose dark:prose-invert max-w-none', message.role === 'assistant' ? 'max-w-[70%] [&_h2]:mb-3 [&_h2]:text-lg [&_h2]:font-semibold [&_h3]:mb-2 [&_h3]:text-base [&_h3]:font-semibold [&_ol]:ml-5 [&_ol]:list-decimal [&_ol]:space-y-1 [&_p]:leading-7 [&_ul]:ml-5 [&_ul]:list-disc [&_ul]:space-y-1' : 'bg-secondary text-secondary-foreground rounded-full']">
+                            <MDC v-if="message.role === 'assistant' && message.content" :key="message.id"
+                                :value="message.content" tag="article" />
+                            <div v-else-if="message.role === 'assistant'"
+                                class="loading-dots flex items-center gap-1.5 py-2 p-2 rounded-lg bg-accent/50"
+                                aria-label="Assistant is thinking" role="status">
+                                <span class="loading-dot" />
+                                <span class="loading-dot" />
+                                <span class="loading-dot" />
+                            </div>
                             <template v-else>
                                 {{ message.content }}
                             </template>
@@ -133,9 +143,7 @@ onMounted(() => {
 
             </div>
             <div :class="['flex items-center justify-center ', !hasConversation ? 'w-3xl' : 'w-6xl']">
-                <form
-                    class="w-full  rounded-4xl border border-border bg-card/95 p-2 shadow-[0_18px_50px_-24px_rgba(15,23,42,0.35)] backdrop-blur"
-                    @submit.prevent="sendMessage()">
+                <form class="w-full  rounded-4xl border border-border bg-card/95 p-2 " @submit.prevent="sendMessage()">
                     <div class="flex items-center gap-3 rounded-[1.6rem]   px-2 py-2">
                         <textarea v-model="draftMessage" rows="1" placeholder="Message RestoQuick Agent"
                             class="max-h-40 min-h-7 flex-1 resize-none  text-base text-foreground outline-none placeholder:text-muted-foreground"
@@ -157,3 +165,62 @@ onMounted(() => {
 
     </div>
 </template>
+
+<style scoped>
+.loading-dots {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.loading-dot {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--muted-foreground) 78%, transparent);
+
+    animation: chatgptDots 1.2s infinite ease-in-out;
+
+    will-change: transform, opacity;
+    transform: translateZ(0);
+}
+
+.loading-dot:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.loading-dot:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes chatgptDots {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0.75);
+        opacity: 0.45;
+    }
+
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.prose table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+    border: 1px solid #d1d5db;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.prose th {
+    font-weight: 600;
+}
+</style>

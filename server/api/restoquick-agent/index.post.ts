@@ -1,5 +1,4 @@
 import { Agent, run } from "@openai/agents";
-import { OpenAIProvider } from "@openai/agents-openai";
 import { booking_tools } from "~~/server/utils/agent-tools/booking_tools";
 import { leave_request_tools } from "~~/server/utils/agent-tools/leave_request_tools";
 import { orders_tools } from "~~/server/utils/agent-tools/orders_tools";
@@ -8,16 +7,26 @@ import { stock_tools } from "~~/server/utils/agent-tools/stock_tools";
 import { table_tools } from "~~/server/utils/agent-tools/table_tools";
 
 import { restoquickAgentInstructions } from "~~/server/utils/restoquick-agent-instructions";
-export default defineEventHandler(async (event) => {
-  const body = await readBody<{ message?: string }>(event);
-  const userMessage = body?.message?.trim();
+type ChatRole = "assistant" | "user";
 
-  if (!userMessage) {
+type ChatMessage = {
+  id: string;
+  role: ChatRole;
+  content: string;
+};
+
+export default defineEventHandler(async (event) => {
+  const body = await readBody<{ messages: ChatMessage[] }>(event);
+  const messages = body?.messages ?? [];
+
+  if (!messages.length) {
     throw createError({
       statusCode: 400,
-      statusMessage: "A message is required.",
+      statusMessage: "A messages array is required.",
     });
   }
+
+  console.log(messages);
 
   const runtimeConfig = useRuntimeConfig();
 
@@ -43,7 +52,27 @@ export default defineEventHandler(async (event) => {
     ],
   });
 
-  const result = await run(agent, userMessage, { stream: true });
+  const result = await run(
+    agent,
+    messages.map((message) =>
+      message.role === "user"
+        ? {
+            role: "user",
+            content: message.content,
+          }
+        : {
+            role: "assistant",
+            status: "completed",
+            content: [
+              {
+                type: "output_text",
+                text: message.content,
+              },
+            ],
+          },
+    ),
+    { stream: true },
+  );
 
   setResponseHeader(event, "content-type", "text/plain; charset=utf-8");
   setResponseHeader(event, "cache-control", "no-cache, no-transform");
