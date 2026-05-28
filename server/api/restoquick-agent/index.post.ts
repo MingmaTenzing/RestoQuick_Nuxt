@@ -1,6 +1,5 @@
 import { Agent, imageGenerationTool, run, webSearchTool } from "@openai/agents";
-
-import { main_agent } from "~~/server/utils/agent/main-agent";
+import { useMainAgent } from "~~/server/utils/agent/main-agent";
 
 type ChatRole = "assistant" | "user";
 
@@ -11,6 +10,7 @@ type ChatMessage = {
 };
 
 export default defineEventHandler(async (event) => {
+  const { main_agent } = await useMainAgent();
   const body = await readBody<{ messages: ChatMessage[] }>(event);
   const messages = body?.messages ?? [];
 
