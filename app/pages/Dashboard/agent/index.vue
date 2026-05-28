@@ -112,19 +112,25 @@ const sendMessage = async () => {
 </script>
 
 <template>
-    <div class="h-full">
+    <div class="h-full min-h-0">
 
-        <main
-            :class="['flex h-full w-full flex-col justify-center items-center', !hasConversation ? 'gap-12' : 'gap-6']">
-            <div v-if="!hasConversation">
-                <h1 class="text-3xl">Hi, How can I Assist You?</h1>
+        <main :class="[
+            'flex h-full min-h-0 w-full flex-col items-center px-2 py-3 sm:px-6 sm:py-6',
+            !hasConversation ? 'justify-center gap-8 sm:gap-12' : 'gap-4 sm:gap-6'
+        ]">
+            <div v-if="!hasConversation" class="px-2 text-center">
+                <h1 class="text-2xl sm:text-3xl">Hi, How can I Assist You?</h1>
             </div>
-            <div v-else class="flex min-h-0 w-full max-w-6xl flex-1 overflow-y-scroll">
+            <div v-else class="flex min-h-0 w-full max-w-6xl flex-1 overflow-y-auto">
                 <div ref="chatViewport" class="flex w-full flex-col gap-8">
                     <div v-for="message in messages" :key="message.id" :data-message-id="message.id"
                         :class="['flex items-start ', message.role === 'assistant' ? 'justify-start' : 'justify-end']">
-                        <div
-                            :class="['p-4 text-base prose dark:prose-invert max-w-none', message.role === 'assistant' ? 'max-w-[70%] [&_h2]:mb-3 [&_h2]:text-lg [&_h2]:font-semibold [&_h3]:mb-2 [&_h3]:text-base [&_h3]:font-semibold [&_ol]:ml-5 [&_ol]:list-decimal [&_ol]:space-y-1 [&_p]:leading-7 [&_ul]:ml-5 [&_ul]:list-disc [&_ul]:space-y-1' : 'bg-secondary text-secondary-foreground rounded-full']">
+                        <div :class="[
+                            'max-w-[88%] p-3 text-sm prose dark:prose-invert sm:max-w-[75%] sm:p-4 sm:text-base',
+                            message.role === 'assistant'
+                                ? 'overflow-hidden [&_h2]:mb-3 [&_h2]:text-base [&_h2]:font-semibold sm:[&_h2]:text-lg [&_h3]:mb-2 [&_h3]:text-base [&_h3]:font-semibold [&_ol]:ml-5 [&_ol]:list-decimal [&_ol]:space-y-1 [&_p]:leading-6 sm:[&_p]:leading-7 [&_ul]:ml-5 [&_ul]:list-disc [&_ul]:space-y-1'
+                                : 'rounded-3xl bg-secondary text-secondary-foreground wrap-break-word'
+                        ]">
                             <MDC v-if="message.role === 'assistant' && message.content" :key="message.id"
                                 :value="message.content" tag="article" />
                             <div v-else-if="message.role === 'assistant'"
@@ -142,11 +148,12 @@ const sendMessage = async () => {
                 </div>
 
             </div>
-            <div :class="['flex items-center justify-center ', !hasConversation ? 'w-3xl' : 'w-6xl']">
-                <form class="w-full  rounded-4xl border border-border bg-card/95 p-2 " @submit.prevent="sendMessage()">
-                    <div class="flex items-center gap-3 rounded-[1.6rem]   px-2 py-2">
+            <div :class="['flex w-full items-center justify-center', !hasConversation ? 'max-w-3xl' : 'max-w-6xl']">
+                <form class="w-full rounded-4xl border border-border bg-card/95 p-1.5 sm:p-2"
+                    @submit.prevent="sendMessage()">
+                    <div class="flex items-end gap-3 rounded-[1.6rem] px-1.5 py-1.5 sm:px-2 sm:py-2">
                         <textarea v-model="draftMessage" rows="1" placeholder="Message RestoQuick Agent"
-                            class="max-h-40 min-h-7 flex-1 resize-none  text-base text-foreground outline-none placeholder:text-muted-foreground"
+                            class="min-h-10 max-h-40 flex-1 resize-none bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground sm:text-base"
                             @keydown.enter.exact.prevent="sendMessage()" />
 
                         <button type="submit"
@@ -211,6 +218,9 @@ const sendMessage = async () => {
 .prose table {
     width: 100%;
     border-collapse: collapse;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 .prose th,
@@ -222,5 +232,10 @@ const sendMessage = async () => {
 
 .prose th {
     font-weight: 600;
+}
+
+.prose {
+    max-width: 100%;
+    overflow-wrap: anywhere;
 }
 </style>
