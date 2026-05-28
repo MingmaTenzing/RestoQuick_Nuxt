@@ -40,22 +40,24 @@ export const useAiRosterModal = () => {
       content: message,
     });
 
-    const response = await $fetch<RosterAgentStructuredOutput>(
-      "/api/roster-agent",
-      {
-        method: "POST",
-        body: {
-          message,
+    try {
+      const response = await $fetch<RosterAgentStructuredOutput>(
+        "/api/roster-agent",
+        {
+          method: "POST",
+          body: {
+            message,
+          },
         },
-      },
-    );
+      );
 
-    const staffs = await $fetch<Staff[]>("/api/staff");
-    const staffById = new Map(staffs.map((staff) => [staff.id, staff]));
+      const staffs = await $fetch<Staff[]>("/api/staff");
+      const staffById = new Map(staffs.map((staff) => [staff.id, staff]));
 
-    //mapped the response to match with shift_with_staff_payload
-    const mapped_response = response.shifts.reduce<Shift_With_Staff_Payload[]>(
-      (acc, shift) => {
+      //mapped the response to match with shift_with_staff_payload
+      const mapped_response = response.shifts.reduce<
+        Shift_With_Staff_Payload[]
+      >((acc, shift) => {
         const get_staff = staffById.get(shift.staffId);
 
         if (!get_staff) {
@@ -73,18 +75,19 @@ export const useAiRosterModal = () => {
         });
 
         return acc;
-      },
-      [],
-    );
-    response_loading.value = false;
+      }, []);
 
-    ai_conversation.value.shifts = mapped_response;
-    ai_conversation.value.assistantMessage.push({
-      role: "AI",
-      content: response.assistantMessage.content,
-      caution: response.assistantMessage.caution,
-    });
-    return ai_conversation.value;
+      ai_conversation.value.shifts = mapped_response;
+      ai_conversation.value.assistantMessage.push({
+        role: "AI",
+        content: response.assistantMessage.content,
+        caution: response.assistantMessage.caution,
+      });
+
+      return ai_conversation.value;
+    } finally {
+      response_loading.value = false;
+    }
   };
 
   return {

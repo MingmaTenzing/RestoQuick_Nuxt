@@ -4,7 +4,6 @@ definePageMeta({
 })
 
 import { computed } from 'vue'
-import { de } from 'zod/v4/locales'
 import { OrderStatus } from '~/generated/prisma/enums'
 import type { OrderDetailsWithInclude } from '~~/types/orderwithInclude'
 
@@ -214,6 +213,10 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 						<div>
 							<p class="text-sm text-muted-foreground">Order No.</p>
 							<p class="font-semibold">#{{ order_details.orderNo }}</p>
+						</div>
+						<div>
+							<p class="text-sm text-muted-foreground">Order ID</p>
+							<p class="font-semibold">{{ order_details.id }}</p>
 						</div>
 						<div>
 							<p class="text-sm text-muted-foreground">Status</p>

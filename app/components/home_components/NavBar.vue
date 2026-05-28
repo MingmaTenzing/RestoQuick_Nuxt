@@ -64,7 +64,7 @@ const signInToDemo = async () => {
       session: signInAttempt.createdSessionId,
     });
 
-    await router.push('/dashboard');
+    await router.push('/dashboard/agent');
   } catch (error) {
     console.error('Demo sign-in failed', error);
   } finally {

@@ -21,7 +21,7 @@ const { isSidebar_open } = useSideBar()
     </Transition>
 
 
-    <div class="flex min-h-0 w-full flex-1 flex-col gap-4 p-4 lg:p-8 ">
+    <div class="flex min-h-0 w-full flex-1 flex-col gap-4 p-4 ">
 
       <ClientOnly>
         <!-- the navbar is made client cause the auth needs to be checked on the client side -->
@@ -33,7 +33,7 @@ const { isSidebar_open } = useSideBar()
 
 
       <!-- the height is set to screen-4rem and overflow-y-scroll to give immersive experience -->
-      <div class="min-h-0 flex-1 overflow-y-auto hide-scrollbar">
+      <div class="min-h-0 flex-1 overflow-y-auto hide-scrollbar p-4">
 
         <slot></slot>
       </div>

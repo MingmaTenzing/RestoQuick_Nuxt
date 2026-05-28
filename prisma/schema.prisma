@@ -20,7 +20,7 @@ enum LeaveStatus {
   pending
   approved
   rejected
-}
+} 
 
 enum WeekDay {
   MON
