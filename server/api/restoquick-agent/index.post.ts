@@ -23,15 +23,6 @@ export default defineEventHandler(async (event) => {
 
   console.log(messages);
 
-  const runtimeConfig = useRuntimeConfig();
-
-  if (!runtimeConfig.OPENAI_API_KEY?.trim()) {
-    throw createError({
-      statusCode: 500,
-      statusMessage: "OPENAI_API_KEY is not configured.",
-    });
-  }
-
   const result = await run(
     main_agent,
     messages.map((message) =>

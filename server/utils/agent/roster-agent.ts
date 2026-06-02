@@ -9,7 +9,7 @@ const rosterAgentTools = [get_staffs, get_leave_request, create_many_shifts];
 
 export const rosterAgent = new Agent({
   name: "Roster Agent",
-  model: "gpt-5-mini-2025-08-07",
+  model: "llama3.1:8b",
   tools: rosterAgentTools,
   outputType: RosterAgentStructuredOutputSchema,
   instructions: `You are a restaurant roster planner.
