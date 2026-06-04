@@ -107,6 +107,13 @@ const formattedDate = computed(() => {
               <i class="pi pi-envelope text-xs"></i>
               Email
             </a>
+            <NuxtLink
+              :to="`/dashboard/staff/${staff.id}`"
+              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl text-sm font-medium transition-all border h-8 w-8 bg-transparent hover:bg-accent hover:text-accent-foreground"
+              aria-label="View staff details"
+            >
+              <i class="pi pi-eye text-xs"></i>
+            </NuxtLink>
             <button
               @click="showEditModal = true"
               class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl text-sm font-medium transition-all border h-8 w-8 bg-transparent hover:bg-accent hover:text-accent-foreground"

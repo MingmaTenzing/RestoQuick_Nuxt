@@ -16,8 +16,7 @@ import OpenAI from "openai";
 export const useMainAgent = async () => {
   const composio = new Composio();
   const client = new OpenAI({
-    baseURL: "http://localhost:11434/v1",
-    apiKey: "ollama",
+    apiKey: process.env.OPENAI_API_KEY,
   });
   setDefaultOpenAIClient(client);
   const userId = "user_33455";
@@ -26,7 +25,7 @@ export const useMainAgent = async () => {
 
   const main_agent = Agent.create({
     name: "RestoQuick Assistant",
-    model: "gemma4:e2b-mlx ",
+    model: "gpt-5.4-mini",
     handoffs: [rosterAgent],
 
     instructions: restoquickAgentInstructions,
