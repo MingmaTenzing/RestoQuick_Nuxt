@@ -5,10 +5,10 @@ import {
   setDefaultOpenAIClient,
   webSearchTool,
 } from "@openai/agents";
-import { menu_tools } from "../agent-tools/menu_tools";
-import { shift_tools } from "../agent-tools/shift_tools";
-import { staff_tool } from "../agent-tools/staff_tool";
-import { analytics_tools } from "../agent-tools/analytics_tools";
+import { menu_tools } from "../main-agent-tools/menu_tools";
+import { shift_tools } from "../main-agent-tools/shift_tools";
+import { staff_tool } from "../main-agent-tools/staff_tool";
+import { analytics_tools } from "../main-agent-tools/analytics_tools";
 import { rosterAgent } from "./roster-agent";
 import { Composio } from "@composio/core";
 import OpenAI from "openai";

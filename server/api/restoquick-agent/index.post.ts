@@ -1,5 +1,5 @@
 import { Agent, imageGenerationTool, run, webSearchTool } from "@openai/agents";
-import { useMainAgent } from "~~/server/utils/agent/main-agent";
+import { useMainAgent } from "~~/server/utils/agents/main-agent";
 
 type ChatRole = "assistant" | "user";
 

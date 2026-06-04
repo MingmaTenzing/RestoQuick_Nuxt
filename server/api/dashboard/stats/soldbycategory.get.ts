@@ -1,25 +1,9 @@
-export default defineEventHandler(async () => {
-  const prisma = usePrisma();
+import { useStats } from "~~/server/utils/dashboard/stats";
 
+export default defineEventHandler(async () => {
+  const { getSoldByCategoryData } = useStats();
   // Get all completed order items with their menu item category
-  const orderItems = await prisma.orderItem.findMany({
-    where: {
-      order: {
-        status: "COMPLETED",
-        createdAt: {
-          gte: new Date(new Date().setDate(new Date().getDate() - 30)),
-        },
-      },
-      menuItemId: { not: null },
-    },
-    include: {
-      menuItem: {
-        select: {
-          category: true,
-        },
-      },
-    },
-  });
+  const orderItems = await getSoldByCategoryData();
 
   // Group by category and sum quantities
   const categoryTotals: Record<string, number> = {};
