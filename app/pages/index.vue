@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  colorMode: 'dark',
+});
+
 import HomeHeroSection from '~/components/home_components/HomeHeroSection.vue';
 import NavBar from '~/components/home_components/NavBar.vue';
 </script>

@@ -151,14 +151,14 @@ const statCards = computed(() => {
                     </div>
 
                     <div class="grid gap-3 sm:grid-cols-2 lg:min-w-[24rem]">
-                        <div class="rounded-2xl border border-border bg-background p-4">
+                        <div class="rounded-2xl border border-border bg-secondary/50 p-4">
                             <p class="text-xs uppercase tracking-wide text-muted-foreground">Email</p>
                             <a :href="`mailto:${staff.email}`"
                                 class="mt-1 block break-all text-foreground hover:underline">
                                 {{ staff.email }}
                             </a>
                         </div>
-                        <div class="rounded-2xl border border-border bg-background p-4">
+                        <div class="rounded-2xl border border-border bg-secondary/50 p-4">
                             <p class="text-xs uppercase tracking-wide text-muted-foreground">Phone</p>
                             <a :href="`tel:${staff.phone}`" class="mt-1 block text-foreground hover:underline">
                                 {{ staff.phone }}
@@ -169,7 +169,7 @@ const statCards = computed(() => {
 
                 <div class="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                     <article v-for="card in statCards" :key="card.label"
-                        class="rounded-2xl border border-border bg-background p-4">
+                        class="rounded-2xl border border-border bg-secondary/50 p-4">
                         <p class="text-xs uppercase tracking-wide text-muted-foreground">{{ card.label }}</p>
                         <p class="mt-2 text-2xl font-semibold text-foreground">{{ card.value }}</p>
                         <p class="mt-1 text-sm text-muted-foreground">{{ card.note }}</p>
@@ -194,7 +194,7 @@ const statCards = computed(() => {
 
                         <div v-else class="space-y-3 p-6">
                             <article v-for="shift in staffWeeklyShifts" :key="shift.id"
-                                class="grid gap-4 rounded-2xl border border-border bg-background p-4 md:grid-cols-[9rem_minmax(0,1fr)_auto] md:items-center">
+                                class="grid gap-4 rounded-2xl border border-border bg-secondary/50 p-4 md:grid-cols-[9rem_minmax(0,1fr)_auto] md:items-center">
                                 <div>
                                     <p class="text-xs uppercase tracking-wide text-muted-foreground">Day</p>
                                     <p class="mt-1 font-medium text-foreground">
@@ -227,7 +227,7 @@ const statCards = computed(() => {
                         <div class="flex flex-wrap gap-2 p-6">
                             <span v-for="day in weekDays" :key="day.value"
                                 class="rounded-full border px-3 py-1.5 text-sm" :class="staff.availability.includes(day.value as WeekDay)
-                                    ? 'border-border bg-background text-foreground'
+                                    ? 'border-border bg-secondary/50 text-foreground'
                                     : 'border-dashed border-border bg-muted/40 text-muted-foreground'">
                                 {{ day.label }}
                             </span>
@@ -243,20 +243,20 @@ const statCards = computed(() => {
                         </div>
 
                         <div class="space-y-3 p-6">
-                            <div class="rounded-2xl border border-border bg-background p-4">
+                            <div class="rounded-2xl border border-border bg-secondary/50 p-4">
                                 <p class="text-xs uppercase tracking-wide text-muted-foreground">Role</p>
                                 <p class="mt-1 font-medium text-foreground">{{ formatLabel(staff.role) }}</p>
                             </div>
-                            <div class="rounded-2xl border border-border bg-background p-4">
+                            <div class="rounded-2xl border border-border bg-secondary/50 p-4">
                                 <p class="text-xs uppercase tracking-wide text-muted-foreground">Employment type</p>
                                 <p class="mt-1 font-medium text-foreground">{{ formatLabel(staff.employmentType) }}</p>
                             </div>
-                            <div class="rounded-2xl border border-border bg-background p-4">
+                            <div class="rounded-2xl border border-border bg-secondary/50 p-4">
                                 <p class="text-xs uppercase tracking-wide text-muted-foreground">Hourly rate</p>
                                 <p class="mt-1 font-medium text-foreground">${{ Number(staff.perHourRate).toFixed(2)
-                                    }}/hour</p>
+                                }}/hour</p>
                             </div>
-                            <div class="rounded-2xl border border-border bg-background p-4">
+                            <div class="rounded-2xl border border-border bg-secondary/50 p-4">
                                 <p class="text-xs uppercase tracking-wide text-muted-foreground">Joined</p>
                                 <p class="mt-1 font-medium text-foreground">
                                     <NuxtTime :datetime="staff.joined_date" />
@@ -277,7 +277,7 @@ const statCards = computed(() => {
 
                         <div v-else class="space-y-3 p-6">
                             <article v-for="request in staff.leaveRequests" :key="request.id"
-                                class="rounded-2xl border border-border bg-background p-4">
+                                class="rounded-2xl border border-border bg-secondary/50 p-4">
                                 <div class="flex items-start justify-between gap-3">
                                     <div>
                                         <p class="text-sm font-medium text-foreground">
