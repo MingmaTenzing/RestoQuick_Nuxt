@@ -1,56 +1,14 @@
+import { useStats } from "~~/server/utils/dashboard/stats";
+
 export default defineEventHandler(async () => {
-  const prisma = usePrisma();
   const { shift_hours_to_minutes } = useToMinutes();
   const { getWeekRange, getDayRange } = useDateRange();
+  const { getWeeklyKpiData } = useStats();
   const weekRange = getWeekRange();
   const todayRange = getDayRange();
 
   const [weeklyRevenue, weeklyOrderCount, todayBookingsCount, weeklyShifts] =
-    await Promise.all([
-      prisma.order.aggregate({
-        _sum: {
-          totalAmountCents: true,
-        },
-        where: {
-          createdAt: {
-            gte: weekRange.start,
-            lt: weekRange.end,
-          },
-          status: "COMPLETED",
-        },
-      }),
-      prisma.order.count({
-        where: {
-          createdAt: {
-            gte: weekRange.start,
-            lt: weekRange.end,
-          },
-        },
-      }),
-      prisma.booking.count({
-        where: {
-          bookingTime: {
-            gte: todayRange.start,
-            lt: todayRange.end,
-          },
-        },
-      }),
-      prisma.shift.findMany({
-        where: {
-          date: {
-            gte: weekRange.start,
-            lt: weekRange.end,
-          },
-        },
-        include: {
-          staff: {
-            select: {
-              perHourRate: true,
-            },
-          },
-        },
-      }),
-    ]);
+    await getWeeklyKpiData(weekRange, todayRange);
 
   const revenueCents = weeklyRevenue._sum.totalAmountCents ?? 0;
 

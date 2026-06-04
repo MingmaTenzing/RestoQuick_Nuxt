@@ -1,16 +1,8 @@
-export default defineEventHandler(async () => {
-  const prisma = usePrisma();
+import { useStats } from "~~/server/utils/dashboard/stats";
 
-  const recentOrders = await prisma.order.findMany({
-    take: 5,
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      table: true,
-      items: true,
-    },
-  });
+export default defineEventHandler(async () => {
+  const { getRecentOrdersData } = useStats();
+  const recentOrders = await getRecentOrdersData();
 
   return recentOrders.map((order) => ({
     id: order.id,

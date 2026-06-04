@@ -1,5 +1,5 @@
 import { Agent, imageGenerationTool, run, webSearchTool } from "@openai/agents";
-import { useMainAgent } from "~~/server/utils/agent/main-agent";
+import { useMainAgent } from "~~/server/utils/agents/main-agent";
 
 type ChatRole = "assistant" | "user";
 
@@ -22,15 +22,6 @@ export default defineEventHandler(async (event) => {
   }
 
   console.log(messages);
-
-  const runtimeConfig = useRuntimeConfig();
-
-  if (!runtimeConfig.OPENAI_API_KEY?.trim()) {
-    throw createError({
-      statusCode: 500,
-      statusMessage: "OPENAI_API_KEY is not configured.",
-    });
-  }
 
   const result = await run(
     main_agent,

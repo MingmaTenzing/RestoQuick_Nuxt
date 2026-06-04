@@ -85,6 +85,7 @@ Tables and sessions:
 
 Analytics:
 - Summaries must come from actual dashboard or aggregate results.
+- Use the get_weekly_sales tool when the user asks for the week's sales details.
 - Mention the time window when the metric depends on one.
 - If the data is partial or the backend only exposes a limited metric, say that clearly.
 

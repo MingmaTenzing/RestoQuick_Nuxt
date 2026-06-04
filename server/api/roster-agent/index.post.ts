@@ -1,5 +1,5 @@
 import { Agent, run, tool } from "@openai/agents";
-import { rosterAgent } from "../../utils/agent/roster-agent";
+import { rosterAgent } from "../../utils/agents/roster-agent";
 import { type RosterAgentStructuredOutput } from "../../../zod_schema/roster_agent_schema";
 
 export default defineEventHandler(async (event) => {

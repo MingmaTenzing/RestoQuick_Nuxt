@@ -1,9 +1,9 @@
 import { useDateRange } from "~~/server/utils/dateRange";
-import { usePrisma } from "~~/server/utils/prisma";
+import { useStats } from "~~/server/utils/dashboard/stats";
 
 export default defineEventHandler(async (event) => {
-  const prisma = usePrisma();
   const { getWeekRange } = useDateRange();
+  const { getRosterOverviewData } = useStats();
   const query = getQuery(event);
 
   const fallbackRange = getWeekRange();
@@ -22,22 +22,7 @@ export default defineEventHandler(async (event) => {
     : requestedEnd;
 
   const [totalStaff, weeklyShiftCount, pendingLeaveRequests] =
-    await Promise.all([
-      prisma.staff.count(),
-      prisma.shift.count({
-        where: {
-          date: {
-            gte: rangeStart,
-            lt: rangeEnd,
-          },
-        },
-      }),
-      prisma.leaveRequest.count({
-        where: {
-          status: "pending",
-        },
-      }),
-    ]);
+    await getRosterOverviewData(rangeStart, rangeEnd);
 
   return {
     totalStaff,
