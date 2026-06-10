@@ -18,28 +18,6 @@ const formatStatusLabel = (statusValue: string) => {
 	return statusValue.charAt(0) + statusValue.slice(1).toLowerCase()
 }
 
-const placedAt = computed(() => {
-	if (!order_details.value) return ''
-	return new Date(order_details.value.createdAt).toLocaleString('en-AU', {
-		day: '2-digit',
-		month: 'short',
-		year: 'numeric',
-		hour: '2-digit',
-		minute: '2-digit',
-	})
-})
-
-const updatedAt = computed(() => {
-	if (!order_details.value) return ''
-	return new Date(order_details.value.updatedAt).toLocaleString('en-AU', {
-		day: '2-digit',
-		month: 'short',
-		year: 'numeric',
-		hour: '2-digit',
-		minute: '2-digit',
-	})
-})
-
 const itemCount = computed(() => {
 	if (!order_details.value) return 0
 	return order_details.value.items.reduce((sum, item) => sum + item.quantity, 0)
@@ -60,7 +38,7 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 		isUpdatingStatus.value = true
 
 		await $fetch('/api/orders', {
-			method: 'PUT',
+			method: 'PUT' as any,
 			body: {
 				order_id: order_details.value.id,
 				status: nextStatus,
@@ -108,7 +86,10 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 					<p class="text-muted-foreground text-sm mt-1">
 						<i class="pi pi-clock text-xs"></i>
 						Placed
-						<NuxtTime :datetime="new Date(order_details.createdAt).getTime()" relative /> • {{ placedAt }}
+						<NuxtTime :datetime="order_details.createdAt" relative />
+						•
+						<NuxtTime :datetime="order_details.createdAt" locale="en-AU" day="2-digit" month="short"
+							year="numeric" hour="2-digit" minute="2-digit" />
 					</p>
 				</div>
 
@@ -224,11 +205,17 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 						</div>
 						<div>
 							<p class="text-sm text-muted-foreground">Placed</p>
-							<p class="font-semibold">{{ placedAt }}</p>
+							<p class="font-semibold">
+								<NuxtTime :datetime="order_details.createdAt" locale="en-AU" day="2-digit" month="short"
+									year="numeric" hour="2-digit" minute="2-digit" />
+							</p>
 						</div>
 						<div>
 							<p class="text-sm text-muted-foreground">Last Updated</p>
-							<p class="font-semibold">{{ updatedAt }}</p>
+							<p class="font-semibold">
+								<NuxtTime :datetime="order_details.updatedAt" locale="en-AU" day="2-digit" month="short"
+									year="numeric" hour="2-digit" minute="2-digit" />
+							</p>
 						</div>
 						<div>
 							<p class="text-sm text-muted-foreground">Session ID</p>
