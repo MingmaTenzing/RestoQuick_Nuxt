@@ -14,6 +14,7 @@ const order_id = route.params.order_id
 
 const { data: order_details, status, refresh } = await useFetch<OrderDetailsWithInclude>(`/api/orders/${order_id}`)
 
+console.log(order_details.value)
 const formatStatusLabel = (statusValue: string) => {
 	return statusValue.charAt(0) + statusValue.slice(1).toLowerCase()
 }
@@ -30,6 +31,11 @@ const orderTotal = computed(() => {
 
 const isUpdatingStatus = ref(false)
 const availableStatuses = Object.values(OrderStatus) as OrderStatus[]
+const isUpdateModalOpen = ref(false)
+
+async function onOrderSaved() {
+	await refresh()
+}
 
 async function updateOrderStatus(nextStatus: OrderStatus) {
 	if (!order_details.value || isUpdatingStatus.value) return
@@ -94,6 +100,10 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 				</div>
 
 				<div class="flex items-center gap-2">
+					<button type="button" @click="isUpdateModalOpen = true"
+						class="rounded-2xl border border-border px-4 py-1.5 text-sm font-semibold hover:bg-accent">
+						Edit Details
+					</button>
 					<span
 						class="inline-flex items-center rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
 						{{ order_details.orderType === 'UBER' ? 'Uber Eats' : order_details.orderType === 'DINING' ?
@@ -230,6 +240,9 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 					</div>
 				</div>
 			</div>
+
+			<OrderDashboardComponentsEditOrderModal :open="isUpdateModalOpen" :order="order_details"
+				@close="isUpdateModalOpen = false" @saved="onOrderSaved" />
 		</section>
 	</main>
 </template>
