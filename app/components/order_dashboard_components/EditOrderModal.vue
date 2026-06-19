@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { OrderStatus } from '~/generated/prisma/enums'
 import type { OrderDetailsWithInclude } from '~~/types/orderwithInclude'
 
-defineProps<{
+const props = defineProps<{
     open: boolean
     order: OrderDetailsWithInclude | null
 }>()
@@ -10,30 +11,90 @@ const emit = defineEmits<{
     close: []
 }>()
 
+const toast = useToast()
+const itemQuantities = reactive<Record<string, number>>({})
+const itemSpecialInstructions = reactive<Record<string, string>>({})
+const optionQuantities = reactive<Record<string, number>>({})
+const selectedOrderStatus = ref<OrderStatus>()
+const availableStatuses = Object.values(OrderStatus) as OrderStatus[]
+
+watch(
+    () => props.order,
+    (order) => {
+        if (!order) return
+
+        selectedOrderStatus.value = order.status
+
+        for (const item of order.items) {
+            itemQuantities[item.id] = item.quantity
+            itemSpecialInstructions[item.id] = item.specialInstructions ?? ''
+
+            for (const option of item.orderItemOptions) {
+                optionQuantities[option.id] = option.quantity
+            }
+        }
+    },
+    { immediate: true }
+)
+
 function closeModal() {
     emit('close')
 }
 
-function removeOrderItem(itemId: string) {
-    void itemId
+async function removeOrderItem(itemId: string) {
+    await $fetch(`/api/orders/items/${itemId}`, {
+        method: 'DELETE',
+    })
+    toast.success({ title: 'Order item removed' })
 }
 
-function saveOrderItemQuantity(itemId: string) {
-    void itemId
+async function saveOrderItemQuantity(itemId: string) {
+    await $fetch(`/api/orders/items/${itemId}/quantity`, {
+        method: 'PATCH',
+        body: {
+            quantity: itemQuantities[itemId],
+        },
+    })
+    toast.success({ title: 'Item quantity updated' })
 }
 
-function saveOrderItemSpecialInstructions(itemId: string) {
-    void itemId
+async function saveOrderItemSpecialInstructions(itemId: string) {
+    await $fetch(`/api/orders/items/${itemId}/special-instructions`, {
+        method: 'PATCH',
+        body: {
+            specialInstructions: itemSpecialInstructions[itemId],
+        },
+    })
+    toast.success({ title: 'Special instructions updated' })
 }
 
-function saveOptionQuantity(itemId: string, optionId: string) {
-    void itemId
-    void optionId
+async function saveOptionQuantity(itemId: string, optionId: string) {
+    await $fetch(`/api/orders/items/${itemId}/options/${optionId}/quantity`, {
+        method: 'PATCH',
+        body: {
+            quantity: optionQuantities[optionId],
+        },
+    })
+    toast.success({ title: 'Option quantity updated' })
 }
 
-function removeOptionFromItem(itemId: string, optionId: string) {
-    void itemId
-    void optionId
+async function removeOptionFromItem(itemId: string, optionId: string) {
+    await $fetch(`/api/orders/items/${itemId}/options/${optionId}`, {
+        method: 'DELETE',
+    })
+    toast.success({ title: 'Option removed' })
+}
+
+async function saveOrderStatus() {
+    if (!props.order || !selectedOrderStatus.value) return
+
+    await $fetch(`/api/orders/${props.order.id}/status`, {
+        method: 'PATCH',
+        body: {
+            status: selectedOrderStatus.value,
+        },
+    })
+    toast.success({ title: 'Order status updated' })
 }
 </script>
 
@@ -68,8 +129,19 @@ function removeOptionFromItem(itemId: string, optionId: string) {
 
                     <div class="space-y-1.5">
                         <label class="text-sm font-medium">Status</label>
-                        <p class="w-full rounded-xl border border-border bg-muted/40 px-3 py-2 text-sm">{{ order.status
-                        }}</p>
+                        <div class="flex gap-2">
+                            <select v-model="selectedOrderStatus"
+                                class="min-w-0 flex-1 rounded-xl border border-border bg-muted/40 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/30">
+                                <option v-for="statusOption in availableStatuses" :key="statusOption"
+                                    :value="statusOption">
+                                    {{ statusOption }}
+                                </option>
+                            </select>
+                            <button type="button" @click="saveOrderStatus"
+                                class="rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60">
+                                Save
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -92,7 +164,7 @@ function removeOptionFromItem(itemId: string, optionId: string) {
                             <div class="md:col-span-5 space-y-1">
                                 <label class="text-xs text-muted-foreground">Qty</label>
                                 <div class="flex gap-2">
-                                    <input :value="item.quantity" type="number" min="1"
+                                    <input v-model.number="itemQuantities[item.id]" type="number" min="1"
                                         class="min-w-0 flex-1 rounded-lg border border-border bg-muted/40 px-2.5 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/30" />
                                     <button type="button" @click="saveOrderItemQuantity(item.id)"
                                         class="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60">
@@ -105,7 +177,7 @@ function removeOptionFromItem(itemId: string, optionId: string) {
                         <div class="space-y-1">
                             <label class="text-xs text-muted-foreground">Special Instructions</label>
                             <div class="flex flex-col gap-2 md:flex-row md:items-start">
-                                <textarea :value="item.specialInstructions ?? ''" rows="2"
+                                <textarea v-model="itemSpecialInstructions[item.id]" rows="2"
                                     class="min-w-0 flex-1 resize-none rounded-lg border border-border bg-muted/40 px-2.5 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/30"></textarea>
                                 <button type="button" @click="saveOrderItemSpecialInstructions(item.id)"
                                     class="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60">
@@ -126,7 +198,7 @@ function removeOptionFromItem(itemId: string, optionId: string) {
                                 <div class="md:col-span-4 space-y-1">
                                     <label class="text-xs text-muted-foreground">Qty</label>
                                     <div class="flex gap-2">
-                                        <input :value="option.quantity" type="number" min="1"
+                                        <input v-model.number="optionQuantities[option.id]" type="number" min="1"
                                             class="min-w-0 flex-1 rounded-lg border border-border bg-muted/40 px-2.5 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/30" />
                                         <button type="button" @click="saveOptionQuantity(item.id, option.id)"
                                             class="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60">
@@ -136,7 +208,7 @@ function removeOptionFromItem(itemId: string, optionId: string) {
                                 </div>
                                 <div class="md:col-span-1 flex items-end">
                                     <button type="button" @click="removeOptionFromItem(item.id, option.id)"
-                                        class="w-full rounded-lg border border-red-500/30 px-2 py-2 text-xs font-semibold text-red-500 hover:bg-red-500/10">
+                                        class="w-full rounded-lg border border-red-500/30 px-2 py-2 text-xs font-semibold text-red-500 hover:bg-red-500/10 disabled:opacity-60">
                                         X
                                     </button>
                                 </div>
