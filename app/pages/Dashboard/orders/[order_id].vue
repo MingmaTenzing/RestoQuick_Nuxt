@@ -4,81 +4,50 @@ definePageMeta({
 })
 
 import { computed } from 'vue'
-import { OrderStatus } from '~/generated/prisma/enums'
 import type { OrderDetailsWithInclude } from '~~/types/orderwithInclude'
 
 const route = useRoute()
-const toast = useToast()
 
 const order_id = route.params.order_id
 
 const { data: order_details, status, refresh } = await useFetch<OrderDetailsWithInclude>(`/api/orders/${order_id}`)
 
+console.log(order_details.value)
 const formatStatusLabel = (statusValue: string) => {
 	return statusValue.charAt(0) + statusValue.slice(1).toLowerCase()
 }
-
-const placedAt = computed(() => {
-	if (!order_details.value) return ''
-	return new Date(order_details.value.createdAt).toLocaleString('en-AU', {
-		day: '2-digit',
-		month: 'short',
-		year: 'numeric',
-		hour: '2-digit',
-		minute: '2-digit',
-	})
-})
-
-const updatedAt = computed(() => {
-	if (!order_details.value) return ''
-	return new Date(order_details.value.updatedAt).toLocaleString('en-AU', {
-		day: '2-digit',
-		month: 'short',
-		year: 'numeric',
-		hour: '2-digit',
-		minute: '2-digit',
-	})
-})
 
 const itemCount = computed(() => {
 	if (!order_details.value) return 0
 	return order_details.value.items.reduce((sum, item) => sum + item.quantity, 0)
 })
 
+function itemOptionsTotalCents(item: OrderDetailsWithInclude['items'][number]) {
+	return item.orderItemOptions.reduce((sum, option) => sum + option.quantity * option.priceCents, 0)
+}
+
+function optionTotalCents(item: OrderDetailsWithInclude['items'][number], option: OrderDetailsWithInclude['items'][number]['orderItemOptions'][number]) {
+	return option.quantity * option.priceCents * item.quantity
+}
+
+function itemUnitTotalCents(item: OrderDetailsWithInclude['items'][number]) {
+	return item.unitPriceCents + itemOptionsTotalCents(item)
+}
+
+function itemTotalCents(item: OrderDetailsWithInclude['items'][number]) {
+	return itemUnitTotalCents(item) * item.quantity
+}
+
 const orderTotal = computed(() => {
 	if (!order_details.value) return 0
-	return order_details.value.totalAmountCents / 100
+	return order_details.value.items.reduce((sum, item) => sum + itemTotalCents(item), 0) / 100
 })
 
-const isUpdatingStatus = ref(false)
-const availableStatuses = Object.values(OrderStatus) as OrderStatus[]
+const isUpdateModalOpen = ref(false)
 
-async function updateOrderStatus(nextStatus: OrderStatus) {
-	if (!order_details.value || isUpdatingStatus.value) return
-
-	try {
-		isUpdatingStatus.value = true
-
-		await $fetch('/api/orders', {
-			method: 'PUT',
-			body: {
-				order_id: order_details.value.id,
-				status: nextStatus,
-			},
-		})
-
-		await refresh()
-
-		toast.success({
-			title: `Order ${formatStatusLabel(nextStatus)}`
-		})
-	} catch {
-		toast.error({
-			title: 'Failed to update order status'
-		})
-	} finally {
-		isUpdatingStatus.value = false
-	}
+async function closeEditModal() {
+	isUpdateModalOpen.value = false
+	await refresh()
 }
 </script>
 
@@ -108,11 +77,18 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 					<p class="text-muted-foreground text-sm mt-1">
 						<i class="pi pi-clock text-xs"></i>
 						Placed
-						<NuxtTime :datetime="new Date(order_details.createdAt).getTime()" relative /> • {{ placedAt }}
+						<NuxtTime :datetime="order_details.createdAt" relative />
+						•
+						<NuxtTime :datetime="order_details.createdAt" locale="en-AU" day="2-digit" month="short"
+							year="numeric" hour="2-digit" minute="2-digit" />
 					</p>
 				</div>
 
 				<div class="flex items-center gap-2">
+					<button type="button" @click="isUpdateModalOpen = true"
+						class="rounded-2xl border border-border px-4 py-1.5 text-sm font-semibold hover:bg-accent">
+						Edit Details
+					</button>
 					<span
 						class="inline-flex items-center rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
 						{{ order_details.orderType === 'UBER' ? 'Uber Eats' : order_details.orderType === 'DINING' ?
@@ -136,31 +112,47 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 							<span class="text-sm text-muted-foreground">({{ itemCount }} items)</span>
 						</div>
 
-						<div class="p-5 space-y-4">
-							<div
-								class="grid grid-cols-12 text-xs font-semibold text-muted-foreground uppercase border-b border-dashed border-border pb-3">
-								<p class="col-span-6">Item</p>
-								<p class="col-span-2 text-center">Qty</p>
-								<p class="col-span-2 text-right">Unit</p>
-								<p class="col-span-2 text-right">Total</p>
-							</div>
-
+						<div class="p-5 space-y-5">
 							<div v-for="item in order_details.items" :key="item.id"
-								class="grid grid-cols-12 items-start py-2 border-b border-dashed border-border last:border-b-0">
-								<div class="col-span-6 pr-3">
-									<p class="font-semibold">{{ item.itemName }}</p>
-									<p v-if="item.specialInstructions" class="text-xs italic text-destructive mt-0.5">
-										{{ item.specialInstructions }}
+								class="space-y-2 border-b border-dashed border-border pb-4 last:border-b-0 last:pb-0">
+								<div class="flex items-start justify-between gap-4">
+									<div>
+										<p class="font-semibold text-foreground">{{ item.quantity }}x {{ item.itemName
+										}}</p>
+										<p class="text-xs text-muted-foreground">${{ item.unitPriceCents / 100 }} each
+										</p>
+									</div>
+									<p class="font-medium text-foreground whitespace-nowrap">
+										${{ (item.unitPriceCents * item.quantity) / 100 }}
 									</p>
 								</div>
-								<p class="col-span-2 text-center font-semibold">x{{ item.quantity }}</p>
-								<p class="col-span-2 text-right">${{ item.unitPriceCents / 100 }}</p>
-								<p class="col-span-2 text-right font-semibold">${{ (item.unitPriceCents * item.quantity)
-									/ 100 }}</p>
+
+								<div v-if="item.orderItemOptions.length" class="space-y-1 pl-4">
+									<div v-for="option in item.orderItemOptions" :key="option.id"
+										class="flex items-start justify-between gap-4 text-sm text-muted-foreground">
+										<div>
+											<p>+ {{ option.quantity }}x {{ option.name }}</p>
+											<p class="text-xs">${{ option.priceCents / 100 }} each option x {{
+												item.quantity }} item{{ item.quantity === 1 ? '' : 's' }}</p>
+										</div>
+										<p class="whitespace-nowrap">${{ optionTotalCents(item, option) / 100 }}</p>
+									</div>
+								</div>
+
+								<p v-if="item.specialInstructions"
+									class="rounded-lg border border-dashed border-border bg-muted/30 px-3 py-2 text-xs italic text-destructive">
+									{{ item.specialInstructions }}
+								</p>
+
+								<p
+									class="border-t border-dashed border-border pt-2 text-right text-lg font-bold text-primary">
+									${{ itemTotalCents(item) / 100 }}
+								</p>
+
 							</div>
 
 							<div class="border-t border-dashed border-border pt-4">
-								<div class="flex justify-between text-lg font-semibold">
+								<div class="flex justify-between text-2xl font-bold">
 									<span>Total</span>
 									<span class="text-primary">${{ orderTotal }}</span>
 								</div>
@@ -168,20 +160,6 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 						</div>
 					</div>
 
-					<div class="rounded-2xl border border-border bg-card p-5 space-y-4">
-						<h3 class="text-xl font-semibold text-primary">Update Status</h3>
-						<p class="text-sm text-muted-foreground">Current: {{ formatStatusLabel(order_details.status) }}
-						</p>
-
-						<div class="flex flex-wrap gap-2">
-							<button v-for="statusOption in availableStatuses" :key="statusOption" type="button"
-								:disabled="isUpdatingStatus" @click="updateOrderStatus(statusOption)"
-								class="rounded-2xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent"
-								:class="order_details.status === statusOption ? 'bg-primary text-primary-foreground border-primary hover:bg-primary' : ''">
-								{{ formatStatusLabel(statusOption) }}
-							</button>
-						</div>
-					</div>
 				</div>
 
 				<div class="space-y-4">
@@ -224,11 +202,17 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 						</div>
 						<div>
 							<p class="text-sm text-muted-foreground">Placed</p>
-							<p class="font-semibold">{{ placedAt }}</p>
+							<p class="font-semibold">
+								<NuxtTime :datetime="order_details.createdAt" locale="en-AU" day="2-digit" month="short"
+									year="numeric" hour="2-digit" minute="2-digit" />
+							</p>
 						</div>
 						<div>
 							<p class="text-sm text-muted-foreground">Last Updated</p>
-							<p class="font-semibold">{{ updatedAt }}</p>
+							<p class="font-semibold">
+								<NuxtTime :datetime="order_details.updatedAt" locale="en-AU" day="2-digit" month="short"
+									year="numeric" hour="2-digit" minute="2-digit" />
+							</p>
 						</div>
 						<div>
 							<p class="text-sm text-muted-foreground">Session ID</p>
@@ -243,6 +227,9 @@ async function updateOrderStatus(nextStatus: OrderStatus) {
 					</div>
 				</div>
 			</div>
+
+			<OrderDashboardComponentsEditOrderModal :open="isUpdateModalOpen" :order="order_details"
+				@close="closeEditModal" />
 		</section>
 	</main>
 </template>

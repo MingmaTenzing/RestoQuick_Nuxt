@@ -143,7 +143,7 @@ const formatCurrency = (amount: number) => {
             <span v-if="orders_loading == 'pending'" class="block h-10 w-20 animate-pulse rounded-2xl bg-muted"></span>
             <span v-else
               class="block min-w-0 truncate text-3xl font-semibold leading-none text-emerald-600 sm:text-4xl">{{
-              total_completed_orders }}</span>
+                total_completed_orders }}</span>
             <span class="text-sm text-muted-foreground">Finished orders</span>
           </div>
         </div>

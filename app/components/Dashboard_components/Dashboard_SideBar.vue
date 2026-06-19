@@ -6,6 +6,7 @@ const { orgRole, isLoaded } = useAuth();
 const baseNavItems = [
     { to: '/dashboard/bookings', icon: 'pi pi-calendar-clock', label: 'Bookings' },
     { to: '/dashboard/orders', icon: 'pi pi-shopping-cart', label: 'Orders' },
+    { to: '/dashboard/sessions', icon: 'pi pi-history', label: 'Sessions' },
     { to: '/dashboard/pos', icon: 'pi pi-desktop', label: 'POS' },
     { to: '/dashboard/cashier', icon: 'pi pi-wallet', label: 'Cashier' },
     { to: '/dashboard/kitchen', icon: 'pi pi-building-columns', label: 'Kitchen' },
