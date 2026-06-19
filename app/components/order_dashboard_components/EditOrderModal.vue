@@ -12,10 +12,12 @@ const emit = defineEmits<{
 }>()
 
 const toast = useToast()
+const modalOrder = ref<OrderDetailsWithInclude | null>(null)
 const itemQuantities = reactive<Record<string, number>>({})
 const itemSpecialInstructions = reactive<Record<string, string>>({})
 const optionQuantities = reactive<Record<string, number>>({})
 const selectedOrderStatus = ref<OrderStatus>()
+const loadingActions = reactive<Record<string, boolean>>({})
 const availableStatuses = Object.values(OrderStatus) as OrderStatus[]
 
 watch(
@@ -23,83 +25,143 @@ watch(
     (order) => {
         if (!order) return
 
-        selectedOrderStatus.value = order.status
-
-        for (const item of order.items) {
-            itemQuantities[item.id] = item.quantity
-            itemSpecialInstructions[item.id] = item.specialInstructions ?? ''
-
-            for (const option of item.orderItemOptions) {
-                optionQuantities[option.id] = option.quantity
-            }
-        }
+        modalOrder.value = order
+        syncOrderInputs(order)
     },
     { immediate: true }
 )
+
+function syncOrderInputs(order: OrderDetailsWithInclude) {
+    selectedOrderStatus.value = order.status
+
+    for (const item of order.items) {
+        itemQuantities[item.id] = item.quantity
+        itemSpecialInstructions[item.id] = item.specialInstructions ?? ''
+
+        for (const option of item.orderItemOptions) {
+            optionQuantities[option.id] = option.quantity
+        }
+    }
+}
+
+async function refreshModalOrder() {
+    if (!modalOrder.value) return
+
+    modalOrder.value = await $fetch<OrderDetailsWithInclude>(`/api/orders/${modalOrder.value.id}`)
+    syncOrderInputs(modalOrder.value)
+}
 
 function closeModal() {
     emit('close')
 }
 
 async function removeOrderItem(itemId: string) {
-    await $fetch(`/api/orders/items/${itemId}`, {
-        method: 'DELETE',
-    })
-    toast.success({ title: 'Order item removed' })
+    const actionKey = `remove-item-${itemId}`
+
+    try {
+        loadingActions[actionKey] = true
+        await $fetch(`/api/orders/items/${itemId}`, {
+            method: 'DELETE',
+        })
+        await refreshModalOrder()
+        toast.success({ title: 'Order item removed' })
+    } finally {
+        loadingActions[actionKey] = false
+    }
 }
 
 async function saveOrderItemQuantity(itemId: string) {
-    await $fetch(`/api/orders/items/${itemId}/quantity`, {
-        method: 'PATCH',
-        body: {
-            quantity: itemQuantities[itemId],
-        },
-    })
-    toast.success({ title: 'Item quantity updated' })
+    const actionKey = `item-quantity-${itemId}`
+
+    try {
+        loadingActions[actionKey] = true
+        await $fetch(`/api/orders/items/${itemId}/quantity`, {
+            method: 'PATCH',
+            body: {
+                quantity: itemQuantities[itemId],
+            },
+        })
+        await refreshModalOrder()
+        toast.success({ title: 'Item quantity updated' })
+    } finally {
+        loadingActions[actionKey] = false
+    }
 }
 
 async function saveOrderItemSpecialInstructions(itemId: string) {
-    await $fetch(`/api/orders/items/${itemId}/special-instructions`, {
-        method: 'PATCH',
-        body: {
-            specialInstructions: itemSpecialInstructions[itemId],
-        },
-    })
-    toast.success({ title: 'Special instructions updated' })
+    const actionKey = `item-instructions-${itemId}`
+
+    try {
+        loadingActions[actionKey] = true
+        await $fetch(`/api/orders/items/${itemId}/special-instructions`, {
+            method: 'PATCH',
+            body: {
+                specialInstructions: itemSpecialInstructions[itemId],
+            },
+        })
+        await refreshModalOrder()
+        toast.success({ title: 'Special instructions updated' })
+    } finally {
+        loadingActions[actionKey] = false
+    }
 }
 
 async function saveOptionQuantity(itemId: string, optionId: string) {
-    await $fetch(`/api/orders/items/${itemId}/options/${optionId}/quantity`, {
-        method: 'PATCH',
-        body: {
-            quantity: optionQuantities[optionId],
-        },
-    })
-    toast.success({ title: 'Option quantity updated' })
+    const actionKey = `option-quantity-${optionId}`
+
+    try {
+        loadingActions[actionKey] = true
+        await $fetch(`/api/orders/items/${itemId}/options/${optionId}/quantity`, {
+            method: 'PATCH',
+            body: {
+                quantity: optionQuantities[optionId],
+            },
+        })
+        await refreshModalOrder()
+        toast.success({ title: 'Option quantity updated' })
+    } finally {
+        loadingActions[actionKey] = false
+    }
 }
 
 async function removeOptionFromItem(itemId: string, optionId: string) {
-    await $fetch(`/api/orders/items/${itemId}/options/${optionId}`, {
-        method: 'DELETE',
-    })
-    toast.success({ title: 'Option removed' })
+    const actionKey = `remove-option-${optionId}`
+
+    try {
+        loadingActions[actionKey] = true
+        await $fetch(`/api/orders/items/${itemId}/options/${optionId}`, {
+            method: 'DELETE',
+        })
+        await refreshModalOrder()
+        toast.success({ title: 'Option removed' })
+    } finally {
+        loadingActions[actionKey] = false
+    }
 }
 
 async function saveOrderStatus() {
-    if (!props.order || !selectedOrderStatus.value) return
+    if (!modalOrder.value || !selectedOrderStatus.value) return
 
-    await $fetch(`/api/orders/${props.order.id}/status`, {
-        method: 'PATCH',
-        body: {
-            status: selectedOrderStatus.value,
-        },
-    })
-    toast.success({ title: 'Order status updated' })
+    const actionKey = 'order-status'
+
+    try {
+        loadingActions[actionKey] = true
+        await $fetch(`/api/orders/${modalOrder.value.id}/status`, {
+            method: 'PATCH',
+            body: {
+                status: selectedOrderStatus.value,
+            },
+        })
+        await refreshModalOrder()
+        toast.success({ title: 'Order status updated' })
+    } finally {
+        loadingActions[actionKey] = false
+    }
 }
 </script>
 
 <template>
-    <div v-if="open && order" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div v-if="open && modalOrder" class="fixed inset-0 z-50 flex items-center justify-center p-4">
         <button type="button" @click="closeModal" class="absolute inset-0 bg-black/40"
             aria-label="Close edit order modal"></button>
 
@@ -118,13 +180,13 @@ async function saveOrderStatus() {
                     <div class="space-y-1.5 md:col-span-1">
                         <label class="text-sm font-medium">Customer Name</label>
                         <p class="w-full rounded-xl border border-border bg-muted/40 px-3 py-2 text-sm">{{
-                            order.customerName ?? 'Guest' }}</p>
+                            modalOrder.customerName ?? 'Guest' }}</p>
                     </div>
 
                     <div class="space-y-1.5">
                         <label class="text-sm font-medium">Order Type</label>
                         <p class="w-full rounded-xl border border-border bg-muted/40 px-3 py-2 text-sm">{{
-                            order.orderType }}</p>
+                            modalOrder.orderType }}</p>
                     </div>
 
                     <div class="space-y-1.5">
@@ -138,8 +200,10 @@ async function saveOrderStatus() {
                                 </option>
                             </select>
                             <button type="button" @click="saveOrderStatus"
-                                class="rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60">
-                                Save
+                                class="inline-flex w-14 items-center justify-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60"
+                                :disabled="loadingActions['order-status']">
+                                <i v-if="loadingActions['order-status']" class="pi pi-spin pi-spinner text-xs"></i>
+                                <span v-else>Save</span>
                             </button>
                         </div>
                     </div>
@@ -148,15 +212,18 @@ async function saveOrderStatus() {
                 <div class="space-y-3">
                     <h4 class="text-sm font-semibold text-muted-foreground uppercase">Order Items and Options</h4>
 
-                    <div v-for="item in order.items" :key="item.id"
+                    <div v-for="item in modalOrder.items" :key="item.id"
                         class="rounded-xl border border-border p-3 space-y-3">
                         <div class="flex items-start justify-between gap-3">
                             <div>
                                 <p class="font-semibold">{{ item.itemName }}</p>
                             </div>
                             <button type="button" @click="removeOrderItem(item.id)"
-                                class="rounded-lg border border-red-500/30 px-3 py-1.5 text-xs font-semibold text-red-500 hover:bg-red-500/10 disabled:opacity-60">
-                                Remove Item
+                                class="inline-flex w-28 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-red-500/30 px-3 py-1.5 text-xs font-semibold text-red-500 hover:bg-red-500/10 disabled:opacity-60"
+                                :disabled="loadingActions[`remove-item-${item.id}`]">
+                                <i v-if="loadingActions[`remove-item-${item.id}`]"
+                                    class="pi pi-spin pi-spinner text-xs"></i>
+                                <span v-else>Remove Item</span>
                             </button>
                         </div>
 
@@ -167,8 +234,11 @@ async function saveOrderStatus() {
                                     <input v-model.number="itemQuantities[item.id]" type="number" min="1"
                                         class="min-w-0 flex-1 rounded-lg border border-border bg-muted/40 px-2.5 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/30" />
                                     <button type="button" @click="saveOrderItemQuantity(item.id)"
-                                        class="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60">
-                                        Save
+                                        class="inline-flex w-14 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60"
+                                        :disabled="loadingActions[`item-quantity-${item.id}`]">
+                                        <i v-if="loadingActions[`item-quantity-${item.id}`]"
+                                            class="pi pi-spin pi-spinner text-xs"></i>
+                                        <span v-else>Save</span>
                                     </button>
                                 </div>
                             </div>
@@ -180,8 +250,11 @@ async function saveOrderStatus() {
                                 <textarea v-model="itemSpecialInstructions[item.id]" rows="2"
                                     class="min-w-0 flex-1 resize-none rounded-lg border border-border bg-muted/40 px-2.5 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/30"></textarea>
                                 <button type="button" @click="saveOrderItemSpecialInstructions(item.id)"
-                                    class="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60">
-                                    Save
+                                    class="inline-flex w-14 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60"
+                                    :disabled="loadingActions[`item-instructions-${item.id}`]">
+                                    <i v-if="loadingActions[`item-instructions-${item.id}`]"
+                                        class="pi pi-spin pi-spinner text-xs"></i>
+                                    <span v-else>Save</span>
                                 </button>
                             </div>
                         </div>
@@ -201,15 +274,21 @@ async function saveOrderStatus() {
                                         <input v-model.number="optionQuantities[option.id]" type="number" min="1"
                                             class="min-w-0 flex-1 rounded-lg border border-border bg-muted/40 px-2.5 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/30" />
                                         <button type="button" @click="saveOptionQuantity(item.id, option.id)"
-                                            class="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60">
-                                            Save
+                                            class="inline-flex w-14 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60"
+                                            :disabled="loadingActions[`option-quantity-${option.id}`]">
+                                            <i v-if="loadingActions[`option-quantity-${option.id}`]"
+                                                class="pi pi-spin pi-spinner text-xs"></i>
+                                            <span v-else>Save</span>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="md:col-span-1 flex items-end">
                                     <button type="button" @click="removeOptionFromItem(item.id, option.id)"
-                                        class="w-full rounded-lg border border-red-500/30 px-2 py-2 text-xs font-semibold text-red-500 hover:bg-red-500/10 disabled:opacity-60">
-                                        X
+                                        class="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-red-500/30 px-2 py-2 text-xs font-semibold text-red-500 hover:bg-red-500/10 disabled:opacity-60"
+                                        :disabled="loadingActions[`remove-option-${option.id}`]">
+                                        <i v-if="loadingActions[`remove-option-${option.id}`]"
+                                            class="pi pi-spin pi-spinner text-xs"></i>
+                                        <span v-else>X</span>
                                     </button>
                                 </div>
                             </div>

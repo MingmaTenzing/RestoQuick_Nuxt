@@ -118,7 +118,7 @@ async function closeEditModal() {
 								<div class="flex items-start justify-between gap-4">
 									<div>
 										<p class="font-semibold text-foreground">{{ item.quantity }}x {{ item.itemName
-											}}</p>
+										}}</p>
 										<p class="text-xs text-muted-foreground">${{ item.unitPriceCents / 100 }} each
 										</p>
 									</div>
