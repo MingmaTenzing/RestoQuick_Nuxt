@@ -117,8 +117,8 @@ const sessionTotalCents = computed(() => {
             </section>
 
             <section v-else class="overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
-                <article v-for="order in orders" :key="order.id"
-                    class="border-b border-border p-5 last:border-b-0 sm:p-6">
+                <NuxtLink v-for="order in orders" :key="order.id" :to="`/dashboard/orders/${order.id}`"
+                    class="block border-b border-border p-5 transition hover:bg-accent/30 last:border-b-0 sm:p-6">
                     <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                         <div class="min-w-0 space-y-3">
                             <div class="flex flex-wrap items-center gap-2">
@@ -154,7 +154,7 @@ const sessionTotalCents = computed(() => {
                             </p>
                         </li>
                     </ul>
-                </article>
+                </NuxtLink>
             </section>
         </template>
     </main>
