@@ -296,12 +296,7 @@ async function saveOrderStatus() {
                     </div>
                 </div>
 
-                <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" @click="closeModal"
-                        class="rounded-xl border border-border px-4 py-2 text-sm font-semibold hover:bg-accent">
-                        Cancel
-                    </button>
-                </div>
+
             </div>
         </div>
     </div>
