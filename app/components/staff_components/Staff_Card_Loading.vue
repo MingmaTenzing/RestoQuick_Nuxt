@@ -1,15 +1,7 @@
 <template>
   <div
-    class="bg-card text-card-foreground flex flex-col gap-6 rounded-3xl border border-border py-6 shadow-sm group relative overflow-hidden"
-  >
+    class="bg-card text-card-foreground flex flex-col gap-6 rounded-3xl border border-border py-6 shadow-sm group relative overflow-hidden">
     <div class="px-6 pt-6">
-      <!-- Online Status Indicator (skeleton) -->
-      <div class="absolute top-3 right-3">
-        <span class="flex h-2.5 w-2.5">
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-muted animate-pulse"></span>
-        </span>
-      </div>
-
       <!-- Profile Section (skeleton) -->
       <div class="mb-4 flex flex-col items-center text-center">
         <div class="h-20 w-20 rounded-full mb-3 ring-2 ring-background shadow-md bg-muted animate-pulse" />
@@ -45,11 +37,7 @@
       <div class="border-t border-border pt-3">
         <div class="mb-2 h-3 w-32 rounded bg-muted animate-pulse"></div>
         <div class="flex gap-1">
-          <div
-            v-for="i in 7"
-            :key="i"
-            class="h-6 flex-1 rounded bg-muted animate-pulse"
-          />
+          <div v-for="i in 7" :key="i" class="h-6 flex-1 rounded bg-muted animate-pulse" />
         </div>
       </div>
 
