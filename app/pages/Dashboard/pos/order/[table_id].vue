@@ -4,7 +4,7 @@ definePageMeta({
     middleware: ['require-active-table-session']
 })
 
-import type { MenuCategory, Table } from '~/generated/prisma/browser'
+import type { Table } from '~/generated/prisma/browser'
 import type { MenuItemWithOptions } from '~~/types/menu'
 import Pos_Filter_Bar from '~/components/pos_components/Pos_Filter_Bar.vue'
 import Pos_Menu_Item_Card from '~/components/pos_components/Pos_Menu_Item_Card.vue'
@@ -25,7 +25,7 @@ const backTo = computed(() => isTakeawayOrder.value ? '/dashboard/pos' : '/dashb
 const backLabel = computed(() => isTakeawayOrder.value ? 'Back to POS' : 'Back to tables')
 
 const searchQuery = ref('')
-const selectedCategory = ref<MenuCategory | ''>('')
+const selectedCategory = ref<string | ''>('')
 const isSubmittingOrder = ref(false)
 const toast = useToast()
 const {
@@ -43,7 +43,7 @@ const {
 
 
 const { data: menuItems, pending: menuPending } = await useFetch<MenuItemWithOptions[]>('/api/menu')
-const { data: menuCategories } = await useFetch<MenuCategory[]>('/api/menu/category')
+const { data: menuCategories } = await useFetch<string[]>('/api/menu/category')
 
 const loadTable = async () => {
     if (isTakeawayOrder.value) {

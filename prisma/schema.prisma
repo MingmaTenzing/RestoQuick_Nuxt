@@ -20,7 +20,7 @@ enum LeaveStatus {
   pending
   approved
   rejected
-} 
+}
 
 enum WeekDay {
   MON
@@ -87,6 +87,7 @@ enum BookingStatus {
 
 enum TableSessionStatus {
   ACTIVE
+  CHECKOUT_PENDING
   CLOSED
 }
 
@@ -139,29 +140,32 @@ model Booking {
 }
 
 // Menu
-enum MenuCategory {
-  APPETIZER
-  MAIN_COURSE
-  DESSERT
-  BEVERAGE
-  SIDE
-  SALAD
+model MenuCategory {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  menuItems MenuItem[]
 }
 
 model MenuItem {
-  id          String       @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
   description String?
   priceCents  Int
-  category    MenuCategory
+  category    String
   imageUrl    String? // Optional image URL for the menu item
-  isAvailable Boolean      @default(true) // Whether the item is currently available
+  isAvailable Boolean @default(true) // Whether the item is currently available
 
   // Relations
-  orderItems OrderItem[]
+  orderItems   OrderItem[]
+  menuCategory MenuCategory @relation(fields: [category], references: [name], onUpdate: Cascade)
 
   //one menu item can have many options like extra chicken, large, or anything
   options MenuOption[]
+
+  @@index([category])
 }
 
 model MenuOption {

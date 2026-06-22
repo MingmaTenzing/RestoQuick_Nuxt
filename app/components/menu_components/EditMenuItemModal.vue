@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {  type MenuItemCreateInput, type MenuItemUpdateInput, type MenuOptionUncheckedCreateInput } from "~/generated/prisma/models";
-import { cloudinary_image_upload} from "../../client_utils/cloudinary_upload_image"
-import type { MenuCategory, MenuOption } from '~/generated/prisma/browser';
+import { type MenuItemCreateInput, type MenuItemUpdateInput, type MenuOptionUncheckedCreateInput } from "~/generated/prisma/models";
+import { cloudinary_image_upload } from "../../client_utils/cloudinary_upload_image"
+import type { MenuOption } from '~/generated/prisma/browser';
 import type { MenuItemWithOptions } from "~~/types/menu";
 
 const props = defineProps<{
@@ -17,7 +17,7 @@ const emit = defineEmits<{
 }>()
 
 
-const { data: menu_category } = await useFetch<MenuCategory[]>('/api/menu/category')
+const { data: menu_category, refresh: refresh_menu_category } = await useFetch<string[]>('/api/menu/category')
 
 
 const showDeleteConfirm = ref(false)
@@ -26,6 +26,8 @@ const toast = useToast()
 const image_uploading = ref(false)
 const image_upload_success = ref(false)
 const isAddingMenuOption = ref(false)
+const creating_category = ref(false)
+const new_category_name = ref('')
 
 const toCents = (value: number) => Math.round(Number(value || 0) * 100)
 const toDollars = (value: number) => Number((Number(value || 0) / 100).toFixed(2))
@@ -51,7 +53,7 @@ const open_add_option = () => {
   draft_menu_option.priceCents = 0
 }
 
-const save_new_menu_option = async() => {
+const save_new_menu_option = async () => {
   if (!draft_menu_option.name.trim()) return
 
   try {
@@ -110,11 +112,11 @@ const update_menu_option = async (option: MenuOption) => {
   }
 }
 
-const removeMenuOption =  () => {
+const removeMenuOption = () => {
 }
 
 const form = reactive<MenuItemCreateInput>({
-   
+
   name: props.item.name,
   description: props.item.description ?? '',
   priceCents: toDollars(props.item.priceCents),
@@ -122,6 +124,35 @@ const form = reactive<MenuItemCreateInput>({
   imageUrl: props.item.imageUrl ?? '',
   isAvailable: props.item.isAvailable ?? true,
 })
+
+const createMenuCategory = async () => {
+  const name = new_category_name.value.trim()
+
+  if (!name || creating_category.value) return
+
+  creating_category.value = true
+
+  try {
+    const created = await $fetch<{ name: string }>('/api/menu/category', {
+      method: 'POST',
+      body: { name },
+    })
+
+    await refresh_menu_category()
+    form.category = created.name
+    new_category_name.value = ''
+
+    toast.success({
+      message: 'Category added'
+    })
+  } catch (error) {
+    toast.error({
+      message: error instanceof Error ? error.message : 'Failed to add category'
+    })
+  } finally {
+    creating_category.value = false
+  }
+}
 
 
 async function upload_menu_item_image(event: Event) {
@@ -154,10 +185,10 @@ const submitEditMenuItem = async () => {
     id: props.item.id,
     form: {
       name: form.name,
-      description: form.description ,
+      description: form.description,
       priceCents: toCents(Number(form.priceCents)),
       category: form.category,
-      imageUrl: form.imageUrl ,
+      imageUrl: form.imageUrl,
       isAvailable: form.isAvailable,
     }
   })
@@ -183,20 +214,19 @@ const confirmDeleteMenuItem = () => {
 </script>
 
 <template>
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" @click.self="!props.isSaving && !props.isDeleting && !showDeleteConfirm && emit('close')">
-    <div class="w-full h-[90vh] overflow-y-scroll max-w-xl rounded-3xl border border-border bg-card p-6 text-card-foreground shadow-lg">
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4"
+    @click.self="!props.isSaving && !props.isDeleting && !showDeleteConfirm && emit('close')">
+    <div
+      class="w-full h-[90vh] overflow-y-scroll max-w-xl rounded-3xl border border-border bg-card p-6 text-card-foreground shadow-lg">
       <div class="mb-6 flex items-start justify-between gap-4">
         <div>
           <h2 class="text-lg font-semibold">Edit Menu Item</h2>
           <p class="text-sm text-muted-foreground">Update menu information and availability.</p>
         </div>
 
-        <button
-          type="button"
-          :disabled="props.isSaving || props.isDeleting"
+        <button type="button" :disabled="props.isSaving || props.isDeleting"
           class="inline-flex h-8 w-8 items-center justify-center rounded-2xl border border-input transition-colors hover:bg-accent hover:text-accent-foreground"
-          @click="emit('close')"
-        >
+          @click="emit('close')">
           <i class="pi pi-times" />
         </button>
       </div>
@@ -205,48 +235,41 @@ const confirmDeleteMenuItem = () => {
         <div class="space-y-4" :class="{ 'pointer-events-none opacity-50': props.isSaving || props.isDeleting }">
           <div class="space-y-2">
             <label class="text-sm font-medium">Item Name</label>
-            <input
-              v-model="form.name"
-              type="text"
-              required
-              placeholder="e.g. Chicken Burger"
-              class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
-            >
+            <input v-model="form.name" type="text" required placeholder="e.g. Chicken Burger"
+              class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring">
           </div>
 
           <div class="space-y-2">
             <label class="text-sm font-medium">Description</label>
-            <textarea
-              v-model="form.description"
-              rows="3"
-              placeholder="Short description for customers"
-              class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
-            />
+            <textarea v-model="form.description" rows="3" placeholder="Short description for customers"
+              class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring" />
           </div>
 
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div class="space-y-2">
               <label class="text-sm font-medium">Price (dollars)</label>
-              <input
-                v-model.number="form.priceCents"
-                type="number"
-                min="0"
-                step="0.01"
-                required
-                class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
-              >
+              <input v-model.number="form.priceCents" type="number" min="0" step="0.01" required
+                class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring">
             </div>
 
             <div class="space-y-2">
               <label class="text-sm font-medium">Category</label>
-              <select
-                v-model="form.category"
-                class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
-              >
+              <select v-model="form.category"
+                class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring">
                 <option v-for="category in menu_category" :key="category" :value="category">
                   {{ category.replaceAll('_', ' ') }}
                 </option>
               </select>
+
+              <div class="flex gap-2">
+                <input v-model="new_category_name" type="text" placeholder="Add new category"
+                  class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring">
+                <button type="button" :disabled="creating_category"
+                  class="rounded-2xl border border-input bg-background px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                  @click="createMenuCategory">
+                  Add
+                </button>
+              </div>
             </div>
           </div>
 
@@ -257,92 +280,61 @@ const confirmDeleteMenuItem = () => {
                 <p class="text-xs text-muted-foreground">Edit optional extras or upgrades for this menu item.</p>
               </div>
 
-              <button
-                v-if="!isAddingMenuOption"
-                type="button"
+              <button v-if="!isAddingMenuOption" type="button"
                 class="rounded-2xl border border-input bg-background px-3 py-2 text-sm text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-                @click="open_add_option"
-              >
+                @click="open_add_option">
                 Add Option
               </button>
             </div>
 
-            <div
-              v-if="isAddingMenuOption"
-              class="grid grid-cols-1 gap-3 rounded-2xl border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto_auto]"
-            >
+            <div v-if="isAddingMenuOption"
+              class="grid grid-cols-1 gap-3 rounded-2xl border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto_auto]">
               <div class="space-y-1">
                 <label class="text-xs font-medium text-muted-foreground">Option</label>
-                <input
-                  v-model="draft_menu_option.name"
-                  type="text"
-                  placeholder="e.g. Extra cheese"
-                  class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring"
-                >
+                <input v-model="draft_menu_option.name" type="text" placeholder="e.g. Extra cheese"
+                  class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground outline-none focus:ring-2 focus:ring-ring">
               </div>
 
               <div class="space-y-1">
                 <label class="text-xs font-medium text-muted-foreground">Price ($)</label>
-                <input
-                  v-model.number="draft_menu_option.priceCents"
-                  type="number"
-                  min="0"
-                  step="0.01"
+                <input v-model.number="draft_menu_option.priceCents" type="number" min="0" step="0.01"
                   placeholder="Price in dollars"
-                  class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring"
-                >
+                  class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-ring">
               </div>
 
-              <button
-                type="button"
+              <button type="button"
                 class="self-end rounded-2xl bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
-                @click="save_new_menu_option"
-              >
+                @click="save_new_menu_option">
                 Save
               </button>
 
-          
+
             </div>
 
             <div v-if="editable_options.length" class="space-y-3">
-              <div
-                v-for="option in editable_options"
-                :key="option.id"
-                class="grid grid-cols-1 gap-3 rounded-2xl border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto_auto]"
-              >
+              <div v-for="option in editable_options" :key="option.id"
+                class="grid grid-cols-1 gap-3 rounded-2xl border border-border bg-background p-3 sm:grid-cols-[1fr_140px_auto_auto]">
                 <div class="space-y-1">
                   <label class="text-xs font-medium text-muted-foreground">Option</label>
-                  <input
-                    v-model="option.name"
-                    type="text"
-                    class="w-full rounded-2xl border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
-                  >
+                  <input v-model="option.name" type="text"
+                    class="w-full rounded-2xl border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring">
                 </div>
 
                 <div class="space-y-1">
                   <label class="text-xs font-medium text-muted-foreground">Price ($)</label>
-                  <input
-                    v-model.number="option.priceCents"
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    class="w-full rounded-2xl border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
-                  >
+                  <input v-model.number="option.priceCents" type="number" min="0" step="0.01"
+                    class="w-full rounded-2xl border border-input bg-card px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring">
                 </div>
 
-                <button
-                  type="button"
+                <button type="button"
                   class="self-end rounded-2xl bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
-                  @click="update_menu_option(option)"
-                  >
+                  @click="update_menu_option(option)">
                   Update
                 </button>
 
-                <button
-                  type="button"
+                <button type="button"
                   class="self-end rounded-2xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/20"
-                  @click="removeMenuOption"
-                >
+                  @click="removeMenuOption">
                   Remove
                 </button>
               </div>
@@ -360,13 +352,8 @@ const confirmDeleteMenuItem = () => {
               <i v-if="image_upload_success" class="pi pi-check-circle text-green-600"></i>
             </div>
 
-            <input
-              type="file"
-              accept="image/*"
-              @change="upload_menu_item_image($event)"
-              id="edit_menu_item_image_input"
-              class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-ring"
-            >
+            <input type="file" accept="image/*" @change="upload_menu_item_image($event)" id="edit_menu_item_image_input"
+              class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-ring">
           </div>
 
           <div class="rounded-2xl border border-border p-3">
@@ -378,38 +365,25 @@ const confirmDeleteMenuItem = () => {
         </div>
 
         <div class="flex flex-col-reverse gap-2 border-t border-border pt-5 sm:flex-row sm:justify-end">
-          <button
-            v-if="!props.isDeleting"
-            type="button"
-            :disabled="props.isSaving"
+          <button v-if="!props.isDeleting" type="button" :disabled="props.isSaving"
             class="rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-2 text-destructive transition-colors hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-50"
-            @click="openDeleteConfirm"
-          >
+            @click="openDeleteConfirm">
             Delete
           </button>
 
-          <div
-            v-else
-            class="flex items-center justify-center rounded-2xl bg-destructive px-4 py-2 text-destructive-foreground"
-          >
+          <div v-else
+            class="flex items-center justify-center rounded-2xl bg-destructive px-4 py-2 text-destructive-foreground">
             <i class="pi pi-spinner animate-spin" />
           </div>
 
-          <button
-            type="button"
-            :disabled="props.isSaving || props.isDeleting"
+          <button type="button" :disabled="props.isSaving || props.isDeleting"
             class="rounded-2xl border border-input bg-background px-4 py-2 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
-            @click="emit('close')"
-          >
+            @click="emit('close')">
             Cancel
           </button>
 
-          <button
-            v-if="!props.isSaving"
-            type="submit"
-            :disabled="props.isDeleting"
-            class="rounded-2xl bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
-          >
+          <button v-if="!props.isSaving" type="submit" :disabled="props.isDeleting"
+            class="rounded-2xl bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90">
             Save Changes
           </button>
 
@@ -420,12 +394,7 @@ const confirmDeleteMenuItem = () => {
       </form>
     </div>
 
-    <MenuComponentsDeleteMenuItemConfirmModal
-      v-if="showDeleteConfirm"
-      :item-name="item.name"
-      :is-deleting="props.isDeleting"
-      @cancel="closeDeleteConfirm"
-      @confirm="confirmDeleteMenuItem"
-    />
+    <MenuComponentsDeleteMenuItemConfirmModal v-if="showDeleteConfirm" :item-name="item.name"
+      :is-deleting="props.isDeleting" @cancel="closeDeleteConfirm" @confirm="confirmDeleteMenuItem" />
   </div>
 </template>
