@@ -1,5 +1,4 @@
 import type { MenuItem, MenuOption } from "~/generated/prisma/browser";
-import type { MenuCategory } from "~/generated/prisma/enums";
 
 export type MenuItemWithOptions = MenuItem & {
   options: MenuOption[];
@@ -14,7 +13,7 @@ export type MenuItemFormState = {
   name: string;
   description: string;
   price: number;
-  category: MenuCategory;
+  category: string;
   imageUrl: string;
   isAvailable: boolean;
 };

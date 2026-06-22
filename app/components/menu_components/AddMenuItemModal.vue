@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { MenuItemCreateInput, MenuOptionCreateWithoutMenuItemInput } from '~/generated/prisma/models'
-import { cloudinary_image_upload} from "../../client_utils/cloudinary_upload_image"
-import type { MenuCategory } from '~/generated/prisma/enums';
+import { cloudinary_image_upload } from "../../client_utils/cloudinary_upload_image"
 
 import type { MenuOptionDraft, MenuItemFormState } from "../../../types/menu"
 
@@ -19,6 +18,8 @@ const runtimeConfig = useRuntimeConfig()
 const toast = useToast()
 const image_uploading = ref(false)
 const image_upload_success = ref(false)
+const creating_category = ref(false)
+const new_category_name = ref('')
 
 
 const menu_options = ref<MenuOptionDraft[]>([])
@@ -37,13 +38,42 @@ const form = reactive<MenuItemFormState>({
   name: '',
   description: '',
   price: 0,
-  category: 'MAIN_COURSE' as MenuCategory,
+  category: 'MAIN_COURSE',
   imageUrl: '',
   isAvailable: true,
 })
 
 
-const { data: menu_category } = await useFetch<MenuCategory[]>('/api/menu/category')
+const { data: menu_category, refresh: refresh_menu_category } = await useFetch<string[]>('/api/menu/category')
+
+const createMenuCategory = async () => {
+  const name = new_category_name.value.trim()
+
+  if (!name || creating_category.value) return
+
+  creating_category.value = true
+
+  try {
+    const created = await $fetch<{ name: string }>('/api/menu/category', {
+      method: 'POST',
+      body: { name },
+    })
+
+    await refresh_menu_category()
+    form.category = created.name
+    new_category_name.value = ''
+
+    toast.success({
+      title: 'Category added',
+    })
+  } catch (error) {
+    toast.error({
+      title: 'Failed to add category',
+    })
+  } finally {
+    creating_category.value = false
+  }
+}
 
 const addMenuOption = () => {
   isAddingMenuOption.value = true
@@ -84,7 +114,7 @@ const submitAddMenuItem = () => {
 
   emit('create', {
     name: form.name,
-    description: form.description ,
+    description: form.description,
     priceCents: toCents(form.price),
     category: form.category,
     imageUrl: form.imageUrl,
@@ -100,11 +130,11 @@ async function upload_menu_item_image(event: Event) {
   image_uploading.value = true
 
   try {
-     const image_secure_url = await cloudinary_image_upload(event, {
-    cloudName: runtimeConfig.public.CLOUDINARY_CLOUD_NAME,
-    uploadPreset: runtimeConfig.public.CLOUDINARY_UPLOAD_PRESET_MENU_ITEMS,
-    maxSizeInKb: 300,
-  })
+    const image_secure_url = await cloudinary_image_upload(event, {
+      cloudName: runtimeConfig.public.CLOUDINARY_CLOUD_NAME,
+      uploadPreset: runtimeConfig.public.CLOUDINARY_UPLOAD_PRESET_MENU_ITEMS,
+      maxSizeInKb: 300,
+    })
 
     form.imageUrl = image_secure_url
     image_upload_success.value = true
@@ -119,23 +149,19 @@ async function upload_menu_item_image(event: Event) {
 </script>
 
 <template>
-  <div
-    class="fixed inset-0 z-50 flex items-center   justify-center bg-background/80 p-4"
-    @click.self="!props.isCreating && emit('close')"
-  >
-    <div class="w-full h-[90vh] overflow-y-scroll  max-w-xl rounded-3xl border border-border bg-card p-6 text-card-foreground shadow-lg">
+  <div class="fixed inset-0 z-50 flex items-center   justify-center bg-background/80 p-4"
+    @click.self="!props.isCreating && emit('close')">
+    <div
+      class="w-full h-[90vh] overflow-y-scroll  max-w-xl rounded-3xl border border-border bg-card p-6 text-card-foreground shadow-lg">
       <div class="mb-6 flex items-start justify-between gap-4">
         <div>
           <h2 class="text-lg font-semibold">Add Menu Item</h2>
           <p class="text-sm text-muted-foreground">Create a new menu item.</p>
         </div>
 
-        <button
-          type="button"
-          :disabled="props.isCreating"
+        <button type="button" :disabled="props.isCreating"
           class="inline-flex h-8 w-8 items-center justify-center rounded-2xl border border-input transition-colors hover:bg-accent hover:text-accent-foreground"
-          @click="emit('close')"
-        >
+          @click="emit('close')">
           <i class="pi pi-times" />
         </button>
       </div>
@@ -144,48 +170,41 @@ async function upload_menu_item_image(event: Event) {
         <div class="space-y-4" :class="{ 'pointer-events-none opacity-50': props.isCreating }">
           <div class="space-y-2">
             <label class="text-sm font-medium">Item Name</label>
-            <input
-              v-model="form.name"
-              type="text"
-              required
-              placeholder="e.g. Chicken Burger"
-              class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20"
-            >
+            <input v-model="form.name" type="text" required placeholder="e.g. Chicken Burger"
+              class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20">
           </div>
 
           <div class="space-y-2">
             <label class="text-sm font-medium">Description</label>
-            <textarea
-              v-model="form.description"
-              rows="3"
-              placeholder="Short description for customers"
-              class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20"
-            />
+            <textarea v-model="form.description" rows="3" placeholder="Short description for customers"
+              class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20" />
           </div>
 
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div class="space-y-2">
               <label class="text-sm font-medium">Price</label>
-              <input
-                v-model.number="form.price"
-                type="number"
-                min="0"
-                step="0.01"
-                required
-                class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20"
-              >
+              <input v-model.number="form.price" type="number" min="0" step="0.01" required
+                class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20">
             </div>
 
             <div class="space-y-2">
               <label class="text-sm font-medium">Category</label>
-              <select
-                v-model="form.category"
-                class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20"
-              >
+              <select v-model="form.category"
+                class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20">
                 <option v-for="category in menu_category" :key="category" :value="category">
                   {{ category.replaceAll('_', ' ') }}
                 </option>
               </select>
+
+              <div class="flex gap-2">
+                <input v-model="new_category_name" type="text" placeholder="Add new category"
+                  class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20">
+                <button type="button" :disabled="creating_category"
+                  class="rounded-2xl border border-input bg-background px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                  @click="createMenuCategory">
+                  Add
+                </button>
+              </div>
             </div>
           </div>
 
@@ -196,59 +215,37 @@ async function upload_menu_item_image(event: Event) {
                 <p class="text-xs text-muted-foreground">Add optional extras or upgrades for this menu item.</p>
               </div>
 
-              <button
-                v-if="!isAddingMenuOption"
-                type="button"
+              <button v-if="!isAddingMenuOption" type="button"
                 class="rounded-2xl border border-input bg-muted px-3 py-2 text-sm text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-                @click="addMenuOption"
-              >
+                @click="addMenuOption">
                 Add Option
               </button>
             </div>
 
-            <div
-              v-if="isAddingMenuOption"
-              class="grid grid-cols-1 gap-3 rounded-2xl border border-border bg-card p-3 sm:grid-cols-[1fr_140px_auto_auto]"
-            >
-              <input
-                v-model="draft_menu_option.name"
-                type="text"
-                placeholder="e.g. Extra cheese"
-                class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20"
-              >
+            <div v-if="isAddingMenuOption"
+              class="grid grid-cols-1 gap-3 rounded-2xl border border-border bg-card p-3 sm:grid-cols-[1fr_140px_auto_auto]">
+              <input v-model="draft_menu_option.name" type="text" placeholder="e.g. Extra cheese"
+                class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20">
 
-              <input
-                v-model.number="draft_menu_option.price"
-                type="number"
-                min="0"
-                step="0.01"
-                placeholder="e.g. 1.50"
-                class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20"
-              >
+              <input v-model.number="draft_menu_option.price" type="number" min="0" step="0.01" placeholder="e.g. 1.50"
+                class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20">
 
-              <button
-                type="button"
+              <button type="button"
                 class="rounded-2xl bg-primary px-3 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90"
-                @click="saveMenuOption"
-              >
+                @click="saveMenuOption">
                 Save
               </button>
 
-              <button
-                type="button"
+              <button type="button"
                 class="rounded-2xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/20"
-                @click="removeDraftMenuOption"
-              >
+                @click="removeDraftMenuOption">
                 Remove
               </button>
             </div>
 
             <div v-if="menu_options.length" class="space-y-3">
-              <div
-                v-for="(option, index) in menu_options"
-                :key="index"
-                class="grid grid-cols-1 gap-3 rounded-2xl border border-border bg-card p-3 sm:grid-cols-[1fr_140px_auto]"
-              >
+              <div v-for="(option, index) in menu_options" :key="index"
+                class="grid grid-cols-1 gap-3 rounded-2xl border border-border bg-card p-3 sm:grid-cols-[1fr_140px_auto]">
                 <div class="rounded-2xl border border-input bg-card px-3 py-2 text-sm text-foreground">
                   {{ option.name }}
                 </div>
@@ -257,11 +254,9 @@ async function upload_menu_item_image(event: Event) {
                   {{ option.price.toFixed(2) }}
                 </div>
 
-                <button
-                  type="button"
+                <button type="button"
                   class="rounded-2xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/20"
-                  @click="removeMenuOption(index)"
-                >
+                  @click="removeMenuOption(index)">
                   Remove
                 </button>
               </div>
@@ -279,14 +274,9 @@ async function upload_menu_item_image(event: Event) {
               <i v-if="image_upload_success" class="pi pi-check-circle text-green-600"></i>
             </div>
 
-            <input
-              required
-              type="file"
-              accept="image/*"
-              @change="upload_menu_item_image($event)"
+            <input required type="file" accept="image/*" @change="upload_menu_item_image($event)"
               id="menu_item_image_input"
-              class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground placeholder-muted-foreground transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20"
-            >
+              class="w-full rounded-2xl border border-input bg-muted px-3 py-2 text-foreground placeholder-muted-foreground transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20">
           </div>
 
           <div class="rounded-2xl border border-border p-3">
@@ -298,20 +288,14 @@ async function upload_menu_item_image(event: Event) {
         </div>
 
         <div class="flex flex-col-reverse gap-2 border-t border-border pt-5 sm:flex-row sm:justify-end">
-          <button
-            type="button"
-            :disabled="props.isCreating"
+          <button type="button" :disabled="props.isCreating"
             class="rounded-2xl border border-input bg-muted px-4 py-2 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
-            @click="emit('close')"
-          >
+            @click="emit('close')">
             Cancel
           </button>
 
-          <button
-            v-if="!props.isCreating"
-            type="submit"
-            class="rounded-2xl bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
-          >
+          <button v-if="!props.isCreating" type="submit"
+            class="rounded-2xl bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90">
             Create Menu Item
           </button>
 

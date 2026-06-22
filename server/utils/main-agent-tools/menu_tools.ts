@@ -1,14 +1,7 @@
 import { tool } from "@openai/agents";
 import z from "zod";
 
-const menuCategorySchema = z.enum([
-  "APPETIZER",
-  "MAIN_COURSE",
-  "DESSERT",
-  "BEVERAGE",
-  "SIDE",
-  "SALAD",
-]);
+const menuCategorySchema = z.string().trim().min(1);
 
 const menuOptionCreateSchema = z.object({
   name: z.string().min(1),
@@ -65,6 +58,12 @@ export const menu_tools = () => {
       isAvailable,
       options,
     }) => {
+      await prisma.menuCategory.upsert({
+        where: { name: category },
+        update: {},
+        create: { name: category },
+      });
+
       const menuItem = await prisma.menuItem.create({
         data: {
           name,
@@ -127,6 +126,14 @@ export const menu_tools = () => {
 
       if (!existingMenuItem) {
         throw new Error("Menu item not found for this name.");
+      }
+
+      if (category !== null) {
+        await prisma.menuCategory.upsert({
+          where: { name: category },
+          update: {},
+          create: { name: category },
+        });
       }
 
       const optionsToCreate = [];

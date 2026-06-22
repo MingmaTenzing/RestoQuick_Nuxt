@@ -4,7 +4,7 @@ definePageMeta({
     middleware: 'is-admin'
 })
 
-import type { MenuCategory, MenuItem, MenuOption } from '~/generated/prisma/browser'
+import { type MenuItem } from '~/generated/prisma/browser'
 import type { MenuItemCreateInput, MenuItemUpdateInput } from '~/generated/prisma/models'
 import type { MenuItemWithOptions } from '~~/types/menu'
 
@@ -13,13 +13,13 @@ const { data: menuItems, pending: isMenuItemsPending, refresh } = await useFetch
     lazy: true
 })
 
-const { data: menu_category } = await useFetch<MenuCategory[]>('/api/menu/category', {
+const { data: menu_category, refresh: refreshMenuCategories } = await useFetch<string[]>('/api/menu/category', {
     lazy: true
 })
 
 const toast = useToast()
 const searchQuery = ref('')
-const selectedCategory = ref<MenuCategory | ''>('')
+const selectedCategory = ref<string | ''>('')
 
 const showMenuSkeletons = computed(() => isMenuItemsPending.value && !(menuItems.value?.length))
 
@@ -99,6 +99,7 @@ const createMenuItem = async (payload: MenuItemCreateInput) => {
         })
 
         await refresh()
+        await refreshMenuCategories()
 
         toast.success({
             title: 'Menu item created'
@@ -126,6 +127,7 @@ const updateEditedMenuItem = async (payload: { id: string, form: MenuItemUpdateI
 
         if (updatedItem) {
             await refresh()
+            await refreshMenuCategories()
 
             toast.success({
                 title: 'Menu item updated'

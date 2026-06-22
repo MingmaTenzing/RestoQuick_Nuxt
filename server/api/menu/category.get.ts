@@ -1,5 +1,10 @@
-import { MenuCategory } from "~/generated/prisma/enums";
+export default defineEventHandler(async () => {
+  const prisma = usePrisma();
 
-export default defineEventHandler((event) => {
-  return Object.values(MenuCategory);
+  const categories = await prisma.menuCategory.findMany({
+    orderBy: { name: "asc" },
+    select: { name: true },
+  });
+
+  return categories.map((category) => category.name);
 });
