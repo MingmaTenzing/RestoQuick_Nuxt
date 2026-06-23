@@ -1,4 +1,5 @@
 import { tool } from "@openai/agents";
+import { useDateRange } from "~~/server/utils/dateRange";
 import z from "zod";
 
 const createShiftSchema = z.object({
@@ -9,8 +10,114 @@ const createShiftSchema = z.object({
   position: z.string().min(1).nullable(),
 });
 
+const toDateString = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
 export const roster_agent_tools = () => {
   const prisma = usePrisma();
+  const { getDayRange, getWeekRange, getNextWeekRange } = useDateRange();
+
+  const get_roster_date_context = tool({
+    name: "get_roster_date_context",
+    description:
+      "Get today's date and the exact Monday-to-Sunday date range for next week. Use this before planning any roster that mentions relative dates like next week, this week, tomorrow, or today.",
+    parameters: z.object({}),
+    execute: async () => {
+      const today = getDayRange().start;
+      const thisWeek = getWeekRange();
+      const nextWeek = getNextWeekRange();
+
+      return {
+        currentDate: toDateString(today),
+        currentDay: today.toLocaleDateString("en-US", { weekday: "long" }),
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        thisWeek: {
+          startDate: toDateString(thisWeek.start),
+          endDate: toDateString(new Date(thisWeek.end.getTime() - 1)),
+        },
+        nextWeek: {
+          startDate: toDateString(nextWeek.start),
+          endDate: toDateString(new Date(nextWeek.end.getTime() - 1)),
+        },
+      };
+    },
+  });
+
+  const get_roster_shifts = tool({
+    name: "get_roster_shifts",
+    description:
+      "Get roster shifts with staff details for this week, next week, or a custom inclusive date range. Use this when the user asks to show, view, inspect, or summarize an existing roster.",
+    parameters: z.object({
+      range: z.enum(["this_week", "next_week", "custom"]),
+      startDate: z.string().nullable(),
+      endDate: z.string().nullable(),
+    }),
+    execute: async ({ range, startDate, endDate }) => {
+      const resolvedRange = (() => {
+        if (range === "this_week") {
+          return getWeekRange();
+        }
+
+        if (range === "next_week") {
+          return getNextWeekRange();
+        }
+
+        if (!startDate || !endDate) {
+          throw new Error(
+            "Custom roster range requires startDate and endDate.",
+          );
+        }
+
+        const start = new Date(startDate);
+        start.setHours(0, 0, 0, 0);
+
+        const end = new Date(endDate);
+        end.setHours(0, 0, 0, 0);
+        end.setDate(end.getDate() + 1);
+
+        return { start, end };
+      })();
+
+      const shifts = await prisma.shift.findMany({
+        where: {
+          date: {
+            gte: resolvedRange.start,
+            lt: resolvedRange.end,
+          },
+        },
+        include: {
+          staff: true,
+        },
+        orderBy: [{ date: "asc" }, { startTime: "asc" }],
+      });
+
+      return {
+        range: {
+          startDate: toDateString(resolvedRange.start),
+          endDate: toDateString(new Date(resolvedRange.end.getTime() - 1)),
+        },
+        shifts: shifts.map((shift) => ({
+          id: shift.id,
+          date: toDateString(shift.date),
+          startTime: shift.startTime,
+          endTime: shift.endTime,
+          position: shift.position,
+          staff: {
+            id: shift.staff.id,
+            firstname: shift.staff.firstname,
+            lastName: shift.staff.lastName,
+            role: shift.staff.role,
+            employmentType: shift.staff.employmentType,
+          },
+        })),
+      };
+    },
+  });
 
   const get_staffs = tool({
     name: "get_all_staff_members",
@@ -77,6 +184,8 @@ export const roster_agent_tools = () => {
   });
 
   return {
+    get_roster_date_context,
+    get_roster_shifts,
     get_staffs,
     get_leave_request,
     create_many_shifts,

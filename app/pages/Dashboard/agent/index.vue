@@ -126,9 +126,9 @@ const sendMessage = async () => {
                     <div v-for="message in messages" :key="message.id" :data-message-id="message.id"
                         :class="['flex items-start ', message.role === 'assistant' ? 'justify-start' : 'justify-end']">
                         <div :class="[
-                            'max-w-[88%] p-3 text-sm prose dark:prose-invert sm:max-w-[75%] sm:p-4 sm:text-base',
+                            'chat-markdown min-w-0 max-w-[88%] p-3 text-sm sm:max-w-[75%] sm:p-4 sm:text-base',
                             message.role === 'assistant'
-                                ? 'overflow-hidden [&_h2]:mb-3 [&_h2]:text-base [&_h2]:font-semibold sm:[&_h2]:text-lg [&_h3]:mb-2 [&_h3]:text-base [&_h3]:font-semibold [&_ol]:ml-5 [&_ol]:list-decimal [&_ol]:space-y-1 [&_p]:leading-6 sm:[&_p]:leading-7 [&_ul]:ml-5 [&_ul]:list-disc [&_ul]:space-y-1'
+                                ? 'overflow-hidden text-foreground'
                                 : 'rounded-3xl bg-secondary text-secondary-foreground wrap-break-word'
                         ]">
                             <MDC v-if="message.role === 'assistant' && message.content" :key="message.id"
@@ -215,27 +215,218 @@ const sendMessage = async () => {
     }
 }
 
-.prose table {
-    width: 100%;
-    border-collapse: collapse;
-    display: block;
+.chat-markdown {
+    max-width: 100%;
+    color: var(--foreground);
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+}
+
+.chat-markdown :deep(*) {
+    min-width: 0;
+}
+
+.chat-markdown :deep(article > :first-child) {
+    margin-top: 0;
+}
+
+.chat-markdown :deep(article > :last-child) {
+    margin-bottom: 0;
+}
+
+.chat-markdown :deep(h1),
+.chat-markdown :deep(h2),
+.chat-markdown :deep(h3),
+.chat-markdown :deep(h4),
+.chat-markdown :deep(h5),
+.chat-markdown :deep(h6) {
+    margin: 1.25rem 0 0.55rem;
+    color: var(--foreground);
+    font-weight: 650;
+    line-height: 1.25;
+}
+
+.chat-markdown :deep(h1) {
+    font-size: 1.45rem;
+}
+
+.chat-markdown :deep(h2) {
+    font-size: 1.2rem;
+}
+
+.chat-markdown :deep(h3) {
+    font-size: 1.05rem;
+}
+
+.chat-markdown :deep(h4),
+.chat-markdown :deep(h5),
+.chat-markdown :deep(h6) {
+    font-size: 1rem;
+}
+
+.chat-markdown :deep(p) {
+    margin: 0.65rem 0;
+}
+
+.chat-markdown :deep(a) {
+    color: var(--primary);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--primary) 45%, transparent);
+    text-underline-offset: 0.18em;
+}
+
+.chat-markdown :deep(a:hover) {
+    text-decoration-color: var(--primary);
+}
+
+.chat-markdown :deep(strong) {
+    color: var(--foreground);
+    font-weight: 650;
+}
+
+.chat-markdown :deep(em) {
+    color: color-mix(in srgb, var(--foreground) 86%, var(--muted-foreground));
+}
+
+.chat-markdown :deep(s) {
+    color: var(--muted-foreground);
+}
+
+.chat-markdown :deep(hr) {
+    height: 1px;
+    margin: 1.35rem 0;
+    border: 0;
+    background: var(--border);
+}
+
+.chat-markdown :deep(blockquote) {
+    margin: 0.85rem 0;
+    border-left: 3px solid var(--border);
+    padding: 0.05rem 0 0.05rem 0.9rem;
+    color: var(--muted-foreground);
+}
+
+.chat-markdown :deep(blockquote p) {
+    margin: 0.45rem 0;
+}
+
+.chat-markdown :deep(ul),
+.chat-markdown :deep(ol) {
+    margin: 0.65rem 0 0.65rem 1.35rem;
+    padding: 0;
+}
+
+.chat-markdown :deep(ul) {
+    list-style: disc;
+}
+
+.chat-markdown :deep(ol) {
+    list-style: decimal;
+}
+
+.chat-markdown :deep(li) {
+    margin: 0.25rem 0;
+    padding-left: 0.15rem;
+}
+
+.chat-markdown :deep(li > p) {
+    margin: 0.25rem 0;
+}
+
+.chat-markdown :deep(li > ul),
+.chat-markdown :deep(li > ol) {
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.chat-markdown :deep(input[type='checkbox']) {
+    width: 0.95rem;
+    height: 0.95rem;
+    margin: 0 0.45rem 0.1rem -1.35rem;
+    vertical-align: middle;
+    accent-color: var(--primary);
+}
+
+.chat-markdown :deep(code) {
+    border: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
+    border-radius: 0.4rem;
+    background: var(--muted);
+    padding: 0.12rem 0.35rem;
+    color: var(--foreground);
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+}
+
+.chat-markdown :deep(pre) {
+    max-width: 100%;
+    margin: 0.85rem 0;
     overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 0.85rem;
+    background: color-mix(in srgb, var(--card) 78%, var(--muted));
+    padding: 0.9rem 1rem;
+}
+
+.chat-markdown :deep(pre code) {
+    display: block;
+    min-width: max-content;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    color: inherit;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    white-space: pre;
+}
+
+.chat-markdown :deep(table) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0.9rem 0;
+    overflow-x: auto;
+    border-collapse: collapse;
     white-space: nowrap;
 }
 
-.prose th,
-.prose td {
-    border: 1px solid #d1d5db;
-    padding: 0.75rem;
+.chat-markdown :deep(th),
+.chat-markdown :deep(td) {
+    border: 1px solid var(--border);
+    padding: 0.65rem 0.8rem;
     text-align: left;
+    vertical-align: top;
 }
 
-.prose th {
+.chat-markdown :deep(th) {
+    background: var(--muted);
     font-weight: 600;
 }
 
-.prose {
-    max-width: 100%;
-    overflow-wrap: anywhere;
+.chat-markdown :deep(td) {
+    background: color-mix(in srgb, var(--card) 72%, transparent);
+}
+
+.chat-markdown :deep(img) {
+    max-width: min(100%, 42rem);
+    height: auto;
+    margin: 0.85rem 0;
+    border-radius: 0.9rem;
+    border: 1px solid var(--border);
+}
+
+.chat-markdown :deep(kbd) {
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    border-radius: 0.4rem;
+    background: var(--muted);
+    padding: 0.08rem 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.82em;
+}
+
+.chat-markdown :deep(sup) {
+    font-size: 0.72em;
+    line-height: 0;
 }
 </style>
