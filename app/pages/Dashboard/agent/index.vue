@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { defineAsyncComponent } from 'vue'
+
 definePageMeta({
     layout: 'dashboard-layout',
     middleware: ['is-admin']
@@ -20,8 +22,19 @@ const messages = ref<ChatMessage[]>([
 const draftMessage = ref('')
 const isResponding = ref(false)
 const responseError = ref('')
+const isExternalToolsMenuOpen = ref(false)
+const isComposioToolsModalOpen = ref(false)
 const chatViewport = useTemplateRef<HTMLDivElement>('chatViewport')
 const hasConversation = computed(() => messages.value.length > 0)
+
+const ComposioToolsModal = defineAsyncComponent(
+    () => import('~/components/agent_components/ComposioToolsModal.vue')
+)
+
+const openComposioToolsModal = () => {
+    isExternalToolsMenuOpen.value = false
+    isComposioToolsModalOpen.value = true
+}
 
 const scrollMessageToTop = async (messageId: string) => {
     await nextTick()
@@ -156,6 +169,30 @@ const sendMessage = async () => {
                             class="min-h-10 max-h-40 flex-1 resize-none bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground sm:text-base"
                             @keydown.enter.exact.prevent="sendMessage()" />
 
+                        <div class="relative shrink-0">
+                            <button type="button"
+                                class="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground transition hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring"
+                                :aria-expanded="isExternalToolsMenuOpen" aria-label="Open tools menu"
+                                @click="isExternalToolsMenuOpen = !isExternalToolsMenuOpen">
+                                <i class="pi pi-plus text-sm"></i>
+                            </button>
+
+                            <div v-if="isExternalToolsMenuOpen"
+                                class="absolute bottom-12 right-0 z-20 w-46 rounded-2xl border border-border bg-card p-2 shadow-xl">
+                                <button type="button"
+                                    class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-foreground transition hover:bg-accent"
+                                    @click="openComposioToolsModal">
+                                    <span
+                                        class="flex h-8 w-8 items-center justify-center rounded-full bg-background text-muted-foreground">
+                                        <i class="pi pi-server text-xs"></i>
+                                    </span>
+                                    <span>
+                                        <span class="block font-medium">External tools</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
                         <button type="submit"
                             class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-foreground text-background transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                             :disabled="!draftMessage.trim() || isResponding" aria-label="Send message">
@@ -168,6 +205,8 @@ const sendMessage = async () => {
                 </form>
             </div>
         </main>
+
+        <ComposioToolsModal v-if="isComposioToolsModalOpen" @close="isComposioToolsModalOpen = false" />
 
 
     </div>
