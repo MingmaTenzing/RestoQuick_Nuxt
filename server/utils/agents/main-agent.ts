@@ -10,18 +10,16 @@ import { shift_tools } from "../main-agent-tools/shift_tools";
 import { staff_tool } from "../main-agent-tools/staff_tool";
 import { analytics_tools } from "../main-agent-tools/analytics_tools";
 import { rosterChatAgent } from "./roster-agent";
-import { Composio } from "@composio/core";
 import OpenAI from "openai";
+import type { H3Event } from "h3";
+import { useComposioSession } from "../composio";
 
-export const useMainAgent = async () => {
-  const composio = new Composio();
+export const useMainAgent = async (event: H3Event) => {
   const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
   setDefaultOpenAIClient(client);
-  const userId = "user_33455";
-
-  const session = await composio.create(userId);
+  const session = await useComposioSession(event);
 
   const main_agent = Agent.create({
     name: "RestoQuick Assistant",

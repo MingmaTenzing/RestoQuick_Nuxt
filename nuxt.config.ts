@@ -70,6 +70,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     VAPI_PUBLIC_KEY: process.env.NUXT_VAPI_PUBLIC_KEY,
     VAPI_ASSISTANT_KEY: process.env.NUXT_VAPI_ASSISTANT_KEY,
+    COMPOSIO_API_KEY: process.env.COMPOSIO_API_KEY,
     DATABASE_URL: process.env.DATABASE_URL,
     BASE_URL: process.env.BASE_URL,
     WEBSOCKET_HOST: process.env.WEBSOCKET_HOST,

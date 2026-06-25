@@ -10,7 +10,7 @@ type ChatMessage = {
 };
 
 export default defineEventHandler(async (event) => {
-  const { main_agent } = await useMainAgent();
+  const { main_agent } = await useMainAgent(event);
   const body = await readBody<{ messages: ChatMessage[] }>(event);
   const messages = body?.messages ?? [];
 
