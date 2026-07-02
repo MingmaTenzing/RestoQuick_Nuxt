@@ -7,6 +7,10 @@
 		"Clerk": {
 			"url": "https://mcp.clerk.dev/mcp",
 			"type": "http"
+		},
+		"stripe": {
+			"type": "http",
+			"url": "https://mcp.stripe.com"
 		}
 	},
 	"inputs": []
