@@ -11,16 +11,12 @@ const serviceLabel = computed(() => props.order.orderType === 'TAKEAWAY'
   : `Table ${props.order.table?.number ?? '--'}`)
 async function recall_to_kitchen(order_id: string) {
   try {
-    await $fetch("/api/orders", {
-      method: "PUT",
-      body: {
-        order_id: order_id, status: OrderStatus.PENDING
-        
-       },
+    await $fetch(`/api/orders/${order_id}/status`, {
+      method: "PATCH",
+      body: { status: OrderStatus.PENDING },
     });
-    
   } catch (e) {
-    console.error("Failed to mark order as ready", e);
+    console.error("Failed to recall order to kitchen", e);
   }
 } 
 </script>

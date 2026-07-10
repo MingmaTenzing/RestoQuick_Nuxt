@@ -13,11 +13,10 @@ const serviceLabel = computed(() => props.order.orderType === 'TAKEAWAY'
 
 async function markOrder_as_ready(order_id: string) {
   try {
-    await $fetch("/api/orders", {
-      method: "PUT",
-      body: { order_id: order_id, status: OrderStatus.COMPLETED  },
+    await $fetch(`/api/orders/${order_id}/status`, {
+      method: "PATCH",
+      body: { status: OrderStatus.COMPLETED },
     });
-    
   } catch (e) {
     console.error("Failed to mark order as ready", e);
   }
