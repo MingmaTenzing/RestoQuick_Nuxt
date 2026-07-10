@@ -3,11 +3,9 @@ definePageMeta({
   layout: 'dashboard-layout'
 })
 
-import { useIntervalFn, useWebSocket } from '@vueuse/core';
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import Order_Item from '~/components/kitchenDisplay_components/Order_Item.vue';
 import type { OrderDetailsWithInclude } from '~~/types/orderwithInclude';
-import type websocket_payload from '~~/types/websocket_payload';
 import notification_sound from "../../../assets/audio/new-notification-022-370046.mp3"
 import Complete_Order_Popup from '~/components/kitchenDisplay_components/Completed_Orders/Complete_Order_Popup.vue';
 import Loading_Order_Item from '~/components/kitchenDisplay_components/Loading_Order_Item.vue';
@@ -19,33 +17,47 @@ const all_orders = ref<OrderDetailsWithInclude[]>([]);
 
 const loading_orders = ref(false)
 
-const runtime = useRuntimeConfig();
-
-
 const { modal_state, open_completed_orders_modal } = useCompleted_Order_Modal()
 
-// Realtime channel for kitchen updates (new order, completed, recall, cancelled).
-const { status, data, send, close } = useWebSocket(`${runtime.public.WEBSOCKET_HOST}/api/websocket`, {
+function removeOrderFromQueue(orderId: string) {
+  all_orders.value = all_orders.value.filter((item) => item.id !== orderId)
+}
 
+function addOrderToQueue(order: OrderDetailsWithInclude) {
+  if (all_orders.value.some((item) => item.id === order.id)) return
+  all_orders.value.push(order)
+}
 
-  autoReconnect: {
-    retries: 3,
-    delay: 1000,
-    onFailed() {
-      alert('Failed to connect WebSocket after 3 retries')
+const { status } = useKitchenWebSocket((event) => {
+  applyKitchenOrderEvent(event, {
+    onCreated: (order) => {
+      addOrderToQueue(order)
+      toast.info({ title: 'New Order Received ' })
+      const audio = new Audio(notification_sound);
+      audio.play();
     },
-
-  },
-
-  heartbeat: {
-    message: 'ping',
-    interval: 30000, // 30 seconds,
-    pongTimeout: 20000, // 20 seconds
-  },
-
-
-
+    onCompleted: (order) => {
+      removeOrderFromQueue(order.id)
+      toast.success({ title: "Order Marked as Completed" })
+    },
+    onRecalled: (order) => {
+      addOrderToQueue(order)
+      toast.question({ title: 'Order Recalled' })
+    },
+    onCancelled: (order) => {
+      removeOrderFromQueue(order.id)
+      toast.warning({ title: 'Order Cancelled' })
+    },
+  })
 })
+
+function onOrderCompleted(orderId: string) {
+  removeOrderFromQueue(orderId)
+}
+
+function onOrderRecalled(order: OrderDetailsWithInclude) {
+  addOrderToQueue(order)
+}
 
 
 
@@ -58,73 +70,6 @@ onMounted(async () => {
   loading_orders.value = true
   all_orders.value = await $fetch<OrderDetailsWithInclude[]>('/api/orders/pending');
   loading_orders.value = false
-
-})
-
-
-
-watch(data, (newValue: string) => {
-
-  // Each websocket message is parsed into a typed kitchen payload.
-
-
-  if (!newValue) return;
-
-  if (newValue == "pong") {
-    return;
-  }
-  let parsed_data: websocket_payload = JSON.parse(newValue)
-
-
-  if (parsed_data.type == 'ORDER_CREATED') {
-
-    // New pending order: add to active kitchen queue.
-
-    all_orders.value.push(parsed_data.payload)
-    toast.info({
-
-      title: 'New Order Received '
-    })
-
-    //plays the notification sound
-    const audio = new Audio(notification_sound);
-    audio.play();
-
-
-  }
-
-  if (parsed_data.type == 'ORDER_MARKED_COMPLETED') {
-
-    // Completed orders should leave active kitchen queue.
-
-    all_orders.value = all_orders.value.filter((item) => item.id !== parsed_data.payload.id)
-    toast.success({
-      title: "Order Marked as Completed"
-    })
-
-  }
-  if (parsed_data.type == "ORDER_RECALL") {
-
-    // Recalled order is put back into active queue.
-    all_orders.value.push(parsed_data.payload)
-    toast.question({
-
-      title: 'Order Recalled'
-
-    })
-  }
-
-  if (parsed_data.type == 'ORDER_CANCELLED') {
-
-    // Cancelled orders are removed from active queue.
-    all_orders.value = all_orders.value.filter((item) => item.id !== parsed_data.payload.id)
-    toast.warning({
-      title: 'Order Cancelled'
-    })
-  }
-
-
-
 
 })
 
@@ -216,7 +161,7 @@ watch(data, (newValue: string) => {
 
       <div v-else class=" flex flex-wrap gap-2 ">
         <div v-for="order in all_orders" :key="order.id">
-          <Order_Item :order="order" />
+          <Order_Item :order="order" @completed="onOrderCompleted" />
         </div>
       </div>
 
@@ -227,7 +172,7 @@ watch(data, (newValue: string) => {
 
     <Transition>
       <div v-if="modal_state == true" class="fixed z-50 inset-0 flex items-center justify-center bg-background/80">
-        <Complete_Order_Popup></Complete_Order_Popup>
+        <Complete_Order_Popup @order-recalled="onOrderRecalled"></Complete_Order_Popup>
       </div>
 
     </Transition>

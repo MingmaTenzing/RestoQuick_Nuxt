@@ -6,6 +6,10 @@ const props = defineProps<{
   order: OrderDetailsWithInclude
 }>()
 
+const emit = defineEmits<{
+  recalled: [order: OrderDetailsWithInclude]
+}>()
+
 const serviceLabel = computed(() => props.order.orderType === 'TAKEAWAY'
   ? 'Takeaway'
   : `Table ${props.order.table?.number ?? '--'}`)
@@ -15,6 +19,7 @@ async function recall_to_kitchen(order_id: string) {
       method: "PATCH",
       body: { status: OrderStatus.PENDING },
     });
+    emit('recalled', props.order)
   } catch (e) {
     console.error("Failed to recall order to kitchen", e);
   }

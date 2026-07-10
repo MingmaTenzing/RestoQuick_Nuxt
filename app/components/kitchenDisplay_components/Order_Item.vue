@@ -6,6 +6,10 @@ const props = defineProps<{
   order: OrderDetailsWithInclude
 }>()
 
+const emit = defineEmits<{
+  completed: [orderId: string]
+}>()
+
 const serviceLabel = computed(() => props.order.orderType === 'TAKEAWAY'
   ? 'Takeaway'
   : `Table ${props.order.table?.number ?? '--'}`)
@@ -17,6 +21,7 @@ async function markOrder_as_ready(order_id: string) {
       method: "PATCH",
       body: { status: OrderStatus.COMPLETED },
     });
+    emit('completed', order_id)
   } catch (e) {
     console.error("Failed to mark order as ready", e);
   }

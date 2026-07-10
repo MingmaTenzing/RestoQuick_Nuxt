@@ -2,12 +2,12 @@
 import { type OrderDetailsWithInclude } from '~~/types/orderwithInclude';
 import Completed_Order_Item from './Completed_Order_Item.vue';
 import Loading_Order_Item from '../Loading_Order_Item.vue';
-import { useWebSocket } from '@vueuse/core';
 import type { NuxtError } from '#app';
-import type websocket_payload from '~~/types/websocket_payload';
 
+const emit = defineEmits<{
+  'order-recalled': [order: OrderDetailsWithInclude]
+}>()
 
-const runtime = useRuntimeConfig()
 const { close_completed_orders_modal } = useCompleted_Order_Modal()
 
 const toast = useToast();
@@ -24,10 +24,29 @@ const isOrderWithinLast24Hours = (createdAt: string | Date) => {
 }
 
 const loading = ref(false)
-// Realtime channel for keeping completed list synced while popup is open.
-const { status, data, send, close } = useWebSocket(`${runtime.public.WEBSOCKET_HOST}/api/websocket`)
 
+function removeCompletedOrder(orderId: string) {
+  completed_orders.value = completed_orders.value.filter((order) => order.id !== orderId)
+}
 
+function addCompletedOrder(order: OrderDetailsWithInclude) {
+  if (!isOrderWithinLast24Hours(order.createdAt)) return
+  if (completed_orders.value.some((existing) => existing.id === order.id)) return
+  completed_orders.value.unshift(order)
+}
+
+const { status } = useKitchenWebSocket((event) => {
+  applyKitchenOrderEvent(event, {
+    onCompleted: (order) => addCompletedOrder(order),
+    onRecalled: (order) => removeCompletedOrder(order.id),
+    onCancelled: (order) => removeCompletedOrder(order.id),
+  })
+})
+
+function onOrderRecalled(order: OrderDetailsWithInclude) {
+  removeCompletedOrder(order.id)
+  emit('order-recalled', order)
+}
 
 onMounted(async () => {
     loading.value = true;
@@ -49,42 +68,7 @@ onMounted(async () => {
     finally {
         loading.value = false
     }
-
-    
-
 })
-
-watch(data, (newValue) => {
-    // Keep local list in sync with kitchen/order status changes.
-    let parsed_data: websocket_payload = JSON.parse(newValue);
-
-    if (parsed_data.type == "ORDER_MARKED_COMPLETED") {
-        // Only add completed orders from the last 24 hours.
-        if (!isOrderWithinLast24Hours(parsed_data.payload.createdAt)) {
-            return
-        }
-        const exists = completed_orders.value.some((order) => order.id === parsed_data.payload.id)
-        if (!exists) {
-            completed_orders.value.unshift(parsed_data.payload)
-        }
-    }
-
-    if (parsed_data.type == "ORDER_RECALL") {
-        // Recalled order is no longer completed.
-        completed_orders.value = completed_orders.value.filter((order) => order.id !== parsed_data.payload.id)
-       
-    }
-
-    if (parsed_data.type == "ORDER_CANCELLED") {
-        // Cancelled order should never appear in completed list.
-        completed_orders.value = completed_orders.value.filter((order) => order.id !== parsed_data.payload.id)
-    }
-
-})
-
-
-
-
 </script>
 
 <template>
@@ -151,7 +135,7 @@ watch(data, (newValue) => {
       <section v-else-if="completed_orders.length" class="flex flex-wrap gap-2">
 
                         <div v-for="order in completed_orders" :key="order.id">
-                <Completed_Order_Item  :order="order"></Completed_Order_Item>
+                <Completed_Order_Item :order="order" @recalled="onOrderRecalled"></Completed_Order_Item>
             </div>
             
          </section>
