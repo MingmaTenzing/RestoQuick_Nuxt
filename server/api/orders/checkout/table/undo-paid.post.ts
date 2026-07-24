@@ -5,11 +5,11 @@ type UndoTablePaidBody = {
 };
 
 /**
- * Revert a mistaken table checkout: reopen the CLOSED session by id and
- * mark its paid orders UNPAID again.
+ * Revert a mistaken table checkout for a specific session id.
  *
- * Guard: if another ACTIVE session already exists for the same table, refuse
- * so we never leave two open sessions on one table.
+ * Marks that session's paid orders UNPAID again so cashier can re-collect.
+ * Does NOT reopen the session — it stays CLOSED so a new ACTIVE session can
+ * still be opened on the same table for other guests.
  *
  * Kitchen order status is left alone — this only undoes payment.
  */
@@ -42,23 +42,6 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const conflictingActive = await transaction.tableSession.findFirst({
-      where: {
-        tableId: session.tableId,
-        status: "ACTIVE",
-        id: { not: tableSessionId },
-      },
-      select: { id: true },
-    });
-
-    if (conflictingActive) {
-      throw createError({
-        statusCode: 409,
-        statusMessage:
-          "Another active session is open for this table. Close or finish that session before undoing payment.",
-      });
-    }
-
     const paidOrders = await transaction.order.findMany({
       where: {
         tableSessionId,
@@ -85,23 +68,10 @@ export default defineEventHandler(async (event) => {
       },
     });
 
-    const reopenedSession = await transaction.tableSession.update({
-      where: { id: tableSessionId },
-      data: {
-        status: "ACTIVE",
-        closedAt: null,
-      },
-      select: {
-        id: true,
-        tableId: true,
-        status: true,
-      },
-    });
-
     return {
-      tableSessionId: reopenedSession.id,
-      tableId: reopenedSession.tableId,
-      status: reopenedSession.status,
+      tableSessionId: session.id,
+      tableId: session.tableId,
+      status: session.status,
       orderIds,
     };
   });
