@@ -78,10 +78,12 @@ export const useStats = () => {
     ]);
   };
 
-  const getPopularItemsData = () => {
-    return prisma.orderItem.groupBy({
-      by: ["itemName"],
+  /** Top sellers over the last 30 days — full MenuItem + sold_quantity. */
+  const getPopularItemsData = async () => {
+    const grouped = await prisma.orderItem.groupBy({
+      by: ["menuItemId"],
       where: {
+        menuItemId: { not: null },
         order: {
           status: "COMPLETED",
           createdAt: {
@@ -98,6 +100,31 @@ export const useStats = () => {
         },
       },
       take: 5,
+    });
+
+    const menuItemIds = grouped
+      .map((row) => row.menuItemId)
+      .filter((id): id is string => Boolean(id));
+
+    if (menuItemIds.length === 0) {
+      return [];
+    }
+
+    const menuItems = await prisma.menuItem.findMany({
+      where: { id: { in: menuItemIds } },
+    });
+    const menuById = new Map(menuItems.map((item) => [item.id, item]));
+
+    return grouped.flatMap((row) => {
+      if (!row.menuItemId) return [];
+      const menuItem = menuById.get(row.menuItemId);
+      if (!menuItem) return [];
+      return [
+        {
+          ...menuItem,
+          sold_quantity: row._sum.quantity ?? 0,
+        },
+      ];
     });
   };
 

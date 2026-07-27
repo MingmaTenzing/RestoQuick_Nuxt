@@ -1,6 +1,12 @@
 <script lang="ts" setup>
 type PopularItem = {
+  id: string
   name: string
+  description: string | null
+  priceCents: number
+  category: string
+  imageUrl: string | null
+  isAvailable: boolean
   sold_quantity: number
 }
 

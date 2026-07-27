@@ -97,10 +97,7 @@ export const analytics_tools = () => {
           startDate: weekRange.start,
           endDate: weekRange.end,
         },
-        popularItems: popularItems.map((item) => ({
-          name: item.itemName,
-          sold_quantity: item._sum.quantity ?? 0,
-        })),
+        popularItems,
         revenueTrend,
         recentOrders: recentOrders.map((order) => ({
           id: order.id,
